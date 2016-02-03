@@ -8,22 +8,22 @@
 #
 #
 
-from parameters import NinhBinh,MongDuong1
+from parameters import NinhBinh,MongDuong1,TimeHorizon,DiscountRate
 
 print(MongDuong1.Capacity)
 print(NinhBinh.Capacity)
 
-print
+print()
 
-from npv import npv,TimeHorizon,DiscountRate
+from npv import npv,ElectricitySaleQuantity,CashInflow
 
 print(TimeHorizon)
 print(DiscountRate)
 
-print
+print()
 
 print("Tests for NPV function")
-print
+print()
 
 print("Null cash flow")
 def nocash(t):
@@ -34,7 +34,7 @@ if npv(nocash) == 0:
 else:
     print("ERROR: the null cash flow should have null NPV")
 
-print
+print()
 
 print("Unit cash flow")
 def unitcash(t):
@@ -43,10 +43,13 @@ print(repr(npv(unitcash)))
 CommonRatio = 1/(1+DiscountRate)
 SumOfGeometricSequence = (1 - CommonRatio**(TimeHorizon+1)) / (1 - CommonRatio)
 print(repr(SumOfGeometricSequence))
-if npv(unitcash) - SumOfGeometricSequence < 1E-12:
+if abs(npv(unitcash) - SumOfGeometricSequence) < 1E-12:
     print("OK")
 else:
     print("ERROR: NPV of the unit cash flow is wrong")
 
-
-
+print()
+print("Year")
+for t in range(TimeHorizon+1):
+    print (t, ElectricitySaleQuantity(MongDuong1,t), CashInflow(MongDuong1,t))
+   
