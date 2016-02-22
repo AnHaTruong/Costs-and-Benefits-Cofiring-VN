@@ -44,11 +44,11 @@ def cash_inflow(plant, year):
 
 def cash_outflow(plant, year):
     """This is only for the project"""
-    return (total_capital_cost(plant, year) + fuel_cost(plant, year) +
+    return (tot_capital_cost(plant, year) + fuel_cost(plant, year) +
             operation_maintenance_cost(plant, year) + income_tax(plant, year))
 
 
-def total_capital_cost(plant, year):
+def tot_capital_cost(plant, year):
     """ We assume the plant is paid for coal at capacity design.
        this is only extra capital cost for the biomass co-firing  ??? Total
        This is only for the project
