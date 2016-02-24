@@ -49,11 +49,11 @@ NinhBinh.base_boiler_efficiency = 81.61 * percent
 
 MongDuong1.capital_cost = 50 * USD / kW
 MongDuong1.coal_price = 52.69 * USD / ton
-MongDuong1.fix_om_cost = 32.34 * USD / kW / year
+MongDuong1.fix_om_cost = 32.24 * USD / kW / year
 MongDuong1.variable_om_cost = 0.006 * USD / kWh
 # Computed separately. Assumes 5% co-firing
 MongDuong1.biomass_required = 259107.274137779  # ton/year
-MongDuong1.biomass_unit_cost = 41.3111153541657  # USD/ton
+MongDuong1.biomass_unit_cost = 41.311153541657  # USD/ton
 
 NinhBinh.capital_cost = 100 * USD / kW
 NinhBinh.coal_price = 83.83 * USD / ton
@@ -66,7 +66,7 @@ NinhBinh.biomass_unit_cost = 38.154337591058 * USD / ton
 biomass_ratio = 0.05  # Percent of energy that comes from biomass
 # energy meaning both heat and electricity produced
 time_horizon = 20 * year
-discount_rate = 8.78/100 / year
+discount_rate = 8.7771/100 / year
 tax_rate = 0.25  # Corporate tax in Vietnam
 
 electricity_tariff = 1158.1 * VND / kWh

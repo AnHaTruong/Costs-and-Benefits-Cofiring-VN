@@ -15,16 +15,6 @@ from parameters import time_horizon, discount_rate, biomass_ratio
 from parameters import electricity_tariff, tax_rate
 
 
-def npv(cash_flow):
-    """npv returns the Net Present Value of the cashflow(year),
-    discounted at DiscountRate from 0 to TimeHorizon included
-    """
-    value = 0
-    for year in range(time_horizon+1):
-        value += cash_flow(year) / (1+discount_rate)**year
-    return value
-
-
 def elec_sale_kwh(plant, year):
     """electricity sale refers to line 98 in Excel sheet
         this is only for the project
@@ -92,9 +82,19 @@ def earning_before_tax(plant, year):
         return 0
     else:
         return (cash_inflow(plant, year) - fuel_cost(plant, year) -
-            operation_maintenance_cost(plant, year))
+                operation_maintenance_cost(plant, year))
 
 
 def net_cash_flow(plant, year):
     """Cash flow of the co-firing project"""
     return cash_inflow(plant, year) - cash_outflow(plant, year)
+
+
+def npv(plant):
+    """npv returns the Net Present Value of the project,
+    discounted at DiscountRate from 0 to TimeHorizon included
+    """
+    value = 0
+    for year in range(time_horizon+1):
+        value += net_cash_flow(plant, year) / (1+discount_rate)**year
+    return value

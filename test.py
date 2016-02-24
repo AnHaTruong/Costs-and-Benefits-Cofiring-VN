@@ -26,48 +26,21 @@ print("")
 print(time_horizon)
 print(discount_rate)
 
-
-print("Null cash flow")
-
-
-def nocash(_):
-    """Null cash flow, do not really use the year parameter"""
-    return 0
-print(npv(nocash))
-if npv(nocash) == 0:
-    print("OK")
-else:
-    print("ERROR: the null cash flow should have null NPV")
-
 print("")
-
-print("Unit cash flow")
-
-
-def unitcash(_):
-    """Unit cash flow, do not really use the year parameter"""
-    return 1
-print(repr(npv(unitcash)))
-common_ratio = 1/(1+discount_rate)
-geometric_sum = (1 - common_ratio**(time_horizon+1)) / (1 - common_ratio)
-print(repr(geometric_sum))
-if abs(npv(unitcash) - geometric_sum) < 1E-12:
-    print("OK")
-else:
-    print("ERROR: NPV of the unit cash flow is wrong")
-
-print("")
-print("Year")
+print("Year  elec_sale    cash_in    tot_cap  fuel_cost        EBT income_tax    OM_cost  cash_flow")
 for year in range(time_horizon+1):
-    print(year,
-          elec_sale_kwh(MongDuong1, year),
-          round(cash_inflow(MongDuong1, year)),
-          tot_capital_cost(MongDuong1, year),
-          round(fuel_cost(MongDuong1, year)),
-          round(earning_before_tax(MongDuong1, year)),
-          round(income_tax(MongDuong1, year)),
-          round(operation_maintenance_cost(MongDuong1, year)),
-          round(net_cash_flow(MongDuong1, year)))
+    format_string = "{:4d} {:10.0f} {:10.0f} {:10.0f} {:10.0f} {:10.0f} {:10.0f} {:10.0f} {:10.0f}"
+    line = format_string.format(year,
+                                elec_sale_kwh(MongDuong1, year),
+                                cash_inflow(MongDuong1, year),
+                                tot_capital_cost(MongDuong1, year),
+                                fuel_cost(MongDuong1, year),
+                                earning_before_tax(MongDuong1, year),
+                                income_tax(MongDuong1, year),
+                                operation_maintenance_cost(MongDuong1, year),
+                                net_cash_flow(MongDuong1, year)
+                                )
+    print(line)
 
 print("")
 
@@ -152,3 +125,6 @@ if fuel_cost(MongDuong1, 1) == fuel_cost(MongDuong1, time_horizon):
     print("OK")
 else:
     print("ERROR: Fuel Cost Mong Duong 1 year different in year 1 and year ", time_horizon)
+
+print()
+print('NPV = {:10.0f}'.format(npv(MongDuong1)))
