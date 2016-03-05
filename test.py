@@ -27,19 +27,29 @@ print(time_horizon)
 print(discount_rate)
 
 print('')
-print('Year  elec_sale    cash_in    tot_cap  fuel_cost        EBT income_tax    OM_cost  cash_flow')
+head = '{:4}'+' {:>10}'*8
+row = '{:4d}'+' {:10.0f}'*8
+print(head.format('year',
+                  'elec_sale',
+                  'cash_in',
+                  'tot_cap',
+                  'fuel_cost',
+                  'EBT',
+                  'income_tax',
+                  'OM_cost',
+                  'cash_flow')
+      )
 for year in range(time_horizon+1):
-    format_string = '{:4d} {:10.0f} {:10.0f} {:10.0f} {:10.0f} {:10.0f} {:10.0f} {:10.0f} {:10.0f}'
-    line = format_string.format(year,
-                                elec_sale_kwh(MongDuong1, year),
-                                cash_inflow(MongDuong1, year),
-                                tot_capital_cost(MongDuong1, year),
-                                fuel_cost(MongDuong1, year),
-                                earning_before_tax(MongDuong1, year),
-                                income_tax(MongDuong1, year),
-                                operation_maintenance_cost(MongDuong1, year),
-                                net_cash_flow(MongDuong1, year)
-                                )
+    line = row.format(year,
+                      elec_sale_kwh(MongDuong1, year),
+                      cash_inflow(MongDuong1, year),
+                      tot_capital_cost(MongDuong1, year),
+                      fuel_cost(MongDuong1, year),
+                      earning_before_tax(MongDuong1, year),
+                      income_tax(MongDuong1, year),
+                      operation_maintenance_cost(MongDuong1, year),
+                      net_cash_flow(MongDuong1, year)
+                      )
     print(line)
 
 print('')
