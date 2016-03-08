@@ -58,9 +58,9 @@ NinhBinh.base_coal_consumption = 0.42 * Mt / year
 NinhBinh.base_plant_efficiency = 21.77 * percent
 NinhBinh.base_boiler_efficiency = 81.61 * percent
 
-MongDuong1.capital_cost = 50 * USD / kW
+MongDuong1.capital_cost = 50 * USD
 MongDuong1.coal_price = 52.69 * USD / ton
-MongDuong1.fix_om_cost = 32.24 * USD / kW / year
+MongDuong1.fix_om_cost = 32.24 * USD / year
 MongDuong1.variable_om_cost = 0.006 * USD / kWh
 # Computed separately. Assumes 5% co-firing
 MongDuong1.biomass_required = 259107.274137779 * ton / year
@@ -68,10 +68,10 @@ MongDuong1.biomass_unit_cost = 41.311153541657 * USD / ton
 MongDuong1.heat_rate = 9.32786896004 * MJ / kWh
 MongDuong1.capacity_factor = 0.68704549298157
 
-NinhBinh.capital_cost = 100 * USD / kW
+NinhBinh.capital_cost = 100 * USD
 NinhBinh.coal_price = 83.83 * USD / ton
-NinhBinh.fix_om_cost = 32.34 * USD / kW / year
-NinhBinh.variable_om_cost = 0.006 * USDcent / kWh
+NinhBinh.fix_om_cost = 32.24 * USD / year
+NinhBinh.variable_om_cost = 0.006 * USD / kWh
 # Computed separately. Assumes 5% co-firing
 NinhBinh.biomass_required = 53362.0062849769 * ton / year
 NinhBinh.biomass_unit_cost = 38.154337591058 * USD / ton
