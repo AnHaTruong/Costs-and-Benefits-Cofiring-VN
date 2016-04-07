@@ -11,12 +11,14 @@
 """
 
 from parameters import NinhBinh, MongDuong1
-from parameters import time_horizon, discount_rate
+from parameters import time_step, time_horizon, discount_rate
 from parameters import biomass_ratio, electricity_tariff
+from parameters import zero_kwh, zero_VND
 
-from npv import npv, elec_sale_kwh, cash_inflow
+from npv import npv, elec_sale, cash_inflow
 from npv import tot_capital_cost, fuel_cost, net_cash_flow
 from npv import operation_maintenance_cost, earning_before_tax, income_tax
+
 
 print(MongDuong1.capacity)
 print(NinhBinh.capacity)
@@ -39,9 +41,10 @@ print(head.format('year',
                   'OM_cost',
                   'cash_flow')
       )
+
 for year in range(time_horizon+1):
     line = row.format(year,
-                      elec_sale_kwh(MongDuong1, year),
+                      elec_sale(MongDuong1, year),
                       cash_inflow(MongDuong1, year),
                       tot_capital_cost(MongDuong1, year),
                       fuel_cost(MongDuong1, year),
@@ -55,21 +58,21 @@ for year in range(time_horizon+1):
 print('')
 
 print('No sales on year zero')
-if elec_sale_kwh(MongDuong1, 0) == 0:
+if elec_sale(MongDuong1, 0) == zero_kwh:
     print('OK')
 else:
     print('ERROR: Electricity sales quantity Mong Duong 1 year zero ',
-          elec_sale_kwh(MongDuong1, 0))
+          elec_sale(MongDuong1, 0))
 
 print('Sales on year one')
-if elec_sale_kwh(MongDuong1, 1) == MongDuong1.generation * biomass_ratio:
+if elec_sale(MongDuong1, 1) == MongDuong1.generation * biomass_ratio * time_step:
     print('OK')
 else:
     print('ERROR: Electricity sales quantity Mong Duong 1 year one ',
-          elec_sale_kwh(MongDuong1, 1))
+          elec_sale(MongDuong1, 1))
 
 print('Sales remain constant')
-if elec_sale_kwh(MongDuong1, 1) == elec_sale_kwh(MongDuong1, time_horizon):
+if elec_sale(MongDuong1, 1) == elec_sale(MongDuong1, time_horizon):
     print('OK')
 else:
     print('ERROR: Electricity sales quantity Mong Duong 1 yr 1 different from yr', time_horizon)
@@ -77,16 +80,16 @@ else:
 print('')
 
 print('No Cash Inflow on year zero')
-if cash_inflow(MongDuong1, 0) == 0:
+if cash_inflow(MongDuong1, 0) == zero_VND:
     print('OK')
 else:
     print('ERROR: Cash Inflow Mong Duong 1 year zero ', cash_inflow(MongDuong1, 0))
 
 print('Cash inflow on year one')
-if cash_inflow(MongDuong1, 1) == MongDuong1.generation * biomass_ratio * electricity_tariff:
+if cash_inflow(MongDuong1, 1) == MongDuong1.generation * biomass_ratio * electricity_tariff * time_step:
     print('OK')
 else:
-    print('ERROR: Cash Inflow Mong Duong 1 year one ', elec_sale_kwh(MongDuong1, 1))
+    print('ERROR: Cash Inflow Mong Duong 1 year one ', elec_sale(MongDuong1, 1))
 
 print('Cash inflow remain constant')
 if cash_inflow(MongDuong1, 1) == cash_inflow(MongDuong1, time_horizon):
@@ -125,10 +128,11 @@ else:
     print('ERROR: Fuel Cost Mong Duong 1 year zero ', fuel_cost(MongDuong1, 0))
 
 print('Fuel Cost on year one')
-if fuel_cost(MongDuong1, 1) == MongDuong1.biomass_required * MongDuong1.biomass_unit_cost:
+if fuel_cost(MongDuong1, 1) == MongDuong1.biomass_required * MongDuong1.biomass_unit_cost * time_step:
     print('OK')
 else:
     print('ERROR: fuel_cost Mong Duong 1 year one ', fuel_cost(MongDuong1, 1))
+    print(MongDuong1.biomass_required * MongDuong1.biomass_unit_cost)
 
 print('Fuel cost remain constant')
 if fuel_cost(MongDuong1, 1) == fuel_cost(MongDuong1, time_horizon):
