@@ -142,3 +142,4 @@ else:
 
 print()
 print('NPV = {:10.0f}'.format(npv(MongDuong1)))
+print('NPV = {:10.0f}'.format(npv(NinhBinh)))

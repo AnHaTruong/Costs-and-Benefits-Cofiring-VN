@@ -9,8 +9,8 @@
 #
 """LCOE assessment of a co-firing project"""
 
-from parameters import discount_rate, time_horizon
-from parameters import biomass_heat_value, h_per_yr
+from parameters import discount_rate, time_horizon, time_step
+from parameters import h_per_yr, biomass_heat_value
 
 
 def cap_rec_factor():
@@ -19,9 +19,9 @@ def cap_rec_factor():
             ((1 + discount_rate)**time_horizon - 1))
 
 
-def bm_unit_cost_mj(plant):
-    """return the biomass unit cost in USD/MJ"""
-    return plant.biomass_unit_cost / biomass_heat_value
+#def bm_unit_cost_mj(plant):
+#    """return the biomass unit cost in USD/MJ"""
+#    return plant.biomass_unit_cost / biomass_heat_value
 
 
 def lcoe_cap_return(plant):
@@ -31,12 +31,12 @@ def lcoe_cap_return(plant):
 
 def lcoe_fix_om(plant):
     """Contribution of fix O&M cost in lcoe """
-    return plant.fix_om_cost/(h_per_yr*plant.capacity_factor)
+    return plant.fix_om_cost/(h_per_yr * plant.capacity_factor) * time_step
 
 
 def lcoe_bm_cost(plant):
     """Contribution of fuel cost in lcoe"""
-    return bm_unit_cost_mj(plant) * plant.heat_rate
+    return (plant.biomass_unit_cost / biomass_heat_value) * plant.heat_rate 
 
 
 def lcoe_variable_om(plant):
