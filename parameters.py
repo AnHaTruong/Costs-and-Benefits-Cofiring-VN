@@ -21,10 +21,10 @@ biomass_ratio = 0.05    # Percent of energy that comes from biomass
 
 winder_capacity = 6.57 * ureg.tonne / ureg.day
 work_hour_day = 8 * ureg.hour / ureg.day
-FTE = 1560 * ureg.hour / ureg.year
-truck_velocity = 45 * ureg.kilometer
+FTE = 1560 * ureg.hour / ureg.year  # number of working hour for a FTE job                                   # a full time equivalence job
+truck_velocity = 45 * ureg.kilometer / ureg.hour
 truck_load = 20 * ureg.tonne
-OM_hour_MW = 0.12 * ureg.hour / ureg.megawatt
+OM_hour_MWh = 0.12 * ureg.hour / ureg.megawatthour # working hour for OM per MWh                                                   # O&M of co-firing per MWh   
 time_step = 1 * ureg.year
 time_horizon = 20
 discount_rate = 0.087771 * time_step / ureg.year
