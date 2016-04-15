@@ -12,13 +12,14 @@
 
 from parameters import MongDuong1, NinhBinh
 
-from job import FTE_bm_collection, hour_bm_collection, FTE_bm_transport
-from job import hour_bm_transport, number_of_truck, transport_time 
-from job import FTE_OM, hour_om, total_FTE
+from job import bm_collection_work, bm_transport_work
+from job import bm_transport_work, number_of_truck, transport_time 
+from job import om_work, cofiring_work
+from parameters import FTE
 
 print('')
 head = '{:38}' + '{:18}' + '{:15}'
-row = '{:35}' + '{:15.2f}'*2
+row = '{:35}' + '{:15.5f}'*2
 
 print (head.format(' ', 'Mong Duong 1', 'Ninh Binh'))
 
@@ -35,43 +36,43 @@ print (row.format('number of truck',
       )
 
 print (row.format('total hour for biomass collection',
-                  hour_bm_collection(MongDuong1),
-                  hour_bm_collection(NinhBinh)
+                  bm_collection_work(MongDuong1),
+                  bm_collection_work(NinhBinh)
                   )
       )
 
 print (row.format('total hour for biomass transportation',
-                  hour_bm_transport(MongDuong1),
-                  hour_bm_transport(NinhBinh)
+                  bm_transport_work(MongDuong1),
+                  bm_transport_work(NinhBinh)
                   )
       )
 
 print (row.format('total hour for O&M',
-                  hour_om(MongDuong1),
-                  hour_om(NinhBinh)
+                  om_work(MongDuong1),
+                  om_work(NinhBinh)
                   )
       )
       
 print (row.format('FTE job from biomass collection',
-                  FTE_bm_collection(MongDuong1),
-                  FTE_bm_collection(NinhBinh)
+                  bm_collection_work(MongDuong1) / FTE,
+                  bm_collection_work(NinhBinh) / FTE
                   )
       )
       
 print (row.format('FTE job from biomass transportation',
-                  FTE_bm_transport(MongDuong1),
-                  FTE_bm_transport(NinhBinh)
+                  bm_transport_work(MongDuong1) / FTE,
+                  bm_transport_work(NinhBinh) / FTE
                   )
       )
 
 print (row.format('FTE job from co-firing O&M',
-                  FTE_OM(MongDuong1),
-                  FTE_OM(NinhBinh)
+                  om_work(MongDuong1) / FTE,
+                  om_work(NinhBinh) / FTE
                   )
       )
 
 print (row.format('Total FTE job',
-                  total_FTE(MongDuong1),
-                  total_FTE(NinhBinh)
+                  cofiring_work(MongDuong1) / FTE,
+                  cofiring_work(NinhBinh) / FTE
                   )
       )
