@@ -57,34 +57,6 @@ for year in range(time_horizon+1):
 
 print('')
 
-print('No sales on year zero')
-if elec_sale(MongDuong1, 0) == zero_kwh:
-    print('OK')
-else:
-    print('ERROR: Electricity sales quantity Mong Duong 1 year zero ',
-          elec_sale(MongDuong1, 0))
-
-print('Sales on year one')
-if elec_sale(MongDuong1, 1) == MongDuong1.generation * biomass_ratio * time_step:
-    print('OK')
-else:
-    print('ERROR: Electricity sales quantity Mong Duong 1 year one ',
-          elec_sale(MongDuong1, 1))
-
-print('Sales remain constant')
-if elec_sale(MongDuong1, 1) == elec_sale(MongDuong1, time_horizon):
-    print('OK')
-else:
-    print('ERROR: Electricity sales quantity Mong Duong 1 yr 1 different from yr', time_horizon)
-
-print('')
-
-print('No Cash Inflow on year zero')
-if cash_inflow(MongDuong1, 0) == zero_VND:
-    print('OK')
-else:
-    print('ERROR: Cash Inflow Mong Duong 1 year zero ', cash_inflow(MongDuong1, 0))
-
 print('Cash inflow on year one')
 if cash_inflow(MongDuong1, 1) == MongDuong1.generation * biomass_ratio * electricity_tariff * time_step:
     print('OK')
@@ -105,27 +77,7 @@ if tot_capital_cost(MongDuong1, 0) == MongDuong1.capital_cost * MongDuong1.capac
 else:
     print('ERROR: Total capital cost Mong Duong 1 year zero ', tot_capital_cost(MongDuong1, 0))
 
-print('Capital cost on year 1 is zero')
-if tot_capital_cost(MongDuong1, 1) == 0:
-    print('OK')
-else:
-    print('ERROR: Total capital cost Mong Duong 1 year one ', tot_capital_cost(MongDuong1, 1))
-
-print('Capital cost on last year is zero')
-if tot_capital_cost(MongDuong1, time_horizon) == 0:
-    print('OK')
-else:
-    print('ERROR: Total capital cost Mong Duong 1 last year ',
-          tot_capital_cost(MongDuong1, time_horizon))
-
-
 print('')
-
-print('No fuel cost on year zero')
-if fuel_cost(MongDuong1, 0) == 0:
-    print('OK')
-else:
-    print('ERROR: Fuel Cost Mong Duong 1 year zero ', fuel_cost(MongDuong1, 0))
 
 print('Fuel Cost on year one')
 if fuel_cost(MongDuong1, 1) == MongDuong1.biomass_required * MongDuong1.biomass_unit_cost * time_step:
@@ -134,11 +86,6 @@ else:
     print('ERROR: fuel_cost Mong Duong 1 year one ', fuel_cost(MongDuong1, 1))
     print(MongDuong1.biomass_required * MongDuong1.biomass_unit_cost)
 
-print('Fuel cost remain constant')
-if fuel_cost(MongDuong1, 1) == fuel_cost(MongDuong1, time_horizon):
-    print('OK')
-else:
-    print('ERROR: Fuel Cost Mong Duong 1 year different in year 1 and year ', time_horizon)
 
 print()
 print('NPV = {:10.0f}'.format(npv(MongDuong1)))

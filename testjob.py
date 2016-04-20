@@ -13,7 +13,7 @@
 from parameters import MongDuong1, NinhBinh
 
 from job import bm_collection_work, bm_transport_work
-from job import bm_transport_work, number_of_truck, transport_time 
+from job import bm_transport_work, number_of_truck, transport_time
 from job import om_work, cofiring_work
 from parameters import FTE
 

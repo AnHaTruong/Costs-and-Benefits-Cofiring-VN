@@ -19,6 +19,19 @@ from parameters import zero_kwh, zero_USD, zero_VND
 def elec_sale(plant, year):
     """electricity sale refers to line 98 in Excel sheet
         this is only for the project
+
+     In the first year, the project is not here yet so no sales:
+     >>> from parameters import *
+     >>> elec_sale(MongDuong1, 0)
+     <Quantity(0, 'kilowatt_hour')>
+     >>> elec_sale(NinhBinh, 0)
+     <Quantity(0, 'kilowatt_hour')>
+     
+     Sales are assumed constant afterwards:
+     >>> elec_sale(MongDuong1, 1) == elec_sale(MongDuong1, time_horizon)
+     True
+     >>> elec_sale(NinhBinh, 1) == elec_sale(NinhBinh, time_horizon)
+     True
     """
     if year == 0:
         return zero_kwh
@@ -29,12 +42,21 @@ def elec_sale(plant, year):
 def cash_inflow(plant, year):
     """ Excel line 99 and 102
         This is only for the project
+        
+    In the first year, there is no sale so cash inflow is zero:
+    >>> from parameters import *    
+    >>> cash_inflow(MongDuong1, 0)
+    <Quantity(0.0, 'VND')>
+    >>> cash_inflow(NinhBinh, 0)
+    <Quantity(0.0, 'VND')>
     """
     return elec_sale(plant, year) * electricity_tariff
 
 
 def cash_outflow(plant, year):
-    """This is only for the project"""
+    """ This is only for the project
+    
+    """
     return (tot_capital_cost(plant, year) + fuel_cost(plant, year) +
             operation_maintenance_cost(plant, year) + income_tax(plant, year))
 
@@ -43,6 +65,13 @@ def tot_capital_cost(plant, year):
     """ We assume the plant is paid for coal at capacity design.
        this is only extra capital cost for the biomass co-firing  ??? Total
        This is only for the project
+       
+    Total capital cost is zero from year 1 afterwards:
+    >>> from parameters import *    
+    >>> tot_capital_cost(MongDuong1, 1) == tot_capital_cost(MongDuong1, time_horizon) == 0
+    True
+    >>> tot_capital_cost(NinhBinh, 1) == tot_capital_cost(NinhBinh, time_horizon) == 0
+    True
     """
     if year == 0:
         return plant.capacity * plant.capital_cost * biomass_ratio
@@ -51,7 +80,21 @@ def tot_capital_cost(plant, year):
 
 
 def fuel_cost(plant, year):
-    """total expense on biomass"""
+    """total expense on biomass
+    
+    no fuel cost on year zero:
+    >>> from parameters import *
+    >>> fuel_cost(MongDuong1, 0)
+    <Quantity(0, 'USD')>
+    >>> fuel_cost(NinhBinh, 0)
+    <Quantity(0, 'USD')>
+    
+    fuel cost remain constant:
+     >>> fuel_cost(MongDuong1, 1) == fuel_cost(MongDuong1, time_horizon)
+     True
+     >>> fuel_cost(NinhBinh, 1) == fuel_cost(NinhBinh, time_horizon)
+     True
+    """
     if year == 0:
         return zero_USD
     else:
@@ -60,7 +103,16 @@ def fuel_cost(plant, year):
 
 
 def operation_maintenance_cost(plant, year):
-    """total expense for the cofiring project"""
+    """total expense for the cofiring project
+    
+    No O&M cost for co-firing on the first year:
+    >>> from parameters import *
+    >>> operation_maintenance_cost(MongDuong1, 0)
+    <Quantity(0, 'USD')>
+    >>> operation_maintenance_cost(NinhBinh, 0)
+    <Quantity(0, 'USD')>
+    
+    """
     if year == 0:
         return zero_USD
     else:
@@ -70,7 +122,14 @@ def operation_maintenance_cost(plant, year):
 
 
 def income_tax(plant, year):
-    """Corporate tax"""
+    """Corporate tax
+    No income tax for co-firing on the first year:
+    >>> from parameters import *
+    >>> income_tax(MongDuong1, 0)
+    <Quantity(0, 'VND')>
+    >>> income_tax(NinhBinh, 0)
+    <Quantity(0, 'VND')>
+    """
     if year == 0:
         return zero_VND
     else:
@@ -99,3 +158,8 @@ def npv(plant):
     for year in range(time_horizon+1):
         value += net_cash_flow(plant, year) / (1+discount_rate)**year
     return value
+
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
