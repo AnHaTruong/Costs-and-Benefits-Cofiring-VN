@@ -13,13 +13,13 @@
 from parameters import MongDuong1, NinhBinh
 
 from job import bm_collection_work, bm_transport_work
-from job import bm_transport_work, number_of_truck, transport_time
+from job import number_of_truck, transport_time
 from job import om_work, cofiring_work
 from parameters import FTE
 
 print('')
-head = '{:38}' + '{:18}' + '{:15}'
-row = '{:35}' + '{:15.5f}'*2
+head = '{:48}' + '{:28}' + '{:15}'
+row = '{:40}' + '{:~P 25.5f}'*2
 
 print (head.format(' ', 'Mong Duong 1', 'Ninh Binh'))
 

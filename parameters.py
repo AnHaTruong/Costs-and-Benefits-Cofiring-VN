@@ -31,6 +31,14 @@ discount_rate = 0.087771 * time_step / ureg.year
 tax_rate = 0.25  # Corporate tax in Vietnam
 electricity_tariff = 1158.1 * ureg.VND / ureg.kWh
 
+ef_so2_biomass = 0.18 * ureg.g / ureg.kg
+ef_pm10_biomass = 9.1 * ureg.g / ureg.kg
+ef_nox_biomass = 2.28 * ureg.g / ureg.kg
+
+health_damage_so2 = 3767 * ureg.USD / ureg.t
+health_damage_pm10 = 5883 * ureg.USD / ureg.t
+health_damage_nox = 286 * ureg.USD / ureg.t
+
 zero_kwh = 0 * ureg.kWh
 zero_USD = 0 * ureg.USD
 zero_VND = 0 * ureg.VND
@@ -69,6 +77,11 @@ MongDuong1.ef_coal_transport = 0 * ureg.kg / ureg.t / ureg.km
 MongDuong1.ef_biomass_combust = 0.0858 * ureg.kg / ureg.MJ
 MongDuong1.ef_biomass_transport = 0.062 * ureg.kg / ureg.t / ureg.km
 
+MongDuong1.esp_efficiency = 0.996
+MongDuong1.desulfur_efficiency = 0.982
+MongDuong1.ef_so2_coal = 11.5 * ureg.kg / ureg.t
+MongDuong1.ef_pm10_coal = 43.8 * ureg.kg / ureg.t
+MongDuong1.ef_nox_coal = 18 * ureg.kg / ureg.t
 
 NinhBinh = PowerPlant()
 
@@ -100,3 +113,9 @@ NinhBinh.ef_coal_combust = 0.0966 * ureg.kg / ureg.MJ
 NinhBinh.ef_coal_transport = 0.031 * ureg.kg / ureg.t / ureg.km
 NinhBinh.ef_biomass_combust = 0.0858 * ureg.kg / ureg.MJ
 NinhBinh.ef_biomass_transport = 0.062 * ureg.kg / ureg.t / ureg.km
+
+NinhBinh.esp_efficiency = 0.992
+NinhBinh.desulfur_efficiency = 0
+NinhBinh.ef_so2_coal = 11.5 * ureg.kg / ureg.t
+NinhBinh.ef_pm10_coal = 26.1 * ureg.kg / ureg.t
+NinhBinh.ef_nox_coal = 18 * ureg.kg / ureg.t

@@ -18,8 +18,8 @@ from emission import total_emission_coal, total_emission_biomass
 from emission import emission_reduction
 
 print('')
-head = '{:38}' + '{:18}' + '{:15}'
-row = '{:35}' + '{:15.2f}'*2
+head = '{:38}' + '{:28}' + '{:18}'
+row = '{:35}' + '{:~P 15.2f}'*2
 
 print (head.format(' ', 'Mong Duong 1', 'Ninh Binh'))
 
