@@ -10,7 +10,8 @@
 """ Job creation assessment of a co-firing project"""
 
 from parameters import winder_capacity, work_hour_day, truck_velocity
-from parameters import truck_load, OM_hour_MWh, biomass_ratio
+from parameters import truck_load, OM_hour_MWh, biomass_ratio, wage_bm_transport
+from parameters import wage_bm_collect, wage_operation_maintenance
 
 
 def bm_collection_work(plant):
@@ -84,6 +85,55 @@ def cofiring_work(plant):
     <Quantity(71341.5587855956, 'hour / year')>
     """
     return bm_collection_work(plant) + bm_transport_work(plant) + om_work(plant)
+
+
+def benefit_bm_collection(plant):
+    """Benefit from job creation from biomass collection
+
+    >>> from parameters import *
+    >>> benefit_bm_collection(MongDuong1)
+    <Quantity(350208.91846932686, 'USD / year')>
+    >>> benefit_bm_collection(NinhBinh)
+    <Quantity(72123.99022992312, 'USD / year')>
+    """
+    return bm_collection_work(plant) * wage_bm_collect
+
+
+def benefit_bm_transport(plant):
+    """Benefit from job creation from biomass transportation
+
+    >>> from parameters import *
+    >>> benefit_bm_transport(MongDuong1)
+    <Quantity(45214.166205633126, 'USD / year')>
+    >>> benefit_bm_transport(NinhBinh)
+    <Quantity(2070.1400220879946, 'USD / year')>
+    """
+    return bm_transport_work(plant) * wage_bm_transport
+
+
+def benefit_om(plant):
+    """Benefit from job creation from co-firing operation and maintenance
+
+    >>> from parameters import *
+    >>> benefit_om(MongDuong1)
+    <Quantity(65.13, 'USD * gigawatt_hour / megawatt_hour / year')>
+    >>> benefit_om(NinhBinh)
+    <Quantity(7.515, 'USD * gigawatt_hour / megawatt_hour / year')>
+    """
+    return om_work(plant) * wage_operation_maintenance
+
+
+def total_job_benefit(plant):
+    """Total benefit from job creation from biomass co-firing
+
+    >>> from parameters import *
+    >>> total_job_benefit(MongDuong1)
+    <Quantity(460553.08467496, 'USD / year')>
+    >>> total_job_benefit(NinhBinh)
+    <Quantity(81709.1302520111, 'USD / year')>
+    """
+    return benefit_bm_collection(plant) + benefit_bm_transport(plant) + benefit_om(plant)
+
 
 if __name__ == "__main__":
     import doctest

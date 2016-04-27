@@ -24,12 +24,19 @@ work_hour_day = 8 * ureg.hour / ureg.day
 FTE = 1560 * ureg.hour / ureg.year  # number of working hour for a FTE job                                   # a full time equivalence job
 truck_velocity = 45 * ureg.km / ureg.hour
 truck_load = 20 * ureg.t
-OM_hour_MWh = 0.12 * ureg.hour / ureg.MWh # working hour for OM per MWh                                                   # O&M of co-firing per MWh   
+OM_hour_MWh = 0.12 * ureg.hour / ureg.MWh # working hour for OM per MWh                                                   # O&M of co-firing per MWh
 time_step = 1 * ureg.year
 time_horizon = 20
 discount_rate = 0.087771 * time_step / ureg.year
 tax_rate = 0.25  # Corporate tax in Vietnam
 electricity_tariff = 1158.1 * ureg.VND / ureg.kWh
+biomass_fix_cost = 37.26 * ureg.USD / ureg.t
+
+# wage per hour is calculated from base salary defined in gorvenmental regulations
+wage_bm_collect = 1.11 * ureg.USD / ureg.hour
+wage_bm_transport = 1.11 * ureg.USD / ureg.hour
+wage_operation_maintenance = 1.67 * ureg.USD / ureg.hour
+winder_rental_cost = 40 * ureg.USD / ureg.ha
 
 ef_so2_biomass = 0.18 * ureg.g / ureg.kg
 ef_pm10_biomass = 9.1 * ureg.g / ureg.kg
@@ -71,6 +78,9 @@ MongDuong1.collection_radius = 70.7431601125762 * ureg.km
 MongDuong1.coal_saved = 155986.88053583 * ureg.t / ureg.year
 MongDuong1.coal_transport_distance = 0 * ureg.km
 MongDuong1.coal_heat_value = 19.43468 * ureg.MJ / ureg.kg
+MongDuong1.biomass_yeild = 5.605 * ureg.t / ureg.ha / ureg.year
+# rice cultivation area needed to supply straw for co-firing in the plant
+MongDuong1.rice_cultivation_area = 46228 * ureg.ha
 
 MongDuong1.ef_coal_combust = 0.0966 * ureg.kg / ureg.MJ
 MongDuong1.ef_coal_transport = 0 * ureg.kg / ureg.t / ureg.km
@@ -108,6 +118,9 @@ NinhBinh.collection_radius = 15.7274063201183 * ureg.km
 NinhBinh.coal_saved = 24664.423049406 * ureg.t / ureg.year
 NinhBinh.coal_transport_distance = 200 * ureg.km
 NinhBinh.coal_heat_value = 25.3132 * ureg.MJ / ureg.kg
+NinhBinh.biomass_yeild = 5.7 * ureg.t / ureg.ha / ureg.year
+# rice cultivation area needed to supply straw for co-firing in the plant
+NinhBinh.rice_cultivation_area = 9362 * ureg.ha
 
 NinhBinh.ef_coal_combust = 0.0966 * ureg.kg / ureg.MJ
 NinhBinh.ef_coal_transport = 0.031 * ureg.kg / ureg.t / ureg.km

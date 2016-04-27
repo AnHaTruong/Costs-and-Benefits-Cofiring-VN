@@ -28,7 +28,7 @@ print (head.format('Pollutant',
                    'Base emission',
                    'Co-firing emission',
                    'Emission reduction ',
-                   'Health banefit'
+                   'Health benefit'
                    )
        )
 
