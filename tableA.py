@@ -12,11 +12,12 @@
 
 from parameters import NinhBinh, MongDuong1
 from parameters import time_horizon, discount_rate
+# DEBUG
+#time_horizon = 1
 
 from npv import npv, elec_sale, cash_inflow
 from npv import tot_capital_cost, fuel_cost, net_cash_flow
 from npv import operation_maintenance_cost, earning_before_tax, income_tax
-
 
 print(MongDuong1.capacity)
 print(NinhBinh.capacity)
@@ -30,7 +31,7 @@ print('')
 print('Mong Duong 1')
 
 head = '{:4}'+' {:>11}'*8
-row = '{:4d}'+' {:~P 10.0f}'*8
+row = '{:4d}'+' {:6.0f}'*8
 print(head.format('year',
                   'elec_sale',
                   'cash_in',
@@ -43,15 +44,33 @@ print(head.format('year',
       )
 
 for year in range(time_horizon+1):
+    col1 = elec_sale(MongDuong1, year)
+    col2 = cash_inflow(MongDuong1, year)
+    col3 = tot_capital_cost(MongDuong1, year)
+    col4 = fuel_cost(MongDuong1, year)
+    col5 = earning_before_tax(MongDuong1, year)
+    col6 = income_tax(MongDuong1, year)
+    col7 = operation_maintenance_cost(MongDuong1, year)
+    col8 = net_cash_flow(MongDuong1, year)
+    
+    col1.display_unit = 'GWh'
+    col2.display_unit = 'kUSD'
+    col3.display_unit = 'kUSD'
+    col4.display_unit = 'kUSD'
+    col5.display_unit = 'kUSD'
+    col6.display_unit = 'kUSD'
+    col7.display_unit = 'kUSD'
+    col8.display_unit = 'kUSD'
+                      
     line = row.format(year,
-                      elec_sale(MongDuong1, year),
-                      cash_inflow(MongDuong1, year),
-                      tot_capital_cost(MongDuong1, year),
-                      fuel_cost(MongDuong1, year),
-                      earning_before_tax(MongDuong1, year),
-                      income_tax(MongDuong1, year),
-                      operation_maintenance_cost(MongDuong1, year),
-                      net_cash_flow(MongDuong1, year)
+                      col1,
+                      col2,
+                      col3,
+                      col4,
+                      col5,
+                      col6,
+                      col7,
+                      col8
                       )
     print(line)
 

@@ -134,7 +134,6 @@ def total_job_benefit(plant):
     """
     return benefit_bm_collection(plant) + benefit_bm_transport(plant) + benefit_om(plant)
 
-
 if __name__ == "__main__":
     import doctest
     doctest.testmod()

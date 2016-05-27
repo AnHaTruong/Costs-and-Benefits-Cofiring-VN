@@ -1,0 +1,24 @@
+﻿TODO
+
+
+Use a list or an array rather than a function for time-dependant variables
+
+Encapsulate the class
+
+Read data from data file
+
+Use (standard) software construction
+
+Change print files to tables
+
+Refactoring the model to fix the zero biomass percentage bug
+
+Get units right
+  Monetary units in Table 1
+
+DONE
+
+Use (standard) test harness
+
+Add README
+

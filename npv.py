@@ -68,7 +68,7 @@ def cash_inflow(plant, year):
     >>> cash_inflow(NinhBinh, 1)
     <Quantity(43428.75, 'VND * gigawatt_hour / kilowatt_hour')>
     """
-    return elec_sale(plant, year) * electricity_tariff
+    return electricity_tariff * elec_sale(plant, year)
 
 
 def cash_outflow(plant, year):
@@ -116,7 +116,7 @@ def tot_capital_cost(plant, year):
     <Quantity(500.0, 'USD * megawatt / kilowatt')>
     """
     if year == 0:
-        return plant.capacity * plant.capital_cost * biomass_ratio
+        return plant.capital_cost * plant.capacity * biomass_ratio
     else:
         return zero_USD
 
@@ -146,7 +146,7 @@ def fuel_cost(plant, year):
     if year == 0:
         return zero_USD
     else:
-        biomass_cost = plant.biomass_required * plant.biomass_unit_cost
+        biomass_cost = plant.biomass_unit_cost * plant.biomass_required
         return biomass_cost * time_step
 
 
@@ -175,8 +175,8 @@ def operation_maintenance_cost(plant, year):
     if year == 0:
         return zero_USD
     else:
-        fixed_om_cost = plant.capacity * plant.fix_om_cost * biomass_ratio * time_step
-        variable_om_cost = elec_sale(plant, year) * plant.variable_om_cost
+        fixed_om_cost = plant.fix_om_cost * plant.capacity * biomass_ratio * time_step
+        variable_om_cost = plant.variable_om_cost * elec_sale(plant, year) 
         return fixed_om_cost + variable_om_cost
 
 
@@ -204,7 +204,8 @@ def income_tax(plant, year):
     if year == 0:
         return zero_VND
     else:
-        if tax_rate * earning_before_tax(plant, year) > 0:
+# 0 dimension VND
+        if tax_rate * earning_before_tax(plant, year) >  zero_VND:
             return tax_rate * earning_before_tax(plant, year)
         else:
             return zero_VND
@@ -235,11 +236,11 @@ def earning_before_tax(plant, year):
     if year == 0:
         return zero_VND
     else:
-        if (cash_inflow(plant, year) - fuel_cost(plant, year) - operation_maintenance_cost(plant, year)) > 0:
+        if (cash_inflow(plant, year) - fuel_cost(plant, year) - operation_maintenance_cost(plant, year)) > zero_VND:
             return (cash_inflow(plant, year) - fuel_cost(plant, year) - operation_maintenance_cost(plant, year))
         else:
             return zero_VND
-
+    return zero_VND
 
 def net_cash_flow(plant, year):
     """Cash flow of the co-firing project

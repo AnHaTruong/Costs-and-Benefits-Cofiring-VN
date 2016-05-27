@@ -1,0 +1,8 @@
+﻿This model is ...
+
+Requisite :
+Python 3
+Pint (>= 0.7 , we use hectare unit)
+
+natu: 
+patch the file natu/core.py using the provided diff to remove the dependency on reduce()
