@@ -19,8 +19,6 @@ from npv import npv, elec_sale, cash_inflow
 from npv import tot_capital_cost, fuel_cost, net_cash_flow
 from npv import operation_maintenance_cost, earning_before_tax, income_tax
 
-print(MongDuong1.capacity)
-print(NinhBinh.capacity)
 
 print('')
 
@@ -28,7 +26,7 @@ print(time_horizon)
 print(discount_rate)
 
 print('')
-print('Mong Duong 1')
+
 
 head = '{:4}'+' {:>11}'*8
 row = '{:4d}'+' {:6.0f}'*8
@@ -43,55 +41,49 @@ print(head.format('year',
                   'cash_flow')
       )
 
-for year in range(time_horizon+1):
-    col1 = elec_sale(MongDuong1, year)
-    col2 = cash_inflow(MongDuong1, year)
-    col3 = tot_capital_cost(MongDuong1, year)
-    col4 = fuel_cost(MongDuong1, year)
-    col5 = earning_before_tax(MongDuong1, year)
-    col6 = income_tax(MongDuong1, year)
-    col7 = operation_maintenance_cost(MongDuong1, year)
-    col8 = net_cash_flow(MongDuong1, year)
+
+def print_npv(plant):
+
+    for year in range(time_horizon+1):
+        col1 = elec_sale(plant, year)
+        col2 = cash_inflow(plant, year)
+        col3 = tot_capital_cost(plant, year)
+        col4 = fuel_cost(plant, year)
+        col5 = earning_before_tax(plant, year)
+        col6 = income_tax(plant, year)
+        col7 = operation_maintenance_cost(plant, year)
+        col8 = net_cash_flow(plant, year)
     
-    col1.display_unit = 'GWh'
-    col2.display_unit = 'kUSD'
-    col3.display_unit = 'kUSD'
-    col4.display_unit = 'kUSD'
-    col5.display_unit = 'kUSD'
-    col6.display_unit = 'kUSD'
-    col7.display_unit = 'kUSD'
-    col8.display_unit = 'kUSD'
+        col1.display_unit = 'GWh'
+        col2.display_unit = 'kUSD'
+        col3.display_unit = 'kUSD'
+        col4.display_unit = 'kUSD'
+        col5.display_unit = 'kUSD'
+        col6.display_unit = 'kUSD'
+        col7.display_unit = 'kUSD'
+        col8.display_unit = 'kUSD'
                       
-    line = row.format(year,
-                      col1,
-                      col2,
-                      col3,
-                      col4,
-                      col5,
-                      col6,
-                      col7,
-                      col8
-                      )
-    print(line)
+        line = row.format(year,
+                          col1,
+                          col2,
+                          col3,
+                          col4,
+                          col5,
+                          col6,
+                          col7,
+                          col8
+                          )
+        print(line)
+
+        
+print('Mong Duong 1')
+print_npv(MongDuong1)
+print('')
+print('NPV Mong Duong 1 = ', npv(MongDuong1))
 
 print('')
+
 print('Ninh Binh')
-
-for year in range(time_horizon+1):
-    line = row.format(year,
-                      elec_sale(NinhBinh, year),
-                      cash_inflow(NinhBinh, year),
-                      tot_capital_cost(NinhBinh, year),
-                      fuel_cost(NinhBinh, year),
-                      earning_before_tax(NinhBinh, year),
-                      income_tax(NinhBinh, year),
-                      operation_maintenance_cost(NinhBinh, year),
-                      net_cash_flow(NinhBinh, year)
-                      )
-    print(line)
-
+print_npv(NinhBinh)
 print('')
-
-print()
-print('NPV = {:10.0f}'.format(npv(MongDuong1)))
-print('NPV = {:10.0f}'.format(npv(NinhBinh)))
+print('NPV Ninh Binh  = ', npv(NinhBinh))

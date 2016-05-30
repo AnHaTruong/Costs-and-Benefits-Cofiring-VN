@@ -18,7 +18,7 @@ def farmer_income(plant):
 
     >>> from parameters import *
     >>> farmer_income(MongDuong1)
-    <Quantity(168.8423, 'USD / hectare / year')>
+    3.71453e+06 mol/(ha*y)
     >>> farmer_income(NinhBinh)
     <Quantity(172.382, 'USD / hectare / year')>
     """

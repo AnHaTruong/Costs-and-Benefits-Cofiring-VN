@@ -9,14 +9,18 @@ Read data from data file
 
 Use (standard) software construction
 
-Change print files to tables
-
 Refactoring the model to fix the zero biomass percentage bug
 
 Get units right
-  Monetary units in Table 1
+  Monetary units in Table A, B
+
+Use function to print table for both cases
+
+Redo the doc test 
 
 DONE
+
+Change print files to tables
 
 Use (standard) test harness
 

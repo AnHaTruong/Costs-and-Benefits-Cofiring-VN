@@ -24,7 +24,7 @@ from natu import units
 VND = ScalarUnit(1, 'N', 'mol', prefixable=True)
 units.VND = VND
 
-USD = ScalarUnit(22000, 'N', 'mol', prefixable=True)
+USD = ScalarUnit(21473, 'N', 'mol', prefixable=True)
 units.USD = USD
 
 """Input parameters of the model"""
@@ -76,7 +76,7 @@ MongDuong1.boiler_technology = 'CFB'
 MongDuong1.capacity = 1080 * 1000 * kW  # natu can't simplify
 MongDuong1.generation = 6500 * 1000000 * kWh / y
 MongDuong1.coal_heat_value = 19.4 * MJ / kg
-MongDuong1.base_coal_consumption = 2750000 * t / y
+MongDuong1.base_coal_consumption = 2751600 * t / y
 MongDuong1.base_plant_efficiency = 38.84 / 100
 MongDuong1.base_boiler_efficiency = 87.03 / 100
 

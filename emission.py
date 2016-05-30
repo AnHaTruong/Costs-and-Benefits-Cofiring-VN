@@ -21,9 +21,9 @@ def emission_coal_combust(plant):
 
     >>> from parameters import *
     >>> emission_coal_combust(MongDuong1)
-    <Quantity(292848.22337600734, 'metric_ton / year')>
+    292848 t/y
     >>> emission_coal_combust(NinhBinh)
-    <Quantity(60310.806743406036, 'metric_ton / year')>
+    60310.8 t/y
     """
     return plant.ef_coal_combust * plant.coal_saved * plant.coal_heat_value
 
@@ -35,9 +35,9 @@ def emission_coal_transport(plant):
 
     >>> from parameters import *
     >>> emission_coal_transport(MongDuong1)
-    <Quantity(0.0, 'kilogram / year')>
+    0 t/y
     >>> emission_coal_transport(NinhBinh)
-    <Quantity(305838.8458126344, 'kilogram / year')>
+    305.839 t/y
     """
     return plant.ef_coal_transport * 2 * plant.coal_transport_distance * plant.coal_saved
 
@@ -47,9 +47,9 @@ def emission_biomass_combust(plant):
 
     >>> from parameters import *
     >>> emission_biomass_combust(MongDuong1)
-    <Quantity(260107.42821595081, 'metric_ton / year')>
+    260107 t/y
     >>> emission_biomass_combust(NinhBinh)
-    <Quantity(53567.983629236915, 'metric_ton / year')>
+    53568 t/y
     """
     return plant.ef_biomass_combust * plant.biomass_required * biomass_heat_value
 
@@ -61,9 +61,9 @@ def emission_biomass_transport(plant):
 
     >>> from parameters import *
     >>> emission_biomass_transport(MongDuong1)
-    <Quantity(2272928.3552020974, 'kilogram / year')>
+    2272.93 t/y
     >>> emission_biomass_transport(NinhBinh)
-    <Quantity(104066.49840766673, 'kilogram / year')>
+    104.066 t/y
     """
     return plant.ef_biomass_transport * 2 * plant.collection_radius * plant.biomass_required
 
@@ -74,9 +74,9 @@ def total_emission_coal(plant):
 
     >>> from parameters import *
     >>> total_emission_coal(MongDuong1)
-    <Quantity(292848.22337600734, 'metric_ton / year')>
+    292848 t/y
     >>> total_emission_coal(NinhBinh)
-    <Quantity(60616.64558921867, 'metric_ton / year')>
+    60616.6 t/y
     """
     return emission_coal_combust(plant) + emission_coal_transport(plant)
 
@@ -87,9 +87,9 @@ def total_emission_biomass(plant):
 
     >>> from parameters import *
     >>> total_emission_biomass(MongDuong1)
-    <Quantity(262380.3565711529, 'metric_ton / year')>
+    262380 t/y
     >>> total_emission_biomass(NinhBinh)
-    <Quantity(53672.05012764458, 'metric_ton / year')>
+    53672.1 t/y
     """
     return emission_biomass_combust(plant) + emission_biomass_transport(plant)
 
@@ -100,9 +100,9 @@ def emission_reduction(plant):
 
     >>> from parameters import *
     >>> emission_reduction(MongDuong1)
-    <Quantity(30467.86680485442, 'metric_ton / year')>
+    30467.9 t/y
     >>> emission_reduction(NinhBinh)
-    <Quantity(6944.595461574092, 'metric_ton / year')>
+    6944.6 t/y
     """
     return total_emission_coal(plant) - total_emission_biomass(plant)
 

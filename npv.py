@@ -23,16 +23,16 @@ def elec_sale(plant, year):
      In the first year, the project is not here yet so no sales:
      >>> from parameters import *
      >>> elec_sale(MongDuong1, 0)
-     <Quantity(0, 'kilowatt_hour')>
+     0 kWh
      >>> elec_sale(NinhBinh, 0)
-     <Quantity(0, 'kilowatt_hour')>
+     0 kWh
 
      From the second year onwards:
      >>> elec_sale(MongDuong1, 1)
-     <Quantity(325.0, 'gigawatt_hour')>
+     3.25e+08 kWh
      >>> elec_sale(NinhBinh, 1)
-     <Quantity(37.5, 'gigawatt_hour')>
-
+     3.75e+07 kWh
+     
      Sales are assumed constant afterwards:
      >>> elec_sale(MongDuong1, 1) == elec_sale(MongDuong1, time_horizon)
      True
@@ -52,9 +52,9 @@ def cash_inflow(plant, year):
     In the first year, there is no sale so cash inflow is zero:
     >>> from parameters import *
     >>> cash_inflow(MongDuong1, 0)
-    <Quantity(0.0, 'VND')>
+    0 mol
     >>> cash_inflow(NinhBinh, 0)
-    <Quantity(0.0, 'VND')>
+    0 mol
 
     Cash inflow remain constant afterwards:
     >>> cash_inflow(MongDuong1, 1) == cash_inflow(MongDuong1, time_horizon)
@@ -64,9 +64,9 @@ def cash_inflow(plant, year):
 
     Cash inflow on year one:
     >>> cash_inflow(MongDuong1, 1)
-    <Quantity(376382.49999999994, 'VND * gigawatt_hour / kilowatt_hour')>
+    3.76382e+11 mol
     >>> cash_inflow(NinhBinh, 1)
-    <Quantity(43428.75, 'VND * gigawatt_hour / kilowatt_hour')>
+    4.34287e+10 mol
     """
     return electricity_tariff * elec_sale(plant, year)
 
@@ -77,15 +77,15 @@ def cash_outflow(plant, year):
     Cash outflow year zero:
     >>> from parameters import *
     >>> cash_outflow(MongDuong1, 0)
-    <Quantity(2700.0, 'USD * megawatt / kilowatt')>
+    5.94e+10 mol
     >>> cash_outflow(NinhBinh, 0)
-    <Quantity(500.0, 'USD * megawatt / kilowatt')>
+    1.1e+10 mol
 
     Cash outflow from year one:
     >>> cash_outflow(MongDuong1, 1)
-    <Quantity(15178279.018584013, 'USD')>
+    3.31613e+11 mol
     >>> cash_outflow(NinhBinh, 1)
-    <Quantity(2422192.002333168, 'USD')>
+    5.32882e+10 mol
 
     Cash outflow remain constant afterwards:
     >>> cash_outflow(MongDuong1, 1) == cash_outflow(MongDuong1, time_horizon)
@@ -111,9 +111,9 @@ def tot_capital_cost(plant, year):
 
     Total capital cost on year zero:
     >>> tot_capital_cost(MongDuong1, 0)
-    <Quantity(2700.0, 'USD * megawatt / kilowatt')>
+    5.94e+10 mol
     >>> tot_capital_cost(NinhBinh, 0)
-    <Quantity(500.0, 'USD * megawatt / kilowatt')>
+    1.1e+10 mol
     """
     if year == 0:
         return plant.capital_cost * plant.capacity * biomass_ratio

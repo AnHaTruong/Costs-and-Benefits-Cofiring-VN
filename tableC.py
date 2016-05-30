@@ -19,8 +19,8 @@ print('')
 print('capacity recovery factor', (cap_rec_factor()))
 
 print('')
-head = '{:22}' + '{:25}'*2
-row = '{:22}' + '{:10.5f}'*2
+head = '{:22}' + '{:30}'*2
+row = '{:22}' + '{:15.5f}'*2
 
 print (head.format(' ', 'Mong Duong 1', 'Ninh Binh'))
 

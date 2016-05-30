@@ -9,32 +9,22 @@
 #
 """Evaluation of benefits of co-firing project to public health"""
 
-from parameters import biomass_ratio, ef_so2_biomass, ef_pm10_biomass
+from parameters import ef_so2_biomass, ef_pm10_biomass
 from parameters import ef_nox_biomass, health_damage_so2
 from parameters import health_damage_pm10, health_damage_nox
 
-def coal_burned(plant):
-    """ amount of coal substituted by 5% biomass co-firing
-
-    >>> from parameters import *
-    >>> coal_burned(MongDuong1)
-    <Quantity(0.1375, 'megametric_ton / year')>
-    >>> coal_burned(NinhBinh)
-    <Quantity(0.021, 'megametric_ton / year')>
-    """
-    return plant.base_coal_consumption * biomass_ratio
 
 def so2_emission_base(plant):
     """ SO2 emission from the plant without co-firing.
     Only account for the project (5% co-firing)
 
     >>> from parameters import *
-    >>> so2_emission_base(MongDuong1)
+    >>> so2_emission_baseD(MongDuong1)
     <Quantity(0.028462500000000026, 'kilogram * megametric_ton / metric_ton / year')>
     >>> so2_emission_base(NinhBinh)
     <Quantity(0.24150000000000002, 'kilogram * megametric_ton / metric_ton / year')>
     """
-    return coal_burned(plant) * plant.ef_so2_coal * (1 - plant.desulfur_efficiency)
+    return plant.coal_saved * plant.ef_so2_coal * (1 - plant.desulfur_efficiency)
 
 
 def pm10_emission_base(plant):
@@ -47,7 +37,7 @@ def pm10_emission_base(plant):
     >>> pm10_emission_base(NinhBinh)
     <Quantity(0.004384800000000004, 'kilogram * megametric_ton / metric_ton / year')>
     """
-    return coal_burned(plant) * plant.ef_pm10_coal * (1 - plant.esp_efficiency)
+    return plant.coal_saved * plant.ef_pm10_coal * (1 - plant.esp_efficiency)
 
 
 def nox_emission_base(plant):
@@ -60,7 +50,7 @@ def nox_emission_base(plant):
     >>> nox_emission_base(NinhBinh)
     <Quantity(0.378, 'kilogram * megametric_ton / metric_ton / year')>
     """
-    return coal_burned(plant) * plant.ef_nox_coal
+    return plant.coal_saved * plant.ef_nox_coal
 
 
 def so2_emission_cofiring(plant):
