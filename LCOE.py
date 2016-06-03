@@ -73,13 +73,17 @@ def lcoe_variable_om(plant):
 
 
 def lcoe(plant):
-    """calcuate the levelized cost of electricity for co-firing project
+    """Calculate the levelized cost of electricity for co-firing project
 
     >>> from parameters import *
-    >>> lcoe(MongDuong1)
-    <Quantity(0.045187940447952706, 'USD / hour / kilowatt')>
-    >>> lcoe(NinhBinh)
-    <Quantity(0.06602927869272243, 'USD / hour / kilowatt')>
+    >>> l = lcoe(MongDuong1)
+    >>> l.display_unit = 'USD/(hr*kW)'
+    >>> l
+    0.0451879 USD/(hr*kW)
+    >>> l = lcoe(NinhBinh)
+    >>> l.display_unit = 'USD/(hr*kW)'
+    >>> l
+    0.0660293 USD/(hr*kW)
     """
     return (lcoe_cap_return(plant)
             + lcoe_fix_om(plant)
@@ -90,4 +94,3 @@ def lcoe(plant):
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
-    

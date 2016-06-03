@@ -6,3 +6,9 @@ Pint (>= 0.7 , we use hectare unit)
 
 natu: 
 patch the file natu/core.py using the provided diff to remove the dependency on reduce()
+
+Known bugs and workarounds:
+
+doctest fails in an spyder3 IPython console with an unexpected argument in __init__
+See https://github.com/spyder-ide/spyder/issues/1855
+Use a simple Python console instead.
