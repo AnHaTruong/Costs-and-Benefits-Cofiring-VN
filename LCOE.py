@@ -18,7 +18,7 @@ def cap_rec_factor():
 
     >>> from parameters import *
     >>> cap_rec_factor()
-    <Quantity(0.10781189728784245, 'dimensionless')>
+    0.10781189728784245
     """
     return ((discount_rate * (1 + discount_rate)**time_horizon) /
             ((1 + discount_rate)**time_horizon - 1))
@@ -28,10 +28,14 @@ def lcoe_cap_return(plant):
     """Contribution of capital cost in lcoe
 
     >>> from parameters import *
-    >>> lcoe_cap_return(MongDuong1)
-    <Quantity(0.0008956680697759168, 'USD / hour / kilowatt')>
-    >>> lcoe_cap_return(NinhBinh)
-    <Quantity(0.0014374919638379057, 'USD / hour / kilowatt')>
+    >>> l = lcoe_cap_return(MongDuong1)
+    >>> l.display_unit = 'USD/(hr*kW)'
+    >>> l
+    0.000895668 USD/(hr*kW)
+    >>> l = lcoe_cap_return(NinhBinh)
+    >>> l.display_unit = 'USD/(hr*kW)'
+    >>> l
+    0.00143749 USD/(hr*kW)
     """
     return plant.capital_cost * cap_rec_factor()/h_per_yr / plant.capacity_factor
 
@@ -40,34 +44,46 @@ def lcoe_fix_om(plant):
     """Contribution of fix O&M cost in lcoe
 
     >>> from parameters import *
-    >>> lcoe_fix_om(MongDuong1)
-    <Quantity(0.005356799999999969, 'USD / hour / kilowatt')>
-    >>> lcoe_fix_om(NinhBinh)
-    <Quantity(0.004298666666666686, 'USD / hour / kilowatt')>
+    >>> l = lcoe_fix_om(MongDuong1)
+    >>> l.display_unit = 'USD/(hr*kW)'
+    >>> l
+    0.0053568 USD/(hr*kW)
+    >>> l = lcoe_fix_om(NinhBinh)
+    >>> l.display_unit = 'USD/(hr*kW)'
+    >>> l
+    0.00429867 USD/(hr*kW)
     """
-    return plant.fix_om_cost/(h_per_yr * plant.capacity_factor) * time_step
+    return plant.fix_om_cost/(h_per_yr * plant.capacity_factor) *time_step
 
 
 def lcoe_bm_cost(plant):
     """Contribution of fuel cost in lcoe
 
     >>> from parameters import *
-    >>> lcoe_bm_cost(MongDuong1)
-    <Quantity(32.935472378176826, 'USD * kilogram / kilowatt_hour / metric_ton')>
-    >>> lcoe_bm_cost(NinhBinh)
-    <Quantity(54.29312006221783, 'USD * kilogram / kilowatt_hour / metric_ton')>
+    >>> l = lcoe_bm_cost(MongDuong1)
+    >>> l.display_unit = 'USD/(hr*kW)'
+    >>> l
+    0.0329355 USD/(hr*kW)
+    >>> l = lcoe_bm_cost(NinhBinh)
+    >>> l.display_unit = 'USD/(hr*kW)'
+    >>> l
+    0.0542931 USD/(hr*kW)
     """
-    return (plant.biomass_unit_cost / biomass_heat_value) * plant.heat_rate
+    return plant.biomass_unit_cost * plant.heat_rate / biomass_heat_value
 
 
 def lcoe_variable_om(plant):
     """Contribution of variable O&M cost in lcoe
 
     >>> from parameters import *
-    >>> lcoe_variable_om(MongDuong1)
-    <Quantity(0.006, 'USD / kilowatt_hour')>
-    >>> lcoe_variable_om(NinhBinh)
-    <Quantity(0.006, 'USD / kilowatt_hour')>
+    >>> l = lcoe_variable_om(MongDuong1)
+    >>> l.display_unit = 'USD/(hr*kW)'
+    >>> l
+    0.006 USD/(hr*kW)
+    >>> l = lcoe_variable_om(NinhBinh)
+    >>> l.display_unit = 'USD/(hr*kW)'
+    >>> l
+    0.006 USD/(hr*kW)
     """
     return plant.variable_om_cost
 

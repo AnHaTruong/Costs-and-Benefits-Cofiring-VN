@@ -20,47 +20,56 @@ from health import total_health_benefit
 
 print('')
 head = '{:22}' * 2 + '{:22}' * 3
-row = '{:10}' + '{:15.2f}' * 4
+row = '{:10}' + '{:18.2f}' * 3 + '{:15.0f}'
 
 
 print('')
 
 
 def print_health(plant):
-    
-    print (head.format('Pollutant',
-                       'Base emission',
-                       'Co-firing emission',
-                       'Emission reduction ',
-                       'Health benefit'
-                       )
-           )    
 
-    print (row.format('SO2',
-                      so2_emission_base(plant),
-                      so2_emission_cofiring(plant),
-                      so2_emission_reduction(plant),
-                      health_benefit_so2(plant)
-                      )
-           )
+    print(head.format('Pollutant',
+                      'Base emission',
+                      'Co-firing emission',
+                      'Emission reduction ',
+                      'Health benefit'
+                     )
+         )
+    col1 = health_benefit_so2(plant)
+    col2 = health_benefit_pm10(plant)
+    col3 = health_benefit_nox(plant)
+    col4 = total_health_benefit(plant)
 
-    print (row.format('PM10',
-                      pm10_emission_base(plant),
-                      pm10_emission_cofiring(plant),
-                      pm10_emission_reduction(plant),
-                      health_benefit_pm10(plant)
-                      )
-           )
+    col1.display_unit = 'USD/y'
+    col2.display_unit = 'USD/y'
+    col3.display_unit = 'USD/y'
+    col4.display_unit = 'USD/y'
 
-    print (row.format('NOx',
-                      nox_emission_base(plant),
-                      nox_emission_cofiring(plant),
-                      nox_emission_reduction(plant),
-                      health_benefit_nox(plant)
-                      )
-           )
-    
-    print ('Total health benefit ',total_health_benefit(plant))
+    print(row.format('SO2',
+                     so2_emission_base(plant),
+                     so2_emission_cofiring(plant),
+                     so2_emission_reduction(plant),
+                     col1
+                    )
+         )
+
+    print(row.format('PM10',
+                     pm10_emission_base(plant),
+                     pm10_emission_cofiring(plant),
+                     pm10_emission_reduction(plant),
+                     col2
+                    )
+         )
+
+    print(row.format('NOx',
+                     nox_emission_base(plant),
+                     nox_emission_cofiring(plant),
+                     nox_emission_reduction(plant),
+                     col3
+                    )
+         )
+
+    print('Total health benefit ', col4)
 
 print('Health benefit - Mong Duong 1')
 print_health(MongDuong1)

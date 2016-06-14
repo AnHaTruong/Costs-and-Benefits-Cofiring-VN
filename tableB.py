@@ -14,25 +14,33 @@ from parameters import MongDuong1, NinhBinh
 from farmerincome import farmer_income, bm_sell_revenue, total_income_benefit
 
 print('')
-head = '{:40}' + '{:28}' + '{:15}'
-row = '{:30}' + '{:23.5f}'*2
+#head = '{:40}' + '{:28}' + '{:15}'
+row = '{:20}' + '{:23.0f}'
 
-print (head.format(' ', 'Mong Duong 1', 'Ninh Binh'))
+#print (head.format(' ', 'Mong Duong 1', 'Ninh Binh'))
 
-print (row.format('biomass sell revenue',
-                  bm_sell_revenue(MongDuong1),
-                  bm_sell_revenue(NinhBinh)
-                  )
-      )
 
-print (row.format('farmer income per ha',
-                  farmer_income(MongDuong1),
-                  farmer_income(NinhBinh)
-                  )
-      )
+def print_income(plant):
+    col1 = bm_sell_revenue(plant)
+    col2 = farmer_income(plant)
+    col3 = total_income_benefit(plant)
+    
+    col1.display_unit = 'USD/ha/y'
+    col2.display_unit = 'USD/ha/y'
+    col3.display_unit = 'USD/y'
 
-print (row.format('total benefit from farmers extra income',
-                  total_income_benefit(MongDuong1),
-                  total_income_benefit(NinhBinh)
-                  )
-      )
+
+    print (row.format('biomass sell revenue', col1))
+
+    print (row.format('farmer income per ha', col2))
+
+    print (row.format('total benefit', col3))
+    
+print('total benefit from farmers extra income Mong Duong 1')
+print('')
+print_income(MongDuong1)
+
+print('')
+print('total benefit from farmers extra income Ninh Binh')
+print('')
+print_income(NinhBinh)

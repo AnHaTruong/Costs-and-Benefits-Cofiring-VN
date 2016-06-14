@@ -18,49 +18,51 @@ from emission import total_emission_coal, total_emission_biomass
 from emission import emission_reduction
 
 print('')
-head = '{:38}' + '{:28}' + '{:18}'
-row = '{:35}' + '{:16.2f}'*2
+row = '{:35}' + '{:16.2f}'
 
-print (head.format(' ', 'Mong Duong 1', 'Ninh Binh'))
 
-print (row.format('emission from coal combustion',
-                  emission_coal_combust(MongDuong1),
-                  emission_coal_combust(NinhBinh)
-                  )
-      )
+def print_emission(plant):
+    """Print table 7-Emission reduction from co-firing """
+    
+    print(row.format('emission from coal combustion',
+                     emission_coal_combust(plant),
+                    )
+         )
 
-print (row.format('emission from coal transport',
-                  emission_coal_transport(MongDuong1),
-                  emission_coal_transport(NinhBinh)
-                  )
-      )      
- 
-print (row.format('emission from biomass combustion',
-                  emission_biomass_combust(MongDuong1),
-                  emission_biomass_combust(NinhBinh)
-                  )
-      )  
-      
-print (row.format('emission from biomass transport',
-                  emission_biomass_transport(MongDuong1),
-                  emission_biomass_transport(NinhBinh)
-                  )
-      )      
+    print(row.format('emission from coal transport',
+                     emission_coal_transport(plant),
+                    )
+         )
 
-print (row.format('emission from coal',
-                  total_emission_coal(MongDuong1),
-                  total_emission_coal(NinhBinh)
-                  )
-      )
+    print(row.format('emission from biomass combustion',
+                     emission_biomass_combust(plant),
+                    )
+         )
 
-print (row.format('emission from biomass',
-                  total_emission_biomass(MongDuong1),
-                  total_emission_biomass(NinhBinh)
-                  )
-      )
+    print(row.format('emission from biomass transport',
+                     emission_biomass_transport(plant),
+                    )
+         )
 
-print (row.format('emission reduction',
-                  emission_reduction(MongDuong1),
-                  emission_reduction(NinhBinh)
-                  )
-      )
+    print(row.format('emission from coal',
+                     total_emission_coal(plant),
+                    )
+         )
+
+    print(row.format('emission from biomass',
+                     total_emission_biomass(plant),
+                    )
+         )
+
+    print(row.format('emission reduction',
+                     emission_reduction(plant),
+                    )
+         )
+
+print('Greenhouse gas emission reduction Mong Duong 1')
+print_emission(MongDuong1)
+print('')
+
+print('Greenhouse gas emission reduction NinhBinh')
+print_emission(NinhBinh)
+

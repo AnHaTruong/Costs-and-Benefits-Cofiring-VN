@@ -9,10 +9,7 @@ Read data from data file
 
 Refactoring the model to fix the zero biomass percentage bug
 
-Get units right
-  Monetary units in Table A, B
-
-Redo the doc test 
+Sensitivity analysis
 
 
 DONE
@@ -27,3 +24,7 @@ Use function to print table for both cases
 
 Use (standard) software construction
 
+Get units right
+  Monetary units in Table A, B
+
+Redo the doc test 

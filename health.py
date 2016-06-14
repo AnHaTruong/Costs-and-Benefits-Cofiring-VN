@@ -19,10 +19,10 @@ def so2_emission_base(plant):
     Only account for the project (5% co-firing)
 
     >>> from parameters import *
-    >>> so2_emission_baseD(MongDuong1)
-    <Quantity(0.028462500000000026, 'kilogram * megametric_ton / metric_ton / year')>
+    >>> so2_emission_base(MongDuong1)
+    32.2893 t/y
     >>> so2_emission_base(NinhBinh)
-    <Quantity(0.24150000000000002, 'kilogram * megametric_ton / metric_ton / year')>
+    283.641 t/y
     """
     return plant.coal_saved * plant.ef_so2_coal * (1 - plant.desulfur_efficiency)
 
@@ -33,9 +33,9 @@ def pm10_emission_base(plant):
 
     >>> from parameters import *
     >>> pm10_emission_base(MongDuong1)
-    <Quantity(0.02409000000000002, 'kilogram * megametric_ton / metric_ton / year')>
+    27.3289 t/y
     >>> pm10_emission_base(NinhBinh)
-    <Quantity(0.004384800000000004, 'kilogram * megametric_ton / metric_ton / year')>
+    5.14993 t/y
     """
     return plant.coal_saved * plant.ef_pm10_coal * (1 - plant.esp_efficiency)
 
@@ -46,9 +46,9 @@ def nox_emission_base(plant):
 
     >>> from parameters import *
     >>> nox_emission_base(MongDuong1)
-    <Quantity(2.475, 'kilogram * megametric_ton / metric_ton / year')>
+    2807.76 t/y
     >>> nox_emission_base(NinhBinh)
-    <Quantity(0.378, 'kilogram * megametric_ton / metric_ton / year')>
+    443.96 t/y
     """
     return plant.coal_saved * plant.ef_nox_coal
 
@@ -58,9 +58,9 @@ def so2_emission_cofiring(plant):
 
     >>> from parameters import *
     >>> so2_emission_cofiring(MongDuong1)
-    <Quantity(839.5075682064047, 'gram * metric_ton / kilogram / year')>
+    0.839508 t/y
     >>> so2_emission_cofiring(NinhBinh)
-    <Quantity(9605.161131295841, 'gram * metric_ton / kilogram / year')>
+    9.60516 t/y
     """
     return plant.biomass_required * ef_so2_biomass * (1 - plant.desulfur_efficiency)
 
@@ -70,9 +70,9 @@ def pm10_emission_cofiring(plant):
 
     >>> from parameters import *
     >>> pm10_emission_cofiring(MongDuong1)
-    <Quantity(9431.504778615163, 'gram * metric_ton / kilogram / year')>
+    9.4315 t/y
     >>> pm10_emission_cofiring(NinhBinh)
-    <Quantity(3884.7540575463217, 'gram * metric_ton / kilogram / year')>
+    3.88475 t/y
     """
     return plant.biomass_required * ef_pm10_biomass * (1 - plant.esp_efficiency)
 
@@ -81,10 +81,10 @@ def nox_emission_cofiring(plant):
     """NOx emission from co-firing
 
     >>> from parameters import *
-    >>> nox_emission_cofiring(MongDuong1)
-    <Quantity(590764.5850341361, 'gram * metric_ton / kilogram / year')>
-    >>> nox_emission_cofiring(NinhBinh)
-    <Quantity(121665.37432974733, 'gram * metric_ton / kilogram / year')>
+    >>> pm10_emission_cofiring(MongDuong1)
+    9.4315 t/y
+    >>> pm10_emission_cofiring(NinhBinh)
+    3.88475 t/y
     """
     return plant.biomass_required * ef_nox_biomass
 
@@ -94,9 +94,9 @@ def so2_emission_reduction(plant):
 
     >>> from parameters import *
     >>> so2_emission_reduction(MongDuong1)
-    <Quantity(0.02762299243179362, 'kilogram * megametric_ton / metric_ton / year')>
+    31.4498 t/y
     >>> so2_emission_reduction(NinhBinh)
-    <Quantity(0.23189483886870418, 'kilogram * megametric_ton / metric_ton / year')>
+    274.036 t/y
     """
     return so2_emission_base(plant) - so2_emission_cofiring(plant)
 
@@ -106,9 +106,9 @@ def pm10_emission_reduction(plant):
 
     >>> from parameters import *
     >>> pm10_emission_reduction(MongDuong1)
-    <Quantity(0.014658495221384859, 'kilogram * megametric_ton / metric_ton / year')>
+    17.8974 t/y
     >>> pm10_emission_reduction(NinhBinh)
-    <Quantity(0.0005000459424536821, 'kilogram * megametric_ton / metric_ton / year')>
+    1.26518 t/y
     """
     return pm10_emission_base(plant) - pm10_emission_cofiring(plant)
 
@@ -118,9 +118,9 @@ def nox_emission_reduction(plant):
 
     >>> from parameters import *
     >>> nox_emission_reduction(MongDuong1)
-    <Quantity(1.884235414965864, 'kilogram * megametric_ton / metric_ton / year')>
+    2217 t/y
     >>> nox_emission_reduction(NinhBinh)
-    <Quantity(0.25633462567025267, 'kilogram * megametric_ton / metric_ton / year')>
+    322.294 t/y
     """
     return nox_emission_base(plant) - nox_emission_cofiring(plant)
 
@@ -128,10 +128,14 @@ def health_benefit_so2(plant):
     """ Health benefit (in USD/year) from SO2 reduction by co-firing
 
     >>> from parameters import *
-    >>> health_benefit_so2(MongDuong1)
-    <Quantity(104.05581249056657, 'USD * kilogram * megametric_ton / metric_ton ** 2 / year')>
-    >>> health_benefit_so2(NinhBinh)
-    <Quantity(873.5478580184086, 'USD * kilogram * megametric_ton / metric_ton ** 2 / year')>
+    >>> l = health_benefit_so2(MongDuong1)
+    >>> l.display_unit = 'kUSD/y'
+    >>> l
+    118.471 kUSD/y
+    >>> l = health_benefit_so2(NinhBinh)
+    >>> l.display_unit = 'kUSD/y'
+    >>> l
+    1032.29 kUSD/y
     """
     return so2_emission_reduction(plant) * health_damage_so2
 
@@ -140,10 +144,14 @@ def health_benefit_pm10(plant):
     """ Health benefit from pm10 reduction by co-firing
 
     >>> from parameters import *
-    >>> health_benefit_pm10(MongDuong1)
-    <Quantity(86.23592738740713, 'USD * kilogram * megametric_ton / metric_ton ** 2 / year')>
-    >>> health_benefit_pm10(NinhBinh)
-    <Quantity(2.941770279455012, 'USD * kilogram * megametric_ton / metric_ton ** 2 / year')>
+    >>> l = health_benefit_pm10(MongDuong1)
+    >>> l.display_unit = 'kUSD/y'
+    >>> l
+    105.29 kUSD/y
+    >>> l = health_benefit_pm10(NinhBinh)
+    >>> l.display_unit = 'kUSD/y'
+    >>> l
+    7.44304 kUSD/y
     """
     return pm10_emission_reduction(plant) * health_damage_pm10
 
@@ -151,10 +159,14 @@ def health_benefit_nox(plant):
     """ Health benefit from nox emission reduction by co-firing
 
     >>> from parameters import *
-    >>> health_benefit_nox(MongDuong1)
-    <Quantity(538.891328680237, 'USD * kilogram * megametric_ton / metric_ton ** 2 / year')>
-    >>> health_benefit_nox(NinhBinh)
-    <Quantity(73.31170294169226, 'USD * kilogram * megametric_ton / metric_ton ** 2 / year')>
+    >>> l = health_benefit_nox(MongDuong1)
+    >>> l.display_unit = 'kUSD/y'
+    >>> l
+    634.062 kUSD/y
+    >>> l = health_benefit_nox(NinhBinh)
+    >>> l.display_unit = 'kUSD/y'
+    >>> l
+    92.1762 kUSD/y
     """
     return nox_emission_reduction(plant) * health_damage_nox
 
@@ -162,10 +174,14 @@ def total_health_benefit(plant):
     """ Total health benefit from co-firing
 
     >>> from parameters import *
-    >>> total_health_benefit(MongDuong1)
-    <Quantity(729.1830685582107, 'USD * kilogram * megametric_ton / metric_ton ** 2 / year')>
-    >>> total_health_benefit(NinhBinh)
-    <Quantity(949.8013312395559, 'USD * kilogram * megametric_ton / metric_ton ** 2 / year')>
+    >>> l = total_health_benefit(MongDuong1)
+    >>> l.display_unit = 'kUSD/y'
+    >>> l
+    857.823 kUSD/y
+    >>> l = total_health_benefit(NinhBinh)
+    >>> l.display_unit = 'kUSD/y'
+    >>> l
+    1131.91 kUSD/y
     """
     return health_benefit_so2(plant) + health_benefit_pm10(plant) + health_benefit_nox(plant)
 

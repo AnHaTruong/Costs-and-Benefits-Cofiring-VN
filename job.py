@@ -11,7 +11,7 @@
 
 from parameters import winder_capacity, work_hour_day, truck_velocity
 from parameters import truck_load, OM_hour_MWh, biomass_ratio, wage_bm_transport
-from parameters import wage_bm_collect, wage_operation_maintenance
+from parameters import wage_bm_collect, wage_operation_maintenance, h_per_yr
 
 
 def bm_collection_work(plant):
@@ -19,9 +19,9 @@ def bm_collection_work(plant):
 
     >>> from parameters import *
     >>> bm_collection_work(MongDuong1)
-    <Quantity(315503.5301525467, 'hour / year')>
+    35.991732848796104
     >>> bm_collection_work(NinhBinh)
-    <Quantity(64976.56777470551, 'hour / year')>
+    7.412339467796658
     """
     return plant.biomass_required * work_hour_day / winder_capacity
 
@@ -31,9 +31,9 @@ def bm_transport_work(plant):
 
     >>> from parameters import *
     >>> bm_transport_work(MongDuong1)
-    <Quantity(40733.483068137946, 'hour / year')>
+    4.646758278363899
     >>> bm_transport_work(NinhBinh)
-    <Quantity(1864.991010890085, 'hour / year')>
+    0.21275279613165468
     """
     return number_of_truck(plant) * transport_time(plant)
 
@@ -43,9 +43,9 @@ def number_of_truck(plant):
 
     >>> from parameters import *
     >>> number_of_truck(MongDuong1)
-    <Quantity(12955.36370688895, '1 / year')>
+    12955.4 1/y
     >>> number_of_truck(NinhBinh)
-    <Quantity(2668.1003142488453, '1 / year')>
+    2668.1 1/y
     """
     return plant.biomass_required / truck_load
 
@@ -55,9 +55,9 @@ def transport_time(plant):
 
     >>> from parameters import *
     >>> transport_time(MongDuong1)
-    <Quantity(3.1441404494478316, 'hour')>
+    3.14414 hr
     >>> transport_time(NinhBinh)
-    <Quantity(0.6989958364497022, 'hour')>
+    0.698996 hr
     """
     return plant.collection_radius * 2 / truck_velocity
 
@@ -67,9 +67,9 @@ def om_work(plant):
 
     >>> from parameters import *
     >>> om_work(MongDuong1)
-    <Quantity(39.0, 'gigawatt_hour * hour / megawatt_hour / year')>
+    4.449007529089665
     >>> om_work(NinhBinh)
-    <Quantity(4.5, 'gigawatt_hour * hour / megawatt_hour / year')>
+    0.5133470225872689
     """
     return plant.generation * biomass_ratio * OM_hour_MWh
 
@@ -80,9 +80,9 @@ def cofiring_work(plant):
 
     >>> from parameters import *
     >>> cofiring_work(MongDuong1)
-    <Quantity(395237.01322068466, 'hour / year')>
+    45.087498656249664
     >>> cofiring_work(NinhBinh)
-    <Quantity(71341.5587855956, 'hour / year')>
+    8.138439286515581
     """
     return bm_collection_work(plant) + bm_transport_work(plant) + om_work(plant)
 
@@ -91,10 +91,14 @@ def benefit_bm_collection(plant):
     """Benefit from job creation from biomass collection
 
     >>> from parameters import *
-    >>> benefit_bm_collection(MongDuong1)
-    <Quantity(350208.91846932686, 'USD / year')>
-    >>> benefit_bm_collection(NinhBinh)
-    <Quantity(72123.99022992312, 'USD / year')>
+    >>> l = benefit_bm_collection(MongDuong1)
+    >>> l.display_unit = 'kUSD/y'
+    >>> l
+    350.209 kUSD/y
+    >>> l = benefit_bm_collection(NinhBinh)
+    >>> l.display_unit = 'kUSD/y'
+    >>> l
+    72.124 kUSD/y
     """
     return bm_collection_work(plant) * wage_bm_collect
 
@@ -103,10 +107,14 @@ def benefit_bm_transport(plant):
     """Benefit from job creation from biomass transportation
 
     >>> from parameters import *
-    >>> benefit_bm_transport(MongDuong1)
-    <Quantity(45214.166205633126, 'USD / year')>
-    >>> benefit_bm_transport(NinhBinh)
-    <Quantity(2070.1400220879946, 'USD / year')>
+    >>> l = benefit_bm_transport(MongDuong1)
+    >>> l.display_unit = 'kUSD/y'
+    >>> l
+    45.2142 kUSD/y
+    >>> l = benefit_bm_transport(NinhBinh)
+    >>> l.display_unit = 'kUSD/y'
+    >>> l
+    2.07014 kUSD/y
     """
     return bm_transport_work(plant) * wage_bm_transport
 
@@ -115,10 +123,14 @@ def benefit_om(plant):
     """Benefit from job creation from co-firing operation and maintenance
 
     >>> from parameters import *
-    >>> benefit_om(MongDuong1)
-    <Quantity(65.13, 'USD * gigawatt_hour / megawatt_hour / year')>
-    >>> benefit_om(NinhBinh)
-    <Quantity(7.515, 'USD * gigawatt_hour / megawatt_hour / year')>
+    >>> l = benefit_om(MongDuong1)
+    >>> l.display_unit = 'kUSD/y'
+    >>> l
+    65.13 kUSD/y
+    >>> l = benefit_om(NinhBinh)
+    >>> l.display_unit = 'kUSD/y'
+    >>> l
+    7.515 kUSD/y
     """
     return om_work(plant) * wage_operation_maintenance
 
@@ -127,10 +139,14 @@ def total_job_benefit(plant):
     """Total benefit from job creation from biomass co-firing
 
     >>> from parameters import *
-    >>> total_job_benefit(MongDuong1)
-    <Quantity(460553.08467496, 'USD / year')>
-    >>> total_job_benefit(NinhBinh)
-    <Quantity(81709.1302520111, 'USD / year')>
+    >>> l = total_job_benefit(MongDuong1)
+    >>> l.display_unit = 'kUSD/y'
+    >>> l
+    460.553 kUSD/y
+    >>> l = total_job_benefit(NinhBinh)
+    >>> l.display_unit = 'kUSD/y'
+    >>> l
+    81.7091 kUSD/y
     """
     return benefit_bm_collection(plant) + benefit_bm_transport(plant) + benefit_om(plant)
 
