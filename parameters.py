@@ -12,9 +12,7 @@ from natu.units import km, ha
 from natu.units import g, kg, t
 from natu.units import hr, d, y
 from natu.units import MJ
-from natu.units import kW, MW, GW 
-#VND = 1
-#USD = 1
+from natu.units import kW, MW, GW
 
 ### Semantic overloading
 ### We reuse the "amount" dimension to mean "value"
@@ -36,10 +34,10 @@ biomass_ratio = 0.05    # Percent of energy that comes from biomass
 
 winder_capacity = 6.57 * t / d
 work_hour_day = 8 * hr / d
-FTE = 1560 * hr / y  # number of working hour for a FTE job                                   # a full time equivalence job
+FTE = 1560 * hr / y  # number of working hour for a FTE job # a full time equivalence job
 truck_velocity = 45 * km / hr
 truck_load = 20 * t
-OM_hour_MWh = 0.12 * hr / MW / hr # working hour for OM per MWh                                                   # O&M of co-firing per MWh
+OM_hour_MWh = 0.12 * hr / MW / hr # working hour for OM per MWh    # O&M of co-firing per MWh
 time_step = 1 * y
 time_horizon = 20
 discount_rate = 0.087771 * time_step / y

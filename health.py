@@ -124,17 +124,20 @@ def nox_emission_reduction(plant):
     """
     return nox_emission_base(plant) - nox_emission_cofiring(plant)
 
+
+def print_with_unit(func, plant, unit):
+    l = func(plant)
+    l.display_unit = unit
+    return l
+    
+
 def health_benefit_so2(plant):
     """ Health benefit (in USD/year) from SO2 reduction by co-firing
 
     >>> from parameters import *
-    >>> l = health_benefit_so2(MongDuong1)
-    >>> l.display_unit = 'kUSD/y'
-    >>> l
+    >>> print_with_unit(health_benefit_so2, MongDuong1, 'kUSD/y')
     118.471 kUSD/y
-    >>> l = health_benefit_so2(NinhBinh)
-    >>> l.display_unit = 'kUSD/y'
-    >>> l
+    >>> print_with_unit(health_benefit_so2, NinhBinh, 'kUSD/y')
     1032.29 kUSD/y
     """
     return so2_emission_reduction(plant) * health_damage_so2
@@ -144,13 +147,9 @@ def health_benefit_pm10(plant):
     """ Health benefit from pm10 reduction by co-firing
 
     >>> from parameters import *
-    >>> l = health_benefit_pm10(MongDuong1)
-    >>> l.display_unit = 'kUSD/y'
-    >>> l
+    >>> print_with_unit(health_benefit_pm10, MongDuong1, 'kUSD/y')
     105.29 kUSD/y
-    >>> l = health_benefit_pm10(NinhBinh)
-    >>> l.display_unit = 'kUSD/y'
-    >>> l
+    >>> print_with_unit(health_benefit_pm10, NinhBinh, 'kUSD/y')
     7.44304 kUSD/y
     """
     return pm10_emission_reduction(plant) * health_damage_pm10
@@ -159,13 +158,9 @@ def health_benefit_nox(plant):
     """ Health benefit from nox emission reduction by co-firing
 
     >>> from parameters import *
-    >>> l = health_benefit_nox(MongDuong1)
-    >>> l.display_unit = 'kUSD/y'
-    >>> l
+    >>> print_with_unit(health_benefit_nox, MongDuong1, 'kUSD/y')
     634.062 kUSD/y
-    >>> l = health_benefit_nox(NinhBinh)
-    >>> l.display_unit = 'kUSD/y'
-    >>> l
+    >>> print_with_unit(health_benefit_nox, NinhBinh, 'kUSD/y')
     92.1762 kUSD/y
     """
     return nox_emission_reduction(plant) * health_damage_nox
@@ -174,13 +169,9 @@ def total_health_benefit(plant):
     """ Total health benefit from co-firing
 
     >>> from parameters import *
-    >>> l = total_health_benefit(MongDuong1)
-    >>> l.display_unit = 'kUSD/y'
-    >>> l
+    >>> print_with_unit(total_health_benefit, MongDuong1, 'kUSD/y')
     857.823 kUSD/y
-    >>> l = total_health_benefit(NinhBinh)
-    >>> l.display_unit = 'kUSD/y'
-    >>> l
+    >>> print_with_unit(total_health_benefit, NinhBinh, 'kUSD/y')
     1131.91 kUSD/y
     """
     return health_benefit_so2(plant) + health_benefit_pm10(plant) + health_benefit_nox(plant)

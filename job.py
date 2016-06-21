@@ -11,7 +11,7 @@
 
 from parameters import winder_capacity, work_hour_day, truck_velocity
 from parameters import truck_load, OM_hour_MWh, biomass_ratio, wage_bm_transport
-from parameters import wage_bm_collect, wage_operation_maintenance, h_per_yr
+from parameters import wage_bm_collect, wage_operation_maintenance
 
 
 def bm_collection_work(plant):
@@ -77,7 +77,6 @@ def om_work(plant):
 def cofiring_work(plant):
     """Total number of hours created from co-firing
 
-
     >>> from parameters import *
     >>> cofiring_work(MongDuong1)
     45.087498656249664
@@ -87,17 +86,19 @@ def cofiring_work(plant):
     return bm_collection_work(plant) + bm_transport_work(plant) + om_work(plant)
 
 
+def print_with_unit(func, plant, unit):
+    l = func(plant)
+    l.display_unit = unit
+    return l
+    
+
 def benefit_bm_collection(plant):
     """Benefit from job creation from biomass collection
 
     >>> from parameters import *
-    >>> l = benefit_bm_collection(MongDuong1)
-    >>> l.display_unit = 'kUSD/y'
-    >>> l
+    >>> print_with_unit(benefit_bm_collection, MongDuong1, 'kUSD/y')
     350.209 kUSD/y
-    >>> l = benefit_bm_collection(NinhBinh)
-    >>> l.display_unit = 'kUSD/y'
-    >>> l
+    >>> print_with_unit(benefit_bm_collection, NinhBinh, 'kUSD/y')
     72.124 kUSD/y
     """
     return bm_collection_work(plant) * wage_bm_collect
@@ -107,13 +108,9 @@ def benefit_bm_transport(plant):
     """Benefit from job creation from biomass transportation
 
     >>> from parameters import *
-    >>> l = benefit_bm_transport(MongDuong1)
-    >>> l.display_unit = 'kUSD/y'
-    >>> l
+    >>> print_with_unit(benefit_bm_transport, MongDuong1, 'kUSD/y')
     45.2142 kUSD/y
-    >>> l = benefit_bm_transport(NinhBinh)
-    >>> l.display_unit = 'kUSD/y'
-    >>> l
+    >>> print_with_unit(benefit_bm_transport, NinhBinh, 'kUSD/y')
     2.07014 kUSD/y
     """
     return bm_transport_work(plant) * wage_bm_transport
@@ -123,13 +120,9 @@ def benefit_om(plant):
     """Benefit from job creation from co-firing operation and maintenance
 
     >>> from parameters import *
-    >>> l = benefit_om(MongDuong1)
-    >>> l.display_unit = 'kUSD/y'
-    >>> l
+    >>> print_with_unit(benefit_om, MongDuong1, 'kUSD/y')
     65.13 kUSD/y
-    >>> l = benefit_om(NinhBinh)
-    >>> l.display_unit = 'kUSD/y'
-    >>> l
+    >>> print_with_unit(benefit_om, NinhBinh, 'kUSD/y')
     7.515 kUSD/y
     """
     return om_work(plant) * wage_operation_maintenance
@@ -139,13 +132,9 @@ def total_job_benefit(plant):
     """Total benefit from job creation from biomass co-firing
 
     >>> from parameters import *
-    >>> l = total_job_benefit(MongDuong1)
-    >>> l.display_unit = 'kUSD/y'
-    >>> l
+    >>> print_with_unit(total_job_benefit, MongDuong1, 'kUSD/y')
     460.553 kUSD/y
-    >>> l = total_job_benefit(NinhBinh)
-    >>> l.display_unit = 'kUSD/y'
-    >>> l
+    >>> print_with_unit(total_job_benefit, NinhBinh, 'kUSD/y')
     81.7091 kUSD/y
     """
     return benefit_bm_collection(plant) + benefit_bm_transport(plant) + benefit_om(plant)

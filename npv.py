@@ -45,19 +45,21 @@ def elec_sale(plant, year):
         return plant.generation * biomass_ratio * time_step
 
 
+def print_with_unit(func, plant, year, unit):
+    l = func(plant, year)
+    l.display_unit = unit
+    return l
+
+
 def cash_inflow(plant, year):
     """ Excel line 99 and 102
         This is only for the project
 
     In the first year, there is no sale so cash inflow is zero:
     >>> from parameters import *
-    >>> l = cash_inflow(MongDuong1, 0)
-    >>> l.display_unit = 'USD'
-    >>> l
+    >>> print_with_unit(cash_inflow, MongDuong1, 0, 'USD')
     0 USD
-    >>> l = cash_inflow(NinhBinh, 0)
-    >>> l.display_unit = 'USD'
-    >>> l
+    >>> print_with_unit(cash_inflow, NinhBinh, 0, 'USD')
     0 USD
 
     Cash inflow remain constant afterwards:
@@ -67,13 +69,9 @@ def cash_inflow(plant, year):
     True
 
     Cash inflow on year one:
-    >>> l = cash_inflow(MongDuong1, 1)
-    >>> l.display_unit = 'kUSD'
-    >>> l
+    >>> print_with_unit(cash_inflow, MongDuong1, 1, 'kUSD')
     17528.2 kUSD
-    >>> l = cash_inflow(NinhBinh, 1)
-    >>> l.display_unit = 'kUSD'
-    >>> l
+    >>> print_with_unit(cash_inflow, NinhBinh, 1, 'kUSD')
     2022.48 kUSD
     """
     return electricity_tariff * elec_sale(plant, year)
@@ -84,23 +82,15 @@ def cash_outflow(plant, year):
 
     Cash outflow year zero:
     >>> from parameters import *
-    >>> l = cash_outflow(MongDuong1, 0)
-    >>> l.display_unit = 'kUSD'
-    >>> l
+    >>> print_with_unit(cash_outflow, MongDuong1, 0, 'kUSD')
     2700 kUSD
-    >>> l = cash_outflow(NinhBinh, 0)
-    >>> l.display_unit = 'kUSD'
-    >>> l
+    >>> print_with_unit(cash_outflow, NinhBinh, 0, 'kUSD')
     500 kUSD
 
     Cash outflow from year one:
-    >>> l = cash_outflow(MongDuong1, 1)
-    >>> l.display_unit = 'kUSD'
-    >>> l
+    >>> print_with_unit(cash_outflow, MongDuong1, 1, 'kUSD')
     15178.3 kUSD
-    >>> l = cash_outflow(NinhBinh, 1)
-    >>> l.display_unit = 'kUSD'
-    >>> l
+    >>> print_with_unit(cash_outflow, NinhBinh, 1, 'kUSD')
     2422.19 kUSD
 
     Cash outflow remain constant afterwards:
@@ -126,13 +116,9 @@ def tot_capital_cost(plant, year):
     True
 
     Total capital cost on year zero:
-    >>> l = tot_capital_cost(MongDuong1, 0)
-    >>> l.display_unit = 'kUSD'
-    >>> l
+    >>> print_with_unit(tot_capital_cost, MongDuong1, 0, 'kUSD')
     2700 kUSD
-    >>> l = tot_capital_cost(NinhBinh, 0)
-    >>> l.display_unit = 'kUSD'
-    >>> l
+    >>> print_with_unit(tot_capital_cost, NinhBinh, 0, 'kUSD')
     500 kUSD
     """
     if year == 0:
@@ -146,13 +132,9 @@ def fuel_cost(plant, year):
 
     No fuel cost on year zero:
     >>> from parameters import *
-    >>> l = fuel_cost(MongDuong1, 0)
-    >>> l.display_unit = 'USD'
-    >>> l
+    >>> print_with_unit(fuel_cost, MongDuong1, 0, 'USD')
     0 USD
-    >>> l = fuel_cost(NinhBinh, 0)
-    >>> l.display_unit = 'USD'
-    >>> l
+    >>> print_with_unit(fuel_cost, NinhBinh, 0, 'USD')
     0 USD
 
     Fuel cost remain constant:
@@ -162,13 +144,9 @@ def fuel_cost(plant, year):
     True
 
     Fuel cost on year one:
-    >>> l = fuel_cost(MongDuong1, 1)
-    >>> l.display_unit = 'kUSD'
-    >>> l
+    >>> print_with_unit(fuel_cost, MongDuong1, 1, 'kUSD')
     10704 kUSD
-    >>> l = fuel_cost(NinhBinh, 1)
-    >>> l.display_unit = 'kUSD'
-    >>> l
+    >>> print_with_unit(fuel_cost, NinhBinh, 1, 'kUSD')
     2035.99 kUSD
     """
     if year == 0:
@@ -183,23 +161,15 @@ def operation_maintenance_cost(plant, year):
 
     No O&M cost for co-firing on the first year:
     >>> from parameters import *
-    >>> l = operation_maintenance_cost(MongDuong1, 0)
-    >>> l.display_unit = 'USD'
-    >>> l
+    >>> print_with_unit(operation_maintenance_cost, MongDuong1, 0, 'USD')
     0 USD
-    >>> l = operation_maintenance_cost(NinhBinh, 0)
-    >>> l.display_unit = 'USD'
-    >>> l
+    >>> print_with_unit(operation_maintenance_cost, NinhBinh, 0, 'USD')
     0 USD
 
     O&M cost on year one:
-    >>> l = operation_maintenance_cost(MongDuong1, 1)
-    >>> l.display_unit = 'kUSD'
-    >>> l
+    >>> print_with_unit(operation_maintenance_cost, MongDuong1, 1, 'kUSD')
     3690.96 kUSD
-    >>> l = operation_maintenance_cost(NinhBinh, 1)
-    >>> l.display_unit = 'kUSD'
-    >>> l
+    >>> print_with_unit(operation_maintenance_cost, NinhBinh, 1, 'kUSD')
     386.2 kUSD
 
     O&M cost remain constant from year 1 onwards:
@@ -220,23 +190,15 @@ def income_tax(plant, year):
     """Corporate tax
     No income tax for co-firing on the first year:
     >>> from parameters import *
-    >>> l = income_tax(MongDuong1, 0)
-    >>> l.display_unit = 'USD'
-    >>> l
+    >>> print_with_unit(income_tax, MongDuong1, 0, 'USD')
     0 USD
-    >>> l = income_tax(NinhBinh, 0)
-    >>> l.display_unit = 'USD'
-    >>> l
+    >>> print_with_unit(income_tax, NinhBinh, 0, 'USD')
     0 USD
 
     Income tax on year 1:
-    >>> l = income_tax(MongDuong1, 1)
-    >>> l.display_unit = 'kUSD'
-    >>> l
+    >>> print_with_unit(income_tax, MongDuong1, 1, 'kUSD')
     783.299 kUSD
-    >>> l = income_tax(NinhBinh, 1)
-    >>> l.display_unit = 'USD'
-    >>> l
+    >>> print_with_unit(income_tax, NinhBinh, 1, 'USD')
     0 USD
 
     Income tax remain constant from year 1 onwards:
@@ -260,23 +222,15 @@ def earning_before_tax(plant, year):
 
     No earning before tax for co-firing on the first year:
     >>> from parameters import *
-    >>> l = earning_before_tax(MongDuong1, 0)
-    >>> l.display_unit = 'USD'
-    >>> l
+    >>> print_with_unit(earning_before_tax, MongDuong1, 0, 'USD')
     0 USD
-    >>> l = earning_before_tax(NinhBinh, 0)
-    >>> l.display_unit = 'USD'
-    >>> l
+    >>> print_with_unit(earning_before_tax, NinhBinh, 0, 'USD')
     0 USD
     
     Earning before tax on year 1:
-    >>> l = earning_before_tax(MongDuong1, 1)
-    >>> l.display_unit = 'kUSD'
-    >>> l
+    >>> print_with_unit(earning_before_tax, MongDuong1, 1, 'kUSD')
     3133.19 kUSD
-    >>> l = earning_before_tax(NinhBinh, 1)
-    >>> l.display_unit = 'USD'
-    >>> l
+    >>> print_with_unit(earning_before_tax, NinhBinh, 1, 'USD')
     0 USD
     
     Earning before tax remain constant from year 1 onwards:
@@ -299,23 +253,15 @@ def net_cash_flow(plant, year):
     
     Net cash flow on year 0:
     >>> from parameters import *   
-    >>> l = net_cash_flow(MongDuong1, 0)
-    >>> l.display_unit = 'kUSD'
-    >>> l
+    >>> print_with_unit(net_cash_flow, MongDuong1, 0, 'kUSD')
     -2700 kUSD
-    >>> l = net_cash_flow(NinhBinh, 0)
-    >>> l.display_unit = 'kUSD'
-    >>> l
+    >>> print_with_unit(net_cash_flow, NinhBinh, 0, 'kUSD')
     -500 kUSD
     
     Net cash flow on year 1:
-    >>> l = net_cash_flow(MongDuong1, 1)
-    >>> l.display_unit = 'kUSD'
-    >>> l
+    >>> print_with_unit(net_cash_flow, MongDuong1, 1, 'kUSD')
     2349.9 kUSD
-    >>> l = net_cash_flow(NinhBinh, 1)
-    >>> l.display_unit = 'kUSD'
-    >>> l
+    >>> print_with_unit(net_cash_flow, NinhBinh, 1, 'kUSD')
     -399.71 kUSD
     
     Net cash flow remains constant from year 1 onwards:

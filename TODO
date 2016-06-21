@@ -9,7 +9,13 @@ Read data from data file
 
 Refactoring the model to fix the zero biomass percentage bug
 
+"PrintWithUnits" function for testing
+
 Sensitivity analysis
+
+Typo in yield
+
+Add modules as necessary to compute intermediate values like coal saved or collection radius
 
 
 DONE
