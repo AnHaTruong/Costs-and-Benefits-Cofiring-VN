@@ -12,7 +12,7 @@ tests = job.test emission.test npv.test health.test LCOE.test farmerincome.test 
 all: $(tables)
 
 %.test: %.py parameters.py
-	python < > $@
+	python $< > $@
 	@echo "Tests pass when the file is empty:"
 	cat $@
 
