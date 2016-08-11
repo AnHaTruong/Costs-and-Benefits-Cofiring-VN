@@ -1,0 +1,15 @@
+
+
+Health benefit - Mong Duong 1
+Pollutant             Base emission         Co-firing emission    Emission reduction    Health benefit        
+SO2                   569.58 t/y            538.13 t/y             31.45 t/y         118471 USD/y
+PM10                  482.08 t/y            464.18 t/y             17.90 t/y         105290 USD/y
+NOx                 49528.80 t/y          47311.80 t/y           2217.00 t/y         634062 USD/y
+('Total health benefit ', 857.823 kUSD/y)
+
+Health benefit - Ninh Binh
+Pollutant             Base emission         Co-firing emission    Emission reduction    Health benefit        
+SO2                  4830.00 t/y           4555.96 t/y            274.04 t/y        1032292 USD/y
+PM10                   87.70 t/y             86.43 t/y              1.27 t/y           7443 USD/y
+NOx                  7560.00 t/y           7237.71 t/y            322.29 t/y          92176 USD/y
+('Total health benefit ', 1131.91 kUSD/y)

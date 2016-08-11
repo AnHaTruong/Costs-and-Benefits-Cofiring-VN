@@ -1,0 +1,27 @@
+>>> from natu.units import m
+>>> m
+ScalarUnit(1, 'L', 'm', True) (m)
+
+>>> from natu.units import degC
+>>> degC # doctest: +ELLIPSIS
+LambdaUnit(<function <lambda> at ...>, <function <lambda> at ...>, 'Theta', 'degC', True)
+
+>>> from natu.units import degC
+>>> 25*degC
+Quantity(298.15, 'Theta', 'degC') (25.0 degC)
+
+>>> from natu.units import *
+>>> print(1*m)
+1.0 m
+
+>>> from natu.units import *
+>>> 1*m
+Quantity(1, 'L', 'm') (1.0 m)
+
+>>> 100*pct == 1
+True
+
+>>> 1*m == m
+True
+
+check constants and units in all unit systems

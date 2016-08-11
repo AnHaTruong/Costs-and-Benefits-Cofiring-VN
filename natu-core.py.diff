@@ -1,0 +1,13 @@
+1374,1383c1374
+< ### BEGIN HDM
+< ### minh.haduong@gmail.com
+< ### 2016-05-23
+< # Avoid using reduce to be portable between Python v2 and v3
+< #            return reduce(lambda x, y: x * y, factors)
+<             result = factors[0]
+<             for x in factors[1:]:
+<                 result = result * x
+<             return result
+< ### End HDM
+---
+>             return reduce(lambda x, y: x * y, factors)
