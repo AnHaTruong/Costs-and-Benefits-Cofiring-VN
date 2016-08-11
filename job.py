@@ -12,6 +12,8 @@
 from parameters import winder_capacity, work_hour_day, truck_velocity
 from parameters import truck_load, OM_hour_MWh, biomass_ratio, wage_bm_transport
 from parameters import wage_bm_collect, wage_operation_maintenance
+from biomassrequired import biomass_required
+from biomasscost import collection_radius
 
 
 def bm_collection_work(plant):
@@ -21,9 +23,9 @@ def bm_collection_work(plant):
     >>> bm_collection_work(MongDuong1)
     35.991732848796104
     >>> bm_collection_work(NinhBinh)
-    7.412339467796658
+    7.412339467796653
     """
-    return plant.biomass_required * work_hour_day / winder_capacity
+    return biomass_required(plant) * work_hour_day / winder_capacity
 
 
 def bm_transport_work(plant):
@@ -31,9 +33,9 @@ def bm_transport_work(plant):
 
     >>> from parameters import *
     >>> bm_transport_work(MongDuong1)
-    4.646758278363899
+    4.6467612441644475
     >>> bm_transport_work(NinhBinh)
-    0.21275279613165468
+    0.21275304488580102
     """
     return number_of_truck(plant) * transport_time(plant)
 
@@ -42,24 +44,24 @@ def number_of_truck(plant):
     """Number of trucks to deliver the required biomass for co-firing to plant
 
     >>> from parameters import *
-    >>> number_of_truck(MongDuong1)
+    >>> print_with_unit(number_of_truck, MongDuong1, '1/y')
     12955.4 1/y
-    >>> number_of_truck(NinhBinh)
+    >>> print_with_unit(number_of_truck, NinhBinh, '1/y')
     2668.1 1/y
     """
-    return plant.biomass_required / truck_load
+    return biomass_required(plant) / truck_load
 
 
 def transport_time(plant):
     """Time for 1 truck to deliver biomass to the plant (round trip)
 
     >>> from parameters import *
-    >>> transport_time(MongDuong1)
+    >>> print_with_unit(transport_time, MongDuong1, 'hr')
     3.14414 hr
-    >>> transport_time(NinhBinh)
-    0.698996 hr
+    >>> print_with_unit(transport_time, NinhBinh, 'hr')
+    0.698997 hr
     """
-    return plant.collection_radius * 2 / truck_velocity
+    return collection_radius(plant) * 2 / truck_velocity
 
 
 def om_work(plant):
@@ -79,9 +81,9 @@ def cofiring_work(plant):
 
     >>> from parameters import *
     >>> cofiring_work(MongDuong1)
-    45.087498656249664
+    45.08750162205021
     >>> cofiring_work(NinhBinh)
-    8.138439286515581
+    8.138439535269724
     """
     return bm_collection_work(plant) + bm_transport_work(plant) + om_work(plant)
 

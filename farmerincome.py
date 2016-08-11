@@ -10,6 +10,7 @@
 """ Assessment of extra income for farmer from co-firing projects"""
 
 from parameters import winder_rental_cost, biomass_fix_cost, time_step
+from biomassrequired import cultivation_area
 
 
 def print_with_unit(func, plant, unit):
@@ -40,7 +41,7 @@ def bm_sell_revenue(plant):
     >>> print_with_unit(bm_sell_revenue, NinhBinh, 'USD/ha/y')
     212.382 USD/(ha*y)
     """
-    return plant.biomass_yeild * biomass_fix_cost
+    return plant.biomass_yield * biomass_fix_cost
 
 
 def total_income_benefit(plant):
@@ -49,11 +50,11 @@ def total_income_benefit(plant):
 
     >>> from parameters import *
     >>> print_with_unit(total_income_benefit, MongDuong1, 'kUSD/y')
-    7805.24 kUSD/y
+    7805.22 kUSD/y
     >>> print_with_unit(total_income_benefit, NinhBinh, 'kUSD/y')
-    1613.84 kUSD/y
+    1613.8 kUSD/y
     """
-    return farmer_income(plant) * plant.rice_cultivation_area
+    return farmer_income(plant) * cultivation_area(plant)
 
 if __name__ == "__main__":
     import doctest

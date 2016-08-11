@@ -12,19 +12,20 @@
 from parameters import ef_so2_biomass, ef_pm10_biomass
 from parameters import ef_nox_biomass, health_damage_so2
 from parameters import health_damage_pm10, health_damage_nox
+from biomassrequired import biomass_required
+from coalsaved import coal_saved
 
 
 def so2_emission_base(plant):
     """ SO2 emission from the plant without co-firing.
-    Only account for the project (5% co-firing)
-
+   
     >>> from parameters import *
-    >>> so2_emission_base(MongDuong1)
-    32.2893 t/y
-    >>> so2_emission_base(NinhBinh)
-    283.641 t/y
+    >>> print_with_unit(so2_emission_base, MongDuong1, 't/y')
+    569.581 t/y
+    >>> print_with_unit(so2_emission_base, NinhBinh, 't/y')
+    4830 t/y
     """
-    return plant.coal_saved * plant.ef_so2_coal * (1 - plant.desulfur_efficiency)
+    return plant.base_coal_consumption * plant.ef_so2_coal * (1 - plant.desulfur_efficiency)
 
 
 def pm10_emission_base(plant):
@@ -32,12 +33,12 @@ def pm10_emission_base(plant):
     Only account for the project
 
     >>> from parameters import *
-    >>> pm10_emission_base(MongDuong1)
-    27.3289 t/y
-    >>> pm10_emission_base(NinhBinh)
-    5.14993 t/y
+    >>> print_with_unit(pm10_emission_base, MongDuong1, 't/y')
+    482.08 t/y
+    >>> print_with_unit(pm10_emission_base, NinhBinh, 't/y')
+    87.696 t/y
     """
-    return plant.coal_saved * plant.ef_pm10_coal * (1 - plant.esp_efficiency)
+    return plant.base_coal_consumption * plant.ef_pm10_coal * (1 - plant.esp_efficiency)
 
 
 def nox_emission_base(plant):
@@ -45,57 +46,63 @@ def nox_emission_base(plant):
     Only account for the project
 
     >>> from parameters import *
-    >>> nox_emission_base(MongDuong1)
-    2807.76 t/y
-    >>> nox_emission_base(NinhBinh)
-    443.96 t/y
+    >>> print_with_unit(nox_emission_base, MongDuong1, 't/y')
+    49528.8 t/y
+    >>> print_with_unit(nox_emission_base, NinhBinh, 't/y')
+    7560 t/y
     """
-    return plant.coal_saved * plant.ef_nox_coal
+    return plant.base_coal_consumption * plant.ef_nox_coal
 
 
 def so2_emission_cofiring(plant):
     """ SO2 emission from co-firing
 
     >>> from parameters import *
-    >>> so2_emission_cofiring(MongDuong1)
-    0.839508 t/y
-    >>> so2_emission_cofiring(NinhBinh)
-    9.60516 t/y
+    >>> print_with_unit(so2_emission_cofiring, MongDuong1, 't/y')
+    538.131 t/y
+    >>> print_with_unit(so2_emission_cofiring, NinhBinh, 't/y')
+    4555.96 t/y
     """
-    return plant.biomass_required * ef_so2_biomass * (1 - plant.desulfur_efficiency)
+    so2_emit_bm = biomass_required(plant) * ef_so2_biomass * (1 - plant.desulfur_efficiency)
+    so2_emit_coal = (plant.base_coal_consumption - coal_saved(plant)) * plant.ef_so2_coal * (1 - plant.desulfur_efficiency)
+    return so2_emit_bm + so2_emit_coal
 
 
 def pm10_emission_cofiring(plant):
     """PM10 emission from co-firing
 
     >>> from parameters import *
-    >>> pm10_emission_cofiring(MongDuong1)
-    9.4315 t/y
-    >>> pm10_emission_cofiring(NinhBinh)
-    3.88475 t/y
+    >>> print_with_unit(pm10_emission_cofiring, MongDuong1, 't/y')
+    464.183 t/y
+    >>> print_with_unit(pm10_emission_cofiring, NinhBinh, 't/y')
+    86.4308 t/y
     """
-    return plant.biomass_required * ef_pm10_biomass * (1 - plant.esp_efficiency)
-
+    pm10_emit_bm = biomass_required(plant) * ef_pm10_biomass * (1 - plant.esp_efficiency)
+    pm10_emit_coal = (plant.base_coal_consumption - coal_saved(plant)) * plant.ef_pm10_coal * (1 - plant.esp_efficiency)
+    return  pm10_emit_bm + pm10_emit_coal
+   
 
 def nox_emission_cofiring(plant):
     """NOx emission from co-firing
 
     >>> from parameters import *
-    >>> pm10_emission_cofiring(MongDuong1)
-    9.4315 t/y
-    >>> pm10_emission_cofiring(NinhBinh)
-    3.88475 t/y
+    >>> print_with_unit(nox_emission_cofiring, MongDuong1, 't/y')
+    47311.8 t/y
+    >>> print_with_unit(nox_emission_cofiring, NinhBinh, 't/y')
+    7237.71 t/y
     """
-    return plant.biomass_required * ef_nox_biomass
+    nox_emit_bm = biomass_required(plant) * ef_nox_biomass
+    nox_emit_coal = (plant.base_coal_consumption - coal_saved(plant)) * plant.ef_nox_coal
+    return nox_emit_bm + nox_emit_coal
 
 
 def so2_emission_reduction(plant):
     """ Amount of SO2 emission cut off by co-firing
 
     >>> from parameters import *
-    >>> so2_emission_reduction(MongDuong1)
+    >>> print_with_unit(so2_emission_reduction, MongDuong1, 't/y')
     31.4498 t/y
-    >>> so2_emission_reduction(NinhBinh)
+    >>> print_with_unit(so2_emission_reduction, NinhBinh, 't/y')
     274.036 t/y
     """
     return so2_emission_base(plant) - so2_emission_cofiring(plant)
@@ -105,9 +112,9 @@ def pm10_emission_reduction(plant):
     """ Amount of PM10 emission cut off by co-firing
 
     >>> from parameters import *
-    >>> pm10_emission_reduction(MongDuong1)
+    >>> print_with_unit(pm10_emission_reduction, MongDuong1, 't/y')
     17.8974 t/y
-    >>> pm10_emission_reduction(NinhBinh)
+    >>> print_with_unit(pm10_emission_reduction, NinhBinh, 't/y')
     1.26518 t/y
     """
     return pm10_emission_base(plant) - pm10_emission_cofiring(plant)
@@ -117,9 +124,9 @@ def nox_emission_reduction(plant):
     """ Amount of NOx emission cut off by co-firing
 
     >>> from parameters import *
-    >>> nox_emission_reduction(MongDuong1)
+    >>> print_with_unit(nox_emission_reduction, MongDuong1, 't/y')
     2217 t/y
-    >>> nox_emission_reduction(NinhBinh)
+    >>> print_with_unit(nox_emission_reduction, NinhBinh, 't/y')
     322.294 t/y
     """
     return nox_emission_base(plant) - nox_emission_cofiring(plant)

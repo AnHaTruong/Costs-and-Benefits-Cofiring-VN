@@ -11,7 +11,29 @@
 
 from parameters import discount_rate, time_horizon, time_step
 from parameters import h_per_yr, biomass_heat_value
-from parameters import *
+from biomasscost import bm_unit_cost
+from biomassrequired import plant_efficency_bm
+
+
+def capacity_factor(plant):
+    """
+    >>> capacity_factor(MongDuong1)
+    0.687045492981566
+    >>> capacity_factor(NinhBinh)
+    0.8561643835616437
+    """
+    return plant.generation / (plant.capacity * h_per_yr) * time_step
+
+
+def heat_rate(plant):
+    """
+    >>> heat_rate(MongDuong1)
+    2.59107274137779
+    >>> heat_rate(NinhBinh)
+    4.624707211364663
+    """
+    return (1/plant_efficency_bm(plant))
+
 
 def cap_rec_factor():
     """Calcuate the capital recovery factor
@@ -39,7 +61,7 @@ def lcoe_cap_return(plant):
     >>> print_with_unit(lcoe_cap_return, NinhBinh, 'USD/hr/kW')
     0.00143749 USD/(hr*kW)
     """
-    return plant.capital_cost * cap_rec_factor()/h_per_yr / plant.capacity_factor
+    return plant.capital_cost * cap_rec_factor()/h_per_yr / capacity_factor(plant)
 
 
 def lcoe_fix_om(plant):
@@ -51,7 +73,7 @@ def lcoe_fix_om(plant):
     >>> print_with_unit(lcoe_fix_om, NinhBinh, 'USD/hr/kW')
     0.00429867 USD/(hr*kW)
     """
-    return plant.fix_om_cost/(h_per_yr * plant.capacity_factor) *time_step
+    return plant.fix_om_cost/(h_per_yr * capacity_factor(plant)) * time_step
 
 
 def lcoe_bm_cost(plant):
@@ -59,11 +81,11 @@ def lcoe_bm_cost(plant):
 
     >>> from parameters import *
     >>> print_with_unit(lcoe_bm_cost, MongDuong1, 'USD/hr/kW')
-    0.0329355 USD/(hr*kW)
+    0.0330897 USD/(hr*kW)
     >>> print_with_unit(lcoe_bm_cost, NinhBinh, 'USD/hr/kW')
-    0.0542931 USD/(hr*kW)
+    0.0543633 USD/(hr*kW)
     """
-    return plant.biomass_unit_cost * plant.heat_rate / biomass_heat_value
+    return bm_unit_cost(plant) * heat_rate(plant) / biomass_heat_value
 
 
 def lcoe_variable_om(plant):
@@ -83,9 +105,9 @@ def lcoe(plant):
 
     >>> from parameters import *
     >>> print_with_unit(lcoe, MongDuong1, 'USD/hr/kW')
-    0.0451879 USD/(hr*kW)
+    0.0453421 USD/(hr*kW)
     >>> print_with_unit(lcoe, NinhBinh, 'USD/hr/kW')
-    0.0660293 USD/(hr*kW)
+    0.0660994 USD/(hr*kW)
     """
     return (lcoe_cap_return(plant)
             + lcoe_fix_om(plant)

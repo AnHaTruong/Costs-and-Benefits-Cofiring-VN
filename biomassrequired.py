@@ -13,6 +13,11 @@
     (turbine, generator...)
 """
 
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
+
 from parameters import biomass_ratio, biomass_heat_value
 
 
@@ -56,7 +61,7 @@ def plant_efficency_bm(plant):
     >>> plant_efficency_bm(NinhBinh)
     0.21622990479107954
     """
-    return (plant.base_plant_efficiency / plant.base_boiler_efficiency) * boiler_efficiency_bm (plant)
+    return (plant.base_plant_efficiency / plant.base_boiler_efficiency) * boiler_efficiency_bm(plant)
 
 
 def gross_heat_input(plant):
@@ -82,6 +87,11 @@ def biomass_required(plant):
     """
     return gross_heat_input(plant) * biomass_ratio / biomass_heat_value
 
-if __name__ == "__main__":
-    import doctest
-    doctest.testmod()
+def cultivation_area(plant):
+    """ Area of rice cultivation needed to supply enough straw for co-firing
+    >>> print_with_unit(cultivation_area, MongDuong1, 'ha')
+    46227.9 ha
+    >>> print_with_unit(cultivation_area, NinhBinh, 'ha')
+    9361.76 ha
+    """
+    return biomass_required(plant) / plant.biomass_yield

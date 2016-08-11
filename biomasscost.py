@@ -14,7 +14,8 @@
 import math
 
 from biomassrequired import biomass_required
-from parameters import MongDuong1, NinhBinh
+from parameters import MongDuong1, transport_tariff, tortuosity_factor
+from parameters import biomass_fix_cost
 
 def collection_area(plant):
     """
@@ -49,3 +50,24 @@ def print_with_unit(func, plant, unit):
     return l
 
 
+def bm_transportation_cost(plant):
+    """
+    >>> from parameters import *
+    >>> print_with_unit(bm_transportation_cost, MongDuong1, 'USD/t')
+    4.24459 USD/t
+    >>> print_with_unit(bm_transportation_cost, NinhBinh, 'USD/t')
+    0.943645 USD/t
+    """
+    return 2/3 * (collection_radius(plant) * transport_tariff * tortuosity_factor)
+   
+   
+def bm_unit_cost(plant):
+    """
+    >>> from parameters import *
+    >>> print_with_unit(bm_unit_cost, MongDuong1, 'USD/t')
+    41.5046 USD/t
+    >>> print_with_unit(bm_unit_cost, NinhBinh, 'USD/t')
+    38.2036 USD/t
+    """
+    return bm_transportation_cost(plant) + biomass_fix_cost
+    

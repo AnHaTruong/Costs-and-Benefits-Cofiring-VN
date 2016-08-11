@@ -13,59 +13,80 @@
 """
 
 from parameters import biomass_heat_value
+from biomassrequired import biomass_required
+from coalsaved import coal_saved
+from biomasscost import collection_radius
 
 
-def emission_coal_combust(plant):
+
+def print_with_unit(func, plant, unit):
+    l = func(plant)
+    l.display_unit = unit
+    return l
+
+
+def emission_coal_combust_base(plant):
     """return the greenhouse gas emission in tonCO2eq from coal combustion
        when there is no co-firing
 
     >>> from parameters import *
-    >>> emission_coal_combust(MongDuong1)
-    292848 t/y
-    >>> emission_coal_combust(NinhBinh)
-    60310.8 t/y
+    >>> emission_coal_combust_base(MongDuong1)
+    5.16583e+06 t/y
+    >>> emission_coal_combust_base(NinhBinh)
+    1.02701e+06 t/y
     """
-    return plant.ef_coal_combust * plant.coal_saved * plant.coal_heat_value
+    return plant.ef_coal_combust * plant.base_coal_consumption * plant.coal_heat_value
 
 
-def emission_coal_transport(plant):
+def emission_coal_transport_base(plant):
     """return the greenhouse gas emission in tonCO2eq from coal transportation
        in no co-firing case. transported distance is 2 times of coal transport
        distance because round trip is accounted
 
     >>> from parameters import *
-    >>> emission_coal_transport(MongDuong1)
+    >>> emission_coal_transport_base(MongDuong1)
     0 t/y
-    >>> emission_coal_transport(NinhBinh)
-    305.839 t/y
+    >>> emission_coal_transport_base(NinhBinh)
+    5208 t/y
     """
-    return plant.ef_coal_transport * 2 * plant.coal_transport_distance * plant.coal_saved
+    return plant.ef_coal_transport * 2 * plant.coal_transport_distance * plant.base_coal_consumption
+
+
+def emission_coal_combust_cofire(plant):
+    """ emission from coal combustion when co-fire
+    """
+    return plant.ef_coal_combust * (plant.base_coal_consumption - coal_saved(plant)) * plant.coal_heat_value
 
 
 def emission_biomass_combust(plant):
-    """return the emission from burning the biomass when do co-firing
+    """return the emission from biomass combustion with co-firing
 
     >>> from parameters import *
-    >>> emission_biomass_combust(MongDuong1)
+    >>> print_with_unit(emission_biomass_combust, MongDuong1, 't/y')
     260107 t/y
-    >>> emission_biomass_combust(NinhBinh)
+    >>> print_with_unit(emission_biomass_combust, NinhBinh, 't/y')
     53568 t/y
     """
-    return plant.ef_biomass_combust * plant.biomass_required * biomass_heat_value
+    return plant.ef_biomass_combust * biomass_required(plant) * biomass_heat_value
 
+
+def emission_coal_transport_cofire(plant):
+    """emission from coal transportation when co-fire
+    """
+    return plant.ef_coal_transport * 2 * plant.coal_transport_distance * (plant.base_coal_consumption - coal_saved(plant))
 
 def emission_biomass_transport(plant):
-    """return emission from transportation of the biomass required for
-       co-firing to the plant. transported distance is 2 times of biomass
+    """return emission from transportation of biomass and coal.
+       transported distance is 2 times of biomass
        collection radius because round trip is accounted
 
     >>> from parameters import *
-    >>> emission_biomass_transport(MongDuong1)
+    >>> print_with_unit(emission_biomass_transport, MongDuong1, 't/y')
     2272.93 t/y
-    >>> emission_biomass_transport(NinhBinh)
-    104.066 t/y
+    >>> print_with_unit(emission_biomass_transport, NinhBinh, 't/y')
+    104.067 t/y
     """
-    return plant.ef_biomass_transport * 2 * plant.collection_radius * plant.biomass_required
+    return plant.ef_biomass_transport * 2 * collection_radius(plant) * biomass_required(plant)
 
 
 def total_emission_coal(plant):
@@ -73,12 +94,12 @@ def total_emission_coal(plant):
        substituted by biomass
 
     >>> from parameters import *
-    >>> total_emission_coal(MongDuong1)
-    292848 t/y
-    >>> total_emission_coal(NinhBinh)
-    60616.6 t/y
+    >>> print_with_unit(total_emission_coal, MongDuong1, 't/y')
+    5.16583e+06 t/y
+    >>> print_with_unit(total_emission_coal, NinhBinh, 't/y')
+    1.03222e+06 t/y
     """
-    return emission_coal_combust(plant) + emission_coal_transport(plant)
+    return emission_coal_combust_base(plant) + emission_coal_transport_base(plant)
 
 
 def total_emission_biomass(plant):
@@ -86,13 +107,16 @@ def total_emission_biomass(plant):
        co-firing case
 
     >>> from parameters import *
-    >>> total_emission_biomass(MongDuong1)
-    262380 t/y
-    >>> total_emission_biomass(NinhBinh)
-    53672.1 t/y
+    >>> print_with_unit(total_emission_biomass, MongDuong1, 't/y')
+    5.13536e+06 t/y
+    >>> print_with_unit(total_emission_biomass, NinhBinh, 't/y')
+    1.02527e+06 t/y
     """
-    return emission_biomass_combust(plant) + emission_biomass_transport(plant)
-
+    return (emission_biomass_combust(plant)
+            + emission_biomass_transport(plant)
+            + emission_coal_combust_cofire(plant)
+            + emission_coal_transport_cofire(plant)
+            )
 
 def emission_reduction(plant):
     """different between total emission from coal (base case) and total

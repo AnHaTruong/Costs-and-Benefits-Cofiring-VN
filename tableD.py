@@ -27,15 +27,19 @@ def print_job(plant):
     col2 = benefit_bm_transport(plant)
     col3 = benefit_om(plant)
     col4 = total_job_benefit(plant)
+    col5 = number_of_truck(plant)
+    col6 = transport_time(plant)
     
     col1.display_unit = 'USD/y'
     col2.display_unit = 'USD/y'
     col3.display_unit = 'USD/y'
     col4.display_unit = 'USD/y'
+    col5.display_unit = '1/y'
+    col6.display_unit = 'hr'
     
-    print(row.format('transportation time', transport_time(plant)))
+    print(row.format('transportation time', col6))
          
-    print(row.format('number of truck', number_of_truck(plant)))         
+    print(row.format('number of truck', col5))         
   
     print(row.format('total hour for biomass collection',
                      bm_collection_work(plant) * h_per_yr

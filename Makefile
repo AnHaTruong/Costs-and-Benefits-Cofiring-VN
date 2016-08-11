@@ -5,9 +5,17 @@
 # Creative Commons Attribution-ShareAlike 4.0 International
 #
 
-tables = tableA.txt tableB.txt tableC.txt tableD.txt table7.txt table8.txt
+tables = tableAA.txt tableB.txt tableC.txt tableD.txt table77.txt table88.txt
 
+tests = job.test emission.test npv.test health.test LCOE.test farmerincome.test biomassrequired.test
+ 
 all: $(tables)
+
+%.test: %.py parameters.py
+	python < > $@
+	@echo "Tests pass when the file is empty:"
+	cat $@
+
 
 %.txt: %.py parameters.py
 	python $< > $@
@@ -15,13 +23,12 @@ all: $(tables)
 
 .PHONY: test clean cleaner
 
-test: job.txt emission.txt npv.txt health.txt LCOE.txt farmerincome.txt
+test: $(tests)
 	@echo "Tests pass when the files are empty:"
-	cat $^
 
 clean:
 	rm -f $(tables)
-	rm -f job.txt emission.txt npv.txt health.txt LCOE.txt farmerincome.txt
+	rm -f $(tests)
 
 cleaner: clean
 	rm -f __pycache__/*.pyc *.pyc
