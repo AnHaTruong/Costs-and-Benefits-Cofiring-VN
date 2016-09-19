@@ -14,17 +14,14 @@
 """
 
 
-if __name__ == "__main__":
-    import doctest
-    doctest.testmod()
-
-from parameters import biomass_ratio, biomass_heat_value
+from parameters import biomass_ratio, biomass_heat_value, MongDuong1, NinhBinh
 
 
 def print_with_unit(func, plant, unit):
-    l = func(plant)
-    l.display_unit = unit
-    return l
+    """ Display the desired unit on Tables"""
+    value = func(plant)
+    value.display_unit = unit
+    return value
 
 def boiler_efficiency_loss(plant):
     """Calculate the boiler efficiency loss when co-firing biomass based on
@@ -95,3 +92,7 @@ def cultivation_area(plant):
     9361.76 ha
     """
     return biomass_required(plant) / plant.biomass_yield
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()

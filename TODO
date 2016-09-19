@@ -7,13 +7,16 @@ Encapsulate the class
 
 Read data from data file
 
+Hourly dispatch, with ramp-up and ramp-down constraints, maintenance downtime, and variable electricity price
 
 Sensitivity analysis
 
-Add modules as necessary to compute intermediate values like coal saved or collection radius
+
 
 
 DONE
+
+Amortization within the first 10 year
 
 Change print files to tables
 
@@ -35,3 +38,6 @@ Redo the doc test
 Typo in yield
 
 Refactoring the model to fix the zero biomass percentage bug
+
+Add modules as necessary to compute intermediate values like coal saved or collection radius
+

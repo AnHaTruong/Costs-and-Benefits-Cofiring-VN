@@ -16,6 +16,13 @@ from biomassrequired import biomass_required
 from biomasscost import collection_radius
 
 
+def print_with_unit(func, plant, unit):
+    """ Display the desired unit on Tables"""
+    value = func(plant)
+    value.display_unit = unit
+    return value
+
+
 def bm_collection_work(plant):
     """Total number of hour needed to collect straw for co-firing per year
 
@@ -87,12 +94,6 @@ def cofiring_work(plant):
     """
     return bm_collection_work(plant) + bm_transport_work(plant) + om_work(plant)
 
-
-def print_with_unit(func, plant, unit):
-    l = func(plant)
-    l.display_unit = unit
-    return l
-    
 
 def benefit_bm_collection(plant):
     """Benefit from job creation from biomass collection

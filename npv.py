@@ -12,11 +12,18 @@
 """
 
 from parameters import time_step, time_horizon, discount_rate, biomass_ratio
-from parameters import electricity_tariff, tax_rate
+from parameters import electricity_tariff, tax_rate, depreciation_period
 from parameters import zero_kwh, zero_USD, zero_VND
 from biomassrequired import biomass_required
 from biomasscost import bm_unit_cost
 from coalsaved import coal_saved
+
+
+def print_with_unit(func, plant, year, unit):
+    """ Display the desired unit on Tables"""
+    value = func(plant, year)
+    value.display_unit = unit
+    return value
 
 
 def elec_sale(plant, year):
@@ -45,13 +52,7 @@ def elec_sale(plant, year):
     if year == 0:
         return zero_kwh
     else:
-        return plant.generation  * time_step
-
-
-def print_with_unit(func, plant, year, unit):
-    l = func(plant, year)
-    l.display_unit = unit
-    return l
+        return plant.generation * time_step
 
 
 def cash_inflow(plant, year):
@@ -92,15 +93,10 @@ def cash_outflow(plant, year):
 
     Cash outflow from year one:
     >>> print_with_unit(cash_outflow, MongDuong1, 1, 'kUSD')
-    245831 kUSD
+    245763 kUSD
     >>> print_with_unit(cash_outflow, NinhBinh, 1, 'kUSD')
     41770.3 kUSD
 
-    Cash outflow remain constant afterwards:
-    >>> cash_outflow(MongDuong1, 1) == cash_outflow(MongDuong1, time_horizon)
-    True
-    >>> cash_outflow(NinhBinh, 1) == cash_outflow(NinhBinh, time_horizon)
-    True
     """
     return (tot_capital_cost(plant, year) + fuel_cost(plant, year) +
             operation_maintenance_cost(plant, year) + income_tax(plant, year))
@@ -203,28 +199,50 @@ def income_tax(plant, year):
 
     Income tax on year 1:
     >>> print_with_unit(income_tax, MongDuong1, 1, 'kUSD')
-    34910.9 kUSD
+    34843.4 kUSD
     >>> print_with_unit(income_tax, NinhBinh, 1, 'USD')
     0 USD
 
-    Income tax remain constant from year 1 onwards:
-    >>> income_tax(MongDuong1, 1) == income_tax(MongDuong1, time_horizon)
-    True
-    >>> income_tax(NinhBinh, 1) == income_tax(NinhBinh, time_horizon)
-    True
     """
     if year == 0:
         return zero_VND
     else:
-        if tax_rate * earning_before_tax(plant, year) >  zero_VND:
+        if earning_before_tax(plant, year) > zero_VND:
             return tax_rate * earning_before_tax(plant, year)
         else:
             return zero_VND
 
 
-def earning_before_tax(plant, year):
-    """Amortizations not excluded (yet) from tax base
+def amortization(plant, year):
+    """Amortization of the investment cost
 
+    No amortization on year 0
+    >>> from parameters import *
+    >>> print_with_unit(amortization, MongDuong1, 0, 'USD')
+    0 USD
+    >>> print_with_unit(amortization, NinhBinh, 0, 'USD')
+    0 USD
+
+    Amortization on year 1:
+    >>> print_with_unit(amortization, MongDuong1, 1, 'kUSD')
+    270 kUSD
+    >>> print_with_unit(amortization, NinhBinh, 1, 'kUSD')
+    50 kUSD
+
+   """
+    if year == 0:
+        return zero_VND
+    else:
+   
+        if year in range(1, depreciation_period + 1):
+            # WARNING INTEGER DIVISION OPERATOR ?
+            return tot_capital_cost(plant, 0) / float(depreciation_period)
+        else:
+            return zero_VND
+
+
+def earning_before_tax(plant, year):
+    """
     No earning before tax for co-firing on the first year:
     >>> from parameters import *
     >>> print_with_unit(earning_before_tax, MongDuong1, 0, 'USD')
@@ -234,24 +252,19 @@ def earning_before_tax(plant, year):
 
     Earning before tax on year 1:
     >>> print_with_unit(earning_before_tax, MongDuong1, 1, 'kUSD')
-    139643 kUSD
-    >>> print_with_unit(earning_before_tax, NinhBinh, 1, 'USD')
-    0 USD
-
-    Earning before tax remain constant from year 1 onwards:
-    >>> earning_before_tax(MongDuong1, 1) == earning_before_tax(MongDuong1, time_horizon)
-    True
-    >>> earning_before_tax(NinhBinh, 1) == earning_before_tax(NinhBinh, time_horizon)
-    True
+    139373 kUSD
+    >>> print_with_unit(earning_before_tax, NinhBinh, 1, 'kUSD')
+    -1370.62 kUSD
     """
     if year == 0:
         return zero_VND
     else:
-        if (cash_inflow(plant, year) - fuel_cost(plant, year) - operation_maintenance_cost(plant, year)) > zero_VND:
-            return (cash_inflow(plant, year) - fuel_cost(plant, year) - operation_maintenance_cost(plant, year))
-        else:
-            return zero_VND
-    return zero_VND
+        return (cash_inflow(plant, year) -
+                fuel_cost(plant, year) -
+                operation_maintenance_cost(plant, year) -
+                amortization(plant, year)
+                )
+
 
 def net_cash_flow(plant, year):
     """Cash flow of the plant
@@ -265,15 +278,10 @@ def net_cash_flow(plant, year):
 
     Net cash flow on year 1:
     >>> print_with_unit(net_cash_flow, MongDuong1, 1, 'kUSD')
-    104733 kUSD
+    104800 kUSD
     >>> print_with_unit(net_cash_flow, NinhBinh, 1, 'kUSD')
     -1320.62 kUSD
 
-    Net cash flow remains constant from year 1 onwards:
-    >>> net_cash_flow(MongDuong1, 1) == net_cash_flow(MongDuong1, time_horizon)
-    True
-    >>> net_cash_flow(NinhBinh, 1) == net_cash_flow(NinhBinh, time_horizon)
-    True
     """
     return cash_inflow(plant, year) - cash_outflow(plant, year)
 
@@ -281,12 +289,13 @@ def net_cash_flow(plant, year):
 def npv(plant):
     """npv returns the Net Present Value of the project,
     discounted at DiscountRate from 0 to TimeHorizon included
+
     """
     value = zero_USD
     for year in range(time_horizon+1):
+            # WARNING INTEGER DIVISION OPERATOR ?
         value += net_cash_flow(plant, year) / (1+discount_rate)**year
     return value
-
 
 if __name__ == "__main__":
     import doctest

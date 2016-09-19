@@ -5,26 +5,26 @@
 # Creative Commons Attribution-ShareAlike 4.0 International
 #
 
-tables = tableAA.txt tableB.txt tableC.txt tableD.txt table77.txt table88.txt
+PYTHON = python3
 
-tests = job.test emission.test npv.test health.test LCOE.test farmerincome.test biomassrequired.test
+tables = tableA.txt tableB.txt tableC.txt tableD.txt table7.txt table8.txt table11.txt table12.txt
+
+tests = job.test emission.test npv.test health.test LCOE.test farmerincome.test biomassrequired.test benefitaddup.test
  
 all: $(tables)
 
 %.test: %.py parameters.py
-	python $< > $@
+	$(PYTHON) $< > $@
+	#TODO: actually test if the file is empty or not and cry if error
 	@echo "Tests pass when the file is empty:"
-	cat $@
-
+	@cat $@ 
 
 %.txt: %.py parameters.py
-	python $< > $@
-
+	$(PYTHON) $< > $@
 
 .PHONY: test clean cleaner
 
 test: $(tests)
-	@echo "Tests pass when the files are empty:"
 
 clean:
 	rm -f $(tables)

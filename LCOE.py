@@ -9,10 +9,18 @@
 #
 """LCOE assessment of a co-firing project"""
 
+
 from parameters import discount_rate, time_horizon, time_step
-from parameters import h_per_yr, biomass_heat_value
+from parameters import h_per_yr, biomass_heat_value, MongDuong1, NinhBinh
 from biomasscost import bm_unit_cost
 from biomassrequired import plant_efficency_bm
+
+
+def print_with_unit(func, plant, unit):
+    """ Display the desired unit on Tables"""
+    value = func(plant)
+    value.display_unit = unit
+    return value
 
 
 def capacity_factor(plant):
@@ -32,7 +40,7 @@ def heat_rate(plant):
     >>> heat_rate(NinhBinh)
     4.624707211364663
     """
-    return (1/plant_efficency_bm(plant))
+    return 1/plant_efficency_bm(plant)
 
 
 def cap_rec_factor():
@@ -44,12 +52,6 @@ def cap_rec_factor():
     """
     return ((discount_rate * (1 + discount_rate)**time_horizon) /
             ((1 + discount_rate)**time_horizon - 1))
-
-
-def print_with_unit(func, plant, unit):
-    l = func(plant)
-    l.display_unit = unit
-    return l
 
 
 def lcoe_cap_return(plant):
@@ -118,3 +120,4 @@ def lcoe(plant):
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
+    

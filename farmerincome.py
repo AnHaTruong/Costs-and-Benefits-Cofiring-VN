@@ -14,9 +14,10 @@ from biomassrequired import cultivation_area
 
 
 def print_with_unit(func, plant, unit):
-    l = func(plant)
-    l.display_unit = unit
-    return l
+    """ Display the desired unit on Tables"""
+    value = func(plant)
+    value.display_unit = unit
+    return value
 
 
 def farmer_income(plant):
@@ -59,3 +60,4 @@ def total_income_benefit(plant):
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
+    

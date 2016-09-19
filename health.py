@@ -16,9 +16,16 @@ from biomassrequired import biomass_required
 from coalsaved import coal_saved
 
 
+def print_with_unit(func, plant, unit):
+    """ Display the desired unit on Tables"""
+    value = func(plant)
+    value.display_unit = unit
+    return value
+
+
 def so2_emission_base(plant):
     """ SO2 emission from the plant without co-firing.
-   
+
     >>> from parameters import *
     >>> print_with_unit(so2_emission_base, MongDuong1, 't/y')
     569.581 t/y
@@ -80,7 +87,7 @@ def pm10_emission_cofiring(plant):
     pm10_emit_bm = biomass_required(plant) * ef_pm10_biomass * (1 - plant.esp_efficiency)
     pm10_emit_coal = (plant.base_coal_consumption - coal_saved(plant)) * plant.ef_pm10_coal * (1 - plant.esp_efficiency)
     return  pm10_emit_bm + pm10_emit_coal
-   
+
 
 def nox_emission_cofiring(plant):
     """NOx emission from co-firing
@@ -131,12 +138,6 @@ def nox_emission_reduction(plant):
     """
     return nox_emission_base(plant) - nox_emission_cofiring(plant)
 
-
-def print_with_unit(func, plant, unit):
-    l = func(plant)
-    l.display_unit = unit
-    return l
-    
 
 def health_benefit_so2(plant):
     """ Health benefit (in USD/year) from SO2 reduction by co-firing

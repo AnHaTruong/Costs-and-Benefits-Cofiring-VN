@@ -12,17 +12,18 @@
    Total emission include emission from fuel combustion and fuel transportation
 """
 
-from parameters import biomass_heat_value
+
+from parameters import biomass_heat_value, carbon_price
 from biomassrequired import biomass_required
 from coalsaved import coal_saved
 from biomasscost import collection_radius
 
 
-
 def print_with_unit(func, plant, unit):
-    l = func(plant)
-    l.display_unit = unit
-    return l
+    """ Display the desired unit on Tables"""
+    value = func(plant)
+    value.display_unit = unit
+    return value
 
 
 def emission_coal_combust_base(plant):
@@ -116,7 +117,7 @@ def total_emission_biomass(plant):
             + emission_biomass_transport(plant)
             + emission_coal_combust_cofire(plant)
             + emission_coal_transport_cofire(plant)
-            )
+           )
 
 def emission_reduction(plant):
     """different between total emission from coal (base case) and total
@@ -129,6 +130,17 @@ def emission_reduction(plant):
     6944.6 t/y
     """
     return total_emission_coal(plant) - total_emission_biomass(plant)
+    
+
+def emission_reduction_benefit(plant):
+    """ return the monetary benefit from greenhouse gas emission reduction
+    >>> from parameters import *
+    >>> print_with_unit(emission_reduction_benefit, MongDuong1, 'USD/y')
+    30467.9 USD/y
+    >>> print_with_unit(emission_reduction_benefit, NinhBinh, 'USD/y')
+    6944.6 USD/y
+    """
+    return emission_reduction(plant) * carbon_price
 
 if __name__ == "__main__":
     import doctest

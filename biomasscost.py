@@ -15,7 +15,8 @@ import math
 
 from biomassrequired import biomass_required
 from parameters import MongDuong1, transport_tariff, tortuosity_factor
-from parameters import biomass_fix_cost
+from parameters import biomass_fix_cost, NinhBinh
+
 
 def collection_area(plant):
     """
@@ -29,7 +30,7 @@ def collection_area(plant):
         bm_supply_quangninh = math.pi * MongDuong1.small_radius ** 2 * MongDuong1.bm_density_1
         return (biomass_required(MongDuong1) - bm_supply_quangninh / 2)/MongDuong1.bm_density_2
     else:
-        return biomass_required(plant) / plant.bm_density
+        return biomass_required(NinhBinh) / NinhBinh.bm_density
 
 def collection_radius(plant):
     """
@@ -40,14 +41,15 @@ def collection_radius(plant):
     15.7274 km
     """
     if plant == MongDuong1:
-        return ((2* collection_area(plant) / math.pi) + (MongDuong1.small_radius ** 2)) **0.5 
+        return ((2* collection_area(plant) / math.pi) + (MongDuong1.small_radius ** 2)) **0.5
     else:
         return (collection_area(plant) / math.pi) **0.5
 
 def print_with_unit(func, plant, unit):
-    l = func(plant)
-    l.display_unit = unit
-    return l
+    """ Display the desired unit on Tables"""
+    value = func(plant)
+    value.display_unit = unit
+    return value
 
 
 def bm_transportation_cost(plant):
@@ -58,9 +60,9 @@ def bm_transportation_cost(plant):
     >>> print_with_unit(bm_transportation_cost, NinhBinh, 'USD/t')
     0.943645 USD/t
     """
-    return 2/3 * (collection_radius(plant) * transport_tariff * tortuosity_factor)
-   
-   
+    return 2.0 / 3.0 * collection_radius(plant) * tortuosity_factor * transport_tariff 
+
+
 def bm_unit_cost(plant):
     """
     >>> from parameters import *
@@ -70,4 +72,8 @@ def bm_unit_cost(plant):
     38.2036 USD/t
     """
     return bm_transportation_cost(plant) + biomass_fix_cost
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
     
