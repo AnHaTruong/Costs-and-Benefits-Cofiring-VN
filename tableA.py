@@ -28,8 +28,8 @@ print('Discount Rate', discount_rate)
 print('')
 
 
-head = '{:4}'+' {:>11}'*8
-row = '{:4d}'+' {:6.0f}'*8
+head = '{:4}'+' {:>11}'*9
+row = '{:4d}'+' {:6.0f}'*9
 print(head.format('year',
                   'elec_sale',
                   'cash_in',
@@ -77,7 +77,7 @@ def print_npv(plant):
                           col6,
                           col7,
                           col8,
-                          col9
+                          col9,
                          )
         print(line)
 

@@ -6,15 +6,25 @@
 # minh.haduong@gmail.com
 # Creative Commons Attribution-ShareAlike 4.0 International
 #
-#
+
 """Calculation of the amount of coal saved and fuel cost saving due to biomass co-firing
 
 """
 
 
 
-from parameters import biomass_ratio, coal_import_price
-from biomassrequired import gross_heat_input
+from parameters import biomass_ratio, coal_import_price, time_step
+from biomassrequired import gross_heat_input, power_generation
+
+def base_coal_consumption(plant):
+    """
+    >>> from parameters import *
+    >>> print_with_unit(base_coal_consumption, MongDuong1, 't/y')
+    138589 t/y
+    >>> print_with_unit(base_coal_consumption, NinhBinh, 't/y')
+    21674 t/y
+    """
+    return (power_generation(plant) / plant.base_plant_efficiency / time_step) / plant.coal_heat_value
 
 
 def coal_saved(plant):
@@ -22,9 +32,9 @@ def coal_saved(plant):
 
     >>> from parameters import *
     >>> print_with_unit(coal_saved, MongDuong1, 't/y')
-    155987 t/y
+    138589 t/y
     >>> print_with_unit(coal_saved, NinhBinh, 't/y')
-    28974.7 t/y
+    21674 t/y
     """
     return gross_heat_input(plant) * biomass_ratio / plant.coal_heat_value
     

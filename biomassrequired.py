@@ -14,7 +14,7 @@
 """
 
 
-from parameters import biomass_ratio, biomass_heat_value, MongDuong1, NinhBinh
+from parameters import biomass_ratio, biomass_heat_value, MongDuong1, NinhBinh, time_step
 
 
 def print_with_unit(func, plant, unit):
@@ -70,8 +70,11 @@ def gross_heat_input(plant):
     >>> print_with_unit(gross_heat_input, NinhBinh, 'TJ/y')
     12486.7 TJ/y
     """
-    return plant.generation /  plant_efficency_bm(plant)
+    return power_generation(plant) /  plant_efficency_bm(plant) / time_step
 
+
+def power_generation(plant):
+    return plant.capacity * plant.capacity_factor * time_step
 
 def biomass_required(plant):
     """Amount of biomass needed per year for co-firing

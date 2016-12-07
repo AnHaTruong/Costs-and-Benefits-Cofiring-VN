@@ -16,7 +16,7 @@ from parameters import tax_rate, depreciation_period
 from parameters import zero_kwh, zero_USD, zero_VND
 from biomassrequired import biomass_required
 from biomasscost import bm_unit_cost
-from coalsaved import coal_saved
+from coalsaved import coal_saved, base_coal_consumption
 
 
 def print_with_unit(func, plant, year, unit):
@@ -24,6 +24,10 @@ def print_with_unit(func, plant, year, unit):
     value = func(plant, year)
     value.display_unit = unit
     return value
+
+
+def power_generation(plant):
+    return plant.capacity * plant.capacity_factor
 
 
 def elec_sale(plant, year):
@@ -38,10 +42,10 @@ def elec_sale(plant, year):
      0 hr*kW
 
      From the second year onwards:
-     >>> elec_sale(MongDuong1, 1)
-     6500 GW*hr
-     >>> elec_sale(NinhBinh, 1)
-     750 GW*hr
+     >>> print_with_unit(elec_sale, MongDuong1, 1, 'GWh')
+     4733.64 GWh
+     >>> print_with_unit(elec_sale, NinhBinh, 1, 'GWh')
+     561.024 GWh
 
      Sales are assumed constant afterwards:
      >>> elec_sale(MongDuong1, 1) == elec_sale(MongDuong1, time_horizon)
@@ -52,7 +56,7 @@ def elec_sale(plant, year):
     if year == 0:
         return zero_kwh
     else:
-        return plant.generation * time_step
+        return power_generation(plant) * time_step
 
 
 def cash_inflow(plant, year):
@@ -145,7 +149,7 @@ def fuel_cost_coal(plant, year):
     if year == 0:
         return zero_USD
     else:
-        return plant.coal_price * (plant.base_coal_consumption - coal_saved(plant)) * time_step
+        return plant.coal_price * (base_coal_consumption(plant) - coal_saved(plant)) * time_step
         
         
 def fuel_cost_biomass(plant, year):

@@ -29,45 +29,32 @@ def print_emission(plant):
     col1 = emission_biomass_combust(plant) + emission_coal_combust_cofire(plant)
     col2 = emission_biomass_transport(plant) + emission_coal_transport_cofire(plant)
     col3 = total_emission_cofire(plant)
+    col4 = emission_coal_combust_base(plant)
+    col5 = emission_coal_transport_base(plant)
+    col6 = total_emission_coal(plant)
+    col7 = emission_reduction(plant)
 
     col1.display_unit = 't/y'
     col2.display_unit = 't/y'
     col3.display_unit = 't/y'
+    col4.display_unit = 't/y'
+    col5.display_unit = 't/y'
+    col6.display_unit = 't/y'
+    col7.display_unit = 't/y'
 
-    print(row.format('Emission from combustion baseline',
-                     emission_coal_combust_base(plant),
-                    )
-         )
+    print(row.format('Emission from combustion baseline', col4))
 
-    print(row.format('Emission from transport baseline',
-                     emission_coal_transport_base(plant),
-                    )
-         )
+    print(row.format('Emission from transport baseline', col5))
 
-    print(row.format('Emission from combustion co-firing',
-                     col1,
-                    )
-         )
+    print(row.format('Emission from combustion co-firing', col1))
 
-    print(row.format('Emission from transport co-firing',
-                     col2,
-                    )
-         )
+    print(row.format('Emission from transport co-firing', col2))
 
-    print(row.format('Emission baseline case',
-                     total_emission_coal(plant),
-                    )
-         )
+    print(row.format('Emission baseline case', col6))
 
-    print(row.format('Emission co-firing case',
-                     col3,
-                    )
-         )
+    print(row.format('Emission co-firing case', col3))
 
-    print(row.format('Emission reduction',
-                     emission_reduction(plant),
-                    )
-         )
+    print(row.format('Emission reduction', col7))
 
 print('Greenhouse gas emission reduction Mong Duong 1')
 print_emission(MongDuong1)

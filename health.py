@@ -13,7 +13,7 @@ from parameters import ef_so2_biomass, ef_pm10_biomass
 from parameters import ef_nox_biomass, health_damage_so2
 from parameters import health_damage_pm10, health_damage_nox
 from biomassrequired import biomass_required
-from coalsaved import coal_saved
+from coalsaved import coal_saved, base_coal_consumption
 
 
 def print_with_unit(func, plant, unit):
@@ -32,7 +32,7 @@ def so2_emission_base(plant):
     >>> print_with_unit(so2_emission_base, NinhBinh, 't/y')
     4830 t/y
     """
-    return plant.base_coal_consumption * plant.ef_so2_coal * (1 - plant.desulfur_efficiency)
+    return base_coal_consumption(plant) * plant.ef_so2_coal * (1 - plant.desulfur_efficiency)
 
 
 def pm10_emission_base(plant):
@@ -45,7 +45,7 @@ def pm10_emission_base(plant):
     >>> print_with_unit(pm10_emission_base, NinhBinh, 't/y')
     87.696 t/y
     """
-    return plant.base_coal_consumption * plant.ef_pm10_coal * (1 - plant.esp_efficiency)
+    return base_coal_consumption(plant) * plant.ef_pm10_coal * (1 - plant.esp_efficiency)
 
 
 def nox_emission_base(plant):
@@ -58,7 +58,7 @@ def nox_emission_base(plant):
     >>> print_with_unit(nox_emission_base, NinhBinh, 't/y')
     7560 t/y
     """
-    return plant.base_coal_consumption * plant.ef_nox_coal
+    return base_coal_consumption(plant) * plant.ef_nox_coal
 
 
 def so2_emission_cofiring(plant):
@@ -71,7 +71,7 @@ def so2_emission_cofiring(plant):
     4506.4 t/y
     """
     so2_emit_bm = biomass_required(plant) * ef_so2_biomass * (1 - plant.desulfur_efficiency)
-    so2_emit_coal = (plant.base_coal_consumption - coal_saved(plant)) * plant.ef_so2_coal * (1 - plant.desulfur_efficiency)
+    so2_emit_coal = (base_coal_consumption(plant) - coal_saved(plant)) * plant.ef_so2_coal * (1 - plant.desulfur_efficiency)
     return so2_emit_bm + so2_emit_coal
 
 
@@ -85,7 +85,7 @@ def pm10_emission_cofiring(plant):
     85.5308 t/y
     """
     pm10_emit_bm = biomass_required(plant) * ef_pm10_biomass * (1 - plant.esp_efficiency)
-    pm10_emit_coal = (plant.base_coal_consumption - coal_saved(plant)) * plant.ef_pm10_coal * (1 - plant.esp_efficiency)
+    pm10_emit_coal = (base_coal_consumption(plant) - coal_saved(plant)) * plant.ef_pm10_coal * (1 - plant.esp_efficiency)
     return  pm10_emit_bm + pm10_emit_coal
 
 
@@ -99,7 +99,7 @@ def nox_emission_cofiring(plant):
     7160.12 t/y
     """
     nox_emit_bm = biomass_required(plant) * ef_nox_biomass
-    nox_emit_coal = (plant.base_coal_consumption - coal_saved(plant)) * plant.ef_nox_coal
+    nox_emit_coal = (base_coal_consumption(plant) - coal_saved(plant)) * plant.ef_nox_coal
     return nox_emit_bm + nox_emit_coal
 
 

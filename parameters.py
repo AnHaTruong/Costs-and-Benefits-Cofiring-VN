@@ -75,8 +75,9 @@ MongDuong1 = PowerPlant()
 MongDuong1.commissioning = 2015 * y
 MongDuong1.boiler_technology = 'CFB'
 MongDuong1.capacity = 1080 * MW
-MongDuong1.generation = 6500 * GW * hr / y
-MongDuong1.base_coal_consumption = 2751600 * t / y
+# MongDuong1.generation = 6500 * GW * hr / y
+MongDuong1.capacity_factor = 0.61
+# MongDuong1.base_coal_consumption = 2751600 * t / y
 MongDuong1.base_plant_efficiency = 38.84 / 100
 MongDuong1.base_boiler_efficiency = 87.03 / 100
 
@@ -111,8 +112,9 @@ NinhBinh = PowerPlant()
 NinhBinh.commissioning = 1974
 NinhBinh.boiler_technology = 'PC'
 NinhBinh.capacity = 100 * MW
-NinhBinh.generation = 750 * GW * hr / y
-NinhBinh.base_coal_consumption = 420000 * t / y
+# NinhBinh.generation = 560 * GW * hr / y
+NinhBinh.capacity_factor = 0.64
+# NinhBinh.base_coal_consumption = 420000 * t / y
 NinhBinh.base_plant_efficiency = 21.77 / 100
 NinhBinh.base_boiler_efficiency = 81.61 / 100
 

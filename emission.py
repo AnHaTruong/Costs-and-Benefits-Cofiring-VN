@@ -15,7 +15,7 @@
 
 from parameters import biomass_heat_value, carbon_price
 from biomassrequired import biomass_required
-from coalsaved import coal_saved
+from coalsaved import coal_saved, base_coal_consumption
 from biomasscost import collection_radius
 
 
@@ -36,7 +36,7 @@ def emission_coal_combust_base(plant):
     >>> emission_coal_combust_base(NinhBinh)
     874229 t/y
     """
-    return plant.ef_coal_combust * plant.base_coal_consumption * plant.coal_heat_value
+    return plant.ef_coal_combust * base_coal_consumption(plant) * plant.coal_heat_value
 
 
 def emission_coal_transport_base(plant):
@@ -50,13 +50,13 @@ def emission_coal_transport_base(plant):
     >>> emission_coal_transport_base(NinhBinh)
     11928 t/y
     """
-    return plant.ef_coal_transport * 2 * plant.coal_transport_distance * plant.base_coal_consumption
+    return plant.ef_coal_transport * 2 * plant.coal_transport_distance * base_coal_consumption(plant)
 
 
 def emission_coal_combust_cofire(plant):
     """ emission from coal combustion when co-fire
     """
-    return plant.ef_coal_combust * (plant.base_coal_consumption - coal_saved(plant)) * plant.coal_heat_value
+    return plant.ef_coal_combust * (base_coal_consumption(plant) - coal_saved(plant)) * plant.coal_heat_value
 
 
 def emission_biomass_combust(plant):
@@ -74,7 +74,7 @@ def emission_biomass_combust(plant):
 def emission_coal_transport_cofire(plant):
     """emission from coal transportation when co-fire
     """
-    return plant.ef_coal_transport * 2 * plant.coal_transport_distance * (plant.base_coal_consumption - coal_saved(plant))
+    return plant.ef_coal_transport * 2 * plant.coal_transport_distance * (base_coal_consumption(plant) - coal_saved(plant))
 
 def emission_biomass_transport(plant):
     """return emission from transportation of biomass and coal.

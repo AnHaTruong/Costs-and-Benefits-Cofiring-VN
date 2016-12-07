@@ -42,6 +42,9 @@ def print_health(plant):
     col5 = so2_emission_cofiring(plant)
     col6 = pm10_emission_cofiring(plant)
     col7 = nox_emission_cofiring(plant)
+    col8 = so2_emission_base(plant)
+    col9 = pm10_emission_base (plant)
+    col10 = nox_emission_base(plant)
 
     col1.display_unit = 'USD/y'
     col2.display_unit = 'USD/y'
@@ -50,9 +53,12 @@ def print_health(plant):
     col5.display_unit = 't/y'
     col6.display_unit = 't/y'
     col7.display_unit = 't/y'
+    col8.display_unit = 't/y'
+    col9.display_unit = 't/y'
+    col10.display_unit = 't/y'
 
     print(row.format('SO2',
-                     so2_emission_base(plant),
+                     col8,
                      col5,
                      so2_emission_reduction(plant),
                      col1
@@ -60,7 +66,7 @@ def print_health(plant):
          )
 
     print(row.format('PM10',
-                     pm10_emission_base(plant),
+                     col9,
                      col6,
                      pm10_emission_reduction(plant),
                      col2
@@ -68,7 +74,7 @@ def print_health(plant):
          )
 
     print(row.format('NOx',
-                     nox_emission_base(plant),
+                     col10,
                      col7,
                      nox_emission_reduction(plant),
                      col3
