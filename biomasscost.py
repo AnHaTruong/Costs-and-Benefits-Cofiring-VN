@@ -56,9 +56,9 @@ def bm_transportation_cost(plant):
     """
     >>> from parameters import *
     >>> print_with_unit(bm_transportation_cost, MongDuong1, 'USD/t')
-    4.24459 USD/t
+    6.35323 USD/t
     >>> print_with_unit(bm_transportation_cost, NinhBinh, 'USD/t')
-    0.943645 USD/t
+    1.41243 USD/t
     """
     return 2.0 / 3.0 * collection_radius(plant) * tortuosity_factor * transport_tariff 
 
@@ -67,9 +67,9 @@ def bm_unit_cost(plant):
     """
     >>> from parameters import *
     >>> print_with_unit(bm_unit_cost, MongDuong1, 'USD/t')
-    41.5046 USD/t
+    43.6132 USD/t
     >>> print_with_unit(bm_unit_cost, NinhBinh, 'USD/t')
-    38.2036 USD/t
+    38.6724 USD/t
     """
     return bm_transportation_cost(plant) + biomass_fix_cost
 

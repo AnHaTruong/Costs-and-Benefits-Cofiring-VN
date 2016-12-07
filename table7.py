@@ -14,8 +14,9 @@ from parameters import MongDuong1, NinhBinh
 
 from emission import emission_coal_combust_base, emission_coal_transport_base
 from emission import emission_biomass_combust, emission_biomass_transport
-from emission import total_emission_coal, total_emission_biomass
-from emission import emission_reduction
+from emission import total_emission_coal, total_emission_cofire
+from emission import emission_reduction, emission_coal_combust_cofire
+from emission import emission_coal_transport_cofire
 
 print('')
 row = '{:35}' + '{:16.2f}'
@@ -24,46 +25,46 @@ row = '{:35}' + '{:16.2f}'
 
 def print_emission(plant):
     """Print table 7-Emission reduction from co-firing """
-    
-    col1 = emission_biomass_combust(plant)
-    col2 = emission_biomass_transport(plant)
-    col3 = total_emission_biomass(plant)
-    
+
+    col1 = emission_biomass_combust(plant) + emission_coal_combust_cofire(plant)
+    col2 = emission_biomass_transport(plant) + emission_coal_transport_cofire(plant)
+    col3 = total_emission_cofire(plant)
+
     col1.display_unit = 't/y'
     col2.display_unit = 't/y'
     col3.display_unit = 't/y'
-    
-    print(row.format('emission from coal combustion',
+
+    print(row.format('Emission from combustion baseline',
                      emission_coal_combust_base(plant),
                     )
          )
 
-    print(row.format('emission from coal transport',
+    print(row.format('Emission from transport baseline',
                      emission_coal_transport_base(plant),
                     )
          )
 
-    print(row.format('emission from biomass combustion',
+    print(row.format('Emission from combustion co-firing',
                      col1,
                     )
          )
 
-    print(row.format('emission from biomass transport',
+    print(row.format('Emission from transport co-firing',
                      col2,
                     )
          )
 
-    print(row.format('emission from coal',
+    print(row.format('Emission baseline case',
                      total_emission_coal(plant),
                     )
          )
 
-    print(row.format('emission from biomass',
+    print(row.format('Emission co-firing case',
                      col3,
                     )
          )
 
-    print(row.format('emission reduction',
+    print(row.format('Emission reduction',
                      emission_reduction(plant),
                     )
          )

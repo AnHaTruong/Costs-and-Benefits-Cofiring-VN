@@ -24,7 +24,7 @@ def coal_saved(plant):
     >>> print_with_unit(coal_saved, MongDuong1, 't/y')
     155987 t/y
     >>> print_with_unit(coal_saved, NinhBinh, 't/y')
-    24664.4 t/y
+    28974.7 t/y
     """
     return gross_heat_input(plant) * biomass_ratio / plant.coal_heat_value
     
@@ -37,7 +37,7 @@ def coal_import_saving(plant):
     >>> print_with_unit(coal_import_saving, MongDuong1, 'kUSD/y')
     11387 kUSD/y
     >>> print_with_unit(coal_import_saving, NinhBinh, 'kUSD/y')
-    1800.5 kUSD/y
+    2115.15 kUSD/y
     """
     return coal_saved(plant) * coal_import_price
 

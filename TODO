@@ -11,8 +11,10 @@ Hourly dispatch, with ramp-up and ramp-down constraints, maintenance downtime, a
 
 Sensitivity analysis
 
-
-
+Consider more indicators that LCOE:
+  Debt Service Coverage Ratio (requires Cash Flow Available for Debt Service ) - minimum over all periods and average
+  Project Internal Rate of Return, pre-tax
+  Equity Internal Rate of Return
 
 DONE
 

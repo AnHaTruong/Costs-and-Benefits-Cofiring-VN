@@ -9,7 +9,7 @@ PYTHON = python3
 
 tables = tableA.txt tableB.txt tableC.txt tableD.txt table7.txt table8.txt table11.txt table12.txt
 
-tests = job.test emission.test npv.test health.test LCOE.test farmerincome.test biomassrequired.test benefitaddup.test
+tests = job.test emission.test npv.test health.test lcoe.test farmerincome.test biomassrequired.test benefitaddup.test
  
 all: $(tables)
 

@@ -14,10 +14,8 @@ from parameters import MongDuong1, NinhBinh
 from farmerincome import farmer_income, bm_sell_revenue, total_income_benefit
 
 print('')
-#head = '{:40}' + '{:28}' + '{:15}'
-row = '{:20}' + '{:23.0f}'
 
-#print (head.format(' ', 'Mong Duong 1', 'Ninh Binh'))
+row = '{:20}' + '{:23.0f}'
 
 
 def print_income(plant):

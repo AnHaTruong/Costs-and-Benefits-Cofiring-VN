@@ -34,7 +34,7 @@ def emission_coal_combust_base(plant):
     >>> emission_coal_combust_base(MongDuong1)
     5.16583e+06 t/y
     >>> emission_coal_combust_base(NinhBinh)
-    1.02701e+06 t/y
+    874229 t/y
     """
     return plant.ef_coal_combust * plant.base_coal_consumption * plant.coal_heat_value
 
@@ -48,7 +48,7 @@ def emission_coal_transport_base(plant):
     >>> emission_coal_transport_base(MongDuong1)
     0 t/y
     >>> emission_coal_transport_base(NinhBinh)
-    5208 t/y
+    11928 t/y
     """
     return plant.ef_coal_transport * 2 * plant.coal_transport_distance * plant.base_coal_consumption
 
@@ -83,9 +83,9 @@ def emission_biomass_transport(plant):
 
     >>> from parameters import *
     >>> print_with_unit(emission_biomass_transport, MongDuong1, 't/y')
-    2272.93 t/y
+    4032.62 t/y
     >>> print_with_unit(emission_biomass_transport, NinhBinh, 't/y')
-    104.067 t/y
+    184.634 t/y
     """
     return plant.ef_biomass_transport * 2 * collection_radius(plant) * biomass_required(plant)
 
@@ -98,20 +98,20 @@ def total_emission_coal(plant):
     >>> print_with_unit(total_emission_coal, MongDuong1, 't/y')
     5.16583e+06 t/y
     >>> print_with_unit(total_emission_coal, NinhBinh, 't/y')
-    1.03222e+06 t/y
+    886157 t/y
     """
     return emission_coal_combust_base(plant) + emission_coal_transport_base(plant)
 
 
-def total_emission_biomass(plant):
+def total_emission_cofire(plant):
     """sum of emission from biomass combustion and biomass transportation for
        co-firing case
 
     >>> from parameters import *
-    >>> print_with_unit(total_emission_biomass, MongDuong1, 't/y')
-    5.13536e+06 t/y
-    >>> print_with_unit(total_emission_biomass, NinhBinh, 't/y')
-    1.02527e+06 t/y
+    >>> print_with_unit(total_emission_cofire, MongDuong1, 't/y')
+    5.13712e+06 t/y
+    >>> print_with_unit(total_emission_cofire, NinhBinh, 't/y')
+    878776 t/y
     """
     return (emission_biomass_combust(plant)
             + emission_biomass_transport(plant)
@@ -125,20 +125,20 @@ def emission_reduction(plant):
 
     >>> from parameters import *
     >>> emission_reduction(MongDuong1)
-    30467.9 t/y
+    28708.2 t/y
     >>> emission_reduction(NinhBinh)
-    6944.6 t/y
+    7381.07 t/y
     """
-    return total_emission_coal(plant) - total_emission_biomass(plant)
+    return total_emission_coal(plant) - total_emission_cofire(plant)
     
 
 def emission_reduction_benefit(plant):
     """ return the monetary benefit from greenhouse gas emission reduction
     >>> from parameters import *
     >>> print_with_unit(emission_reduction_benefit, MongDuong1, 'USD/y')
-    30467.9 USD/y
+    28708.2 USD/y
     >>> print_with_unit(emission_reduction_benefit, NinhBinh, 'USD/y')
-    6944.6 USD/y
+    7381.07 USD/y
     """
     return emission_reduction(plant) * carbon_price
 
