@@ -51,9 +51,9 @@ def total_income_benefit(plant):
 
     >>> from parameters import *
     >>> print_with_unit(total_income_benefit, MongDuong1, 'kUSD/y')
-    7805.22 kUSD/y
+    6821 kUSD/y
     >>> print_with_unit(total_income_benefit, NinhBinh, 'kUSD/y')
-    1613.8 kUSD/y
+    1207.17 kUSD/y
     """
     return farmer_income(plant) * cultivation_area(plant)
 

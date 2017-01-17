@@ -32,21 +32,21 @@ def benefit_add_up(func, plant):
     
     >>> from parameters import *
     >>> print_with_unit(benefit_add_up(total_health_benefit, MongDuong1), 'kUSD')
-    8814.49 kUSD
+    135359 kUSD
     >>> print_with_unit(benefit_add_up(total_income_benefit, MongDuong1), 'kUSD')
-    80201.9 kUSD
+    70088.7 kUSD
     >>> print_with_unit(benefit_add_up(emission_reduction_benefit, MongDuong1), 'kUSD')
-    294.988 kUSD
+    259.06 kUSD
     >>> print_with_unit(benefit_add_up(total_job_benefit, MongDuong1), 'kUSD')
-    4732.37 kUSD
+    4121.41 kUSD
     >>> print_with_unit(benefit_add_up(total_health_benefit, NinhBinh), 'kUSD')
-    13831.9 kUSD
+    32850.3 kUSD
     >>> print_with_unit(benefit_add_up(total_income_benefit, NinhBinh), 'kUSD')
-    16582.4 kUSD
+    12404.2 kUSD
     >>> print_with_unit(benefit_add_up(emission_reduction_benefit, NinhBinh), 'kUSD')
-    75.8436 kUSD
+    56.9252 kUSD
     >>> print_with_unit(benefit_add_up(total_job_benefit, NinhBinh), 'kUSD')
-    839.595 kUSD
+    625.894 kUSD
     """
     value = zero_USD
     for year in range(time_horizon+1):
@@ -60,9 +60,9 @@ def total_benefit_addup(plant):
        
     >>> from parameters import *
     >>> print_with_unit(total_benefit_addup(MongDuong1), 'kUSD')
-    94043.7 kUSD
+    209828 kUSD
     >>> print_with_unit(total_benefit_addup(NinhBinh), 'kUSD')
-    31329.8 kUSD
+    45937.3 kUSD
     """
     return (benefit_add_up(total_health_benefit, plant) +
             benefit_add_up(total_income_benefit, plant) +

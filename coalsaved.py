@@ -20,9 +20,9 @@ def base_coal_consumption(plant):
     """
     >>> from parameters import *
     >>> print_with_unit(base_coal_consumption, MongDuong1, 't/y')
-    138589 t/y
+    2.70908e+06 t/y
     >>> print_with_unit(base_coal_consumption, NinhBinh, 't/y')
-    21674 t/y
+    430553 t/y
     """
     return (power_generation(plant) / plant.base_plant_efficiency / time_step) / plant.coal_heat_value
 
@@ -32,7 +32,7 @@ def coal_saved(plant):
 
     >>> from parameters import *
     >>> print_with_unit(coal_saved, MongDuong1, 't/y')
-    138589 t/y
+    136317 t/y
     >>> print_with_unit(coal_saved, NinhBinh, 't/y')
     21674 t/y
     """
@@ -45,9 +45,9 @@ def coal_import_saving(plant):
         assuming that same amount of coal will be imported if there is no co-firing
     >>> from parameters import *   
     >>> print_with_unit(coal_import_saving, MongDuong1, 'kUSD/y')
-    11387 kUSD/y
+    9951.17 kUSD/y
     >>> print_with_unit(coal_import_saving, NinhBinh, 'kUSD/y')
-    2115.15 kUSD/y
+    1582.2 kUSD/y
     """
     return coal_saved(plant) * coal_import_price
 
