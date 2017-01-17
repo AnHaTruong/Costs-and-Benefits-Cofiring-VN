@@ -31,7 +31,10 @@ h_per_yr = 8760 * hr # Number of hour per year
 biomass_heat_value = 11.7 * MJ / kg
 biomass_ratio = 0.05   # Percent of energy that comes from biomass
                         # energy meaning both heat and electricity produced
-
+straw_collection_fraction = 0.82
+straw_selling_proportion = 0.79
+RPR_straw = 1.0
+straw_burn_rate = 0.9 # Percentage of straw burned infield after harvest
 winder_capacity = 6.57 * t / d
 work_hour_day = 8 * hr / d
 FTE = 1560 * hr / y  # number of working hour for a FTE job # a full time equivalence job
@@ -65,7 +68,7 @@ health_damage_nox = 286 * USD / t
 zero_kwh = 0 * kW*hr
 zero_USD = 0 * USD
 zero_VND = 0 * VND
-
+zero_km = 0 * km
 
 class PowerPlant:
     pass
@@ -76,7 +79,7 @@ MongDuong1.commissioning = 2015 * y
 MongDuong1.boiler_technology = 'CFB'
 MongDuong1.capacity = 1080 * MW
 # MongDuong1.generation = 6500 * GW * hr / y
-MongDuong1.capacity_factor = 0.61
+MongDuong1.capacity_factor = 0.60
 # MongDuong1.base_coal_consumption = 2751600 * t / y
 MongDuong1.base_plant_efficiency = 38.84 / 100
 MongDuong1.base_boiler_efficiency = 87.03 / 100
@@ -86,14 +89,14 @@ MongDuong1.coal_price = 1131400 * VND / t
 MongDuong1.fix_om_cost = 32.24 * USD / kW / y
 MongDuong1.variable_om_cost = 0.006 * USD / (kW*hr)
 MongDuong1.fix_om_coal = 29.31 * USD / kW / y
-MongDuong1.variable_om_coal = 0.0048 * USD / (kW*hr) 
+MongDuong1.variable_om_coal = 0.0048 * USD / (kW*hr)
 MongDuong1.coal_transport_distance = 0 * km
 MongDuong1.coal_heat_value = 19.43468 * MJ / kg
 MongDuong1.biomass_yield = 5.605 * t / ha / y
 MongDuong1.electricity_tariff = 1239.17 * VND / (kW*hr)
 
 MongDuong1.small_radius = 50 * km # Distance from the plant to the boder of Quang Ninh with adjacent provinces
-MongDuong1.bm_density_1 = 5.49 * t / (km**2) / y # Straw dendisty in Quang Ninh
+MongDuong1.bm_density_1 = 5.49 * t / (km**2) / y # Straw density in Quang Ninh
 MongDuong1.bm_density_2 = 60.38 * t / (km**2) / y # Straw density in adjacent provinces
 
 MongDuong1.ef_coal_combust = 0.0966 * kg / MJ
@@ -141,3 +144,5 @@ NinhBinh.desulfur_efficiency = 0
 NinhBinh.ef_so2_coal = 11.5 * kg / t
 NinhBinh.ef_pm10_coal = 26.1 * kg / t
 NinhBinh.ef_nox_coal = 18 * kg / t
+
+
