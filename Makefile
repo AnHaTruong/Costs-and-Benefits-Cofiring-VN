@@ -7,10 +7,10 @@
 
 PYTHON = python3
 
-tables = tableA.txt tableB.txt tableC.txt tableD.txt table7.txt table8.txt table11.txt table12.txt
+tables = tableA.txt tableB.txt tableC.txt tableD.txt table1.txt table5.txt table7.txt table8.txt table11.txt table12.txt
 
-tests = job.test emission.test npv.test health.test lcoe.test farmerincome.test biomassrequired.test benefitaddup.test
- 
+tests = job.test emission.test npv.test health.test lcoe.test farmerincome.test biomassrequired.test benefitaddup.test biomasscost.test
+
 all: $(tables)
 
 %.test: %.py parameters.py
