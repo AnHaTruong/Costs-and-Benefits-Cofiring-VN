@@ -1,13 +1,13 @@
 # Economic of co-firing in two power plants in Vietnam
 #
-#  Tests
+#  
 #
 # (c) Minh Ha-Duong, An Ha Truong   2016
 #     minh.haduong@gmail.com
 #     Creative Commons Attribution-ShareAlike 4.0 International
 #
 #
-""" Tests for the calculation of number of job created from co-firing in job.py
+""" Print table D for job created from co-firing in job.py
 """
 
 from parameters import MongDuong1, NinhBinh
