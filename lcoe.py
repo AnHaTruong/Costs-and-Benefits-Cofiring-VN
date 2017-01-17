@@ -40,9 +40,9 @@ def lcoe_fuel_coal(plant):
 
     >>> from parameters import *
     >>> print_with_unit(lcoe_fuel_coal, MongDuong1, 'kUSD')
-    1.22312e+06 kUSD
+    1.21235e+06 kUSD
     >>> print_with_unit(lcoe_fuel_coal, NinhBinh, 'kUSD')
-    297341 kUSD
+    310917 kUSD
     """
     value = zero_USD
     for year in range(time_horizon+1):
@@ -55,9 +55,9 @@ def lcoe_fuel_biomass(plant):
 
     >>> from parameters import *
     >>> print_with_unit(lcoe_fuel_biomass, MongDuong1, 'kUSD')
-    104817 kUSD
+    91132.3 kUSD
     >>> print_with_unit(lcoe_fuel_biomass, NinhBinh, 'kUSD')
-    19141.1 kUSD
+    14247.5 kUSD
     """
     value = zero_USD
     for year in range(time_horizon+1):
@@ -70,9 +70,9 @@ def lcoe_om(plant):
 
     >>> from parameters import *
     >>> print_with_unit(lcoe_om, MongDuong1, 'kUSD')
-    588089 kUSD
+    551141 kUSD
     >>> print_with_unit(lcoe_om, NinhBinh, 'kUSD')
-    61131 kUSD
+    52612.3 kUSD
     """
 
     value = zero_USD
@@ -86,9 +86,9 @@ def lcoe_tax(plant):
 
     >>> from parameters import *
     >>> print_with_unit(lcoe_tax, MongDuong1, 'kUSD')
-    359238 kUSD
+    268832 kUSD
     >>> print_with_unit(lcoe_tax, NinhBinh, 'kUSD')
-    35588.1 kUSD
+    2773.11 kUSD
     """
     value = zero_USD
     for year in range(time_horizon+1):
@@ -101,9 +101,9 @@ def lcoe_cost(plant):
 
     >>> from parameters import *
     >>> print_with_unit(lcoe_cost, MongDuong1, 'kUSD')
-    2.27796e+06 kUSD
+    2.12616e+06 kUSD
     >>> print_with_unit(lcoe_cost, NinhBinh, 'kUSD')
-    413701 kUSD
+    381050 kUSD
     """
     return (lcoe_investment(plant) +
             lcoe_fuel_coal(plant) +
@@ -118,9 +118,9 @@ def lcoe_power_gen(plant):
 
     >>> from parameters import *
     >>> print_with_unit(lcoe_power_gen, MongDuong1, 'GWh')
-    60290.2 GWh
+    52687.8 GWh
     >>> print_with_unit(lcoe_power_gen, NinhBinh, 'GWh')
-    6956.56 GWh
+    5203.73 GWh
     """
     value = zero_kwh
     for year in range(time_horizon+1):
@@ -134,9 +134,9 @@ def lcoe(plant):
     
     >>> from parameters import *
     >>> print_with_unit(lcoe, MongDuong1, 'USD/kWh')
-    0.0377833 USD/kWh
+    0.040354 USD/kWh
     >>> print_with_unit(lcoe, NinhBinh, 'USD/kWh')
-    0.0594692 USD/kWh
+    0.0732263 USD/kWh
     """
     return lcoe_cost(plant) / lcoe_power_gen(plant)
 
