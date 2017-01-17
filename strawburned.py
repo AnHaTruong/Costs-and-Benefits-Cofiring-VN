@@ -14,7 +14,7 @@ the provinces that supply straw to the plant"""
 import numpy as np
 import pandas as pd
 from natu.units import t, y
-from parameters import MongDuong1, RPR_straw, straw_burn_rate
+from parameters import MongDuong1, residue_to_product_ratio_straw, straw_burn_rate
 from parameters import ef_so2_biomass, ef_pm10_biomass, ef_nox_biomass
 
 def print_with_unit(func, plant, unit):
@@ -51,7 +51,7 @@ def straw_production(plant):
     >>> print_with_unit(straw_production, NinhBinh, 't/y')
     460900 t/y
     """
-    return rice_production(plant) * RPR_straw
+    return rice_production(plant) * residue_to_product_ratio_straw
 
 
 def straw_burned_infield(plant):

@@ -13,10 +13,10 @@
 
 from parameters import time_step, time_horizon, discount_rate, biomass_ratio
 from parameters import tax_rate, depreciation_period
-from parameters import zero_kwh, zero_USD, zero_VND
+from parameters import zero_USD, zero_VND
 from biomassrequired import biomass_required
 from biomasscost import bm_unit_cost
-from coalsaved import coal_saved, base_coal_consumption
+from coalsaved import coal_saved
 
 
 def print_with_unit(func, plant, year, unit):
@@ -26,51 +26,11 @@ def print_with_unit(func, plant, year, unit):
     return value
 
 
-def power_generation(plant):
-    return plant.capacity * plant.capacity_factor
-
-
-def elec_sale(plant, year):
-    """
-        this is for the whole plant
-
-     In the first year, the project is not here yet so no sales:
-     >>> from parameters import *
-     >>> elec_sale(MongDuong1, 0)
-     0 hr*kW
-     >>> elec_sale(NinhBinh, 0)
-     0 hr*kW
-
-     From the second year onwards:
-     >>> print_with_unit(elec_sale, MongDuong1, 1, 'GWh')
-     5680.37 GWh
-     >>> print_with_unit(elec_sale, NinhBinh, 1, 'GWh')
-     561.024 GWh
-
-     Sales are assumed constant afterwards:
-     >>> elec_sale(MongDuong1, 1) == elec_sale(MongDuong1, time_horizon)
-     True
-     >>> elec_sale(NinhBinh, 1) == elec_sale(NinhBinh, time_horizon)
-     True
-    """
-    if year == 0:
-        return zero_kwh
-    else:
-        return power_generation(plant) * time_step
-
-
 def cash_inflow(plant, year):
-    """ Excel line 99 and 102
-        This is for the whole plant
+    """
 
-    In the first year, there is no sale so cash inflow is zero:
+    Cash inflow remain constant :
     >>> from parameters import *
-    >>> print_with_unit(cash_inflow, MongDuong1, 0, 'USD')
-    0 USD
-    >>> print_with_unit(cash_inflow, NinhBinh, 0, 'USD')
-    0 USD
-
-    Cash inflow remain constant afterwards:
     >>> cash_inflow(MongDuong1, 1) == cash_inflow(MongDuong1, time_horizon)
     True
     >>> cash_inflow(NinhBinh, 1) == cash_inflow(NinhBinh, time_horizon)
@@ -82,7 +42,7 @@ def cash_inflow(plant, year):
     >>> print_with_unit(cash_inflow, NinhBinh, 1, 'kUSD')
     41959.7 kUSD
     """
-    return plant.electricity_tariff * elec_sale(plant, year)
+    return plant.electricity_tariff * plant.elec_sale
 
 
 def cash_outflow(plant, year):
@@ -132,15 +92,15 @@ def tot_capital_cost(plant, year):
 
 def fuel_cost_coal(plant, year):
     """Fuel expense on coal
-    
-    No fuel cost on year zero    
+
+    No fuel cost on year zero
     >>> from parameters import *
     >>> print_with_unit(fuel_cost_coal, MongDuong1, 0, 'USD')
     0 USD
     >>> print_with_unit(fuel_cost_coal, NinhBinh, 0, 'USD')
     0 USD
-    
-    Fuel cost on coal from year 1    
+
+    Fuel cost on coal from year 1
     >>> print_with_unit(fuel_cost_coal, MongDuong1, 1, 'kUSD')
     130706 kUSD
     >>> print_with_unit(fuel_cost_coal, NinhBinh, 1, 'kUSD')
@@ -149,20 +109,20 @@ def fuel_cost_coal(plant, year):
     if year == 0:
         return zero_USD
     else:
-        return plant.coal_price * (base_coal_consumption(plant) - coal_saved(plant)) * time_step
-        
-        
+        return plant.coal_price * (plant.base_coal_consumption - coal_saved(plant)) * time_step
+
+
 def fuel_cost_biomass(plant, year):
     """Fuel expense on biomass
-    
-     No fuel cost on year zero    
+
+     No fuel cost on year zero
     >>> from parameters import *
     >>> print_with_unit(fuel_cost_biomass, MongDuong1, 0, 'USD')
     0 USD
     >>> print_with_unit(fuel_cost_biomass, NinhBinh, 0, 'USD')
     0 USD
-    
-    Fuel cost on coal from year 1    
+
+    Fuel cost on coal from year 1
     >>> print_with_unit(fuel_cost_biomass, MongDuong1, 1, 'kUSD')
     9825.15 kUSD
     >>> print_with_unit(fuel_cost_biomass, NinhBinh, 1, 'kUSD')
@@ -172,7 +132,7 @@ def fuel_cost_biomass(plant, year):
         return zero_USD
     else:
         return bm_unit_cost(plant) * biomass_required(plant) * time_step
-        
+
 
 def fuel_cost(plant, year):
     """Total expense on fuel cost including both coal and  biomass
@@ -228,9 +188,9 @@ def operation_maintenance_cost(plant, year):
         return zero_USD
     else:
         fixed_om_bm = plant.fix_om_cost * plant.capacity * biomass_ratio * time_step
-        variable_om_bm = plant.variable_om_cost * elec_sale(plant, year) * biomass_ratio
+        variable_om_bm = plant.variable_om_cost * plant.elec_sale * biomass_ratio
         fixed_om_coal = plant.fix_om_coal * plant.capacity * (1 - biomass_ratio) * time_step
-        variable_om_coal = plant.variable_om_coal * elec_sale(plant, year) * (1 - biomass_ratio)
+        variable_om_coal = plant.variable_om_coal * plant.elec_sale * (1 - biomass_ratio)
         return fixed_om_bm + variable_om_bm + fixed_om_coal + variable_om_coal
 
 
@@ -279,7 +239,7 @@ def amortization(plant, year):
     if year == 0:
         return zero_VND
     else:
-   
+
         if year in range(1, depreciation_period + 1):
             return tot_capital_cost(plant, 0) / float(depreciation_period)
         else:
@@ -336,7 +296,7 @@ def npv(plant):
     >>> from parameters import *
     >>> npv(MongDuong1)
     8.05546e+08 USD
-    >>> npv(NinhBinh) 
+    >>> npv(NinhBinh)
     8.14337e+06 USD
     """
     value = zero_USD

@@ -15,7 +15,7 @@ from parameters import time_horizon, discount_rate
 # DEBUG
 #time_horizon = 1
 
-from npv import npv, elec_sale, cash_inflow
+from npv import npv, cash_inflow
 from npv import tot_capital_cost, fuel_cost, net_cash_flow, amortization
 from npv import operation_maintenance_cost, earning_before_tax, income_tax
 
@@ -48,7 +48,7 @@ def print_npv(plant):
     """
 
     for year in range(time_horizon+1):
-        col1 = elec_sale(plant, year)
+        col1 = plant.elec_sale
         col2 = cash_inflow(plant, year)
         col3 = tot_capital_cost(plant, year)
         col4 = fuel_cost(plant, year)

@@ -13,7 +13,7 @@
 from parameters import discount_rate, time_horizon, time_step, zero_USD
 from parameters import h_per_yr, MongDuong1, NinhBinh, zero_kwh
 from npv import tot_capital_cost, fuel_cost_coal, fuel_cost_biomass
-from npv import operation_maintenance_cost, income_tax, elec_sale
+from npv import operation_maintenance_cost, income_tax
 
 
 def print_with_unit(func, plant, unit):
@@ -33,6 +33,8 @@ def lcoe_investment(plant):
     """
     return tot_capital_cost(plant, 0)
 
+
+# FIXME: Use a common discount function everywhere
 
 
 def lcoe_fuel_coal(plant):
@@ -124,14 +126,14 @@ def lcoe_power_gen(plant):
     """
     value = zero_kwh
     for year in range(time_horizon+1):
-            value += elec_sale(plant, year) / (1+discount_rate)**year
+            value += plant.elec_sale / (1+discount_rate)**year
     return value
 
 
 def lcoe(plant):
     """ This LCOE calculation does not include the initial investment cost of the plant
     It only takes into account the investment cost for co-firing
-    
+
     >>> from parameters import *
     >>> print_with_unit(lcoe, MongDuong1, 'USD/kWh')
     0.040354 USD/kWh

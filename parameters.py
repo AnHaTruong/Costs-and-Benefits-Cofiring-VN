@@ -24,16 +24,23 @@ units.VND = VND
 
 USD = ScalarUnit(22270, 'N', 'mol', prefixable=True)
 units.USD = USD
+time_step = 1 * y
+time_horizon = 20
+h_per_yr = 8760 * hr # Number of hour per year
+
+zero_kwh = 0 * kW*hr
+zero_USD = 0 * USD
+zero_VND = 0 * VND
+zero_km = 0 * km
 
 """Input parameters of the model"""
 
-h_per_yr = 8760 * hr # Number of hour per year
 biomass_heat_value = 11.7 * MJ / kg
 biomass_ratio = 0.05   # Percent of energy that comes from biomass
-                        # energy meaning both heat and electricity produced
-straw_collection_fraction = 0.82
-straw_selling_proportion = 0.79
-RPR_straw = 1.0
+                       # energy meaning both heat and electricity produced
+straw_collection_fraction = 0.5 # Refer to (Leinonen and Nguyen 2013)
+straw_selling_proportion = 0.79  # Refer to (Leinonen and Nguyen 2013)
+residue_to_product_ratio_straw = 1.0
 straw_burn_rate = 0.9 # Percentage of straw burned infield after harvest
 winder_capacity = 6.57 * t / d
 work_hour_day = 8 * hr / d
@@ -41,8 +48,7 @@ FTE = 1560 * hr / y  # number of working hour for a FTE job # a full time equiva
 truck_velocity = 45 * km / hr
 truck_load = 20 * t
 OM_hour_MWh = 0.12 * hr / MW / hr # working hour for OM per MWh    # O&M of co-firing per MWh
-time_step = 1 * y
-time_horizon = 20
+
 discount_rate = 0.087771 * time_step / y
 depreciation_period = 10
 tax_rate = 0.25  # Corporate tax in Vietnam
@@ -65,23 +71,29 @@ health_damage_so2 = 3767 * USD / t
 health_damage_pm10 = 5883 * USD / t
 health_damage_nox = 286 * USD / t
 
-zero_kwh = 0 * kW*hr
-zero_USD = 0 * USD
-zero_VND = 0 * VND
-zero_km = 0 * km
 
 class PowerPlant:
-    pass
 
-MongDuong1 = PowerPlant()
+    def __init__(self, capacity, capacity_factor, commissioning,
+                 boiler_technology, coal_heat_value, base_plant_efficiency):
+        self.capacity = capacity
+        self.capacity_factor = capacity_factor
+        self.commissioning = commissioning
+        self.boiler_technology = boiler_technology
+        self.power_generation = capacity * capacity_factor * time_step
+        self.elec_sale = self.power_generation
+        self.coal_heat_value = coal_heat_value
+        self.base_plant_efficiency = base_plant_efficiency
+        self.base_coal_consumption = capacity * capacity_factor / base_plant_efficiency / coal_heat_value
 
-MongDuong1.commissioning = 2015 * y
-MongDuong1.boiler_technology = 'CFB'
-MongDuong1.capacity = 1080 * MW
-# MongDuong1.generation = 6500 * GW * hr / y
-MongDuong1.capacity_factor = 0.60
-# MongDuong1.base_coal_consumption = 2751600 * t / y
-MongDuong1.base_plant_efficiency = 38.84 / 100
+
+MongDuong1 = PowerPlant(capacity=1080 * MW,
+                        capacity_factor=0.60,
+                        commissioning = 2015 * y,
+                        boiler_technology = 'CFB',
+                        coal_heat_value = 19.43468 * MJ / kg,
+                        base_plant_efficiency = 38.84 / 100)
+
 MongDuong1.base_boiler_efficiency = 87.03 / 100
 
 MongDuong1.capital_cost = 50 * USD / kW
@@ -91,7 +103,6 @@ MongDuong1.variable_om_cost = 0.006 * USD / (kW*hr)
 MongDuong1.fix_om_coal = 29.31 * USD / kW / y
 MongDuong1.variable_om_coal = 0.0048 * USD / (kW*hr)
 MongDuong1.coal_transport_distance = 0 * km
-MongDuong1.coal_heat_value = 19.43468 * MJ / kg
 MongDuong1.biomass_yield = 5.605 * t / ha / y
 MongDuong1.electricity_tariff = 1239.17 * VND / (kW*hr)
 
@@ -110,15 +121,13 @@ MongDuong1.ef_so2_coal = 11.5 * kg / t
 MongDuong1.ef_pm10_coal = 43.8 * kg / t
 MongDuong1.ef_nox_coal = 18 * kg / t
 
-NinhBinh = PowerPlant()
+NinhBinh = PowerPlant(capacity=100 * MW,
+                      capacity_factor=0.64,
+                      commissioning=1974,
+                      boiler_technology='PC',
+                      coal_heat_value = 21.5476 * MJ / kg,
+                      base_plant_efficiency = 21.77 / 100)
 
-NinhBinh.commissioning = 1974
-NinhBinh.boiler_technology = 'PC'
-NinhBinh.capacity = 100 * MW
-# NinhBinh.generation = 560 * GW * hr / y
-NinhBinh.capacity_factor = 0.64
-# NinhBinh.base_coal_consumption = 420000 * t / y
-NinhBinh.base_plant_efficiency = 21.77 / 100
 NinhBinh.base_boiler_efficiency = 81.61 / 100
 
 NinhBinh.capital_cost = 100 * USD / kW
@@ -130,9 +139,8 @@ NinhBinh.variable_om_coal = 0.0048 * USD / (kW*hr)
 NinhBinh.electricity_tariff = 1665.6 * VND / (kW * hr)
 
 NinhBinh.coal_transport_distance = 200 * km
-NinhBinh.coal_heat_value = 21.5476 * MJ / kg
 NinhBinh.biomass_yield = 5.7 * t / ha / y
-NinhBinh.bm_density = 68.67 * t / (km**2) / y
+#NinhBinh.bm_density = 68.67 * t / (km**2) / y
 
 NinhBinh.ef_coal_combust = 0.0966 * kg / MJ
 NinhBinh.ef_coal_transport = 0.071 * kg / t / km # coal transported by barge

@@ -49,6 +49,18 @@ def boiler_efficiency_bm(plant):
     return plant.base_boiler_efficiency - boiler_efficiency_loss(plant)
 
 
+#def boiler_efficiency_bm(boiler_efficiency, boiler_efficiency_loss):
+#    """Return the boiler efficiency when co-firing
+#
+#    >>> boiler_efficiency_bm(0, 0)
+#    0
+#    >>> boiler_efficiency_bm(1, 0)
+#    1
+#    """<=
+#    assert 0 <= boiler_efficiency_loss < base_boiler_efficiency < 1
+#    return base_boiler_efficiency - boiler_efficiency_loss
+
+
 def plant_efficency_bm(plant):
     """ Plant efficiency with biomass co-firing
 
@@ -66,33 +78,30 @@ def gross_heat_input(plant):
 
     >>> from parameters import *
     >>> print_with_unit(gross_heat_input, MongDuong1, 'TJ/y')
-    60631.1 TJ/y
+    52985.7 TJ/y
     >>> print_with_unit(gross_heat_input, NinhBinh, 'TJ/y')
-    12486.7 TJ/y
+    9340.46 TJ/y
     """
-    return power_generation(plant) /  plant_efficency_bm(plant) / time_step
+    return plant.power_generation / plant_efficency_bm(plant) / time_step
 
-
-def power_generation(plant):
-    return plant.capacity * plant.capacity_factor * time_step
 
 def biomass_required(plant):
     """Amount of biomass needed per year for co-firing
 
     >>> from parameters import *
     >>> print_with_unit(biomass_required, MongDuong1, 't/y')
-    259107 t/y
+    226435 t/y
     >>> print_with_unit(biomass_required, NinhBinh, 't/y')
-    53362 t/y
+    39916.5 t/y
     """
     return gross_heat_input(plant) * biomass_ratio / biomass_heat_value
 
 def cultivation_area(plant):
     """ Area of rice cultivation needed to supply enough straw for co-firing
     >>> print_with_unit(cultivation_area, MongDuong1, 'ha')
-    46227.9 ha
+    40398.7 ha
     >>> print_with_unit(cultivation_area, NinhBinh, 'ha')
-    9361.76 ha
+    7002.89 ha
     """
     return biomass_required(plant) / plant.biomass_yield
 

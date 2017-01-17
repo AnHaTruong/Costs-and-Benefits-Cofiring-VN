@@ -9,12 +9,12 @@
 #
 """ Job creation assessment of a co-firing project"""
 
+from parameters import time_step
 from parameters import winder_capacity, work_hour_day, truck_velocity
 from parameters import truck_load, OM_hour_MWh, biomass_ratio, wage_bm_transport
 from parameters import wage_bm_collect, wage_operation_maintenance
 from biomassrequired import biomass_required
 from biomasscost import collection_radius
-from npv import power_generation
 
 
 def print_with_unit(func, plant, unit):
@@ -81,7 +81,7 @@ def om_work(plant):
     >>> om_work(NinhBinh)
     0.38400000000000006
     """
-    return power_generation(plant) * biomass_ratio * OM_hour_MWh
+    return plant.power_generation * biomass_ratio * OM_hour_MWh / time_step
 
 
 def cofiring_work(plant):
