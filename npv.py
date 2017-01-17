@@ -43,7 +43,7 @@ def elec_sale(plant, year):
 
      From the second year onwards:
      >>> print_with_unit(elec_sale, MongDuong1, 1, 'GWh')
-     4733.64 GWh
+     5680.37 GWh
      >>> print_with_unit(elec_sale, NinhBinh, 1, 'GWh')
      561.024 GWh
 
@@ -78,9 +78,9 @@ def cash_inflow(plant, year):
 
     Cash inflow on year one:
     >>> print_with_unit(cash_inflow, MongDuong1, 1, 'kUSD')
-    361680 kUSD
+    316073 kUSD
     >>> print_with_unit(cash_inflow, NinhBinh, 1, 'kUSD')
-    56093.4 kUSD
+    41959.7 kUSD
     """
     return plant.electricity_tariff * elec_sale(plant, year)
 
@@ -97,9 +97,9 @@ def cash_outflow(plant, year):
 
     Cash outflow from year one:
     >>> print_with_unit(cash_outflow, MongDuong1, 1, 'kUSD')
-    245280 kUSD
+    228914 kUSD
     >>> print_with_unit(cash_outflow, NinhBinh, 1, 'kUSD')
-    44544.2 kUSD
+    41024 kUSD
 
     """
     return (tot_capital_cost(plant, year) + fuel_cost(plant, year) +
@@ -142,9 +142,9 @@ def fuel_cost_coal(plant, year):
     
     Fuel cost on coal from year 1    
     >>> print_with_unit(fuel_cost_coal, MongDuong1, 1, 'kUSD')
-    131867 kUSD
+    130706 kUSD
     >>> print_with_unit(fuel_cost_coal, NinhBinh, 1, 'kUSD')
-    32056.9 kUSD
+    33520.5 kUSD
     """
     if year == 0:
         return zero_USD
@@ -164,9 +164,9 @@ def fuel_cost_biomass(plant, year):
     
     Fuel cost on coal from year 1    
     >>> print_with_unit(fuel_cost_biomass, MongDuong1, 1, 'kUSD')
-    11300.5 kUSD
+    9825.15 kUSD
     >>> print_with_unit(fuel_cost_biomass, NinhBinh, 1, 'kUSD')
-    2063.64 kUSD
+    1536.05 kUSD
     """
     if year == 0:
         return zero_USD
@@ -192,9 +192,9 @@ def fuel_cost(plant, year):
 
     Fuel cost on year one:
     >>> print_with_unit(fuel_cost, MongDuong1, 1, 'kUSD')
-    143167 kUSD
+    140531 kUSD
     >>> print_with_unit(fuel_cost, NinhBinh, 1, 'kUSD')
-    34120.5 kUSD
+    35056.6 kUSD
     """
     if year == 0:
         return zero_USD
@@ -214,9 +214,9 @@ def operation_maintenance_cost(plant, year):
 
     O&M cost on year one:
     >>> print_with_unit(operation_maintenance_cost, MongDuong1, 1, 'kUSD')
-    63403 kUSD
+    59419.6 kUSD
     >>> print_with_unit(operation_maintenance_cost, NinhBinh, 1, 'kUSD')
-    6590.65 kUSD
+    5672.23 kUSD
 
     O&M cost remain constant from year 1 onwards:
     >>> operation_maintenance_cost(MongDuong1, 1) == operation_maintenance_cost(MongDuong1, time_horizon)
@@ -245,9 +245,9 @@ def income_tax(plant, year):
 
     Income tax on year 1:
     >>> print_with_unit(income_tax, MongDuong1, 1, 'kUSD')
-    38709.8 kUSD
+    28963 kUSD
     >>> print_with_unit(income_tax, NinhBinh, 1, 'kUSD')
-    3833.06 kUSD
+    295.208 kUSD
 
     """
     if year == 0:
@@ -297,9 +297,9 @@ def earning_before_tax(plant, year):
 
     Earning before tax on year 1:
     >>> print_with_unit(earning_before_tax, MongDuong1, 1, 'kUSD')
-    154839 kUSD
+    115852 kUSD
     >>> print_with_unit(earning_before_tax, NinhBinh, 1, 'kUSD')
-    15332.2 kUSD
+    1180.83 kUSD
     """
     if year == 0:
         return zero_VND
@@ -323,10 +323,9 @@ def net_cash_flow(plant, year):
 
     Net cash flow on year 1:
     >>> print_with_unit(net_cash_flow, MongDuong1, 1, 'kUSD')
-    116399 kUSD
+    87158.9 kUSD
     >>> print_with_unit(net_cash_flow, NinhBinh, 1, 'kUSD')
-    11549.2 kUSD
-
+    935.624 kUSD
     """
     return cash_inflow(plant, year) - cash_outflow(plant, year)
 
@@ -336,9 +335,9 @@ def npv(plant):
     discounted at DiscountRate from 0 to TimeHorizon included
     >>> from parameters import *
     >>> npv(MongDuong1)
-    1.07676e+09 USD
+    8.05546e+08 USD
     >>> npv(NinhBinh) 
-    1.06588e+08 USD
+    8.14337e+06 USD
     """
     value = zero_USD
     for year in range(time_horizon+1):
