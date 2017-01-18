@@ -7,11 +7,19 @@
 
 PYTHON = python3
 
-tables = tableA.txt tableB.txt tableC.txt tableD.txt table1.txt table5.txt table7.txt table8.txt table11.txt table12.txt
+#tests = $(addsuffix .test, $(basename ./*.py))
 
-tests = job.test emission.test npv.test health.test lcoe.test farmerincome.test biomassrequired.test benefitaddup.test biomasscost.test
+tables = $(patsubst %.py,%.txt,$(wildcard table*.py))
+diffs  = $(patsubst %.py,%.diff,$(wildcard table*.py))
+
+tests = $(patsubst %.py,%.test,$(wildcard *.py))
+
 
 all: $(tables)
+
+%.diff: %.txt tables.tocompare/%.txt
+	@diff $^  > $@
+	@if [ -s $@ ]; then exit 1; fi;
 
 %.test: %.py parameters.py
 	$(PYTHON) $< > $@
@@ -22,13 +30,22 @@ all: $(tables)
 %.txt: %.py parameters.py
 	$(PYTHON) $< > $@
 
-.PHONY: test clean cleaner
+.PHONY: test doctests regtests clean cleaner
 
-test: $(tests)
+test: doctests regtests
+
+doctests: $(tests)
+
+regtests: $(diffs)
+	@cat $^
+
+regtests-reset: $(tables)
+	cp $^ tables.tocompare
 
 clean:
 	rm -f $(tables)
 	rm -f $(tests)
+	rm -f $(diffs)
 
 cleaner: clean
 	rm -f __pycache__/*.pyc *.pyc
