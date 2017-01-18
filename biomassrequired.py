@@ -16,7 +16,6 @@
 
 from parameters import biomass_ratio, biomass_heat_value
 from units import time_step
-#from PowerPlant import MongDuong1, NinhBinh
 
 
 def print_with_unit(func, plant, unit):

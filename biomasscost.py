@@ -147,7 +147,7 @@ def bm_unit_cost(plant):
     38.4816 USD/t
     """
     return bm_transportation_cost(plant) + biomass_fix_cost
-#
-#if __name__ == "__main__":
-#    import doctest
-#    doctest.testmod()
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
