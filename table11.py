@@ -12,7 +12,7 @@
 """
 
 from coalsaved import coal_saved, coal_import_saving
-from classdef import MongDuong1, NinhBinh
+from parameters import MongDuong1, NinhBinh
 
 print('')
 

@@ -10,7 +10,7 @@
 """ Tests for the emission functions in  emission.py
 """
 
-from classdef import MongDuong1, NinhBinh
+from parameters import MongDuong1, NinhBinh
 
 from emission import emission_coal_combust_base, emission_coal_transport_base
 from emission import emission_biomass_combust, emission_biomass_transport

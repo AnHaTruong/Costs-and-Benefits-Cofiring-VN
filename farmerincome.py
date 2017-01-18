@@ -11,7 +11,7 @@
 
 from parameters import winder_rental_cost, biomass_fix_cost
 from biomassrequired import cultivation_area
-from unitsdef import time_step
+from units import time_step
 
 
 def print_with_unit(func, plant, unit):

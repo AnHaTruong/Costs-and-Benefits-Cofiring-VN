@@ -1,6 +1,6 @@
 # Economic of co-firing in two power plants in Vietnam
 #
-#  
+#
 #
 # (c) Minh Ha-Duong, An Ha Truong   2016
 #     minh.haduong@gmail.com
@@ -9,7 +9,7 @@
 #
 """ Print table 1 for Technical parameters of the plants"""
 
-from classdef import MongDuong1, NinhBinh
+from parameters import MongDuong1, NinhBinh
 
 print('')
 print('Table 1. Technical parameters')

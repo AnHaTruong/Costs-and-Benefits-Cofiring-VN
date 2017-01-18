@@ -16,7 +16,7 @@ import pandas as pd
 from natu.units import t, y
 from parameters import residue_to_product_ratio_straw, straw_burn_rate
 from parameters import ef_so2_biomass, ef_pm10_biomass, ef_nox_biomass
-from classdef import MongDuong1, NinhBinh
+from parameters import MongDuong1, NinhBinh
 
 def print_with_unit(func, plant, unit):
     """ Display the desired unit on Tables"""

@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 from health import *
 import numpy as np
 
-from classdef import MongDuong1, NinhBinh
+from PowerPlant import MongDuong1, NinhBinh
 
 
 

@@ -13,10 +13,10 @@
 
 import math
 import pandas as pd
-from unitsdef import km, ha, t, y
+from units import km, ha, t, y
 from natu.math import sqrt
 from natu.numpy import mean
-from classdef import MongDuong1, NinhBinh
+from parameters import MongDuong1, NinhBinh
 
 from biomassrequired import biomass_required
 from parameters import transport_tariff, tortuosity_factor, residue_to_product_ratio_straw

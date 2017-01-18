@@ -10,7 +10,7 @@
 """Print out the result on health benefits of co-firing project from health.py
 """
 
-from classdef import MongDuong1, NinhBinh
+from parameters import MongDuong1, NinhBinh
 
 from health import *
 from strawburned import so2_emission_field_base, pm10_emission_field_base, nox_emission_field_base

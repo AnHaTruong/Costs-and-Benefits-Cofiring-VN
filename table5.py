@@ -1,7 +1,7 @@
 """ Print table 1 for Technical parameters of the plants"""
 
 from biomassrequired import biomass_required
-from classdef import MongDuong1, NinhBinh
+from parameters import MongDuong1, NinhBinh
 from biomasscost import bm_unit_cost, bm_transportation_cost, collection_radius
 
 

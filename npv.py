@@ -13,7 +13,7 @@
 
 from parameters import time_horizon, discount_rate, biomass_ratio
 from parameters import tax_rate, depreciation_period
-from unitsdef import zero_USD, zero_VND, time_step
+from units import zero_USD, zero_VND, time_step
 from biomassrequired import biomass_required
 from biomasscost import bm_unit_cost
 from coalsaved import coal_saved

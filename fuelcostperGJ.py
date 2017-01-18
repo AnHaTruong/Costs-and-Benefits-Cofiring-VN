@@ -9,7 +9,7 @@
 """Calculation of fuel cost per GJ"""
 from parameters import  biomass_heat_value
 from biomasscost import bm_unit_cost
-from classdef import MongDuong1, NinhBinh
+from PowerPlant import MongDuong1, NinhBinh
 
 
 def coal_cost_perGJ(plant):

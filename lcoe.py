@@ -11,10 +11,10 @@
 
 
 from parameters import discount_rate, time_horizon
-from classdef import MongDuong1, NinhBinh 
+#from parameters import MongDuong1, NinhBinh 
 from npv import tot_capital_cost, fuel_cost_coal, fuel_cost_biomass
 from npv import operation_maintenance_cost, income_tax
-from unitsdef import h_per_yr, zero_kwh, zero_USD, time_step
+from units import zero_kwh, zero_USD
 
 
 def print_with_unit(func, plant, unit):

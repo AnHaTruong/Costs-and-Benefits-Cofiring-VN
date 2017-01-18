@@ -7,6 +7,7 @@
 # Creative Commons Attribution-ShareAlike 4.0 International
 #
 #
+
 from natu.units import km, ha
 from natu.units import g, kg, t
 from natu.units import hr, d, y
@@ -25,7 +26,7 @@ USD = ScalarUnit(22270, 'N', 'mol', prefixable=True)
 units.USD = USD
 time_step = 1 * y
 time_horizon = 20
-h_per_yr = 8760 * hr # Number of hour per year
+h_per_yr = 8760 * hr  # Number of hour per year
 
 zero_kwh = 0 * kW*hr
 zero_USD = 0 * USD
