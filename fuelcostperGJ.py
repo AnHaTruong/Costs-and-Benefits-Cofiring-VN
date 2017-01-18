@@ -7,8 +7,10 @@
 # Creative Commons Attribution-ShareAlike 4.0 International
 #
 """Calculation of fuel cost per GJ"""
-from parameters import MongDuong1, NinhBinh, biomass_heat_value
+from parameters import  biomass_heat_value
 from biomasscost import bm_unit_cost
+from classdef import MongDuong1, NinhBinh
+
 
 def coal_cost_perGJ(plant):
     return plant.coal_price / plant.coal_heat_value

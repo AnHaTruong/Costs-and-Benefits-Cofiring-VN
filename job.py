@@ -9,8 +9,8 @@
 #
 """ Job creation assessment of a co-firing project"""
 
-from parameters import time_step
-from parameters import winder_capacity, work_hour_day, truck_velocity
+from unitsdef import time_step
+from parameters import winder_capacity, truck_velocity, work_hour_day
 from parameters import truck_load, OM_hour_MWh, biomass_ratio, wage_bm_transport
 from parameters import wage_bm_collect, wage_operation_maintenance
 from biomassrequired import biomass_required

@@ -9,7 +9,7 @@
 #
 """ Print the result of farmer extra income assessment from farmerincome.py"""
 
-from parameters import MongDuong1, NinhBinh
+from classdef import MongDuong1, NinhBinh
 
 from farmerincome import farmer_income, bm_sell_revenue, total_income_benefit
 

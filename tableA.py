@@ -10,7 +10,7 @@
 """ Print table for the net present value calculation in  npv.py
 """
 
-from parameters import NinhBinh, MongDuong1
+from classdef import MongDuong1, NinhBinh
 from parameters import time_horizon, discount_rate
 # DEBUG
 #time_horizon = 1

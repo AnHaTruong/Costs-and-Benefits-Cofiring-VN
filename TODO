@@ -1,5 +1,8 @@
 ﻿TODO
 
+Check emission calculation against CDM ACM0002 methodology
+
+Recode biomasscost.py
 
 Use a list or an array rather than a function for time-dependant variables
 

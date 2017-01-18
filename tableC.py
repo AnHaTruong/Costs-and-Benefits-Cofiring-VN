@@ -9,7 +9,7 @@
 #
 """print the LCOE calculation results in file lcoe.py"""
 
-from parameters import MongDuong1, NinhBinh
+from classdef import MongDuong1, NinhBinh
 
 from lcoe import lcoe_investment, lcoe_fuel_coal, lcoe_fuel_biomass
 from lcoe import lcoe_om, lcoe_tax, lcoe_cost, lcoe_power_gen, lcoe

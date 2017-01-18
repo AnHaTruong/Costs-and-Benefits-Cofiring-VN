@@ -9,7 +9,7 @@
 #
 """ Print table 1 for Technical parameters of the plants"""
 
-from parameters import MongDuong1, NinhBinh
+from classdef import MongDuong1, NinhBinh
 
 print('')
 print('Table 1. Technical parameters')

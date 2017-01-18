@@ -10,12 +10,13 @@
 """ Print table D for job created from co-firing in job.py
 """
 
-from parameters import MongDuong1, NinhBinh
+from classdef import MongDuong1, NinhBinh
 
 from job import bm_collection_work, bm_transport_work, benefit_bm_collection
 from job import number_of_truck, transport_time, benefit_bm_transport
 from job import om_work, cofiring_work, benefit_om, total_job_benefit
-from parameters import FTE, h_per_yr
+from parameters import FTE
+from unitsdef import h_per_yr
 
 print('')
 

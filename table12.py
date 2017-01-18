@@ -16,7 +16,7 @@ from health import total_health_benefit
 from farmerincome import total_income_benefit
 from emission import emission_reduction_benefit
 from job import total_job_benefit
-from parameters import MongDuong1, NinhBinh
+from classdef import MongDuong1, NinhBinh
 
 print('')
 

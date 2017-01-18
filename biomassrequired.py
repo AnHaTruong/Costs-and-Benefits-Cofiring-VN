@@ -14,7 +14,9 @@
 """
 
 
-from parameters import biomass_ratio, biomass_heat_value, MongDuong1, NinhBinh, time_step
+from parameters import biomass_ratio, biomass_heat_value
+from unitsdef import time_step
+#from classdef import MongDuong1, NinhBinh
 
 
 def print_with_unit(func, plant, unit):
