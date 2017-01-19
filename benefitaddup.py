@@ -11,19 +11,12 @@
     number of years as used for NPV calculation
 """
 
-from units import zero_USD, time_step
+from units import zero_USD, time_step, print_with_unit
 from parameters import time_horizon, discount_rate
 from health import total_health_benefit
 from farmerincome import total_income_benefit
 from emission import emission_reduction_benefit
 from job import total_job_benefit
-
-
-def print_with_unit(func, unit):
-    """ Display the desired unit on Tables"""
-    value = func
-    value.display_unit = unit
-    return value
 
 
 def benefit_add_up(func, plant):

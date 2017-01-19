@@ -13,15 +13,16 @@
 
 from parameters import biomass_ratio, coal_import_price
 from biomassrequired import gross_heat_input
+from units import print_with_unit
 
 
 def coal_saved(plant):
     """ amount of coal saved with biomass co-firing
 
     >>> from parameters import *
-    >>> print_with_unit(coal_saved, MongDuong1, 't/y')
+    >>> print_with_unit(coal_saved(MongDuong1), 't/y')
     136317 t/y
-    >>> print_with_unit(coal_saved, NinhBinh, 't/y')
+    >>> print_with_unit(coal_saved(NinhBinh), 't/y')
     21674 t/y
     """
     return gross_heat_input(plant) * biomass_ratio / plant.coal_heat_value
@@ -32,19 +33,13 @@ def coal_import_saving(plant):
         avoided coal import (equivalence to coal saved per year) from co-firing
         assuming that same amount of coal will be imported if there is no co-firing
     >>> from parameters import *
-    >>> print_with_unit(coal_import_saving, MongDuong1, 'kUSD/y')
+    >>> print_with_unit(coal_import_saving(MongDuong1), 'kUSD/y')
     9951.17 kUSD/y
-    >>> print_with_unit(coal_import_saving, NinhBinh, 'kUSD/y')
+    >>> print_with_unit(coal_import_saving(NinhBinh), 'kUSD/y')
     1582.2 kUSD/y
     """
     return coal_saved(plant) * coal_import_price
 
-
-def print_with_unit(func, plant, unit):
-    """ Display the desired unit on Tables"""
-    value = func(plant)
-    value.display_unit = unit
-    return value
 
 if __name__ == "__main__":
     import doctest

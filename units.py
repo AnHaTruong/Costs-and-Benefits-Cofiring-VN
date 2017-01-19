@@ -32,3 +32,9 @@ zero_kwh = 0 * kW*hr
 zero_USD = 0 * USD
 zero_VND = 0 * VND
 zero_km = 0 * km
+
+def print_with_unit(func, unit):
+    """ Display the desired unit on Tables"""
+    value = func
+    value.display_unit = unit
+    return value

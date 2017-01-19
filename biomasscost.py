@@ -17,6 +17,7 @@ from units import km, ha, t, y
 from natu.math import sqrt
 from natu.numpy import mean
 from parameters import MongDuong1, NinhBinh
+from units import print_with_unit
 
 from biomassrequired import biomass_required
 from parameters import transport_tariff, tortuosity_factor, residue_to_product_ratio_straw
@@ -62,9 +63,9 @@ df['straw density'] = (df['straw yield'] *
 def collection_area(plant):
     """
     >>> from parameters import *
-    >>> print_with_unit(collection_area, MongDuong1, 'km2')
+    >>> print_with_unit(collection_area(MongDuong1), 'km2')
     3393.1 km2
-    >>> print_with_unit(collection_area, NinhBinh, 'km2')
+    >>> print_with_unit(collection_area(NinhBinh), 'km2')
     581.28 km2
     """
     if plant == MongDuong1:
@@ -98,9 +99,9 @@ def radius_of_disk(area):
 def collection_radius(plant):
     """
     >>> from parameters import *
-    >>> print_with_unit(collection_radius, MongDuong1, 'km')
+    >>> print_with_unit(collection_radius(MongDuong1), 'km')
     68.265 km
-    >>> print_with_unit(collection_radius, NinhBinh, 'km')
+    >>> print_with_unit(collection_radius(NinhBinh), 'km')
     13.6025 km
     """
     if plant == MongDuong1:
@@ -116,20 +117,14 @@ def collection_radius(plant):
         return radius_of_disk(collection_area(NinhBinh))
 
 
-def print_with_unit(func, plant, unit):
-    """ Display the desired unit on Tables"""
-    value = func(plant)
-    value.display_unit = unit
-    return value
-
 # Use an intermediate function "transportation activity" in t km (reused to compute emissions)
 # Dig the 5 whys - the units should have prevented error on degree
 def bm_transportation_cost(plant):
     """
     >>> from parameters import *
-    >>> print_with_unit(bm_transportation_cost, MongDuong1, 'USD/t')
+    >>> print_with_unit(bm_transportation_cost(MongDuong1), 'USD/t')
     6.13067 USD/t
-    >>> print_with_unit(bm_transportation_cost, NinhBinh, 'USD/t')
+    >>> print_with_unit(bm_transportation_cost(NinhBinh), 'USD/t')
     1.2216 USD/t
     """
     # FIXME: No magic numbers
@@ -141,9 +136,9 @@ def bm_transportation_cost(plant):
 def bm_unit_cost(plant):
     """
     >>> from parameters import *
-    >>> print_with_unit(bm_unit_cost, MongDuong1, 'USD/t')
+    >>> print_with_unit(bm_unit_cost(MongDuong1), 'USD/t')
     43.3907 USD/t
-    >>> print_with_unit(bm_unit_cost, NinhBinh, 'USD/t')
+    >>> print_with_unit(bm_unit_cost(NinhBinh), 'USD/t')
     38.4816 USD/t
     """
     return bm_transportation_cost(plant) + biomass_fix_cost

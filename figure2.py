@@ -14,57 +14,50 @@ import matplotlib.pyplot as plt
 from health import *
 import numpy as np
 
-from PowerPlant import MongDuong1, NinhBinh
+from parameters import MongDuong1, NinhBinh
+from units import t, y, print_with_unit
 
 
-
-def print_with_unit(func, plant, unit):
-    """ Display the desired unit on Tables"""
-    value = func(plant)
-    value.display_unit = unit
-    return value
-
-
-value1 = ([print_with_unit(so2_emission_field_base, MongDuong1, 't/y')/t*y, 
+value1 = ([print_with_unit(so2_emission_field_base(MongDuong1), 't/y')/t*y, 
            so2_emission_field_cofire(MongDuong1)/t*y,
-           print_with_unit(so2_emission_plant_base, MongDuong1, 't/y')/t*y, 
-           print_with_unit(so2_emission_plant_cofire, MongDuong1, 't/y')/t*y
+           print_with_unit(so2_emission_plant_base(MongDuong1), 't/y')/t*y, 
+           print_with_unit(so2_emission_plant_cofire(MongDuong1), 't/y')/t*y
           ])
 
 print(value1)
 
-value2 = ([print_with_unit(so2_emission_field_base, NinhBinh, 't/y')/t*y, 
+value2 = ([print_with_unit(so2_emission_field_base(NinhBinh), 't/y')/t*y, 
            so2_emission_field_cofire(NinhBinh)/t*y,
-           print_with_unit(so2_emission_plant_base, NinhBinh, 't/y')/t*y, 
-           print_with_unit(so2_emission_plant_cofire, NinhBinh, 't/y')/t*y
+           print_with_unit(so2_emission_plant_base(NinhBinh), 't/y')/t*y, 
+           print_with_unit(so2_emission_plant_cofire(NinhBinh), 't/y')/t*y
           ])
 print(value2)
 
-value3 = ([print_with_unit(pm10_emission_field_base, MongDuong1, 't/y')/t*y, 
+value3 = ([print_with_unit(pm10_emission_field_base(MongDuong1), 't/y')/t*y, 
            pm10_emission_field_cofire(MongDuong1)/t*y,
-           print_with_unit(pm10_emission_plant_base, MongDuong1, 't/y')/t*y, 
-           print_with_unit(pm10_emission_plant_cofire, MongDuong1, 't/y')/t*y
+           print_with_unit(pm10_emission_plant_base(MongDuong1), 't/y')/t*y, 
+           print_with_unit(pm10_emission_plant_cofire(MongDuong1), 't/y')/t*y
           ])
 print(value3)
 
-value4 = ([print_with_unit(pm10_emission_field_base, NinhBinh, 't/y')/t*y, 
+value4 = ([print_with_unit(pm10_emission_field_base(NinhBinh), 't/y')/t*y, 
            pm10_emission_field_cofire(NinhBinh)/t*y,
-           print_with_unit(pm10_emission_plant_base, NinhBinh, 't/y')/t*y, 
-           print_with_unit(pm10_emission_plant_cofire, NinhBinh, 't/y')/t*y
+           print_with_unit(pm10_emission_plant_base(NinhBinh), 't/y')/t*y, 
+           print_with_unit(pm10_emission_plant_cofire(NinhBinh), 't/y')/t*y
           ])
 print(value4)
 
-value5 = ([print_with_unit(nox_emission_field_base, MongDuong1, 't/y')/t*y, 
+value5 = ([print_with_unit(nox_emission_field_base(MongDuong1), 't/y')/t*y, 
            nox_emission_field_cofire(MongDuong1)/t*y,
-           print_with_unit(nox_emission_plant_base, MongDuong1, 't/y')/t*y, 
-           print_with_unit(nox_emission_plant_cofire, MongDuong1, 't/y')/t*y
+           print_with_unit(nox_emission_plant_base(MongDuong1), 't/y')/t*y, 
+           print_with_unit(nox_emission_plant_cofire(MongDuong1), 't/y')/t*y
           ])
 print(value5)
 
-value6 = ([print_with_unit(nox_emission_field_base, NinhBinh, 't/y')/t*y, 
+value6 = ([print_with_unit(nox_emission_field_base(NinhBinh), 't/y')/t*y, 
            nox_emission_field_cofire(NinhBinh)/t*y,
-           print_with_unit(nox_emission_plant_base, NinhBinh, 't/y')/t*y, 
-           print_with_unit(nox_emission_plant_cofire, NinhBinh, 't/y')/t*y
+           print_with_unit(nox_emission_plant_base(NinhBinh), 't/y')/t*y, 
+           print_with_unit(nox_emission_plant_cofire(NinhBinh), 't/y')/t*y
           ])
 print(value6)
 
