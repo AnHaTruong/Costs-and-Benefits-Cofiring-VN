@@ -42,7 +42,7 @@ def bm_sell_revenue(plant):
         average_straw_yield = mean([df.loc['Bac Giang', 'straw yield'],
                                     df.loc['Hai Duong', 'straw yield'],
                                     df.loc['Hai Phong', 'straw yield'],
-                                    df.loc['Quang Ninh', 'straw yield'],
+                                    df.loc['Quang Ninh', 'straw yield']
                                    ])
         return average_straw_yield * biomass_fix_cost
     if plant == NinhBinh:

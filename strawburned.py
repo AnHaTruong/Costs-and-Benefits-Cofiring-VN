@@ -11,31 +11,12 @@
 """Estimation of pullutant emission of open field burning of rice straw of
 the provinces that supply straw to the plant"""
 
-import numpy as np
-import pandas as pd
+from natu.math import fsum
 from natu.units import t, y
 from parameters import residue_to_product_ratio_straw, straw_burn_rate
 from parameters import ef_so2_biomass, ef_pm10_biomass, ef_nox_biomass
 from parameters import MongDuong1, NinhBinh
-
-
-"""Read data from excel file"""
-data = pd.read_excel('Data/Rice_production_2014_GSO.xlsx',)
-
-
-def rice_production(plant):
-    """ Rice production of the provinces that supply straw to the plant
-
-    >>> from parameters import *
-    >>> print_with_unit(rice_production(MongDuong1), 't/y')
-    2.0396e+06 t/y
-    >>> print_with_unit(rice_production(NinhBinh), 't/y')
-    460900 t/y
-    """
-    if plant == MongDuong1:
-         return (data.iloc[5, 3] + data.iloc[4, 3] + data.iloc[7,3] + data.iloc[10, 3]) * t/y
-    if plant == NinhBinh:
-        return data.iloc[0, 3] * t/y
+from strawdata import df
 
 
 def straw_production(plant):
@@ -47,7 +28,16 @@ def straw_production(plant):
     >>> print_with_unit(straw_production(NinhBinh), 't/y')
     460900 t/y
     """
-    return rice_production(plant) * residue_to_product_ratio_straw
+    if plant == MongDuong1:
+        rice_production = fsum([df.loc['Bac Giang', 'rice production (ton)']*t/y,
+                                df.loc['Hai Duong', 'rice production (ton)']*t/y,
+                                df.loc['Hai Phong', 'rice production (ton)']*t/y,
+                                df.loc['Quang Ninh', 'rice production (ton)']*t/y
+                                ])
+        return rice_production * residue_to_product_ratio_straw
+    
+    if plant == NinhBinh:
+        return df.loc['Quang Ninh', 'rice production (ton)']*t/y * residue_to_product_ratio_straw
 
 
 def straw_burned_infield(plant):
