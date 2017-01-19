@@ -34,7 +34,7 @@ def rice_production(plant):
     """
     if plant == MongDuong1:
          return (data.iloc[5, 3] + data.iloc[4, 3] + data.iloc[7,3] + data.iloc[10, 3]) * t/y
-    else:
+    if plant == NinhBinh:
         return data.iloc[0, 3] * t/y
 
 

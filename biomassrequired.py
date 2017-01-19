@@ -14,9 +14,10 @@
 """
 
 
-from parameters import biomass_ratio, biomass_heat_value
+from parameters import biomass_ratio, biomass_heat_value, MongDuong1, NinhBinh
 from units import time_step, print_with_unit
-
+from natu.numpy import mean
+from strawdata import df
 
 def boiler_efficiency_loss(plant):
     """Calculate the boiler efficiency loss when co-firing biomass based on
@@ -98,7 +99,15 @@ def cultivation_area(plant):
     >>> print_with_unit(cultivation_area(NinhBinh), 'ha')
     7002.89 ha
     """
-    return biomass_required(plant) / plant.biomass_yield
+    if plant == MongDuong1:
+        average_straw_yield = mean([df.loc['Bac Giang', 'straw yield'],
+                                    df.loc['Hai Duong', 'straw yield'],
+                                    df.loc['Hai Phong', 'straw yield'],
+                                    df.loc['Quang Ninh', 'straw yield'],
+                                   ])
+        return biomass_required(plant) / average_straw_yield
+    if plant == NinhBinh:
+        return biomass_required(plant) / df.loc['Ninh Binh', 'straw yield']
 
 if __name__ == "__main__":
     import doctest

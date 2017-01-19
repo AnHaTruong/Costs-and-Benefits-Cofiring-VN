@@ -91,12 +91,7 @@ MongDuong1.variable_om_cost = 0.006 * USD / (kW*hr)
 MongDuong1.fix_om_coal = 29.31 * USD / kW / y
 MongDuong1.variable_om_coal = 0.0048 * USD / (kW*hr)
 MongDuong1.coal_transport_distance = 0 * km
-MongDuong1.biomass_yield = 5.605 * t / ha / y
 MongDuong1.electricity_tariff = 1239.17 * VND / (kW*hr)
-
-MongDuong1.small_radius = 50 * km # Distance from the plant to the boder of Quang Ninh with adjacent provinces
-MongDuong1.bm_density_1 = 5.49 * t / (km**2) / y # Straw density in Quang Ninh
-MongDuong1.bm_density_2 = 60.38 * t / (km**2) / y # Straw density in adjacent provinces
 
 MongDuong1.ef_coal_combust = 0.0966 * kg / MJ
 MongDuong1.ef_coal_transport = 0 * kg / t / km # asumming conveyor transport emission factor = 0
@@ -127,8 +122,6 @@ NinhBinh.variable_om_coal = 0.0048 * USD / (kW*hr)
 NinhBinh.electricity_tariff = 1665.6 * VND / (kW * hr)
 
 NinhBinh.coal_transport_distance = 200 * km
-NinhBinh.biomass_yield = 5.7 * t / ha / y
-#NinhBinh.bm_density = 68.67 * t / (km**2) / y
 
 NinhBinh.ef_coal_combust = 0.0966 * kg / MJ
 NinhBinh.ef_coal_transport = 0.071 * kg / t / km # coal transported by barge
