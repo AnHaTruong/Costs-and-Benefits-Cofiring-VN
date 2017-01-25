@@ -11,9 +11,6 @@
 
 
 from parameters import discount_rate, time_horizon
-#from npv import tot_capital_cost, fuel_cost_coal, fuel_cost_biomass
-#from npv import operation_maintenance_cost, income_tax
-#from units import zero_USD, print_with_unit
 from units import zero_kwh
 from natu.numpy import npv
 

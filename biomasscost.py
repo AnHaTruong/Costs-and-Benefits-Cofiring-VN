@@ -14,10 +14,11 @@
 import math
 from units import km
 from natu.math import sqrt
-from natu.numpy import mean
 from parameters import MongDuong1, NinhBinh
 from units import print_with_unit
-from strawdata import df
+from strawdata import MongDuong1_straw_density1, MongDuong1_straw_density2
+from strawdata import NinhBinh_straw_density
+from sympy import integrate, symbols, simplify
 
 from biomassrequired import biomass_required
 from parameters import transport_tariff, tortuosity_factor
@@ -31,35 +32,21 @@ from parameters import biomass_fix_cost, biomass_ratio, zero_km
 #   tortuosity * simplify(integrate(integrate(x * x, (x, r, R)),(t, 0, pi)) )
 #   tortuosity * (R**3 - r**3) / 3
 
-#"""Read rice production data from excel file"""
-#data = pd.read_excel('Data/Rice_production_2014_GSO.xlsx',)
-#df = pd.DataFrame(data)
-#df = df.set_index('Province')
-#
-## Calculate straw yield of each province from rice yield and Residue-to-Product Ratio (RPR) of straw
-#residue_to_product_ratio = pd.DataFrame({'Residue to product ratio straw':[residue_to_product_ratio_straw]})
-#df['straw yield'] = df['Rice yield (ton/ha)'] *t/ha/y * residue_to_product_ratio['Residue to product ratio straw'].values
-#
-##Calculate biomass available density from rice cultivation area density,collection fraction and selling fraction of straw
-#collection_fraction = pd.DataFrame({'straw collection fraction':[straw_collection_fraction]})
-#selling_proportion = pd.DataFrame({'straw selling proportion':[straw_selling_proportion]})
-#
-## Rice planted density is the ratio between cultivation area and total area
-#df['rice planted density'] = df['Cultivation area (ha)']*ha/(df['Total area (ha)']*ha)
-#
-## Calculate straw density of each provinces
-#df['straw density'] = (df['straw yield'] *
-#                       df['rice planted density'] *
-#                       collection_fraction['straw collection fraction'].values *
-#                       selling_proportion['straw selling proportion'].values
-#                      )
 
+def radius_of_disk(area):
+    return sqrt(area / math.pi)
+
+
+def area_semi_annulus(R, r):
+    return math.pi * (R**2 - r**2) / 2
+
+def area_required(Q, D):
+    """area needed to provide Q ton of straw when straw density within this area is D (t/ha)
+    """
+    return Q / D
 
 def collection_area(plant):
     """
-    Biomass is collected from two semi annulus centered on the plant.    
-    The surface of a semi annulus is  pi * (R**2 - r**2) / 2
-        
     Ninh Binh case: collection area is a disk
     both semi annulus have zero smaller radius, identical larger radius, 
     and the same biomass density
@@ -70,33 +57,19 @@ def collection_area(plant):
     1st and 2nd semi annulus have different straw density
     straw density of 1st semi annulus is the straw density of Quang Ninh provice
     straw density of 2nd semi annulus is the average of straw density in adjacent provinces
-        
-    >>> from parameters import *
-    >>> print_with_unit(collection_area(MongDuong1), 'km2')
-    3393.1 km2
-    >>> print_with_unit(collection_area(NinhBinh), 'km2')
-    581.28 km2
     """
     if plant == MongDuong1:
-        small_radius_semi_annulus1 = 0 * km
-        large_radius_semi_annulus1 = 50 * km # which is the distance from the plant to Quang Ninh border
-        area_semi_annulus1 = math.pi * (large_radius_semi_annulus1**2 - small_radius_semi_annulus1**2)/2
-        straw_supplied_semi_annulus1 = area_semi_annulus1 * df.loc['Quang Ninh', 'straw density']
-        straw_supplied_semi_annulus2 = biomass_required(MongDuong1) - straw_supplied_semi_annulus1
-        straw_density_adjacent_provinces = mean([df.loc['Bac Giang', 'straw density'],
-                                                 df.loc['Hai Duong', 'straw density'],
-                                                 df.loc['Hai Phong', 'straw density']
-                                                ])
-        area_semi_annulus2 = straw_supplied_semi_annulus2 / straw_density_adjacent_provinces
-        
-        return area_semi_annulus1 + area_semi_annulus2
+        R1 = 50*km # Large radius of semi annulus 1
+        r1 = 0*km  # Small radius of semi annulus 1
+        area1 = area_semi_annulus(R1, r1)
+        Q = biomass_required(MongDuong1) - area1 * MongDuong1_straw_density1
+        area2 = area_required(Q, MongDuong1_straw_density2)
+        return area1 + area2
         
     if plant == NinhBinh:
-        return biomass_required(NinhBinh) / df.loc['Ninh Binh', 'straw density']
+        return area_required(biomass_required(NinhBinh), NinhBinh_straw_density)
+        
 
-
-def radius_of_disk(area):
-    return sqrt(area / math.pi)
 
 def collection_radius(plant):
     """
@@ -107,35 +80,61 @@ def collection_radius(plant):
     13.6025 km
     """
     if plant == MongDuong1:
-        small_radius_semi_annulus1 = 0 * km
-        large_radius_semi_annulus1 = 50 * km
-        small_radius_semi_annulus2 =  large_radius_semi_annulus1
-        area_semi_annulus1 = math.pi * (large_radius_semi_annulus1**2 - small_radius_semi_annulus1**2)/2
+        r1 = 0 * km
+        R1 = 50 * km
+        r2 =  R1
+        area1 = area_semi_annulus(R1, r1)
               
         if biomass_ratio == 0:
             return zero_km
         else:
 #        we need to calculate the large radius of 2nd semi annulus.
-            return sqrt((collection_area(MongDuong1) - area_semi_annulus1)/math.pi*2 + small_radius_semi_annulus2**2)
+            area2 = collection_area(MongDuong1) - area1
+            return sqrt(area2/math.pi*2 + r2**2)
 
     if plant == NinhBinh:
         return radius_of_disk(collection_area(NinhBinh))
 
+def transport_cost(R, r, C, D, tau):
+    """ Straw transportation cost within a collection area of a semi annulus to 
+    the plant at center
+    R is the large radius 
+    r is the small radius
+    C is the transportation cost per ton per km
+    D is the biomass density
+    tau is the tortuosity factor
+    total_transport_cost = integrate(integrate(x**2 dx dt)) * C * D * tau
+    with x[r, R], t[0, pi]
+   
+    """
+    return C * D * tau * math.pi *(R**3 - r**3)/3
+
+
+    
 
 # Use an intermediate function "transportation activity" in t km (reused to compute emissions)
 # Dig the 5 whys - the units should have prevented error on degree
 def bm_transportation_cost(plant):
     """
+    Total straw transportation cost
     >>> from parameters import *
-    >>> print_with_unit(bm_transportation_cost(MongDuong1), 'USD/t')
-    6.13067 USD/t
-    >>> print_with_unit(bm_transportation_cost(NinhBinh), 'USD/t')
-    1.2216 USD/t
+    >>> print_with_unit(bm_transportation_cost(MongDuong1), 'USD/y')
+    6.13067 USD/y
+    >>> print_with_unit(bm_transportation_cost(NinhBinh), 'USD/y')
+    1.2216 USD/y
     """
     # FIXME: No magic numbers
     # FIXME: Check the integral : pi and cube missing ? Add reference
     # FIXME: Non uniform density
-    return 2.0 / 3.0 * collection_radius(plant) * tortuosity_factor * transport_tariff
+    if plant == MongDuong1:
+        r1 = 0 * km
+        R1 = 50 * km
+        r2 =  R1
+        cost_area1 = transport_cost(R1, r1,transport_tariff, MongDuong1_straw_density1,  tortuosity_factor)
+        cost_area2 = transport_cost(collection_radius(MongDuong1), r2,transport_tariff, MongDuong1_straw_density2,  tortuosity_factor)
+        return cost_area1 + cost_area2
+    if plant == NinhBinh:
+        return transport_cost(collection_radius(NinhBinh), 0*km, transport_tariff, NinhBinh_straw_density, tortuosity_factor)
 
 
 def bm_unit_cost(plant):
@@ -146,7 +145,7 @@ def bm_unit_cost(plant):
     >>> print_with_unit(bm_unit_cost(NinhBinh), 'USD/t')
     38.4816 USD/t
     """
-    return bm_transportation_cost(plant) + biomass_fix_cost
+    return bm_transportation_cost(plant) / biomass_required(plant) + biomass_fix_cost
 
 if __name__ == "__main__":
     import doctest

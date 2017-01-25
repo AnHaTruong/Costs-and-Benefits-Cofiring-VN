@@ -12,6 +12,7 @@ import pandas as pd
 from units import km, ha, t, y
 from parameters import residue_to_product_ratio_straw, straw_collection_fraction
 from parameters import straw_selling_proportion
+from natu.numpy import mean
 
 
 """Read rice production data from excel file"""
@@ -36,3 +37,10 @@ df['straw density'] = (df['straw yield'] *
                        collection_fraction['straw collection fraction'].values *
                        selling_proportion['straw selling proportion'].values
                       )
+
+MongDuong1_straw_density1 = df.loc['Quang Ninh', 'straw density'] # straw density of Quang Ninh province
+MongDuong1_straw_density2 = mean([df.loc['Bac Giang', 'straw density'], # straw density of adjacent provinces
+                                  df.loc['Hai Duong', 'straw density'],
+                                  df.loc['Hai Phong', 'straw density']
+                                 ])
+NinhBinh_straw_density = df.loc['Ninh Binh', 'straw density']

@@ -32,8 +32,8 @@ col8 = NinhBinh.coal_price
 col7.display_unit = 'USD/t'
 col8.display_unit = 'USD/t'
 
-col9 = bm_transportation_cost(MongDuong1)
-col10 = bm_transportation_cost(NinhBinh)
+col9 = bm_transportation_cost(MongDuong1) / biomass_required(MongDuong1)
+col10 = bm_transportation_cost(NinhBinh) / biomass_required(NinhBinh)
 col9.display_unit = 'USD/t'
 col10.display_unit = 'USD/t'
 

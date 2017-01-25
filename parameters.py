@@ -8,33 +8,10 @@
 #
 #
 
-#from natu.units import km, ha
-#from natu.units import g, kg, t
-#from natu.units import hr, d, y
-#from natu.units import MJ
-#from natu.units import kW, MW, GW
-#
-#### Semantic overloading
-#### We reuse the "amount" dimension to mean "value"
-#from natu.units import mol
-#from natu.core import ScalarUnit
-#from natu import units
-#VND = ScalarUnit(1, 'N', 'mol', prefixable=True)
-#units.VND = VND
-#
-#USD = ScalarUnit(22270, 'N', 'mol', prefixable=True)
-#units.USD = USD
-#time_step = 1 * y
-#time_horizon = 20
-#h_per_yr = 8760 * hr # Number of hour per year
-#
-#zero_kwh = 0 * kW*hr
-#zero_USD = 0 * USD
-#zero_VND = 0 * VND
-#zero_km = 0 * km
 
 from units import *
 from PowerPlant import PowerPlant
+
 
 """Input parameters of the model"""
 
@@ -104,6 +81,7 @@ MongDuong1.ef_so2_coal = 11.5 * kg / t
 MongDuong1.ef_pm10_coal = 43.8 * kg / t
 MongDuong1.ef_nox_coal = 18 * kg / t
 
+
 NinhBinh = PowerPlant(capacity=100 * MW,
                       capacity_factor=0.64,
                       commissioning=1974,
@@ -127,6 +105,7 @@ NinhBinh.ef_coal_combust = 0.0966 * kg / MJ
 NinhBinh.ef_coal_transport = 0.071 * kg / t / km # coal transported by barge
 NinhBinh.ef_biomass_combust = 0.0858 * kg / MJ
 NinhBinh.ef_biomass_transport = 0.110 * kg / t / km # biomass transported by truck
+
 
 NinhBinh.esp_efficiency = 0.992
 NinhBinh.desulfur_efficiency = 0
