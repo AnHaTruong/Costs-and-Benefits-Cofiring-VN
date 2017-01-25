@@ -18,7 +18,7 @@ from parameters import MongDuong1, NinhBinh
 from units import print_with_unit
 from strawdata import MongDuong1_straw_density1, MongDuong1_straw_density2
 from strawdata import NinhBinh_straw_density
-from sympy import integrate, symbols, simplify
+#from sympy import integrate, symbols, simplify
 
 from biomassrequired import biomass_required
 from parameters import transport_tariff, tortuosity_factor
@@ -47,6 +47,9 @@ def area_required(Q, D):
 
 def collection_area(plant):
     """
+     Biomass is collected from two semi annulus centered on the plant.    
+     The surface of a semi annulus is  pi * (R**2 - r**2) / 2   
+    
     Ninh Binh case: collection area is a disk
     both semi annulus have zero smaller radius, identical larger radius, 
     and the same biomass density
@@ -96,7 +99,7 @@ def collection_radius(plant):
         return radius_of_disk(collection_area(NinhBinh))
 
 def transport_cost(R, r, C, D, tau):
-    """ Straw transportation cost within a collection area of a semi annulus to 
+    """ Transportation cost within a collection area of a semi annulus to 
     the plant at center
     R is the large radius 
     r is the small radius
@@ -110,22 +113,19 @@ def transport_cost(R, r, C, D, tau):
     return C * D * tau * math.pi *(R**3 - r**3)/3
 
 
-    
-
 # Use an intermediate function "transportation activity" in t km (reused to compute emissions)
 # Dig the 5 whys - the units should have prevented error on degree
 def bm_transportation_cost(plant):
     """
-    Total straw transportation cost
+    Total transportation cost of straw in 1 year
+    
     >>> from parameters import *
     >>> print_with_unit(bm_transportation_cost(MongDuong1), 'USD/y')
     6.13067 USD/y
     >>> print_with_unit(bm_transportation_cost(NinhBinh), 'USD/y')
     1.2216 USD/y
-    """
-    # FIXME: No magic numbers
-    # FIXME: Check the integral : pi and cube missing ? Add reference
-    # FIXME: Non uniform density
+    """ 
+
     if plant == MongDuong1:
         r1 = 0 * km
         R1 = 50 * km
