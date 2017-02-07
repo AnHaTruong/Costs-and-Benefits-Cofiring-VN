@@ -15,7 +15,7 @@
 from parameters import biomass_heat_value, carbon_price
 from biomassrequired import biomass_required
 from coalsaved import coal_saved
-from biomasscost import collection_radius
+from biomasscost import collection_radius, bm_transportation_activity
 from units import print_with_unit
 
 
@@ -83,17 +83,16 @@ def emission_biomass_combust(plant):
 
 # FIXME: use the level of transport activity (t km)
 def emission_biomass_transport(plant):
-    """return emission from transportation of biomass and coal.
-       transported distance is 2 times of biomass
-       collection radius because round trip is accounted
+    """return emission from transportation of straw, which is transportation
+    activity (t.km) multiplied by emission factor of transportation
 
     >>> from parameters import *
     >>> print_with_unit(emission_biomass_transport(MongDuong1), 't/y')
-    3400.66 t/y
+    3403.22 t/y
     >>> print_with_unit(emission_biomass_transport(NinhBinh), 't/y')
-    119.452 t/y
+    119.635 t/y
     """
-    return plant.ef_biomass_transport * 2 * collection_radius(plant) * biomass_required(plant)
+    return plant.ef_biomass_transport * bm_transportation_activity(plant)
 
 
 def total_emission_coal(plant):
@@ -115,7 +114,7 @@ def total_emission_cofire(plant):
 
     >>> from parameters import *
     >>> print_with_unit(total_emission_cofire(MongDuong1), 't/y')
-    5.06079e+06 t/y
+    5.0608e+06 t/y
     >>> print_with_unit(total_emission_cofire(NinhBinh), 't/y')
     902883 t/y
     """
@@ -132,9 +131,9 @@ def emission_reduction(plant):
 
     >>> from parameters import *
     >>> print_with_unit(emission_reduction(MongDuong1), 't/y')
-    25211.6 t/y
+    25209.1 t/y
     >>> print_with_unit(emission_reduction(NinhBinh), 't/y')
-    5539.94 t/y
+    5539.75 t/y
     """
     return total_emission_coal(plant) - total_emission_cofire(plant)
 
@@ -143,9 +142,9 @@ def emission_reduction_benefit(plant):
     """ return the monetary benefit from greenhouse gas emission reduction
     >>> from parameters import *
     >>> print_with_unit(emission_reduction_benefit(MongDuong1), 'USD/y')
-    25211.6 USD/y
+    25209.1 USD/y
     >>> print_with_unit(emission_reduction_benefit(NinhBinh), 'USD/y')
-    5539.94 USD/y
+    5539.75 USD/y
     """
     return emission_reduction(plant) * carbon_price
 

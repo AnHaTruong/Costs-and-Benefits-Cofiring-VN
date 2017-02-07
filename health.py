@@ -95,7 +95,7 @@ def nox_emission_base(plant):
     >>> print_with_unit(nox_emission_base(MongDuong1), 't/y')
     52948.8 t/y
     >>> print_with_unit(nox_emission_base(NinhBinh), 't/y')
-    8695.72 t/y
+    8183.75 t/y
     """
     return nox_emission_plant_base(plant) + nox_emission_field_base(plant)
 

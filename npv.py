@@ -45,15 +45,15 @@ def cash_outflow(plant, year):
     Cash outflow year zero:
     >>> from parameters import *
     >>> print_with_unit(cash_outflow(MongDuong1, 0), 'kUSD')
-    2700 kUSD
+    229132 kUSD
     >>> print_with_unit(cash_outflow(NinhBinh, 0), 'kUSD')
-    500 kUSD
+    41680.9 kUSD
 
     Cash outflow from year one:
     >>> print_with_unit(cash_outflow(MongDuong1, 1), 'kUSD')
-    228914 kUSD
+    229180 kUSD
     >>> print_with_unit(cash_outflow(NinhBinh, 1), 'kUSD')
-    41024 kUSD
+    41005.8 kUSD
 
     """
     return (tot_capital_cost(plant, year) + fuel_cost(plant, year) +
@@ -91,7 +91,7 @@ def fuel_cost_coal(plant, year):
     >>> from parameters import *
     >>> print_with_unit(fuel_cost_coal(MongDuong1, 0), 'kUSD')
     137632 kUSD
-    >>> print_with_unit(fuel_cost_coal, NinhBinh, 0, 'kUSD')
+    >>> print_with_unit(fuel_cost_coal(NinhBinh, 0), 'kUSD')
     35297.4 kUSD
 
     Fuel cost on coal from year 1
@@ -111,16 +111,16 @@ def fuel_cost_biomass(plant, year):
 
      No fuel cost on year zero
     >>> from parameters import *
-    >>> print_with_unit(fuel_cost_biomass(MongDuong1, 0), 'kUSD')
+    >>> print_with_unit(fuel_cost_biomass(MongDuong1, 0), 'USD')
     0 USD
-    >>> print_with_unit(fuel_cost_biomass(NinhBinh, 0), 'kUSD')
+    >>> print_with_unit(fuel_cost_biomass(NinhBinh, 0), 'USD')
     0 USD
 
     Fuel cost on coal from year 1
     >>> print_with_unit(fuel_cost_biomass(MongDuong1, 1), 'kUSD')
-    9825.15 kUSD
+    10179.7 kUSD
     >>> print_with_unit(fuel_cost_biomass(NinhBinh, 1), 'kUSD')
-    1536.05 kUSD
+    1511.71 kUSD
     """
     if year == 0:
         return zero_USD
@@ -131,12 +131,12 @@ def fuel_cost_biomass(plant, year):
 def fuel_cost(plant, year):
     """Total expense on fuel cost including both coal and  biomass
 
-    No fuel cost on year zero:
+    Fuel cost on year zero:
     >>> from parameters import *
     >>> print_with_unit(fuel_cost(MongDuong1, 0), 'kUSD')
-    0 USD
+    137632 kUSD
     >>> print_with_unit(fuel_cost(NinhBinh, 0), 'kUSD')
-    0 USD
+    35297.4 kUSD
 
     Fuel cost remain constant:
     >>> fuel_cost(MongDuong1, 1) == fuel_cost(MongDuong1, time_horizon)
@@ -146,9 +146,9 @@ def fuel_cost(plant, year):
 
     Fuel cost on year one:
     >>> print_with_unit(fuel_cost(MongDuong1, 1), 'kUSD')
-    140531 kUSD
+    140886 kUSD
     >>> print_with_unit(fuel_cost(NinhBinh, 1), 'kUSD')
-    35056.6 kUSD
+    35032.3 kUSD
     """
 #    if year == 0:
 #        return zero_USD
@@ -162,9 +162,9 @@ def operation_maintenance_cost(plant, year):
     O&M cost for co-firing on the first year:
     >>> from parameters import *
     >>> print_with_unit(operation_maintenance_cost(MongDuong1, 0), 'kUSD')
-    0 USD
+    58920.6 kUSD
     >>> print_with_unit(operation_maintenance_cost(NinhBinh, 0), 'kUSD')
-    0 USD
+    5623.92 kUSD
 
     O&M cost on year one:
     >>> print_with_unit(operation_maintenance_cost(MongDuong1, 1), 'kUSD')
@@ -192,18 +192,18 @@ def operation_maintenance_cost(plant, year):
 
 def income_tax(plant, year):
     """Corporate tax
-    No income tax for co-firing on the first year:
+    Income tax for co-firing on the first year:
     >>> from parameters import *
     >>> print_with_unit(income_tax(MongDuong1, 0), 'kUSD')
-    0 USD
+    29880.2 kUSD
     >>> print_with_unit(income_tax(NinhBinh, 0), 'kUSD')
-    0 USD
+    259.581 kUSD
 
     Income tax on year 1:
     >>> print_with_unit(income_tax(MongDuong1, 1), 'kUSD')
-    28963 kUSD
+    28874.3 kUSD
     >>> print_with_unit(income_tax(NinhBinh, 1), 'kUSD')
-    295.208 kUSD
+    301.294 kUSD
 
     """
 #    if year == 0:
@@ -220,9 +220,9 @@ def amortization(plant, year):
 
     No amortization on year 0
     >>> from parameters import *
-    >>> print_with_unit(amortization(MongDuong1, 0), 'kUSD')
+    >>> print_with_unit(amortization(MongDuong1, 0), 'USD')
     0 USD
-    >>> print_with_unit(amortization(NinhBinh, 0), 'kUSD')
+    >>> print_with_unit(amortization(NinhBinh, 0), 'USD')
     0 USD
 
     Amortization on year 1:
@@ -244,18 +244,18 @@ def amortization(plant, year):
 
 def earning_before_tax(plant, year):
     """
-    No earning before tax for co-firing on the first year:
+    Earning before tax for co-firing on the first year:
     >>> from parameters import *
     >>> print_with_unit(earning_before_tax(MongDuong1, 0), 'kUSD')
-    0 USD
+    119521 kUSD
     >>> print_with_unit(earning_before_tax(NinhBinh, 0), 'kUSD')
-    0 USD
+    1038.32 kUSD
 
     Earning before tax on year 1:
     >>> print_with_unit(earning_before_tax(MongDuong1, 1), 'kUSD')
-    115852 kUSD
+    115497 kUSD
     >>> print_with_unit(earning_before_tax(NinhBinh, 1), 'kUSD')
-    1180.83 kUSD
+    1205.18 kUSD
     """
 #    if year == 0:
 #      return zero_VND
@@ -273,15 +273,15 @@ def net_cash_flow(plant, year):
     Net cash flow on year 0:
     >>> from parameters import *
     >>> print_with_unit(net_cash_flow(MongDuong1, 0), 'kUSD')
-    -2700 kUSD
+    86940.5 kUSD
     >>> print_with_unit(net_cash_flow(NinhBinh, 0), 'kUSD')
-    -500 kUSD
+    278.743 kUSD
 
     Net cash flow on year 1:
     >>> print_with_unit(net_cash_flow(MongDuong1, 1), 'kUSD')
-    87158.9 kUSD
+    86893 kUSD
     >>> print_with_unit(net_cash_flow(NinhBinh, 1), 'kUSD')
-    935.624 kUSD
+    953.882 kUSD
     """
     return cash_inflow(plant, year) - cash_outflow(plant, year)
 
@@ -291,9 +291,9 @@ def npv(plant):
     discounted at DiscountRate from 0 to TimeHorizon included
     >>> from parameters import *
     >>> npv(MongDuong1)
-    8.05546e+08 USD
+    892720 kUSD
     >>> npv(NinhBinh)
-    8.14337e+06 USD
+    9091.46  kUSD
     """
     value = zero_USD
     for year in range(time_horizon+1):

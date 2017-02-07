@@ -40,20 +40,24 @@ def radius_of_disk(area):
 def area_semi_annulus(R, r):
     return math.pi * (R**2 - r**2) / 2
 
+
 def area_required(Q, D):
     """area needed to provide Q ton of straw when straw density within this area is D (t/ha)
     """
+    assert D > 0
+    assert Q >= 0
     return Q / D
+
 
 def collection_area(plant):
     """
-     Biomass is collected from two semi annulus centered on the plant.    
-     The surface of a semi annulus is  pi * (R**2 - r**2) / 2   
-    
+    Biomass is collected from two semi annulus centered on the plant.
+    The surface of a semi annulus is  pi * (R**2 - r**2) / 2
+
     Ninh Binh case: collection area is a disk
-    both semi annulus have zero smaller radius, identical larger radius, 
+    both semi annulus have zero smaller radius, identical larger radius,
     and the same biomass density
-    
+
     Mong Duong 1 case: collection area is a half disk
     1st semi annulus has zero smaller radius, larger radius = distance from plant to Quang Ninh province border
     2nd semi annulus has smaller radius = larger radius of 1st semi annulus
@@ -68,26 +72,25 @@ def collection_area(plant):
         Q = biomass_required(MongDuong1) - area1 * MongDuong1_straw_density1
         area2 = area_required(Q, MongDuong1_straw_density2)
         return area1 + area2
-        
+
     if plant == NinhBinh:
         return area_required(biomass_required(NinhBinh), NinhBinh_straw_density)
-        
 
 
 def collection_radius(plant):
     """
     >>> from parameters import *
     >>> print_with_unit(collection_radius(MongDuong1), 'km')
-    68.265 km
+    68.3163 km
     >>> print_with_unit(collection_radius(NinhBinh), 'km')
-    13.6025 km
+    13.6233 km
     """
     if plant == MongDuong1:
         r1 = 0 * km
         R1 = 50 * km
         r2 =  R1
         area1 = area_semi_annulus(R1, r1)
-              
+
         if biomass_ratio == 0:
             return zero_km
         else:
@@ -98,52 +101,66 @@ def collection_radius(plant):
     if plant == NinhBinh:
         return radius_of_disk(collection_area(NinhBinh))
 
-def transport_cost(R, r, C, D, tau):
-    """ Transportation cost within a collection area of a semi annulus to 
-    the plant at center
-    R is the large radius 
+
+def transportation_activity(R, r, D, tau):
+    """ Transportation activity (in t.km) for biomass collected from a
+    collection area of a semi annulus to the center
+    R is the large radius
     r is the small radius
-    C is the transportation cost per ton per km
     D is the biomass density
     tau is the tortuosity factor
-    total_transport_cost = integrate(integrate(x**2 dx dt)) * C * D * tau
+    total_transport_cost = integrate(integrate(x**2 dx dt)) * D * tau
     with x[r, R], t[0, pi]
-   
     """
-    return C * D * tau * math.pi *(R**3 - r**3)/3
+    return D * tau * math.pi *(R**3 - r**3)/3
 
 
 # Use an intermediate function "transportation activity" in t km (reused to compute emissions)
 # Dig the 5 whys - the units should have prevented error on degree
-def bm_transportation_cost(plant):
+def bm_transportation_activity(plant):
     """
-    Total transportation cost of straw in 1 year
-    
+    Total straw transportation activity of each plant
+
     >>> from parameters import *
-    >>> print_with_unit(bm_transportation_cost(MongDuong1), 'USD/y')
-    6.13067 USD/y
-    >>> print_with_unit(bm_transportation_cost(NinhBinh), 'USD/y')
-    1.2216 USD/y
-    """ 
+    >>> print_with_unit(bm_transportation_cost(MongDuong1), 'kUSD/y')
+    1742.71 kUSD/y
+    >>> print_with_unit(bm_transportation_cost(NinhBinh), 'kUSD/y')
+    24.4183 kUSD/y
+    """
 
     if plant == MongDuong1:
         r1 = 0 * km
         R1 = 50 * km
-        r2 =  R1
-        cost_area1 = transport_cost(R1, r1,transport_tariff, MongDuong1_straw_density1,  tortuosity_factor)
-        cost_area2 = transport_cost(collection_radius(MongDuong1), r2,transport_tariff, MongDuong1_straw_density2,  tortuosity_factor)
+        r2 = R1
+        cost_area1 = transportation_activity(R1, r1, MongDuong1_straw_density1,  tortuosity_factor)
+        cost_area2 = transportation_activity(collection_radius(MongDuong1), r2, MongDuong1_straw_density2,  tortuosity_factor)
         return cost_area1 + cost_area2
+
     if plant == NinhBinh:
-        return transport_cost(collection_radius(NinhBinh), 0*km, transport_tariff, NinhBinh_straw_density, tortuosity_factor)
+        return transportation_activity(collection_radius(NinhBinh), 0*km, NinhBinh_straw_density, tortuosity_factor)
+
+
+def bm_transportation_cost(plant):
+    """
+    Total transportation cost of straw in 1 year is transportation
+    activity multiplied by transportation tariff (USD/t/km)
+
+    >>> from parameters import *
+    >>> print_with_unit(bm_transportation_cost(MongDuong1), 'kUSD/y')
+    1742.71 kUSD/y
+    >>> print_with_unit(bm_transportation_cost(NinhBinh), 'kUSD/y')
+    24.4183 kUSD/y
+    """
+    return bm_transportation_activity(plant) * transport_tariff
 
 
 def bm_unit_cost(plant):
     """
     >>> from parameters import *
     >>> print_with_unit(bm_unit_cost(MongDuong1), 'USD/t')
-    43.3907 USD/t
+    44.9563 USD/t
     >>> print_with_unit(bm_unit_cost(NinhBinh), 'USD/t')
-    38.4816 USD/t
+    37.8717 USD/t
     """
     return bm_transportation_cost(plant) / biomass_required(plant) + biomass_fix_cost
 

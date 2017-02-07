@@ -37,7 +37,7 @@ def straw_production(plant):
         return rice_production * residue_to_product_ratio_straw
     
     if plant == NinhBinh:
-        return df.loc['Quang Ninh', 'rice production (ton)']*t/y * residue_to_product_ratio_straw
+        return df.loc['Ninh Binh', 'rice production (ton)']*t/y * residue_to_product_ratio_straw
 
 
 def straw_burned_infield(plant):
