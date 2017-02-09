@@ -1,21 +1,31 @@
 # Economic of co-firing in two power plants in Vietnam
 #
-# (c) Minh Ha-Duong, An Ha Truong 2016
+# (c) Minh Ha-Duong, An Ha Truong 2016, 2017
 # minh.haduong@gmail.com
 # Creative Commons Attribution-ShareAlike 4.0 International
 #
 
 PYTHON = python3
 
-#tests = $(addsuffix .test, $(basename ./*.py))
 
-tables = $(patsubst %.py,%.txt,$(wildcard table*.py))
-diffs  = $(patsubst %.py,%.diff,$(wildcard table*.py))
+tablepyfiles = $(wildcard table*.py)
+tables = $(patsubst %.py,%.txt,$(tablepyfiles))
+diffs  = $(patsubst %.py,%.diff,$(tablepyfiles))
 
-tests = $(patsubst %.py,%.test,$(wildcard *.py))
+figurespyfiles = $(wildcard figure*.py)
+figures = $(patsubst %.py,%.eps,$(figurespyfiles))
+
+
+allpyfiles  = $(wildcard *.py)
+nontable  = $(filter-out $(tablepyfiles),$(allpyfiles))
+nontablenonfigure  = $(filter-out $(figurespyfiles),$(nontable))
+tests = $(patsubst %.py,%.test,$(nontablenonfigure))
 
 
 all: $(tables)
+
+%.txt: %.py parameters.py
+	$(PYTHON) $< > $@
 
 %.diff: %.txt tables.tocompare/%.txt
 	@diff $^  > $@
@@ -23,12 +33,11 @@ all: $(tables)
 
 %.test: %.py parameters.py
 	$(PYTHON) $< > $@
-	#TODO: actually test if the file is empty or not and cry if error
-	@echo "Tests pass when the file is empty:"
-	@cat $@ 
+	@#TODO: actually test if the file is empty or not and cry if error
+	@#@echo "Tests pass when the file is empty:"
+	@#@cat $@ 
+	@if [ -s $@ ]; then cat $@ && exit 1; fi;
 
-%.txt: %.py parameters.py
-	$(PYTHON) $< > $@
 
 .PHONY: test doctests regtests clean cleaner
 

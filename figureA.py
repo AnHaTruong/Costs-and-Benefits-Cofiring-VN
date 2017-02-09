@@ -50,7 +50,7 @@ for label, xpt, ypt in zip(labels, x, y):
 
 """Read data from excel file"""
 data = pd.read_excel('Data/List_of_coal_power_plants.xlsx', skiprows = [1])
-print(data)
+#print(data)
 
 """Create empty lists for latitudes, longitudes, number of unit and capacity"""
 lats, lons = [], []
@@ -67,7 +67,7 @@ for index, row in data.iterrows():
 for lon, lat, size in zip(lons, lats, size):
     x,y = map(lons, lats)
     msize = ((size/math.pi)**0.5)/2
-    print(msize)
+#    print(msize)
     map.plot(x, y, 'ro', markersize=msize)
 
 #"""Display number of unit for each plant"""

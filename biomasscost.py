@@ -12,7 +12,7 @@
 """
 
 import math
-from units import km
+from units import km, t, y, ha
 from natu.math import sqrt
 from parameters import MongDuong1, NinhBinh
 from units import print_with_unit
@@ -44,8 +44,8 @@ def area_semi_annulus(R, r):
 def area_required(Q, D):
     """area needed to provide Q ton of straw when straw density within this area is D (t/ha)
     """
-    assert D > 0
-    assert Q >= 0
+#    assert D > 0 * t / ha
+#    assert Q >= 0 * t / y
     return Q / D
 
 
@@ -78,17 +78,10 @@ def collection_area(plant):
 
 
 def collection_radius(plant):
-    """
-    >>> from parameters import *
-    >>> print_with_unit(collection_radius(MongDuong1), 'km')
-    68.3163 km
-    >>> print_with_unit(collection_radius(NinhBinh), 'km')
-    13.6233 km
-    """
     if plant == MongDuong1:
         r1 = 0 * km
         R1 = 50 * km
-        r2 =  R1
+        r2 = R1
         area1 = area_semi_annulus(R1, r1)
 
         if biomass_ratio == 0:
@@ -120,12 +113,6 @@ def transportation_activity(R, r, D, tau):
 def bm_transportation_activity(plant):
     """
     Total straw transportation activity of each plant
-
-    >>> from parameters import *
-    >>> print_with_unit(bm_transportation_cost(MongDuong1), 'kUSD/y')
-    1742.71 kUSD/y
-    >>> print_with_unit(bm_transportation_cost(NinhBinh), 'kUSD/y')
-    24.4183 kUSD/y
     """
 
     if plant == MongDuong1:
@@ -144,24 +131,11 @@ def bm_transportation_cost(plant):
     """
     Total transportation cost of straw in 1 year is transportation
     activity multiplied by transportation tariff (USD/t/km)
-
-    >>> from parameters import *
-    >>> print_with_unit(bm_transportation_cost(MongDuong1), 'kUSD/y')
-    1742.71 kUSD/y
-    >>> print_with_unit(bm_transportation_cost(NinhBinh), 'kUSD/y')
-    24.4183 kUSD/y
     """
     return bm_transportation_activity(plant) * transport_tariff
 
 
 def bm_unit_cost(plant):
-    """
-    >>> from parameters import *
-    >>> print_with_unit(bm_unit_cost(MongDuong1), 'USD/t')
-    44.9563 USD/t
-    >>> print_with_unit(bm_unit_cost(NinhBinh), 'USD/t')
-    37.8717 USD/t
-    """
     return bm_transportation_cost(plant) / biomass_required(plant) + biomass_fix_cost
 
 if __name__ == "__main__":

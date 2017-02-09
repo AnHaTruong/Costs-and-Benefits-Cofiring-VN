@@ -19,7 +19,7 @@ def bm_cost_perGJ(plant):
     return bm_unit_cost(plant) / biomass_heat_value
     
 
-print(print_with_unit(coal_cost_perGJ(MongDuong1), 'USD/GJ'))
-print(print_with_unit(coal_cost_perGJ(NinhBinh), 'USD/GJ'))
-print(print_with_unit(bm_cost_perGJ(MongDuong1), 'USD/GJ'))
-print(print_with_unit(bm_cost_perGJ(NinhBinh), 'USD/GJ'))
+#print(print_with_unit(coal_cost_perGJ(MongDuong1), 'USD/GJ'))
+#print(print_with_unit(coal_cost_perGJ(NinhBinh), 'USD/GJ'))
+#print(print_with_unit(bm_cost_perGJ(MongDuong1), 'USD/GJ'))
+#print(print_with_unit(bm_cost_perGJ(NinhBinh), 'USD/GJ'))

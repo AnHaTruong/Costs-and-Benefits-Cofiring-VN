@@ -70,11 +70,11 @@ Si = sobol.analyze(problem, Y, print_to_console = False)
 
 # Print the first order sensitivity indices
 
-print(Si['S1'])
-print(Si['S1_conf'])
-
-# Print the second order sensitivity indices
-
-print(Si['ST'])
-print(Si['ST_conf'])
+#print(Si['S1'])
+#print(Si['S1_conf'])
+#
+## Print the second order sensitivity indices
+#
+#print(Si['ST'])
+#print(Si['ST_conf'])
 

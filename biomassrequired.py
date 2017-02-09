@@ -23,11 +23,6 @@ def boiler_efficiency_loss(plant):
     """Calculate the boiler efficiency loss when co-firing biomass based on
     equation from De & Assadi 2009.
 
-    >>> from parameters import *
-    >>> boiler_efficiency_loss(MongDuong1)
-    0.005510999999999999
-    >>> boiler_efficiency_loss(NinhBinh)
-    0.005510999999999999
     """
     loss = 0.0044 * biomass_ratio * biomass_ratio + 0.0055
     return loss
@@ -36,11 +31,6 @@ def boiler_efficiency_loss(plant):
 def boiler_efficiency_bm(plant):
     """Return the boiler efficiency when co-firing
 
-    >>> from parameters import *
-    >>> boiler_efficiency_bm(MongDuong1)
-    0.8647889999999999
-    >>> boiler_efficiency_bm(NinhBinh)
-    0.810589
     """
     return plant.base_boiler_efficiency - boiler_efficiency_loss(plant)
 
@@ -60,11 +50,6 @@ def boiler_efficiency_bm(plant):
 def plant_efficency_bm(plant):
     """ Plant efficiency with biomass co-firing
 
-    >>> from parameters import *
-    >>> plant_efficency_bm(MongDuong1)
-    0.3859405349879352
-    >>> plant_efficency_bm(NinhBinh)
-    0.21622990479107954
     """
     return (plant.base_plant_efficiency / plant.base_boiler_efficiency) * boiler_efficiency_bm(plant)
 
@@ -72,11 +57,6 @@ def plant_efficency_bm(plant):
 def gross_heat_input(plant):
     """total amount of heat needed to generate the same amount of electricity as in base case
 
-    >>> from parameters import *
-    >>> print_with_unit(gross_heat_input(MongDuong1), 'TJ/y')
-    52985.7 TJ/y
-    >>> print_with_unit(gross_heat_input(NinhBinh), 'TJ/y')
-    9340.46 TJ/y
     """
     return plant.power_generation / plant_efficency_bm(plant) / time_step
 
@@ -84,20 +64,12 @@ def gross_heat_input(plant):
 def biomass_required(plant):
     """Amount of biomass needed per year for co-firing
 
-    >>> from parameters import *
-    >>> print_with_unit(biomass_required(MongDuong1), 't/y')
-    226435 t/y
-    >>> print_with_unit(biomass_required(NinhBinh), 't/y')
-    39916.5 t/y
     """
     return gross_heat_input(plant) * biomass_ratio / biomass_heat_value
 
 def cultivation_area(plant):
     """ Area of rice cultivation needed to supply enough straw for co-firing
-    >>> print_with_unit(cultivation_area(MongDuong1), 'ha')
-    40398.7 ha
-    >>> print_with_unit(cultivation_area(NinhBinh), 'ha')
-    7002.89 ha
+
     """
     if plant == MongDuong1:
         average_straw_yield = mean([df.loc['Bac Giang', 'straw yield'],

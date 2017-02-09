@@ -4,6 +4,8 @@ Check emission calculation against CDM ACM0002 methodology
 
 Recode biomasscost.py
 
+Generate figures in EPS format (or SVG or PDF) and adjust the Makefile
+
 Use a list or an array rather than a function for time-dependant variables
 
 Encapsulate the class
@@ -18,6 +20,7 @@ Consider more indicators that LCOE:
   Debt Service Coverage Ratio (requires Cash Flow Available for Debt Service ) - minimum over all periods and average
   Project Internal Rate of Return, pre-tax
   Equity Internal Rate of Return
+
 
 DONE
 

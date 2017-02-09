@@ -23,23 +23,7 @@ def benefit_add_up(func, plant):
     """return the present value of cumulative benefits of co-firing 
     discounted at DiscountRate from 0 to TimeHorizon included
     
-    >>> from parameters import *
-    >>> print_with_unit(benefit_add_up(total_health_benefit, MongDuong1), 'kUSD')
-    135359 kUSD
-    >>> print_with_unit(benefit_add_up(total_income_benefit, MongDuong1), 'kUSD')
-    70088.7 kUSD
-    >>> print_with_unit(benefit_add_up(emission_reduction_benefit, MongDuong1), 'kUSD')
-    259.06 kUSD
-    >>> print_with_unit(benefit_add_up(total_job_benefit, MongDuong1), 'kUSD')
-    4121.41 kUSD
-    >>> print_with_unit(benefit_add_up(total_health_benefit, NinhBinh), 'kUSD')
-    32850.3 kUSD
-    >>> print_with_unit(benefit_add_up(total_income_benefit, NinhBinh), 'kUSD')
-    12404.2 kUSD
-    >>> print_with_unit(benefit_add_up(emission_reduction_benefit, NinhBinh), 'kUSD')
-    56.9252 kUSD
-    >>> print_with_unit(benefit_add_up(total_job_benefit, NinhBinh), 'kUSD')
-    625.894 kUSD
+    
     """
     value = zero_USD
     for year in range(time_horizon+1):
@@ -51,11 +35,7 @@ def total_benefit_addup(plant):
     """Total benefit of co-firing added up for the same number of year as used
        in NPV calculation discounted at same DiscountRate
        
-    >>> from parameters import *
-    >>> print_with_unit(total_benefit_addup(MongDuong1), 'kUSD')
-    209828 kUSD
-    >>> print_with_unit(total_benefit_addup(NinhBinh), 'kUSD')
-    45937.3 kUSD
+   
     """
     return (benefit_add_up(total_health_benefit, plant) +
             benefit_add_up(total_income_benefit, plant) +

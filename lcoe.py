@@ -24,11 +24,6 @@ def discount(func, plant, time, rate):
 def lcoe_power_gen(plant):
     """ Sum of electricity generation over Time_Horizon
 
-    >>> from parameters import *
-    >>> print_with_unit(lcoe_power_gen(MongDuong1), 'GWh')
-    52687.8 GWh
-    >>> print_with_unit(lcoe_power_gen(NinhBinh), 'GWh')
-    5203.73 GWh
     """
     value = zero_kwh
     for year in range(time_horizon+1):
