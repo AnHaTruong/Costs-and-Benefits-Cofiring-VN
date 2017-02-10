@@ -1,0 +1,12 @@
+*.pyc
+*~
+table*.txt
+table*.diff
+*.test
+__pycache__/
+natu/__pycache__/
+natu/config/__pycache__/
+*.py[cod]
+Data/
+SALib/
+SALib-0.7.1.dist-info/
