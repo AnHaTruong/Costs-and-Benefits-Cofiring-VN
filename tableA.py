@@ -78,18 +78,22 @@ def print_npv(plant):
                           col7,
                           col8,
                           col9,
-                         )
+                          )
         print(line)
 
 
 print('Mong Duong 1')
 print_npv(MongDuong1)
 print('')
-print('NPV Mong Duong 1 = ', net_present_value(MongDuong1))
+result = net_present_value(MongDuong1)
+result.display_unit = 'kUSD'
+print('NPV Mong Duong 1 = ', result)
 
 print('')
 
 print('Ninh Binh')
 print_npv(NinhBinh)
 print('')
-print('NPV Ninh Binh  = ', net_present_value(NinhBinh))
+result = net_present_value(NinhBinh)
+result.display_unit = 'kUSD'
+print('NPV Ninh Binh  = ', result)

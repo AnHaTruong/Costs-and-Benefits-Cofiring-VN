@@ -8,7 +8,7 @@
 #
 #
 
-"""Net present value assessment of a co-firing power plant
+""" Net present value assessments of a co-firing power plant
 """
 
 from parameters import biomass_ratio, tax_rate, discount_rate, depreciation_period
@@ -18,6 +18,7 @@ from biomasscost import bm_unit_cost
 from coalsaved import coal_saved
 from natu.numpy import npv
 
+# TODO: code a vectorized version of everything in parallel
 
 def discount(func, plant):
     value = [func(plant, year) for year in range(time_horizon + 1)]
@@ -25,14 +26,12 @@ def discount(func, plant):
 
 
 def cash_inflow(plant, year):
-    """ Constant, assume tariff and plant performance do not change over time
-    """
+    """ Constant, assume tariff and plant performance do not change over time"""
     return plant.electricity_tariff * plant.elec_sale
 
 
 def cash_outflow(plant, year):
-    """ This is for the whole plant
-    """
+    """ This is for the whole plant"""
     return (tot_capital_cost(plant, year) + fuel_cost(plant, year) +
             operation_maintenance_cost(plant, year) + income_tax(plant, year))
 
@@ -55,8 +54,7 @@ def tot_capital_cost(plant, year):
 
 
 def fuel_cost_coal(plant, year):
-    """Fuel expense on coal
-    """
+    """Fuel expense on coal"""
     if year == 0:
         return plant.base_coal_consumption * plant.coal_price * time_step
     else:
@@ -64,8 +62,7 @@ def fuel_cost_coal(plant, year):
 
 
 def fuel_cost_biomass(plant, year):
-    """Fuel expense on biomass
-    """
+    """Fuel expense on biomass"""
     if year == 0:
         return zero_USD
     else:
@@ -74,26 +71,14 @@ def fuel_cost_biomass(plant, year):
 
 def fuel_cost(plant, year):
     """Total expense on fuel cost including both coal and  biomass
-
     Fuel cost remain constant from year 1 onward:
-    >>> from parameters import *
-    >>> fuel_cost(MongDuong1, 1) == fuel_cost(MongDuong1, time_horizon)
-    True
-    >>> fuel_cost(NinhBinh, 1) == fuel_cost(NinhBinh, time_horizon)
-    True
     """
     return fuel_cost_coal(plant, year) + fuel_cost_biomass(plant, year)
 
 
 def operation_maintenance_cost(plant, year):
     """total expense for the plant
-
-    O&M cost remain constant from year 1 onwards:
-    >>> from parameters import *
-    >>> operation_maintenance_cost(MongDuong1, 1) == operation_maintenance_cost(MongDuong1, time_horizon)
-    True
-    >>> operation_maintenance_cost(NinhBinh, 1) == operation_maintenance_cost(NinhBinh, time_horizon)
-    True
+       O&M cost remain constant from year 1 onwards:
     """
     if year == 0:
         fixed_om_coal = plant.fix_om_coal * plant.capacity * time_step
@@ -108,11 +93,7 @@ def operation_maintenance_cost(plant, year):
 
 
 def income_tax(plant, year):
-    """Corporate tax
-    """
-#    if year == 0:
-#        return zero_VND
-#    else:
+    """Corporate tax"""
     if earning_before_tax(plant, year) > zero_VND:
         return tax_rate * earning_before_tax(plant, year)
     else:
@@ -120,12 +101,10 @@ def income_tax(plant, year):
 
 
 def amortization(plant, year):
-    """Amortization of the investment cost
-    """
+    """Amortization of the investment cost"""
     if year == 0:
         return zero_VND
     else:
-
         if year in range(1, depreciation_period + 1):
             return tot_capital_cost(plant, 0) / float(depreciation_period)
         else:
@@ -133,9 +112,7 @@ def amortization(plant, year):
 
 
 def earning_before_tax(plant, year):
-    """
-    Earning before tax is the cash inflow exclude all costs
-    """
+    """Earning before tax is the cash inflow exclude all costs"""
     return (cash_inflow(plant, year) -
             fuel_cost(plant, year) -
             operation_maintenance_cost(plant, year) -
@@ -144,20 +121,13 @@ def earning_before_tax(plant, year):
 
 
 def net_cash_flow(plant, year):
-    """Cash flow of the plant
-
-    """
+    """ Cash flow of the plant"""
     return cash_inflow(plant, year) - cash_outflow(plant, year)
 
 
 def net_present_value(plant):
-    """npv returns the Net Present Value of the project,
-    discounted at DiscountRate from 0 to TimeHorizon included
-    """
-    value = zero_USD
-    for year in range(time_horizon+1):
-        value += net_cash_flow(plant, year) / (1+discount_rate)**year
-    return value
+    """Net Present Value of the plant, discounted from year 0 to TimeHorizon included"""
+    return discount(net_cash_flow, plant)
 
 
 def discounted_total_power_gen(plant):
