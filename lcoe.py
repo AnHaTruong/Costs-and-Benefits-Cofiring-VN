@@ -10,8 +10,8 @@
 """LCOE assessment of a co-firing project"""
 
 
-from parameters import discount_rate, time_horizon
-from units import zero_kwh
+from parameters import discount_rate
+from units import zero_kwh, time_horizon
 from natu.numpy import npv
 
 

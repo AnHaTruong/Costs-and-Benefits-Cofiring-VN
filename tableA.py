@@ -1,6 +1,6 @@
 # Economic of co-firing in two power plants in Vietnam
 #
-#  
+#
 #
 # (c) Minh Ha-Duong, An Ha Truong   2016
 #     minh.haduong@gmail.com
@@ -10,8 +10,8 @@
 """ Print table for the net present value calculation in  npv.py
 """
 
-from parameters import MongDuong1, NinhBinh
-from parameters import time_horizon, discount_rate
+from parameters import MongDuong1, NinhBinh, discount_rate
+from units import time_horizon
 # DEBUG
 #time_horizon = 1
 

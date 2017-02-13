@@ -15,8 +15,7 @@
 from parameters import biomass_heat_value, carbon_price
 from biomassrequired import biomass_required
 from coalsaved import coal_saved
-from biomasscost import collection_radius, bm_transportation_activity
-from units import print_with_unit
+from biomasscost import bm_transportation_activity
 
 
 def emission_coal_combust_base(plant):
@@ -56,6 +55,7 @@ def emission_biomass_combust(plant):
     """
     return plant.ef_biomass_combust * biomass_required(plant) * biomass_heat_value
 
+
 # FIXME: use the level of transport activity (t km)
 def emission_biomass_transport(plant):
     """return emission from transportation of straw, which is transportation
@@ -78,11 +78,11 @@ def total_emission_cofire(plant):
        co-firing case
 
     """
-    return (emission_biomass_combust(plant)
-            + emission_biomass_transport(plant)
-            + emission_coal_combust_cofire(plant)
-            + emission_coal_transport_cofire(plant)
-           )
+    return (emission_biomass_combust(plant) +
+            emission_biomass_transport(plant) +
+            emission_coal_combust_cofire(plant) +
+            emission_coal_transport_cofire(plant)
+            )
 
 
 def emission_reduction(plant):

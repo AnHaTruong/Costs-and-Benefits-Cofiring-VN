@@ -9,33 +9,34 @@
 #
 
 
-from units import *
+from units import MJ, kg, t, d, hr, km, MW, USD, VND, ha, g, kW, y, time_step
 from PowerPlant import PowerPlant
 
 
 """Input parameters of the model"""
 
+discount_rate = 0.087771 * time_step / y
+depreciation_period = 10
+tax_rate = 0.25  # Corporate tax in Vietnam
+
 biomass_heat_value = 11.7 * MJ / kg
-biomass_ratio = 0.05   # Percent of energy that comes from biomass
-                       # energy meaning both heat and electricity produced
-straw_collection_fraction = 0.5 # Refer to (Leinonen and Nguyen 2013)
+biomass_ratio = 0.05             # As percent of energy coming from biomass
+
+straw_collection_fraction = 0.5  # Refer to (Leinonen and Nguyen 2013)
 straw_selling_proportion = 0.79  # Refer to (Leinonen and Nguyen 2013)
 residue_to_product_ratio_straw = 1.0
-straw_burn_rate = 0.9 # Percentage of straw burned infield after harvest
+straw_burn_rate = 0.9  # Percentage of straw burned infield after harvest
 winder_capacity = 6.57 * t / d
 work_hour_day = 8 * hr / d
 FTE = 1560 * hr / y  # number of working hour for a FTE job # a full time equivalence job
 truck_velocity = 45 * km / hr
 truck_load = 20 * t
-OM_hour_MWh = 0.12 * hr / MW / hr # working hour for OM per MWh    # O&M of co-firing per MWh
+OM_hour_MWh = 0.12 * hr / MW / hr  # working hour for OM per MWh    # O&M of co-firing per MWh
 
-discount_rate = 0.087771 * time_step / y
-depreciation_period = 10
-tax_rate = 0.25  # Corporate tax in Vietnam
 biomass_fix_cost = 37.26 * USD / t
-transport_tariff = 2000 * VND/t/km # vantaiduongviet.com
+transport_tariff = 2000 * VND / t / km  # vantaiduongviet.com
 tortuosity_factor = 1.5
-# wage per hour is calculated from base salary defined in gorvenmental regulations
+# wage per hour is calculated from base salary defined in governmental regulations
 wage_bm_collect = 1.11 * USD / hr
 wage_bm_transport = 1.11 * USD / hr
 wage_operation_maintenance = 1.67 * USD / hr
@@ -44,6 +45,7 @@ winder_rental_cost = 40 * USD / ha
 ef_so2_biomass = 0.18 * g / kg
 ef_pm10_biomass = 9.1 * g / kg
 ef_nox_biomass = 2.28 * g / kg
+
 carbon_price = 1 * USD / t
 coal_import_price = 73 * USD / t
 
@@ -54,12 +56,11 @@ health_damage_nox = 286 * USD / t
 
 MongDuong1 = PowerPlant(capacity=1080 * MW,
                         capacity_factor=0.60,
-                        commissioning = 2015,
-                        boiler_technology = 'CFB',
-                        coal_heat_value = 19.43468 * MJ / kg,
-                        base_plant_efficiency = 38.84 / 100)
-
-MongDuong1.base_boiler_efficiency = 87.03 / 100
+                        commissioning=2015,
+                        boiler_technology='CFB',
+                        coal_heat_value=19.43468 * MJ / kg,
+                        plant_efficiency=38.84 / 100,
+                        boiler_efficiency=87.03 / 100)
 
 MongDuong1.capital_cost = 50 * USD / kW
 MongDuong1.coal_price = 1131400 * VND / t
@@ -71,9 +72,9 @@ MongDuong1.coal_transport_distance = 0 * km
 MongDuong1.electricity_tariff = 1239.17 * VND / (kW*hr)
 
 MongDuong1.ef_coal_combust = 0.0966 * kg / MJ
-MongDuong1.ef_coal_transport = 0 * kg / t / km # asumming conveyor transport emission factor = 0
+MongDuong1.ef_coal_transport = 0 * kg / t / km  # assuming conveyor transport emission factor = 0
 MongDuong1.ef_biomass_combust = 0.0858 * kg / MJ
-MongDuong1.ef_biomass_transport = 0.110 * kg / t / km # biomass transported by truck
+MongDuong1.ef_biomass_transport = 0.110 * kg / t / km  # biomass transported by truck
 
 MongDuong1.esp_efficiency = 0.996
 MongDuong1.desulfur_efficiency = 0.982
@@ -86,10 +87,9 @@ NinhBinh = PowerPlant(capacity=100 * MW,
                       capacity_factor=0.64,
                       commissioning=1974,
                       boiler_technology='PC',
-                      coal_heat_value = 21.5476 * MJ / kg,
-                      base_plant_efficiency = 21.77 / 100)
-
-NinhBinh.base_boiler_efficiency = 81.61 / 100
+                      coal_heat_value=21.5476 * MJ / kg,
+                      plant_efficiency=21.77 / 100,
+                      boiler_efficiency=81.61 / 100)
 
 NinhBinh.capital_cost = 100 * USD / kW
 NinhBinh.coal_price = 1825730 * VND / t
@@ -102,9 +102,9 @@ NinhBinh.electricity_tariff = 1665.6 * VND / (kW * hr)
 NinhBinh.coal_transport_distance = 200 * km
 
 NinhBinh.ef_coal_combust = 0.0966 * kg / MJ
-NinhBinh.ef_coal_transport = 0.071 * kg / t / km # coal transported by barge
+NinhBinh.ef_coal_transport = 0.071 * kg / t / km     # coal transported by barge
 NinhBinh.ef_biomass_combust = 0.0858 * kg / MJ
-NinhBinh.ef_biomass_transport = 0.110 * kg / t / km # biomass transported by truck
+NinhBinh.ef_biomass_transport = 0.110 * kg / t / km  # biomass transported by truck
 
 
 NinhBinh.esp_efficiency = 0.992
@@ -112,5 +112,3 @@ NinhBinh.desulfur_efficiency = 0
 NinhBinh.ef_so2_coal = 11.5 * kg / t
 NinhBinh.ef_pm10_coal = 26.1 * kg / t
 NinhBinh.ef_nox_coal = 18 * kg / t
-
-

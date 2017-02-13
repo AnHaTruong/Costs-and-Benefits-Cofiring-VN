@@ -11,13 +11,11 @@
 """Net present value assessment of a co-firing power plant
 """
 
-from parameters import time_horizon, discount_rate, biomass_ratio
-from parameters import tax_rate, depreciation_period
-from units import zero_USD, zero_VND, time_step
+from parameters import biomass_ratio, tax_rate, discount_rate, depreciation_period
+from units import time_horizon, zero_USD, zero_VND, time_step
 from biomassrequired import biomass_required
 from biomasscost import bm_unit_cost
 from coalsaved import coal_saved
-from units import print_with_unit
 
 
 def cash_inflow(plant, year):
@@ -36,7 +34,7 @@ def cash_inflow(plant, year):
 
 def cash_outflow(plant, year):
     """ This is for the whole plant
-    
+
     """
     return (tot_capital_cost(plant, year) + fuel_cost(plant, year) +
             operation_maintenance_cost(plant, year) + income_tax(plant, year))
@@ -44,7 +42,7 @@ def cash_outflow(plant, year):
 
 def tot_capital_cost(plant, year):
     """ We assume the plant is paid for coal at capacity design.
-       this is only extra capital cost for the plant retrofitting for biomass co-firing  
+       this is only extra capital cost for the plant retrofitting for biomass co-firing
 
     Total capital cost is zero from year 1 afterwards:
     >>> from parameters import *
@@ -52,12 +50,6 @@ def tot_capital_cost(plant, year):
     True
     >>> tot_capital_cost(NinhBinh, 1) == tot_capital_cost(NinhBinh, time_horizon) == zero_USD
     True
-
-    Total capital cost on year zero:
-    >>> print_with_unit(tot_capital_cost(MongDuong1, 0), 'kUSD')
-    2700 kUSD
-    >>> print_with_unit(tot_capital_cost(NinhBinh, 0), 'kUSD')
-    500 kUSD
     """
     if year == 0:
         return plant.capital_cost * plant.capacity * biomass_ratio
@@ -77,13 +69,6 @@ def fuel_cost_coal(plant, year):
 
 def fuel_cost_biomass(plant, year):
     """Fuel expense on biomass
-
-     No fuel cost on year zero
-    >>> from parameters import *
-    >>> print_with_unit(fuel_cost_biomass(MongDuong1, 0), 'USD')
-    0 USD
-    >>> print_with_unit(fuel_cost_biomass(NinhBinh, 0), 'USD')
-    0 USD
     """
     if year == 0:
         return zero_USD
@@ -101,11 +86,8 @@ def fuel_cost(plant, year):
     >>> fuel_cost(NinhBinh, 1) == fuel_cost(NinhBinh, time_horizon)
     True
     """
-#    if year == 0:
-#        return zero_USD
-#    else:
     return fuel_cost_coal(plant, year) + fuel_cost_biomass(plant, year)
- 
+
 
 def operation_maintenance_cost(plant, year):
     """total expense for the plant
@@ -143,13 +125,6 @@ def income_tax(plant, year):
 
 def amortization(plant, year):
     """Amortization of the investment cost
-
-    No amortization on year 0
-    >>> from parameters import *
-    >>> print_with_unit(amortization(MongDuong1, 0), 'USD')
-    0 USD
-    >>> print_with_unit(amortization(NinhBinh, 0), 'USD')
-    0 USD
     """
     if year == 0:
         return zero_VND
@@ -165,9 +140,6 @@ def earning_before_tax(plant, year):
     """
     Earning before tax is the cash inflow exclude all costs
     """
-#    if year == 0:
-#      return zero_VND
-#    else:  
     return (cash_inflow(plant, year) -
             fuel_cost(plant, year) -
             operation_maintenance_cost(plant, year) -

@@ -12,17 +12,15 @@
 """
 
 import math
-from units import km, t, y, ha
+from units import km, zero_km
 from natu.math import sqrt
 from parameters import MongDuong1, NinhBinh
-from units import print_with_unit
 from strawdata import MongDuong1_straw_density1, MongDuong1_straw_density2
 from strawdata import NinhBinh_straw_density
-#from sympy import integrate, symbols, simplify
 
 from biomassrequired import biomass_required
 from parameters import transport_tariff, tortuosity_factor
-from parameters import biomass_fix_cost, biomass_ratio, zero_km
+from parameters import biomass_fix_cost, biomass_ratio
 
 #
 # import math, sympy

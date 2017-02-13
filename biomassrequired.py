@@ -15,9 +15,10 @@
 
 
 from parameters import biomass_ratio, biomass_heat_value, MongDuong1, NinhBinh
-from units import time_step, print_with_unit
+from units import time_step
 from natu.numpy import mean
 from strawdata import df
+
 
 def boiler_efficiency_loss(plant):
     """Calculate the boiler efficiency loss when co-firing biomass based on
@@ -67,6 +68,7 @@ def biomass_required(plant):
     """
     return gross_heat_input(plant) * biomass_ratio / biomass_heat_value
 
+
 def cultivation_area(plant):
     """ Area of rice cultivation needed to supply enough straw for co-firing
 
@@ -76,7 +78,7 @@ def cultivation_area(plant):
                                     df.loc['Hai Duong', 'straw yield'],
                                     df.loc['Hai Phong', 'straw yield'],
                                     df.loc['Quang Ninh', 'straw yield'],
-                                   ])
+                                  ])
         return biomass_required(plant) / average_straw_yield
     if plant == NinhBinh:
         return biomass_required(plant) / df.loc['Ninh Binh', 'straw yield']
