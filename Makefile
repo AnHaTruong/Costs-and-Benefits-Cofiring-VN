@@ -57,4 +57,4 @@ clean:
 	rm -f $(diffs)
 
 cleaner: clean
-	rm -f __pycache__/*.pyc *.pyc
+	find . -type f -name '*.pyc' -delete
