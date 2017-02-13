@@ -9,14 +9,13 @@
 #
 """print the LCOE calculation results in file lcoe.py"""
 
-from parameters import MongDuong1, NinhBinh, discount_rate
-from units import time_horizon
+from parameters import MongDuong1, NinhBinh
 
-#from lcoe import lcoe_investment, lcoe_fuel_coal, lcoe_fuel_biomass
-#from lcoe import lcoe_om, lcoe_tax, lcoe_cost, lcoe_power_gen, lcoe
-from lcoe import discount, lcoe_power_gen
-from npv import fuel_cost_coal, fuel_cost_biomass, operation_maintenance_cost
-from npv import income_tax, tot_capital_cost
+from npv import (
+            fuel_cost_coal, fuel_cost_biomass, operation_maintenance_cost,
+            income_tax, tot_capital_cost, discounted_total_power_gen,
+            discount
+            )
 from natu.math import fsum
 from units import print_with_unit
 
@@ -31,12 +30,12 @@ row1 = '{:30}' + '{:8.4f}'
 def print_lcoe(plant):
 
     col1 = print_with_unit(tot_capital_cost(plant, 0), 'kUSD')
-    col2 = print_with_unit(discount(fuel_cost_coal, plant, time_horizon, discount_rate), 'kUSD')
-    col3 = print_with_unit(discount(fuel_cost_biomass, plant, time_horizon, discount_rate), 'kUSD')
-    col4 = print_with_unit(discount(operation_maintenance_cost, plant, time_horizon, discount_rate), 'kUSD')
-    col5 = print_with_unit(discount(income_tax, plant, time_horizon, discount_rate), 'kUSD')
+    col2 = print_with_unit(discount(fuel_cost_coal, plant), 'kUSD')
+    col3 = print_with_unit(discount(fuel_cost_biomass, plant), 'kUSD')
+    col4 = print_with_unit(discount(operation_maintenance_cost, plant), 'kUSD')
+    col5 = print_with_unit(discount(income_tax, plant), 'kUSD')
     col6 = fsum([col2, col3, col4, col5])
-    col7 = lcoe_power_gen(plant)
+    col7 = discounted_total_power_gen(plant)
     col8 = col6 / col7
 
     col7.display_unit = 'GWh'
@@ -62,4 +61,3 @@ print('Levelized cost of electricity Ninh Binh')
 print('')
 
 print_lcoe(NinhBinh)
-

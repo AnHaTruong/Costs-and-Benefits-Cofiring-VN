@@ -15,7 +15,7 @@ from units import time_horizon
 # DEBUG
 #time_horizon = 1
 
-from npv import npv, cash_inflow
+from npv import net_present_value, cash_inflow
 from npv import tot_capital_cost, fuel_cost, net_cash_flow, amortization
 from npv import operation_maintenance_cost, earning_before_tax, income_tax
 
@@ -85,11 +85,11 @@ def print_npv(plant):
 print('Mong Duong 1')
 print_npv(MongDuong1)
 print('')
-print('NPV Mong Duong 1 = ', npv(MongDuong1))
+print('NPV Mong Duong 1 = ', net_present_value(MongDuong1))
 
 print('')
 
 print('Ninh Binh')
 print_npv(NinhBinh)
 print('')
-print('NPV Ninh Binh  = ', npv(NinhBinh))
+print('NPV Ninh Binh  = ', net_present_value(NinhBinh))

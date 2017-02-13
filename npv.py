@@ -12,29 +12,26 @@
 """
 
 from parameters import biomass_ratio, tax_rate, discount_rate, depreciation_period
-from units import time_horizon, zero_USD, zero_VND, time_step
+from units import time_horizon, time_step, zero_USD, zero_VND, kW, hr
 from biomassrequired import biomass_required
 from biomasscost import bm_unit_cost
 from coalsaved import coal_saved
+from natu.numpy import npv
+
+
+def discount(func, plant):
+    value = [func(plant, year) for year in range(time_horizon + 1)]
+    return npv(discount_rate, value)
 
 
 def cash_inflow(plant, year):
-    """
-
-    Cash inflow remain constant :
-    >>> from parameters import *
-    >>> cash_inflow(MongDuong1, 1) == cash_inflow(MongDuong1, time_horizon)
-    True
-    >>> cash_inflow(NinhBinh, 1) == cash_inflow(NinhBinh, time_horizon)
-    True
-
+    """ Constant, assume tariff and plant performance do not change over time
     """
     return plant.electricity_tariff * plant.elec_sale
 
 
 def cash_outflow(plant, year):
     """ This is for the whole plant
-
     """
     return (tot_capital_cost(plant, year) + fuel_cost(plant, year) +
             operation_maintenance_cost(plant, year) + income_tax(plant, year))
@@ -59,7 +56,6 @@ def tot_capital_cost(plant, year):
 
 def fuel_cost_coal(plant, year):
     """Fuel expense on coal
-
     """
     if year == 0:
         return plant.base_coal_consumption * plant.coal_price * time_step
@@ -154,7 +150,7 @@ def net_cash_flow(plant, year):
     return cash_inflow(plant, year) - cash_outflow(plant, year)
 
 
-def npv(plant):
+def net_present_value(plant):
     """npv returns the Net Present Value of the project,
     discounted at DiscountRate from 0 to TimeHorizon included
     """
@@ -162,6 +158,16 @@ def npv(plant):
     for year in range(time_horizon+1):
         value += net_cash_flow(plant, year) / (1+discount_rate)**year
     return value
+
+
+def discounted_total_power_gen(plant):
+    """ Sum of electricity generation over Time_Horizon
+    """
+    value = 0 * kW * hr
+    for year in range(time_horizon+1):
+            value += plant.elec_sale / (1+discount_rate)**year
+    return value
+
 
 if __name__ == "__main__":
     import doctest

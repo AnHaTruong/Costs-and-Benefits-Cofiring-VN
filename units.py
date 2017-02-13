@@ -24,7 +24,6 @@ time_step = 1 * y
 time_horizon = 20
 h_per_yr = 8760 * hr
 
-zero_kwh = 0 * kW*hr
 zero_USD = 0 * USD
 zero_VND = 0 * VND
 zero_km = 0 * km

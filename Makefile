@@ -58,3 +58,4 @@ clean:
 
 cleaner: clean
 	find . -type f -name '*.pyc' -delete
+	rm -rf __pycache__
