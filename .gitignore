@@ -7,6 +7,5 @@ __pycache__/
 natu/__pycache__/
 natu/config/__pycache__/
 *.py[cod]
-Data/
 SALib/
 SALib-0.7.1.dist-info/
