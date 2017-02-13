@@ -15,9 +15,11 @@ from units import time_horizon
 # DEBUG
 #time_horizon = 1
 
-from npv import net_present_value, cash_inflow
-from npv import tot_capital_cost, fuel_cost, net_cash_flow, amortization
-from npv import operation_maintenance_cost, earning_before_tax, income_tax
+from npv import (
+            net_present_value, cash_inflow, sales,
+            tot_capital_cost, fuel_cost, net_cash_flow, amortization,
+            operation_maintenance_cost, earning_before_tax, income_tax
+            )
 
 
 print('')
@@ -48,7 +50,7 @@ def print_npv(plant):
     """
 
     for year in range(time_horizon+1):
-        col1 = plant.elec_sale
+        col1 = sales(plant, year)
         col2 = cash_inflow(plant, year)
         col3 = tot_capital_cost(plant, year)
         col4 = fuel_cost(plant, year)

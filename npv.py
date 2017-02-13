@@ -7,6 +7,8 @@
 #     Creative Commons Attribution-ShareAlike 4.0 International
 #
 #
+# TODO: code a vectorized version of everything. First alongside then replace
+
 
 """ Net present value assessments of a co-firing power plant
 """
@@ -18,16 +20,18 @@ from biomasscost import bm_unit_cost
 from coalsaved import coal_saved
 from natu.numpy import npv
 
-# TODO: code a vectorized version of everything in parallel
 
 def discount(func, plant):
     value = [func(plant, year) for year in range(time_horizon + 1)]
     return npv(discount_rate, value)
 
 
+def sales(plant, year):
+    return plant.elec_sale
+
+
 def cash_inflow(plant, year):
-    """ Constant, assume tariff and plant performance do not change over time"""
-    return plant.electricity_tariff * plant.elec_sale
+    return plant.electricity_tariff * sales(plant, year)
 
 
 def cash_outflow(plant, year):
@@ -131,12 +135,8 @@ def net_present_value(plant):
 
 
 def discounted_total_power_gen(plant):
-    """ Sum of electricity generation over Time_Horizon
-    """
-    value = 0 * kW * hr
-    for year in range(time_horizon+1):
-            value += plant.elec_sale / (1+discount_rate)**year
-    return value
+    """ Sum of electricity generation over Time_Horizon"""
+    return discount(sales, plant)
 
 
 if __name__ == "__main__":
