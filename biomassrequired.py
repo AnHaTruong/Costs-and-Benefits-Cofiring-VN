@@ -14,18 +14,19 @@
 """
 
 
-from parameters import biomass_ratio, biomass_heat_value, MongDuong1, NinhBinh
+from parameters import biomass_ratio, biomass_heat_value
 from units import time_step
-from natu.numpy import mean
-from strawdata import df
 
 
 def boiler_efficiency_loss(biomass_ratio):
     """Calculate the boiler efficiency loss when co-firing biomass based on
-    equation from De & Assadi 2009.
-
+    equation from Tillman 2000
+    
+    >>> boiler_efficiency_loss(0)
+    0.0
     """
-    loss = 0.0044 * biomass_ratio * biomass_ratio + 0.0055
+    assert 0 <= biomass_ratio
+    loss = 0.0044 * biomass_ratio * biomass_ratio + 0.0055 * biomass_ratio
     return loss
 
 
@@ -43,7 +44,7 @@ def boiler_efficiency_bm(plant):
 #    0
 #    >>> boiler_efficiency_bm(1, 0)
 #    1
-#    """<=
+#    """
 #    assert 0 <= boiler_efficiency_loss < base_boiler_efficiency < 1
 #    return base_boiler_efficiency - boiler_efficiency_loss
 
@@ -67,8 +68,6 @@ def biomass_required(plant):
 
     """
     return gross_heat_input(plant) * biomass_ratio / biomass_heat_value
-
-
 
 
 if __name__ == "__main__":
