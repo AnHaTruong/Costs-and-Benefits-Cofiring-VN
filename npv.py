@@ -14,7 +14,7 @@
 """
 
 from parameters import biomass_ratio, tax_rate, discount_rate, depreciation_period
-from units import time_horizon, time_step, zero_USD, zero_VND, kW, hr
+from units import time_horizon, time_step, zero_USD, zero_VND
 from biomassrequired import biomass_required
 from biomasscost import bm_unit_cost
 from coalsaved import coal_saved
@@ -26,6 +26,7 @@ def discount(func, plant):
     return npv(discount_rate, value)
 
 
+# When finally removing next line, also merge line in PowerPlant constructor
 def sales(plant, year):
     return plant.elec_sale
 
@@ -36,8 +37,11 @@ def cash_inflow(plant, year):
 
 def cash_outflow(plant, year):
     """ This is for the whole plant"""
-    return (tot_capital_cost(plant, year) + fuel_cost(plant, year) +
-            operation_maintenance_cost(plant, year) + income_tax(plant, year))
+    return (tot_capital_cost(plant, year) +
+            fuel_cost(plant, year) +
+            operation_maintenance_cost(plant, year) +
+            income_tax(plant, year)
+            )
 
 
 def tot_capital_cost(plant, year):
@@ -137,7 +141,6 @@ def net_present_value(plant):
 def discounted_total_power_gen(plant):
     """ Sum of electricity generation over Time_Horizon"""
     return discount(sales, plant)
-
 
 if __name__ == "__main__":
     import doctest

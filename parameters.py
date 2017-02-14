@@ -60,27 +60,26 @@ MongDuong1 = PowerPlant(capacity=1080 * MW,
                         boiler_technology='CFB',
                         coal_heat_value=19.43468 * MJ / kg,
                         plant_efficiency=38.84 / 100,
-                        boiler_efficiency=87.03 / 100)
+                        boiler_efficiency=87.03 / 100,
+                        electricity_tariff=1239.17 * VND / (kW*hr),
+                        coal_price=1131400 * VND / t,
+                        fix_om_coal=29.31 * USD / kW / y,
+                        variable_om_coal=0.0048 * USD / (kW*hr),
+                        ef_coal_combust=0.0966 * kg / MJ,
+                        ef_coal_transport=0 * kg / t / km,
+                        coal_transport_distance=0 * km,
+                        esp_efficiency=0.996,
+                        desulfur_efficiency=0.982,
+                        ef_so2_coal=11.5 * kg / t,
+                        ef_pm10_coal=43.8 * kg / t,
+                        ef_nox_coal=18 * kg / t,
+                        )
 
 MongDuong1.capital_cost = 50 * USD / kW
-MongDuong1.coal_price = 1131400 * VND / t
 MongDuong1.fix_om_cost = 32.24 * USD / kW / y
 MongDuong1.variable_om_cost = 0.006 * USD / (kW*hr)
-MongDuong1.fix_om_coal = 29.31 * USD / kW / y
-MongDuong1.variable_om_coal = 0.0048 * USD / (kW*hr)
-MongDuong1.coal_transport_distance = 0 * km
-MongDuong1.electricity_tariff = 1239.17 * VND / (kW*hr)
-
-MongDuong1.ef_coal_combust = 0.0966 * kg / MJ
-MongDuong1.ef_coal_transport = 0 * kg / t / km  # assuming conveyor transport emission factor = 0
 MongDuong1.ef_biomass_combust = 0.0858 * kg / MJ
 MongDuong1.ef_biomass_transport = 0.110 * kg / t / km  # biomass transported by truck
-
-MongDuong1.esp_efficiency = 0.996
-MongDuong1.desulfur_efficiency = 0.982
-MongDuong1.ef_so2_coal = 11.5 * kg / t
-MongDuong1.ef_pm10_coal = 43.8 * kg / t
-MongDuong1.ef_nox_coal = 18 * kg / t
 
 
 NinhBinh = PowerPlant(capacity=100 * MW,
@@ -89,26 +88,23 @@ NinhBinh = PowerPlant(capacity=100 * MW,
                       boiler_technology='PC',
                       coal_heat_value=21.5476 * MJ / kg,
                       plant_efficiency=21.77 / 100,
-                      boiler_efficiency=81.61 / 100)
+                      boiler_efficiency=81.61 / 100,
+                      electricity_tariff=1665.6 * VND / (kW * hr),
+                      coal_price=1825730 * VND / t,
+                      fix_om_coal=29.31 * USD / kW / y,
+                      variable_om_coal=0.0048 * USD / (kW*hr),
+                      coal_transport_distance=200 * km,
+                      ef_coal_combust=0.0966 * kg / MJ,
+                      ef_coal_transport=0.071 * kg / t / km,  # coal transported by barge
+                      esp_efficiency=0.992,
+                      desulfur_efficiency=0,
+                      ef_so2_coal=11.5 * kg / t,
+                      ef_pm10_coal=26.1 * kg / t,
+                      ef_nox_coal=18 * kg / t
+                      )
 
 NinhBinh.capital_cost = 100 * USD / kW
-NinhBinh.coal_price = 1825730 * VND / t
 NinhBinh.fix_om_cost = 32.24 * USD / kW / y
 NinhBinh.variable_om_cost = 0.006 * USD / (kW*hr)
-NinhBinh.fix_om_coal = 29.31 * USD / kW / y
-NinhBinh.variable_om_coal = 0.0048 * USD / (kW*hr)
-NinhBinh.electricity_tariff = 1665.6 * VND / (kW * hr)
-
-NinhBinh.coal_transport_distance = 200 * km
-
-NinhBinh.ef_coal_combust = 0.0966 * kg / MJ
-NinhBinh.ef_coal_transport = 0.071 * kg / t / km     # coal transported by barge
 NinhBinh.ef_biomass_combust = 0.0858 * kg / MJ
 NinhBinh.ef_biomass_transport = 0.110 * kg / t / km  # biomass transported by truck
-
-
-NinhBinh.esp_efficiency = 0.992
-NinhBinh.desulfur_efficiency = 0
-NinhBinh.ef_so2_coal = 11.5 * kg / t
-NinhBinh.ef_pm10_coal = 26.1 * kg / t
-NinhBinh.ef_nox_coal = 18 * kg / t

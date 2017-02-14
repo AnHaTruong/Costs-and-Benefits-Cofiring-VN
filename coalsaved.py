@@ -13,7 +13,6 @@
 
 from parameters import biomass_ratio, coal_import_price
 from biomassrequired import gross_heat_input
-from units import print_with_unit
 
 
 def coal_saved(plant):

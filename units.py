@@ -8,12 +8,15 @@
 #
 #
 
-from natu.units import km, hr, y, kW
-from natu.units import MJ, kg, t, d, hr, MW, ha, g
+
+from natu.units import km, hr, y
+from natu.units import kW, MJ, kg, t, d, MW, ha, g    # Reexported
 
 # Semantic overloading: we reuse the "amount" dimension to mean "value"
 from natu.core import ScalarUnit
 from natu import units
+
+
 VND = ScalarUnit(1, 'N', 'mol', prefixable=True)
 units.VND = VND
 
@@ -22,6 +25,7 @@ units.USD = USD
 
 time_step = 1 * y
 time_horizon = 20
+
 h_per_yr = 8760 * hr
 
 zero_USD = 0 * USD
