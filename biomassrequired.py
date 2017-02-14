@@ -42,7 +42,7 @@ def boiler_efficiency_bm(plant):
 
     """
     ratio = biomass_ratio_mass(biomass_ratio, plant.coal_heat_value, biomass_heat_value)
-    return plant.base_boiler_efficiency - boiler_efficiency_loss(ratio)
+    return plant.boiler_efficiency - boiler_efficiency_loss(ratio)
 
 
 #def boiler_efficiency_bm(boiler_efficiency, boiler_efficiency_loss):
@@ -53,15 +53,15 @@ def boiler_efficiency_bm(plant):
 #    >>> boiler_efficiency_bm(1, 0)
 #    1
 #    """
-#    assert 0 <= boiler_efficiency_loss < base_boiler_efficiency < 1
-#    return base_boiler_efficiency - boiler_efficiency_loss
+#    assert 0 <= boiler_efficiency_loss < boiler_efficiency < 1
+#    return boiler_efficiency - boiler_efficiency_loss
 
 
 def plant_efficency_bm(plant):
     """ Plant efficiency with biomass co-firing
 
     """
-    return (plant.plant_efficiency / plant.base_boiler_efficiency) * boiler_efficiency_bm(plant)
+    return (plant.plant_efficiency / plant.boiler_efficiency) * boiler_efficiency_bm(plant)
 
 
 def gross_heat_input(plant):
