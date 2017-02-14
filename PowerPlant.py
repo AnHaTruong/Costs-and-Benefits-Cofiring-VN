@@ -7,15 +7,9 @@
 # Creative Commons Attribution-ShareAlike 4.0 International
 #
 #
-from units import time_step, time_horizon
-import natu.numpy as np
+from units import time_step, time_horizon, v_zeros, v_ones, v_after_invest
 from natu.math import sqrt, pi
-
-
-v_zeros = np.zeros(time_horizon + 1, dtype=np.float64)
-v_ones = np.ones(time_horizon + 1, dtype=np.float64)
-v_after_invest = np.ones(time_horizon + 1, dtype=np.float64)
-v_after_invest[0] = 0
+from natu.numpy import npv
 
 
 class Investment:
@@ -66,7 +60,7 @@ class Investment:
 
     def net_present_value(self, discount_rate, tax_rate, depreciation_period):
         assert 0 <= discount_rate < 1, "Discount rate not in [0, 1["
-        return np.npv(discount_rate, self.net_cash_flow(tax_rate, depreciation_period))
+        return npv(discount_rate, self.net_cash_flow(tax_rate, depreciation_period))
 
 
 class PowerPlant(Investment):
@@ -131,7 +125,7 @@ class PowerPlant(Investment):
         return v_fixed_om_coal + v_variable_om_coal
 
     def v_discounted_total_power_gen(self, discount_rate):
-        return np.npv(discount_rate, self.v_sales)
+        return npv(discount_rate, self.v_sales)
 
 
 class CofiringProject(Investment):
