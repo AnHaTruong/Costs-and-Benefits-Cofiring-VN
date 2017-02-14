@@ -99,7 +99,7 @@ class PowerPlant(Investment):
         self.boiler_technology = boiler_technology
         self.power_generation = capacity * capacity_factor * time_step
         self.coal_heat_value = coal_heat_value
-        self.base_plant_efficiency = plant_efficiency
+        self.plant_efficiency = plant_efficiency
         self.base_boiler_efficiency = boiler_efficiency
         self.base_coal_consumption = capacity * capacity_factor / plant_efficiency / coal_heat_value
         self.electricity_tariff = electricity_tariff
@@ -177,7 +177,7 @@ class CofiringProject(Investment):
         """Accounting for the efficiency loss due to cofiring, according to Tillman 2000"""
         boiler_efficiency_loss = 0.0044 * self.biomass_ratio**2 + 0.0055 * self.biomass_ratio #FIXME: update from Ha's repo
         new_boiler_efficiency = self.plant.base_boiler_efficiency - boiler_efficiency_loss
-        new_plant_efficency = (self.plant.base_plant_efficiency *
+        new_plant_efficency = (self.plant.plant_efficiency *
                                self.plant.base_boiler_efficiency / new_boiler_efficiency
                                )
         gross_heat_input = self.plant.power_generation / new_plant_efficency / time_step

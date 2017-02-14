@@ -28,7 +28,7 @@ def biomass_ratio_mass(biomass_ratio, heat_value_coal, heat_value_bm):
 def boiler_efficiency_loss(bm_ratio_mass):
     """Calculate the boiler efficiency loss when co-firing biomass based on
     equation from Tillman 2000 with biomass ratio on mass basis
-    
+
     >>> boiler_efficiency_loss(0)
     0.0
     """
@@ -61,7 +61,7 @@ def plant_efficency_bm(plant):
     """ Plant efficiency with biomass co-firing
 
     """
-    return (plant.base_plant_efficiency / plant.base_boiler_efficiency) * boiler_efficiency_bm(plant)
+    return (plant.plant_efficiency / plant.base_boiler_efficiency) * boiler_efficiency_bm(plant)
 
 
 def gross_heat_input(plant):
