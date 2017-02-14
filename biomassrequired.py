@@ -18,15 +18,22 @@ from parameters import biomass_ratio, biomass_heat_value
 from units import time_step
 
 
-def boiler_efficiency_loss(biomass_ratio):
+def biomass_ratio_mass(biomass_ratio, heat_value_coal, heat_value_bm):
+    """ Return the biomass/coal ratio in term of mass
+    """
+    assert 0 <= biomass_ratio
+    return biomass_ratio * (heat_value_coal/heat_value_bm)
+
+
+def boiler_efficiency_loss(bm_ratio_mass):
     """Calculate the boiler efficiency loss when co-firing biomass based on
-    equation from Tillman 2000
+    equation from Tillman 2000 with biomass ratio on mass basis
     
     >>> boiler_efficiency_loss(0)
     0.0
     """
-    assert 0 <= biomass_ratio
-    loss = 0.0044 * biomass_ratio * biomass_ratio + 0.0055 * biomass_ratio
+    assert 0 <= bm_ratio_mass
+    loss = 0.0044 * bm_ratio_mass * bm_ratio_mass + 0.0055 * bm_ratio_mass
     return loss
 
 
@@ -34,7 +41,8 @@ def boiler_efficiency_bm(plant):
     """Return the boiler efficiency when co-firing
 
     """
-    return plant.base_boiler_efficiency - boiler_efficiency_loss(biomass_ratio)
+    ratio = biomass_ratio_mass(biomass_ratio, plant.coal_heat_value, biomass_heat_value)
+    return plant.base_boiler_efficiency - boiler_efficiency_loss(ratio)
 
 
 #def boiler_efficiency_bm(boiler_efficiency, boiler_efficiency_loss):
