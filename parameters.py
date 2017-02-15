@@ -8,8 +8,8 @@
 #
 #
 
-
-from units import MJ, kg, t, d, hr, km, MW, USD, VND, ha, g, kW, y, time_step
+from units import USD, VND, time_step
+from natu.units import MJ, kg, t, d, hr, km, MW, ha, g, kW, y, kWh
 from PowerPlant import PowerPlant
 
 
@@ -61,10 +61,10 @@ MongDuong1 = PowerPlant(capacity=1080 * MW,
                         coal_heat_value=19.43468 * MJ / kg,
                         plant_efficiency=38.84 / 100,
                         boiler_efficiency=87.03 / 100,
-                        electricity_tariff=1239.17 * VND / (kW*hr),
+                        electricity_tariff=1239.17 * VND / kWh,
                         coal_price=1131400 * VND / t,
                         fix_om_coal=29.31 * USD / kW / y,
-                        variable_om_coal=0.0048 * USD / (kW*hr),
+                        variable_om_coal=0.0048 * USD / kWh,
                         ef_coal_combust=0.0966 * kg / MJ,
                         ef_coal_transport=0 * kg / t / km,
                         coal_transport_distance=0 * km,
@@ -89,10 +89,10 @@ NinhBinh = PowerPlant(capacity=100 * MW,
                       coal_heat_value=21.5476 * MJ / kg,
                       plant_efficiency=21.77 / 100,
                       boiler_efficiency=81.61 / 100,
-                      electricity_tariff=1665.6 * VND / (kW * hr),
+                      electricity_tariff=1665.6 * VND / kWh,
                       coal_price=1825730 * VND / t,
                       fix_om_coal=29.31 * USD / kW / y,
-                      variable_om_coal=0.0048 * USD / (kW*hr),
+                      variable_om_coal=0.0048 * USD / kWh,
                       coal_transport_distance=200 * km,
                       ef_coal_combust=0.0966 * kg / MJ,
                       ef_coal_transport=0.071 * kg / t / km,  # coal transported by barge

@@ -10,7 +10,7 @@
 
 
 from natu.units import km, hr, y
-from natu.units import kW, MJ, kg, t, d, MW, ha, g    # Reexported
+# from natu.units import kW, MJ, kg, t, d, MW, ha, g    # Reexported
 import natu.numpy as np
 
 # Semantic overloading: we reuse the "amount" dimension to mean "value"
@@ -24,6 +24,7 @@ units.VND = VND
 USD = ScalarUnit(22270, 'N', 'mol', prefixable=True)
 units.USD = USD
 
+h_per_yr = 8760 * hr
 time_step = 1 * y
 time_horizon = 20
 
@@ -31,8 +32,6 @@ v_zeros = np.zeros(time_horizon + 1, dtype=np.float64)
 v_ones = np.ones(time_horizon + 1, dtype=np.float64)
 v_after_invest = np.ones(time_horizon + 1, dtype=np.float64)
 v_after_invest[0] = 0
-
-h_per_yr = 8760 * hr
 
 zero_USD = 0 * USD
 zero_VND = 0 * VND
