@@ -7,9 +7,16 @@
 # Creative Commons Attribution-ShareAlike 4.0 International
 #
 #
-from units import time_step, time_horizon, v_zeros, v_ones, v_after_invest
+from units import time_step, time_horizon, v_zeros, v_ones, v_after_invest, USD
 from natu.math import sqrt, pi
-from natu.numpy import npv
+from natu.numpy import npv, array
+
+
+def as_kUSD(v):
+    """Argument is a vector to be displayed in kUSD"""
+    for i in range(time_horizon+1):
+        v[i].display_unit = 'kUSD'
+    return v
 
 
 class Investment:
@@ -21,46 +28,57 @@ class Investment:
         descendent class should redefine  income()  and  operating_expense()
         These functions should return a vector of numbers like v_zeros
     """
-    def __init__(self, capital=0):
+    def __init__(self, capital=0*USD):
         self.capital = capital
-        self.investment = v_zeros.copy()
+        self.capital.display_unit = 'kUSD'
+        self.investment = as_kUSD(v_zeros.copy()*USD)
         self.investment[0] = capital
 
     def income(self):
-        return v_zeros
+        return as_kUSD(v_zeros * USD)
 
     def operating_expenses(self):
-        return v_zeros
+        return as_kUSD(v_zeros * USD)
 
     def amortization(self, depreciation_period):
         assert type(depreciation_period) is int, "Depreciation period not an integer"
         assert 0 < depreciation_period < time_horizon - 1, "Depreciation not in {1..timehorizon-1}"
-        v_cost = v_zeros.copy()
+        v_cost = v_zeros.copy()*USD
         for year in range(1, depreciation_period + 1):
             v_cost[year] = self.capital / float(depreciation_period)
-        return v_cost
+        return as_kUSD(v_cost)
 
     def earning_before_tax(self, depreciation_period):
-        return (self.income() -
-                self.operating_expenses() -
-                self.amortization(depreciation_period)
-                )
+        return as_kUSD(self.income() -
+                       self.operating_expenses() -
+                       self.amortization(depreciation_period)
+                       )
 
     def income_tax(self, tax_rate, depreciation_period):
         assert 0 <= tax_rate <= 1, "Tax rate not in [0, 1["
         # Allows tax credits in lossy periods
-        return tax_rate * self.earning_before_tax(depreciation_period)
+        return as_kUSD(tax_rate * self.earning_before_tax(depreciation_period))
 
     def net_cash_flow(self, tax_rate, depreciation_period):
-        return (self.income() -
-                self.investment -
-                self.operating_expenses() -
-                self.income_tax(tax_rate, depreciation_period)
-                )
+        return as_kUSD(self.income() -
+                       self.investment -
+                       self.operating_expenses() -
+                       self.income_tax(tax_rate, depreciation_period)
+                       )
 
     def net_present_value(self, discount_rate, tax_rate, depreciation_period):
         assert 0 <= discount_rate < 1, "Discount rate not in [0, 1["
         return npv(discount_rate, self.net_cash_flow(tax_rate, depreciation_period))
+
+    def tabulate(self, tax_rate, depreciation_period):
+        return array([self.investment,
+                      self.income(),
+                      self.operating_expenses(),
+                      self.amortization(depreciation_period),
+                      self.earning_before_tax(depreciation_period),
+                      self.income_tax(tax_rate, depreciation_period),
+                      self.net_cash_flow(tax_rate, depreciation_period)
+                      ])
 
 
 class PowerPlant(Investment):
@@ -101,6 +119,7 @@ class PowerPlant(Investment):
         self.fix_om_coal = fix_om_coal
         self.variable_om_coal = variable_om_coal
         self.elec_sale = self.power_generation  # Capacity factor was net of self consumption
+        self.elec_sale.display_unit = 'GWh'
         self.ef_coal_combust = ef_coal_combust
         self.ef_coal_transport = ef_coal_transport
         self.coal_transport_distance = coal_transport_distance
@@ -109,22 +128,23 @@ class PowerPlant(Investment):
         self.ef_so2_coal = ef_so2_coal
         self.ef_pm10_coal = ef_pm10_coal
         self.ef_nox_coal = ef_nox_coal
+        super().__init__()
 
     def income(self):
         return v_ones * self.elec_sale * self.electricity_tariff
 
     def operating_expenses(self):
-        return self.v_fuel_cost() + self.v_operation_maintenance_cost()
+        return self.fuel_cost() + self.operation_maintenance_cost()
 
-    def v_fuel_cost(self):
+    def fuel_cost(self):
         return v_ones * self.coal_price * self.base_coal_consumption * time_step
 
-    def v_operation_maintenance_cost(self):
-        v_fixed_om_coal = v_ones * self.fix_om_coal * self.capacity * time_step
-        v_variable_om_coal = v_ones * self.variable_om_coal * self.power_generation
-        return v_fixed_om_coal + v_variable_om_coal
+    def operation_maintenance_cost(self):
+        fixed_om_coal = v_ones * self.fix_om_coal * self.capacity * time_step
+        variable_om_coal = v_ones * self.variable_om_coal * self.power_generation
+        return fixed_om_coal + variable_om_coal
 
-    def v_discounted_total_power_gen(self, discount_rate):
+    def discounted_total_power_gen(self, discount_rate):
         return npv(discount_rate, self.v_sales)
 
 
