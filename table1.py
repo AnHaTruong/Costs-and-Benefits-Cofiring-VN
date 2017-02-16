@@ -30,6 +30,6 @@ print(row.format('Boiler technology', MongDuong1.boiler_technology, NinhBinh.boi
 print(row.format('Installed capacity', MongDuong1.capacity, NinhBinh.capacity))
 print(row.format('Capacity factor', MongDuong1.capacity_factor, NinhBinh.capacity_factor))
 print(row.format('Coal consumption',  col1, col2))
-print(row.format('Heat value of coal', MongDuong1.coal_supply.heat_value, NinhBinh.coal_supply.heat_value))
+print(row.format('Heat value of coal', MongDuong1.coal.heat_value, NinhBinh.coal.heat_value))
 print(row.format('Plant efficiency', MongDuong1.plant_efficiency, NinhBinh.plant_efficiency))
 print(row.format('Boiler efficiency', MongDuong1.boiler_efficiency, NinhBinh.boiler_efficiency))

@@ -41,7 +41,7 @@ def boiler_efficiency_bm(plant):
     """Return the boiler efficiency when co-firing
 
     """
-    ratio = biomass_ratio_mass(biomass_ratio, plant.coal_supply.heat_value, biomass_heat_value)
+    ratio = biomass_ratio_mass(biomass_ratio, plant.coal.heat_value, biomass_heat_value)
     return plant.boiler_efficiency - boiler_efficiency_loss(ratio)
 
 

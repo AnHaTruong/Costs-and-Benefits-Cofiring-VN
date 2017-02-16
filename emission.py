@@ -23,7 +23,7 @@ def emission_coal_combust_base(plant):
        when there is no co-firing
 
     """
-    return plant.emissions_controls.ef_coal_combust * plant.coal_consumption * plant.coal_supply.heat_value
+    return plant.coal.ef_combust * plant.coal_consumption * plant.coal.heat_value
 
 
 def emission_coal_transport_base(plant):
@@ -32,21 +32,21 @@ def emission_coal_transport_base(plant):
        distance because round trip is accounted
 
     """
-    return plant.emissions_controls.ef_coal_transport * 2 * plant.coal_supply.transport_distance * plant.coal_consumption
+    return plant.coal.ef_transport * 2 * plant.coal.transport_distance * plant.coal_consumption
 
 
 def emission_coal_combust_cofire(plant):
     """ emission from coal combustion when co-fire
 
     """
-    return plant.emissions_controls.ef_coal_combust * (plant.coal_consumption - coal_saved(plant)) * plant.coal_supply.heat_value
+    return plant.coal.ef_combust * (plant.coal_consumption - coal_saved(plant)) * plant.coal.heat_value
 
 
 def emission_coal_transport_cofire(plant):
     """emission from coal transportation when co-fire
 
     """
-    return plant.emissions_controls.ef_coal_transport * 2 * plant.coal_supply.transport_distance * (plant.coal_consumption - coal_saved(plant))
+    return plant.coal.ef_transport * 2 * plant.coal.transport_distance * (plant.coal_consumption - coal_saved(plant))
 
 
 def emission_biomass_combust(plant):

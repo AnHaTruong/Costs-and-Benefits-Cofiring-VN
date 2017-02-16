@@ -7,40 +7,31 @@
 # Creative Commons Attribution-ShareAlike 4.0 International
 #
 #
-from units import time_step, v_ones, v_after_invest, as_kUSD
+from units import time_step, v_ones, v_after_invest, as_kUSD, USD
 from natu.math import sqrt, pi
 import natu.numpy as np
 from Investment import Investment
 
 
-class EmissionsControls:
-    def __init__(self,
-                 esp_efficiency,
-                 desulfur_efficiency,
-                 ef_coal_combust,
-                 ef_coal_transport,
-                 ef_so2_coal,
-                 ef_pm10_coal,
-                 ef_nox_coal
-                 ):
-        self.ef_coal_combust = ef_coal_combust
-        self.ef_coal_transport = ef_coal_transport
-        self.esp_efficiency = esp_efficiency
-        self.desulfur_efficiency = desulfur_efficiency
-        self.ef_so2_coal = ef_so2_coal
-        self.ef_pm10_coal = ef_pm10_coal
-        self.ef_nox_coal = ef_nox_coal
-
-
 class CoalSupply:
     def __init__(self,
-               heat_value,
-               price,
-               transport_distance
-               ):
+                 heat_value,
+                 price,
+                 transport_distance,
+                 ef_combust,
+                 ef_transport,
+                 ef_so2,
+                 ef_pm10,
+                 ef_nox
+                 ):
         self.heat_value = heat_value
         self.price = price
         self.transport_distance = transport_distance
+        self.ef_combust = ef_combust
+        self.ef_transport = ef_transport
+        self.ef_so2 = ef_so2
+        self.ef_pm10 = ef_pm10
+        self.ef_nox = ef_nox
 
 
 class PowerPlant(Investment):
@@ -56,8 +47,10 @@ class PowerPlant(Investment):
                  electricity_tariff,
                  fix_om_coal,
                  variable_om_coal,
-                 coal_supply,
-                 emissions_controls
+                 esp_efficiency,
+                 desulfur_efficiency,
+                 coal,
+                 capital=0*USD
                  ):
         self.capacity = capacity
         self.capacity_factor = capacity_factor
@@ -66,15 +59,16 @@ class PowerPlant(Investment):
         self.power_generation = capacity * capacity_factor
         self.plant_efficiency = plant_efficiency
         self.boiler_efficiency = boiler_efficiency
-        self.coal_consumption = self.power_generation / plant_efficiency / coal_supply.heat_value
+        self.coal_consumption = self.power_generation / plant_efficiency / coal.heat_value
         self.electricity_tariff = electricity_tariff
         self.fix_om_coal = fix_om_coal
         self.variable_om_coal = variable_om_coal
         self.elec_sale = self.power_generation * time_step
         self.elec_sale.display_unit = 'GWh'
-        self.coal_supply = coal_supply
-        self.emissions_controls = emissions_controls
-        super().__init__()
+        self.esp_efficiency = esp_efficiency
+        self.desulfur_efficiency = desulfur_efficiency
+        self.coal = coal
+        super().__init__(capital)
 
     def income(self):
         return as_kUSD(v_ones * self.elec_sale * self.electricity_tariff)
@@ -83,7 +77,7 @@ class PowerPlant(Investment):
         return as_kUSD(self.fuel_cost() + self.operation_maintenance_cost())
 
     def fuel_cost(self):
-        return v_ones * self.coal_supply.price * self.coal_consumption * time_step
+        return v_ones * self.coal.price * self.coal_consumption * time_step
 
     def operation_maintenance_cost(self):
         fixed_om_coal = v_ones * self.fix_om_coal * self.capacity * time_step
@@ -94,7 +88,18 @@ class PowerPlant(Investment):
         return np.npv(discount_rate, self.v_sales)
 
 
-class CofiringProject(Investment):
+class BiomassSupply:
+    def __init__(self,
+                 heat_value,
+                 price,
+                 transport_distance
+                 ):
+        self.heat_value = heat_value
+        self.price = price
+        self.transport_distance = transport_distance
+
+
+class CofiringPlant(PowerPlant):
     def __init__(self,
                  plant,
                  biomass_ratio,
@@ -146,7 +151,7 @@ class CofiringProject(Investment):
         return v_after_invest * gross_heat_input * self.biomass_ratio
 
     def coal_saved(self):
-        return self.biomass_heat() / self.plant.coal_supply.heat_value
+        return self.biomass_heat() / self.plant.coal.heat_value
 
     def coal_saved_cost(self):
         return self.plant.coal_price * self.coal_saved() * time_step

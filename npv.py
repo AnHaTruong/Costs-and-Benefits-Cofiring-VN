@@ -64,9 +64,9 @@ def tot_capital_cost(plant, year):
 def fuel_cost_coal(plant, year):
     """Fuel expense on coal"""
     if year == 0:
-        return plant.coal_consumption * plant.coal_supply.price * time_step
+        return plant.coal_consumption * plant.coal.price * time_step
     else:
-        return plant.coal_supply.price * (plant.coal_consumption - coal_saved(plant)) * time_step
+        return plant.coal.price * (plant.coal_consumption - coal_saved(plant)) * time_step
 
 
 def fuel_cost_biomass(plant, year):
