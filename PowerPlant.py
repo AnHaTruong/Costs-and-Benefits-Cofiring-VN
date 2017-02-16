@@ -22,6 +22,6 @@ class PowerPlant:
         self.power_generation = capacity * capacity_factor * time_step
         self.elec_sale = self.power_generation  # Capacity factor was net of self consumption
         self.coal_heat_value = coal_heat_value
-        self.base_plant_efficiency = plant_efficiency
+        self.plant_efficiency = plant_efficiency
         self.base_boiler_efficiency = boiler_efficiency
         self.base_coal_consumption = capacity * capacity_factor / plant_efficiency / coal_heat_value
