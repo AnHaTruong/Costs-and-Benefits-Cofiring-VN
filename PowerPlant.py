@@ -7,16 +7,10 @@
 # Creative Commons Attribution-ShareAlike 4.0 International
 #
 #
-from units import time_step, time_horizon, v_zeros, v_ones, v_after_invest, USD
+from units import time_step, time_horizon, v_zeros, v_ones, v_after_invest, USD, as_kUSD
 from natu.math import sqrt, pi
-from natu.numpy import npv, array
-
-
-def as_kUSD(v):
-    """Argument is a vector to be displayed in kUSD"""
-    for i in range(time_horizon+1):
-        v[i].display_unit = 'kUSD'
-    return v
+import natu.numpy as np
+import pandas as pd
 
 
 class Investment:
@@ -68,17 +62,36 @@ class Investment:
 
     def net_present_value(self, discount_rate, tax_rate, depreciation_period):
         assert 0 <= discount_rate < 1, "Discount rate not in [0, 1["
-        return npv(discount_rate, self.net_cash_flow(tax_rate, depreciation_period))
+        return np.npv(discount_rate, self.net_cash_flow(tax_rate, depreciation_period))
 
-    def tabulate(self, tax_rate, depreciation_period):
-        return array([self.investment,
+    def table(self, tax_rate, depreciation_period):
+        t = np.array([self.investment,
                       self.income(),
                       self.operating_expenses(),
                       self.amortization(depreciation_period),
                       self.earning_before_tax(depreciation_period),
                       self.income_tax(tax_rate, depreciation_period),
                       self.net_cash_flow(tax_rate, depreciation_period)
-                      ])
+                      ]
+                     )
+        return t
+
+    def pretty_table(self, tax_rate, depreciation_period):
+        t = self.table(tax_rate, depreciation_period)
+        t = np.transpose(t)
+        labels = ["Investment",
+                  "Income",
+                  "Op. Expense",
+                  "Amortization",
+                  "Earn. B. Tax",
+                  "Income tax",
+                  "Net cashflow"
+                  ]
+        t = pd.DataFrame(t, columns=labels)
+        pd.set_option('display.max_columns', 10)
+        pd.set_option('display.width', 150)
+        print(t)
+        return t
 
 
 class PowerPlant(Investment):
@@ -131,10 +144,10 @@ class PowerPlant(Investment):
         super().__init__()
 
     def income(self):
-        return v_ones * self.elec_sale * self.electricity_tariff
+        return as_kUSD(v_ones * self.elec_sale * self.electricity_tariff)
 
     def operating_expenses(self):
-        return self.fuel_cost() + self.operation_maintenance_cost()
+        return as_kUSD(self.fuel_cost() + self.operation_maintenance_cost())
 
     def fuel_cost(self):
         return v_ones * self.coal_price * self.base_coal_consumption * time_step
@@ -145,7 +158,7 @@ class PowerPlant(Investment):
         return fixed_om_coal + variable_om_coal
 
     def discounted_total_power_gen(self, discount_rate):
-        return npv(discount_rate, self.v_sales)
+        return np.npv(discount_rate, self.v_sales)
 
 
 class CofiringProject(Investment):
@@ -172,11 +185,12 @@ class CofiringProject(Investment):
     def income(self):
         return self.plant.income()
 
-    def v_operation_maintenance_cost(self,
-                                     biomass_fix_cost,
-                                     transport_tariff,
-                                     biomass_density,
-                                     tortuosity_factor):
+    def operation_maintenance_cost(self,
+                                   biomass_fix_cost,
+                                   transport_tariff,
+                                   biomass_density,
+                                   tortuosity_factor
+                                   ):
         return (self.plant.operating_expenses() -
                 self.coal_saved_cost() +
                 self.biomass_fuel_cost(biomass_fix_cost) +
@@ -184,12 +198,13 @@ class CofiringProject(Investment):
                 self.biomass_transport_cost(self.biomass_used(),
                                             transport_tariff,
                                             biomass_density,
-                                            tortuosity_factor)
+                                            tortuosity_factor
+                                            )
                 )
 
     def biomass_heat(self):
         """Accounting for the efficiency loss due to cofiring, according to Tillman 2000"""
-        boiler_efficiency_loss = 0.0044 * self.biomass_ratio**2 + 0.0055 * self.biomass_ratio #FIXME: update from Ha's repo
+        boiler_efficiency_loss = 0.0044 * self.biomass_ratio**2 + 0.0055 * self.biomass_ratio
         new_boiler_efficiency = self.plant.boiler_efficiency - boiler_efficiency_loss
         new_plant_efficency = (self.plant.plant_efficiency *
                                self.plant.boiler_efficiency / new_boiler_efficiency
@@ -218,7 +233,8 @@ class CofiringProject(Investment):
                                biomass_quantity,
                                transport_tariff,
                                biomass_density,
-                               tortuosity_factor):
+                               tortuosity_factor
+                               ):
         return (v_after_invest * transport_tariff *
                 self.biomass_transport(biomass_quantity, biomass_density, tortuosity_factor)
                 )

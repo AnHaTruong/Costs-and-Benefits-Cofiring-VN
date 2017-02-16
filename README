@@ -2,7 +2,8 @@
 
 Requisite :
 Python 3
-Pint (>= 0.7 , we use hectare unit)
+pandas
+natu
 sudo pip3 install xlrd
 
 natu: 
