@@ -27,8 +27,8 @@ col6 = bm_unit_cost(NinhBinh)
 col5.display_unit = 'USD/t'
 col6.display_unit = 'USD/t'
 
-col7 = MongDuong1.coal_price
-col8 = NinhBinh.coal_price
+col7 = MongDuong1.coal_supply.price
+col8 = NinhBinh.coal_supply.price
 col7.display_unit = 'USD/t'
 col8.display_unit = 'USD/t'
 

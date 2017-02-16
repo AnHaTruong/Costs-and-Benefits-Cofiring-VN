@@ -45,7 +45,7 @@ def transport_time(plant):
 def om_work(plant):
     """Total number of hour needed for operation and maintenance for co-firing
     """
-    return plant.power_generation * biomass_ratio * OM_hour_MWh / time_step
+    return plant.power_generation * biomass_ratio * OM_hour_MWh
 
 
 def cofiring_work(plant):

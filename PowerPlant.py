@@ -7,91 +7,40 @@
 # Creative Commons Attribution-ShareAlike 4.0 International
 #
 #
-from units import time_step, time_horizon, v_zeros, v_ones, v_after_invest, USD, as_kUSD
+from units import time_step, v_ones, v_after_invest, as_kUSD
 from natu.math import sqrt, pi
 import natu.numpy as np
-import pandas as pd
+from Investment import Investment
 
 
-class Investment:
-    """An investment of capital paid in period 0,
-        There are income, operating expenses and taxes in subsequent periods
-        Taxes account for linear amortization of the capital starting period 1
-        No salvage value
-       Virtual class,
-        descendent class should redefine  income()  and  operating_expense()
-        These functions should return a vector of numbers like v_zeros
-    """
-    def __init__(self, capital=0*USD):
-        self.capital = capital
-        self.capital.display_unit = 'kUSD'
-        self.investment = as_kUSD(v_zeros.copy()*USD)
-        self.investment[0] = capital
+class EmissionsControls:
+    def __init__(self,
+                 esp_efficiency,
+                 desulfur_efficiency,
+                 ef_coal_combust,
+                 ef_coal_transport,
+                 ef_so2_coal,
+                 ef_pm10_coal,
+                 ef_nox_coal
+                 ):
+        self.ef_coal_combust = ef_coal_combust
+        self.ef_coal_transport = ef_coal_transport
+        self.esp_efficiency = esp_efficiency
+        self.desulfur_efficiency = desulfur_efficiency
+        self.ef_so2_coal = ef_so2_coal
+        self.ef_pm10_coal = ef_pm10_coal
+        self.ef_nox_coal = ef_nox_coal
 
-    def income(self):
-        return as_kUSD(v_zeros * USD)
 
-    def operating_expenses(self):
-        return as_kUSD(v_zeros * USD)
-
-    def amortization(self, depreciation_period):
-        assert type(depreciation_period) is int, "Depreciation period not an integer"
-        assert 0 < depreciation_period < time_horizon - 1, "Depreciation not in {1..timehorizon-1}"
-        v_cost = v_zeros.copy()*USD
-        for year in range(1, depreciation_period + 1):
-            v_cost[year] = self.capital / float(depreciation_period)
-        return as_kUSD(v_cost)
-
-    def earning_before_tax(self, depreciation_period):
-        return as_kUSD(self.income() -
-                       self.operating_expenses() -
-                       self.amortization(depreciation_period)
-                       )
-
-    def income_tax(self, tax_rate, depreciation_period):
-        assert 0 <= tax_rate <= 1, "Tax rate not in [0, 1["
-        # Allows tax credits in lossy periods
-        return as_kUSD(tax_rate * self.earning_before_tax(depreciation_period))
-
-    def net_cash_flow(self, tax_rate, depreciation_period):
-        return as_kUSD(self.income() -
-                       self.investment -
-                       self.operating_expenses() -
-                       self.income_tax(tax_rate, depreciation_period)
-                       )
-
-    def net_present_value(self, discount_rate, tax_rate, depreciation_period):
-        assert 0 <= discount_rate < 1, "Discount rate not in [0, 1["
-        return np.npv(discount_rate, self.net_cash_flow(tax_rate, depreciation_period))
-
-    def table(self, tax_rate, depreciation_period):
-        t = np.array([self.investment,
-                      self.income(),
-                      self.operating_expenses(),
-                      self.amortization(depreciation_period),
-                      self.earning_before_tax(depreciation_period),
-                      self.income_tax(tax_rate, depreciation_period),
-                      self.net_cash_flow(tax_rate, depreciation_period)
-                      ]
-                     )
-        return t
-
-    def pretty_table(self, tax_rate, depreciation_period):
-        t = self.table(tax_rate, depreciation_period)
-        t = np.transpose(t)
-        labels = ["Investment",
-                  "Income",
-                  "Op. Expense",
-                  "Amortization",
-                  "Earn. B. Tax",
-                  "Income tax",
-                  "Net cashflow"
-                  ]
-        t = pd.DataFrame(t, columns=labels)
-        pd.set_option('display.max_columns', 10)
-        pd.set_option('display.width', 150)
-        print(t)
-        return t
+class CoalSupply:
+    def __init__(self,
+               heat_value,
+               price,
+               transport_distance
+               ):
+        self.heat_value = heat_value
+        self.price = price
+        self.transport_distance = transport_distance
 
 
 class PowerPlant(Investment):
@@ -99,48 +48,32 @@ class PowerPlant(Investment):
     """
     def __init__(self,
                  capacity,
-                 capacity_factor,
+                 capacity_factor,    # Must be net of self consumption
                  commissioning,
                  boiler_technology,
-                 coal_heat_value,
                  plant_efficiency,
                  boiler_efficiency,
                  electricity_tariff,
-                 coal_price,
                  fix_om_coal,
                  variable_om_coal,
-                 ef_coal_combust,
-                 ef_coal_transport,
-                 coal_transport_distance,
-                 esp_efficiency,
-                 desulfur_efficiency,
-                 ef_so2_coal,
-                 ef_pm10_coal,
-                 ef_nox_coal
+                 coal_supply,
+                 emissions_controls
                  ):
         self.capacity = capacity
         self.capacity_factor = capacity_factor
         self.commissioning = commissioning
         self.boiler_technology = boiler_technology
-        self.power_generation = capacity * capacity_factor * time_step
-        self.coal_heat_value = coal_heat_value
+        self.power_generation = capacity * capacity_factor
         self.plant_efficiency = plant_efficiency
         self.boiler_efficiency = boiler_efficiency
-        self.base_coal_consumption = capacity * capacity_factor / plant_efficiency / coal_heat_value
+        self.coal_consumption = self.power_generation / plant_efficiency / coal_supply.heat_value
         self.electricity_tariff = electricity_tariff
-        self.coal_price = coal_price
         self.fix_om_coal = fix_om_coal
         self.variable_om_coal = variable_om_coal
-        self.elec_sale = self.power_generation  # Capacity factor was net of self consumption
+        self.elec_sale = self.power_generation * time_step
         self.elec_sale.display_unit = 'GWh'
-        self.ef_coal_combust = ef_coal_combust
-        self.ef_coal_transport = ef_coal_transport
-        self.coal_transport_distance = coal_transport_distance
-        self.esp_efficiency = esp_efficiency  # FIXME: keep depollution related code separate
-        self.desulfur_efficiency = desulfur_efficiency
-        self.ef_so2_coal = ef_so2_coal
-        self.ef_pm10_coal = ef_pm10_coal
-        self.ef_nox_coal = ef_nox_coal
+        self.coal_supply = coal_supply
+        self.emissions_controls = emissions_controls
         super().__init__()
 
     def income(self):
@@ -150,11 +83,11 @@ class PowerPlant(Investment):
         return as_kUSD(self.fuel_cost() + self.operation_maintenance_cost())
 
     def fuel_cost(self):
-        return v_ones * self.coal_price * self.base_coal_consumption * time_step
+        return v_ones * self.coal_supply.price * self.coal_consumption * time_step
 
     def operation_maintenance_cost(self):
         fixed_om_coal = v_ones * self.fix_om_coal * self.capacity * time_step
-        variable_om_coal = v_ones * self.variable_om_coal * self.power_generation
+        variable_om_coal = v_ones * self.variable_om_coal * self.power_generation * time_step
         return fixed_om_coal + variable_om_coal
 
     def discounted_total_power_gen(self, discount_rate):
@@ -209,11 +142,11 @@ class CofiringProject(Investment):
         new_plant_efficency = (self.plant.plant_efficiency *
                                self.plant.boiler_efficiency / new_boiler_efficiency
                                )
-        gross_heat_input = self.plant.power_generation / new_plant_efficency / time_step
+        gross_heat_input = self.plant.power_generation / new_plant_efficency
         return v_after_invest * gross_heat_input * self.biomass_ratio
 
     def coal_saved(self):
-        return self.biomass_heat() / self.plant.coal_heat_value
+        return self.biomass_heat() / self.plant.coal_supply.heat_value
 
     def coal_saved_cost(self):
         return self.plant.coal_price * self.coal_saved() * time_step

@@ -19,7 +19,7 @@ def coal_saved(plant):
     """ amount of coal saved with biomass co-firing
 
     """
-    return gross_heat_input(plant) * biomass_ratio / plant.coal_heat_value
+    return gross_heat_input(plant) * biomass_ratio / plant.coal_supply.heat_value
 
 
 def coal_import_saving(plant):
