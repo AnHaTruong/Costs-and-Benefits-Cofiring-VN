@@ -10,7 +10,7 @@
 
 from units import USD, VND, time_step
 from natu.units import MJ, kg, t, d, hr, km, MW, ha, g, kW, y, kWh
-from PowerPlant import PowerPlant, CoalSupply
+from PowerPlant import PowerPlant, Fuel
 
 
 """Input parameters of the model"""
@@ -53,15 +53,15 @@ health_damage_so2 = 3767 * USD / t
 health_damage_pm10 = 5883 * USD / t
 health_damage_nox = 286 * USD / t
 
-MDcoal = CoalSupply(heat_value=19.43468 * MJ / kg,
-                    price=1131400 * VND / t,
-                    transport_distance=0 * km,
-                    ef_combust=0.0966 * kg / MJ,
-                    ef_transport=0 * kg / t / km,
-                    ef_so2=11.5 * kg / t,
-                    ef_pm10=43.8 * kg / t,
-                    ef_nox=18 * kg / t
-                    )
+MDcoal = Fuel(heat_value=19.43468 * MJ / kg,
+              price=1131400 * VND / t,
+              transport_distance=0 * km,
+              ef_combust=0.0966 * kg / MJ,
+              ef_transport=0 * kg / t / km,
+              ef_so2=11.5 * kg / t,
+              ef_pm10=43.8 * kg / t,
+              ef_nox=18 * kg / t
+              )
 
 MongDuong1 = PowerPlant(capacity=1080 * MW,
                         capacity_factor=0.60,
@@ -83,15 +83,15 @@ MongDuong1.variable_om_cost = 0.006 * USD / (kW*hr)
 MongDuong1.ef_biomass_combust = 0.0858 * kg / MJ
 MongDuong1.ef_biomass_transport = 0.110 * kg / t / km  # biomass transported by truck
 
-NBcoal = CoalSupply(heat_value=21.5476 * MJ / kg,
-                    price=1825730 * VND / t,
-                    transport_distance=200 * km,
-                    ef_combust=0.0966 * kg / MJ,
-                    ef_transport=0.071 * kg / t / km,  # coal transported by barge
-                    ef_so2=11.5 * kg / t,
-                    ef_pm10=26.1 * kg / t,
-                    ef_nox=18 * kg / t
-                    )
+NBcoal = Fuel(heat_value=21.5476 * MJ / kg,
+              price=1825730 * VND / t,
+              transport_distance=200 * km,
+              ef_combust=0.0966 * kg / MJ,
+              ef_transport=0.071 * kg / t / km,  # coal transported by barge
+              ef_so2=11.5 * kg / t,
+              ef_pm10=26.1 * kg / t,
+              ef_nox=18 * kg / t
+              )
 
 NinhBinh = PowerPlant(capacity=100 * MW,
                       capacity_factor=0.64,

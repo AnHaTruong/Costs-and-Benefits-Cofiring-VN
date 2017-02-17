@@ -15,7 +15,7 @@
 
 
 from parameters import biomass_ratio, biomass_heat_value
-from units import time_step
+from units import time_step, v_after_invest
 
 
 def biomass_ratio_mass(biomass_ratio, heat_value_coal, heat_value_bm):
@@ -66,14 +66,13 @@ def plant_efficency_bm(plant):
 
 def gross_heat_input(plant):
     """total amount of heat needed to generate the same amount of electricity as in base case
-
+    Not a vector
     """
-    return plant.power_generation / plant_efficency_bm(plant)
+    return plant.power_generation[0] / plant_efficency_bm(plant)
 
 
 def biomass_required(plant):
-    """Amount of biomass needed per year for co-firing
-
+    """Mass of biomass for co-firing
     """
     return gross_heat_input(plant) * biomass_ratio / biomass_heat_value
 

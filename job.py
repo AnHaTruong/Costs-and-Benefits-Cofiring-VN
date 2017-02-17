@@ -9,13 +9,11 @@
 #
 """ Job creation assessment of a co-firing project"""
 
-from units import time_step
 from parameters import winder_capacity, truck_velocity, work_hour_day
 from parameters import truck_load, OM_hour_MWh, biomass_ratio, wage_bm_transport
 from parameters import wage_bm_collect, wage_operation_maintenance
 from biomassrequired import biomass_required
 from biomasscost import collection_radius
-from units import print_with_unit
 
 
 def bm_collection_work(plant):
@@ -45,7 +43,7 @@ def transport_time(plant):
 def om_work(plant):
     """Total number of hour needed for operation and maintenance for co-firing
     """
-    return plant.power_generation * biomass_ratio * OM_hour_MWh
+    return plant.power_generation[0] * biomass_ratio * OM_hour_MWh
 
 
 def cofiring_work(plant):

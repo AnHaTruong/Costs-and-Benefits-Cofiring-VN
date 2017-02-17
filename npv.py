@@ -28,7 +28,7 @@ def discount(func, plant):
 
 # When finally removing next line, also merge line in PowerPlant constructor
 def sales(plant, year):
-    return plant.elec_sale
+    return plant.elec_sale[0]
 
 
 def cash_inflow(plant, year):
@@ -90,13 +90,13 @@ def operation_maintenance_cost(plant, year):
     """
     if year == 0:
         fixed_om_coal = plant.fix_om_coal * plant.capacity * time_step
-        variable_om_coal = plant.variable_om_coal * plant.elec_sale
+        variable_om_coal = plant.variable_om_coal * plant.elec_sale[0]
         return fixed_om_coal + variable_om_coal
     else:
         fixed_om_bm = plant.fix_om_cost * plant.capacity * biomass_ratio * time_step
-        variable_om_bm = plant.variable_om_cost * plant.elec_sale * biomass_ratio
+        variable_om_bm = plant.variable_om_cost * plant.elec_sale[0] * biomass_ratio
         fixed_om_coal = plant.fix_om_coal * plant.capacity * (1 - biomass_ratio) * time_step
-        variable_om_coal = plant.variable_om_coal * plant.elec_sale * (1 - biomass_ratio)
+        variable_om_coal = plant.variable_om_coal * plant.elec_sale[0] * (1 - biomass_ratio)
         return fixed_om_bm + variable_om_bm + fixed_om_coal + variable_om_coal
 
 
