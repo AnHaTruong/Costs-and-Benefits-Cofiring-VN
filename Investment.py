@@ -13,13 +13,14 @@ import pandas as pd
 
 
 class Investment:
-    """An investment of capital paid in period 0,
+    """An investment of capital made in period 0,
         There are income, operating expenses and taxes in subsequent periods
         Taxes account for linear amortization of the capital starting period 1
         No salvage value
        Virtual class,
-        descendent class should redefine  income()  and  operating_expense()
-        These functions should return a vector of numbers like v_zeros
+        descendent class should redefine  income()  and  operating_expense() to
+           return a vector of quantities of size time_horizon+1
+           which has the display unit set to kUSD
     """
     def __init__(self, capital=0*USD):
         self.capital = capital
@@ -52,11 +53,15 @@ class Investment:
         # Allows tax credits in lossy periods
         return as_kUSD(tax_rate * self.earning_before_tax(depreciation_period))
 
+    def cash_out(self, tax_rate, depreciation_period):
+        return as_kUSD(self.investment +
+                       self.operating_expenses() +
+                       self.income_tax(tax_rate, depreciation_period)
+                       )
+
     def net_cash_flow(self, tax_rate, depreciation_period):
         return as_kUSD(self.income() -
-                       self.investment -
-                       self.operating_expenses() -
-                       self.income_tax(tax_rate, depreciation_period)
+                       self.cash_out(tax_rate, depreciation_period)
                        )
 
     def net_present_value(self, discount_rate, tax_rate, depreciation_period):
@@ -69,13 +74,14 @@ class Investment:
     def payback_period(self):
         pass
 
-    def table(self, tax_rate, depreciation_period):
-        t = np.array([self.investment,
-                      self.income(),
-                      self.operating_expenses(),
+    def table(self, tax_rate=0.25, depreciation_period=10):
+        t = np.array([self.income(),
+                      self.investment,
                       self.amortization(depreciation_period),
+                      self.operating_expenses(),
                       self.earning_before_tax(depreciation_period),
                       self.income_tax(tax_rate, depreciation_period),
+                      self.cash_out(tax_rate, depreciation_period),
                       self.net_cash_flow(tax_rate, depreciation_period)
                       ]
                      )
@@ -84,12 +90,13 @@ class Investment:
     def pretty_table(self, tax_rate, depreciation_period):
         t = self.table(tax_rate, depreciation_period)
         t = np.transpose(t)
-        labels = ["Investment",
-                  "Income",
-                  "Op. Expense",
+        labels = ["Income",
+                  "Investment",
                   "Amortization",
+                  "Op. Expense",
                   "Earn. B. Tax",
                   "Income tax",
+                  "Cash out",
                   "Net cashflow"
                   ]
         t = pd.DataFrame(t, columns=labels)
