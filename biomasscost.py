@@ -64,8 +64,8 @@ def collection_area(plant):
     straw density of 2nd semi annulus is the average of straw density in adjacent provinces
     """
     if plant == MongDuong1:
-        R1 = 50*km # Large radius of semi annulus 1
-        r1 = 0*km  # Small radius of semi annulus 1
+        R1 = 50*km  # Large radius of semi annulus 1
+        r1 = 0*km   # Small radius of semi annulus 1
         area1 = area_semi_annulus(R1, r1)
         Q = biomass_required(MongDuong1) - area1 * MongDuong1_straw_density1
         area2 = area_required(Q, MongDuong1_straw_density2)
