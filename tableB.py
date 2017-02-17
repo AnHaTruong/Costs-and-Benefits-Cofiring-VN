@@ -22,7 +22,7 @@ def print_income(plant):
     col1 = bm_sell_revenue(plant)
     col2 = farmer_income(plant)
     col3 = total_income_benefit(plant)
-    
+
     col1.display_unit = 'USD/ha/y'
     col2.display_unit = 'USD/ha/y'
     col3.display_unit = 'USD/y'
@@ -33,7 +33,7 @@ def print_income(plant):
     print (row.format('farmer income per ha', col2))
 
     print (row.format('total benefit', col3))
-    
+
 print('total benefit from farmers extra income Mong Duong 1')
 print('')
 print_income(MongDuong1)

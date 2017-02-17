@@ -28,7 +28,6 @@ row1 = '{:30}' + '{:8.4f}'
 
 
 def print_lcoe(plant):
-
     col1 = print_with_unit(tot_capital_cost(plant, 0), 'kUSD')
     col2 = print_with_unit(discount(fuel_cost_coal, plant), 'kUSD')
     col3 = print_with_unit(discount(fuel_cost_biomass, plant), 'kUSD')
