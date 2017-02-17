@@ -17,8 +17,8 @@ print('Table 1. Technical parameters')
 head = '{:24}'+' {:>20}'*2
 row = '{:24}'+' {:>20}'*2
 
-col1 = MongDuong1.base_coal_consumption
-col2 = NinhBinh.base_coal_consumption
+col1 = MongDuong1.coal_consumption
+col2 = NinhBinh.coal_consumption
 col1.display_unit = 't/y'
 col2.display_unit = 't/y'
 
@@ -30,6 +30,7 @@ print(row.format('Boiler technology', MongDuong1.boiler_technology, NinhBinh.boi
 print(row.format('Installed capacity', MongDuong1.capacity, NinhBinh.capacity))
 print(row.format('Capacity factor', MongDuong1.capacity_factor, NinhBinh.capacity_factor))
 print(row.format('Coal consumption',  col1, col2))
-print(row.format('Heat value of coal', MongDuong1.coal_heat_value, NinhBinh.coal_heat_value))
+print(row.format('Heat value of coal', MongDuong1.coal.heat_value, NinhBinh.coal.heat_value))
 print(row.format('Plant efficiency', MongDuong1.plant_efficiency, NinhBinh.plant_efficiency))
-print(row.format('Boiler efficiency', MongDuong1.base_boiler_efficiency, NinhBinh.base_boiler_efficiency))
+print(row.format('Boiler efficiency', MongDuong1.boiler_efficiency, NinhBinh.boiler_efficiency))
+

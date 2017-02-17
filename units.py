@@ -8,25 +8,40 @@
 #
 #
 
-from natu.units import km, hr, y, kW
-from natu.units import MJ, kg, t, d, hr, MW, ha, g
+
+from natu.units import km, hr, y
+import natu.numpy as np
 
 # Semantic overloading: we reuse the "amount" dimension to mean "value"
 from natu.core import ScalarUnit
 from natu import units
+
 VND = ScalarUnit(1, 'N', 'mol', prefixable=True)
 units.VND = VND
 
 USD = ScalarUnit(22270, 'N', 'mol', prefixable=True)
 units.USD = USD
 
+
+h_per_yr = 8760 * hr
 time_step = 1 * y
 time_horizon = 20
-h_per_yr = 8760 * hr
+
+v_zeros = np.zeros(time_horizon + 1, dtype=np.float64)
+v_ones = np.ones(time_horizon + 1, dtype=np.float64)
+v_after_invest = np.ones(time_horizon + 1, dtype=np.float64)
+v_after_invest[0] = 0
 
 zero_USD = 0 * USD
 zero_VND = 0 * VND
 zero_km = 0 * km
+
+
+def as_kUSD(v):
+    """Sets the vector to be displayed in kUSD"""
+    for i in range(time_horizon+1):
+        v[i].display_unit = 'kUSD'
+    return v
 
 
 def print_with_unit(func, unit):

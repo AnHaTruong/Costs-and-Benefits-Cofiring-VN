@@ -15,7 +15,7 @@
 
 
 from parameters import biomass_ratio, biomass_heat_value
-from units import time_step
+from units import time_step, v_after_invest
 
 
 def biomass_ratio_mass(biomass_ratio, heat_value_coal, heat_value_bm):
@@ -41,8 +41,8 @@ def boiler_efficiency_bm(plant):
     """Return the boiler efficiency when co-firing
 
     """
-    ratio = biomass_ratio_mass(biomass_ratio, plant.coal_heat_value, biomass_heat_value)
-    return plant.base_boiler_efficiency - boiler_efficiency_loss(ratio)
+    ratio = biomass_ratio_mass(biomass_ratio, plant.coal.heat_value, biomass_heat_value)
+    return plant.boiler_efficiency - boiler_efficiency_loss(ratio)
 
 
 #def boiler_efficiency_bm(boiler_efficiency, boiler_efficiency_loss):
@@ -53,27 +53,26 @@ def boiler_efficiency_bm(plant):
 #    >>> boiler_efficiency_bm(1, 0)
 #    1
 #    """
-#    assert 0 <= boiler_efficiency_loss < base_boiler_efficiency < 1
-#    return base_boiler_efficiency - boiler_efficiency_loss
+#    assert 0 <= boiler_efficiency_loss < boiler_efficiency < 1
+#    return boiler_efficiency - boiler_efficiency_loss
 
 
 def plant_efficency_bm(plant):
     """ Plant efficiency with biomass co-firing
 
     """
-    return (plant.plant_efficiency / plant.base_boiler_efficiency) * boiler_efficiency_bm(plant)
+    return (plant.plant_efficiency / plant.boiler_efficiency) * boiler_efficiency_bm(plant)
 
 
 def gross_heat_input(plant):
     """total amount of heat needed to generate the same amount of electricity as in base case
-
+    Not a vector
     """
-    return plant.power_generation / plant_efficency_bm(plant) / time_step
+    return plant.power_generation[0] / plant_efficency_bm(plant)
 
 
 def biomass_required(plant):
-    """Amount of biomass needed per year for co-firing
-
+    """Mass of biomass for co-firing
     """
     return gross_heat_input(plant) * biomass_ratio / biomass_heat_value
 

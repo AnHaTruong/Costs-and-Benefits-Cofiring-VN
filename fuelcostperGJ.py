@@ -12,7 +12,7 @@ from biomasscost import bm_unit_cost
 from units import print_with_unit
 
 def coal_cost_perGJ(plant):
-    return plant.coal_price / plant.coal_heat_value
+    return plant.coal_price / plant.coal.heat_value
 
 
 def bm_cost_perGJ(plant):

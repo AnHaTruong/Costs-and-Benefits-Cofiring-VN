@@ -43,17 +43,11 @@ def print_emission(plant):
     col7.display_unit = 't/y'
 
     print(row.format('Emission from combustion baseline', col4))
-
     print(row.format('Emission from transport baseline', col5))
-
     print(row.format('Emission from combustion co-firing', col1))
-
     print(row.format('Emission from transport co-firing', col2))
-
     print(row.format('Emission baseline case', col6))
-
     print(row.format('Emission co-firing case', col3))
-
     print(row.format('Emission reduction', col7))
 
 print('Greenhouse gas emission reduction Mong Duong 1')
@@ -62,4 +56,3 @@ print('')
 
 print('Greenhouse gas emission reduction NinhBinh')
 print_emission(NinhBinh)
-

@@ -41,8 +41,9 @@ print(head.format('year',
                   'EBT',
                   'income_tax',
                   'OM_cost',
-                  'cash_flow')
-     )
+                  'cash_flow'
+                  )
+      )
 
 
 def print_npv(plant):

@@ -32,7 +32,7 @@ def so2_emission_plant_base(plant):
     """SO2 emission from the plant without co-firing.
 
     """
-    return plant.base_coal_consumption * plant.ef_so2_coal * (1 - plant.desulfur_efficiency)
+    return plant.coal_consumption * plant.coal.ef_so2 * (1 - plant.desulfur_efficiency)
 
 
 def so2_emission_base(plant):
@@ -46,7 +46,7 @@ def pm10_emission_plant_base(plant):
     """ PM10 emission from the plant without co-firing.
 
     """
-    return plant.base_coal_consumption * plant.ef_pm10_coal * (1 - plant.esp_efficiency)
+    return plant.coal_consumption * plant.coal.ef_pm10 * (1 - plant.esp_efficiency)
 
 
 def pm10_emission_base(plant):
@@ -60,7 +60,7 @@ def nox_emission_plant_base(plant):
     """ NOx emission from the plant without co-firing.
 
     """
-    return plant.base_coal_consumption * plant.ef_nox_coal
+    return plant.coal_consumption * plant.coal.ef_nox
 
 
 def nox_emission_base(plant):
@@ -85,7 +85,7 @@ def so2_emission_plant_cofire(plant):
 
     """
     so2_emit_bm = biomass_required(plant) * ef_so2_biomass * (1 - plant.desulfur_efficiency)
-    so2_emit_coal = (plant.base_coal_consumption - coal_saved(plant)) * plant.ef_so2_coal * (1 - plant.desulfur_efficiency)
+    so2_emit_coal = (plant.coal_consumption - coal_saved(plant)) * plant.coal.ef_so2 * (1 - plant.desulfur_efficiency)
     return so2_emit_bm + so2_emit_coal
 
 
@@ -107,7 +107,7 @@ def pm10_emission_plant_cofire(plant):
 
     """
     pm10_emit_bm = biomass_required(plant) * ef_pm10_biomass * (1 - plant.esp_efficiency)
-    pm10_emit_coal = (plant.base_coal_consumption - coal_saved(plant)) * plant.ef_pm10_coal * (1 - plant.esp_efficiency)
+    pm10_emit_coal = (plant.coal_consumption - coal_saved(plant)) * plant.coal.ef_pm10 * (1 - plant.esp_efficiency)
     return  pm10_emit_bm + pm10_emit_coal
 
 
@@ -128,7 +128,7 @@ def nox_emission_plant_cofire(plant):
 
     """
     nox_emit_bm = biomass_required(plant) * ef_nox_biomass
-    nox_emit_coal = (plant.base_coal_consumption - coal_saved(plant)) * plant.ef_nox_coal
+    nox_emit_coal = (plant.coal_consumption - coal_saved(plant)) * plant.coal.ef_nox
     return nox_emit_bm + nox_emit_coal
 
 def nox_emission_cofire(plant):

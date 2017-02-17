@@ -9,7 +9,7 @@
 
 
 import pandas as pd
-from units import km, ha, t, y
+from natu.units import km, ha, t, y
 from parameters import residue_to_product_ratio_straw, straw_collection_fraction
 from parameters import straw_selling_proportion
 from natu.numpy import mean

@@ -13,14 +13,13 @@
 
 from parameters import biomass_ratio, coal_import_price
 from biomassrequired import gross_heat_input
-from units import print_with_unit
 
 
 def coal_saved(plant):
     """ amount of coal saved with biomass co-firing
 
     """
-    return gross_heat_input(plant) * biomass_ratio / plant.coal_heat_value
+    return gross_heat_input(plant) * biomass_ratio / plant.coal.heat_value
 
 
 def coal_import_saving(plant):
