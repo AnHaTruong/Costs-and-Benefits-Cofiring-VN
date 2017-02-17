@@ -2,7 +2,7 @@
 #
 #
 #
-# (c) Minh Ha-Duong, An Ha Truong   2016
+# (c) Minh Ha-Duong, An Ha Truong   2016-2017
 #     minh.haduong@gmail.com
 #     Creative Commons Attribution-ShareAlike 4.0 International
 #
@@ -33,3 +33,4 @@ print(row.format('Coal consumption',  col1, col2))
 print(row.format('Heat value of coal', MongDuong1.coal_heat_value, NinhBinh.coal_heat_value))
 print(row.format('Plant efficiency', MongDuong1.plant_efficiency, NinhBinh.plant_efficiency))
 print(row.format('Boiler efficiency', MongDuong1.boiler_efficiency, NinhBinh.boiler_efficiency))
+
