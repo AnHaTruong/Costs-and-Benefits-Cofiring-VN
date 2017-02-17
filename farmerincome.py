@@ -64,4 +64,3 @@ def total_income_benefit(plant):
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
-    
