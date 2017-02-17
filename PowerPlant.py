@@ -56,12 +56,13 @@ class PowerPlant(Investment):
         self.capacity_factor = capacity_factor
         self.commissioning = commissioning
         self.boiler_technology = boiler_technology
-        self.power_generation = capacity * capacity_factor * time_step
-        self.elec_sale = self.power_generation  # Capacity factor was net of self consumption
-        self.coal_heat_value = coal_heat_value
         self.plant_efficiency = plant_efficiency
-        self.base_boiler_efficiency = boiler_efficiency
-        self.base_coal_consumption = capacity * capacity_factor / plant_efficiency / coal_heat_value
+        self.boiler_efficiency = boiler_efficiency
+        self.electricity_tariff = electricity_tariff
+        self.fix_om_coal = fix_om_coal
+        self.variable_om_coal = variable_om_coal
+        self.esp_efficiency = esp_efficiency
+        self.desulfur_efficiency = desulfur_efficiency
 
 
 #        self.power_generation = v_ones.copy() * capacity * capacity_factor
