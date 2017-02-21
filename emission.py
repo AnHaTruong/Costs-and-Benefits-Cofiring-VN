@@ -57,6 +57,7 @@ def emission_biomass_combust(plant):
 
 
 # FIXME: use the level of transport activity (t km)
+# FIX ME: biomass transportation activity should be zero when biomass ratio = 0
 def emission_biomass_transport(plant):
     """return emission from transportation of straw, which is transportation
     activity (t.km) multiplied by emission factor of transportation
