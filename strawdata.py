@@ -9,11 +9,14 @@
 
 
 import pandas as pd
-from natu.units import km, ha, t, y
-from parameters import residue_to_product_ratio_straw, straw_collection_fraction
-from parameters import straw_selling_proportion
+from natu.units import ha, t, y
+# from parameters import residue_to_product_ratio_straw, straw_collection_fraction
+# from parameters import straw_selling_proportion
 from natu.numpy import mean
 
+straw_collection_fraction = 0.5  # Refer to (Leinonen and Nguyen 2013)
+straw_selling_proportion = 0.79  # Refer to (Leinonen and Nguyen 2013)
+residue_to_product_ratio_straw = 1.0
 
 """Read rice production data from excel file"""
 data = pd.read_excel('Data/Rice_production_2014_GSO.xlsx',)
