@@ -10,7 +10,7 @@
 """ Print table for the net present value calculation in  npv.py
 """
 
-from parameters import MongDuong1, NinhBinh, discount_rate
+from parameters import MongDuong1, NinhBinh, discount_rate, depreciation_period
 from units import time_horizon
 # DEBUG
 #time_horizon = 1
@@ -26,36 +26,41 @@ print('')
 
 print('Time Horizon', time_horizon, 'years')
 print('Discount Rate', discount_rate)
+print('Depreciation', depreciation_period, 'years')
 
 print('')
 
 
-head = '{:4}'+' {:>11}'*9
-row = '{:4d}'+' {:6.0f}'*9
-print(head.format('year',
-                  'elec_sale',
-                  'cash_in',
-                  'tot_cap',
-                  'fuel_cost',
-                  'amortization',
-                  'EBT',
-                  'income_tax',
-                  'OM_cost',
-                  'cash_flow'
-                  )
-      )
-
-
-def print_npv(plant):
+def print_tableA(plant):
     """Print out the cashflows from NPV calculation in npv.py
     """
+    print(plant.name)
+    result = net_present_value(plant)
+    result.display_unit = 'kUSD'
+    print('NPV = ', result)
+
+    head = '{:4}{:>12}{:>12}{:>12}{:>12}{:>12}{:>12}{:>12}{:>12}{:>12}'
+    row = '{:4d}'+' {:6.0f}'*9
+
+    print(head.format('year',
+                      'cash_in',
+                      'tot_cap',
+                      'amortizatin',
+                      'fuel_cost',
+                      'EBT',
+                      'income_tax',
+                      'OM_cost',
+                      'cash_flow',
+                      'elec_sale'
+                      )
+          )
 
     for year in range(time_horizon+1):
         col1 = sales(plant, year)
         col2 = cash_inflow(plant, year)
         col3 = tot_capital_cost(plant, year)
-        col4 = fuel_cost(plant, year)
-        col5 = amortization(plant, year)
+        col4 = amortization(plant, year)
+        col5 = fuel_cost(plant, year)
         col6 = earning_before_tax(plant, year)
         col7 = income_tax(plant, year)
         col8 = operation_maintenance_cost(plant, year)
@@ -72,7 +77,6 @@ def print_npv(plant):
         col9.display_unit = 'kUSD'
 
         line = row.format(year,
-                          col1,
                           col2,
                           col3,
                           col4,
@@ -81,22 +85,13 @@ def print_npv(plant):
                           col7,
                           col8,
                           col9,
+                          col1
                           )
         print(line)
 
 
-print('Mong Duong 1')
-print_npv(MongDuong1)
-print('')
-result = net_present_value(MongDuong1)
-result.display_unit = 'kUSD'
-print('NPV Mong Duong 1 = ', result)
+print_tableA(MongDuong1)
 
 print('')
 
-print('Ninh Binh')
-print_npv(NinhBinh)
-print('')
-result = net_present_value(NinhBinh)
-result.display_unit = 'kUSD'
-print('NPV Ninh Binh  = ', result)
+print_tableA(NinhBinh)
