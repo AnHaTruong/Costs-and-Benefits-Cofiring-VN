@@ -9,7 +9,7 @@
 #
 """print the LCOE calculation results in file lcoe.py"""
 
-from parameters import MongDuong1, NinhBinh
+from parameters import MongDuong1, MongDuong1Cofire, NinhBinh, NinhBinhCofire
 
 from npv import (
             fuel_cost_coal, fuel_cost_biomass, operation_maintenance_cost,
@@ -49,14 +49,18 @@ def print_lcoe(plant):
     print(row.format('Electricity produced', col7))
     print(row1.format('LCOE', col8))
 
-
+print('---- OLD -----')
 print('Levelized cost of electricity Mong Duong 1')
 print('')
 print_lcoe(MongDuong1)
+print('---- NEW -----')
+MongDuong1Cofire.tableC(discount_rate, tax_rate, depreciation_period)
 
 print('')
 print('')
+print('---- OLD -----')
 print('Levelized cost of electricity Ninh Binh')
 print('')
-
 print_lcoe(NinhBinh)
+print('---- NEW -----')
+NinhBinhCofire.tableC(discount_rate, tax_rate, depreciation_period)
