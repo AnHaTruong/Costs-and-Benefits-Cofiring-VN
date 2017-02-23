@@ -65,7 +65,8 @@ MD_coal = Fuel(heat_value=19.43468 * MJ / kg,
                ef_nox=18 * kg / t
                )
 
-MongDuong1 = PowerPlant(capacity=1080 * MW,
+MongDuong1 = PowerPlant(name="Mong Duong 1",
+                        capacity=1080 * MW,
                         capacity_factor=0.60,
                         commissioning=2015,
                         boiler_technology='CFB',
@@ -129,7 +130,8 @@ NB_coal = Fuel(heat_value=21.5476 * MJ / kg,
                )
 
 
-NinhBinh = PowerPlant(capacity=100 * MW,
+NinhBinh = PowerPlant(name="Ninh Binh",
+                      capacity=100 * MW,
                       capacity_factor=0.64,
                       commissioning=1974,
                       boiler_technology='PC',

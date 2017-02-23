@@ -10,7 +10,6 @@
 from units import time_horizon, time_step, v_ones, v_after_invest, as_kUSD, USD
 import natu.numpy as np
 from Investment import Investment
-from SupplyChain import SupplyChain
 
 
 class Fuel:
@@ -38,6 +37,7 @@ class PowerPlant(Investment):
     """ A coal power plant, without co-firing
     """
     def __init__(self,
+                 name,
                  capacity,
                  capacity_factor,    # Must be net of self consumption
                  commissioning,
@@ -52,6 +52,7 @@ class PowerPlant(Investment):
                  coal,                # type:  Fuel
                  capital=0*USD
                  ):
+        self.name = name
         self.capacity = capacity
         self.capacity_factor = capacity_factor
         self.commissioning = commissioning
@@ -97,7 +98,9 @@ class PowerPlant(Investment):
     def lcoe(self, discount_rate, tax_rate, depreciation_period):
         total_lifetime_power_production = np.npv(discount_rate, self.elec_sale)
         total_life_cycle_cost = np.npv(discount_rate, self.cash_out(tax_rate, depreciation_period))
-        return total_life_cycle_cost / total_lifetime_power_production * time_step
+        result = total_life_cycle_cost / total_lifetime_power_production  # * time_step
+        result.display_unit = 'USD/kWh'  # Fixme: once TableC is no regression, use /MWh for integer
+        return result
 
 
 class CofiringPlant(PowerPlant):
@@ -118,6 +121,7 @@ class CofiringPlant(PowerPlant):
                                      plant.boiler_efficiency / cofiring_boiler_efficiency
                                      )
         super().__init__(
+                 name=plant.name + " Cofire",
                  capacity=plant.capacity,
                  capacity_factor=plant.capacity_factor,
                  commissioning=plant.commissioning,
@@ -170,3 +174,26 @@ class CofiringPlant(PowerPlant):
 
     def coal_saved_cost(self):
         return as_kUSD(self.coal_saved * self.coal.price * time_step)
+
+    def tableC(self, discount_rate, tax_rate, depreciation_period):
+        def printRowInt(label, quantity, unit='kUSD'):
+            quantity.display_unit = unit
+            print('{:30}{:8.0f}'.format(label, quantity))
+            return None
+
+        def printRowFloat(label, value):
+            print('{:30}{:8.4f}'.format(label, value))
+            return None
+
+        def printRowNPV(label, vector, unit='kUSD'):
+            printRowInt(label, np.npv(discount_rate, vector), unit)
+
+        print("Levelized cost of electricity - ", self.name, "\n")
+        printRowInt("Investment", self.capital)
+        printRowNPV("Fuel cost: Coal", super().fuel_cost())
+        printRowNPV("Fuel cost: Biomass", self.biomass_cost())
+        printRowNPV("O&M cost", self.operation_maintenance_cost())
+        printRowNPV("Tax", self.income_tax(tax_rate, depreciation_period))
+        printRowNPV("Sum of costs", self.cash_out(tax_rate, depreciation_period))
+        printRowNPV("Electricity produced", self.elec_sale, 'GWh')
+        printRowFloat("LCOE", self.lcoe(discount_rate, tax_rate, depreciation_period))
