@@ -13,7 +13,8 @@ the provinces that supply straw to the plant"""
 
 from natu.math import fsum
 from natu.units import t, y
-from parameters import residue_to_product_ratio_straw, straw_burn_rate
+from strawdata import residue_to_product_ratio_straw
+from parameters import straw_burn_rate
 from parameters import ef_so2_biomass, ef_pm10_biomass, ef_nox_biomass
 from parameters import MongDuong1, NinhBinh
 from strawdata import df
@@ -30,7 +31,7 @@ def straw_production(plant):
                                 df.loc['Quang Ninh', 'rice production (ton)']*t/y
                                 ])
         return rice_production * residue_to_product_ratio_straw
-    
+
     if plant == NinhBinh:
         return df.loc['Ninh Binh', 'rice production (ton)']*t/y * residue_to_product_ratio_straw
 

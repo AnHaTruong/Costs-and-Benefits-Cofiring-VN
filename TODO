@@ -1,5 +1,7 @@
 ﻿TODO
 
+store emissions factors in a dictionary
+
 Check emission calculation against CDM ACM0002 methodology
 
 Recode biomasscost.py

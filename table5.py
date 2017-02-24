@@ -6,10 +6,7 @@ from biomasscost import bm_unit_cost, bm_transportation_cost, collection_radius
 
 
 print('')
-print('Table 5. Straw require and straw cost estimation')
-
-head = '{:24}'+' {:>20}'*2
-row = '{:24}'+' {:>20}'*2
+print('Table 5. Straw required and straw cost estimation')
 
 
 col1 = MongDuong1.electricity_tariff
@@ -42,11 +39,11 @@ col12 = collection_radius(NinhBinh)
 col11.display_unit = 'km'
 col12.display_unit = 'km'
 
-print(head.format('Parameter', 'Mong Duong 1', 'Ninh Binh'))
+print('{:24}{:>24}{:>24}'.format('Parameter', 'Mong Duong 1', 'Ninh Binh'))
 
-print(row.format('Straw required', col3, col4))
-print(row.format('Straw price', col5, col6))
-print(row.format('Coal price',  col7, col8))
-print(row.format('Electricity price',  col1, col2))
-print(row.format('Biomass transportation cost', col9, col10))
-print(row.format('Collection radius', col11, col12))
+print('{:24} {:>20.4f}{:>20.4f}'.format('Straw required', col3, col4))
+print('{:24} {:>20.4f}{:>18.4f}'.format('Straw price', col5, col6))
+print('{:24} {:>20.4f}{:>18.4f}'.format('Coal price',  col7, col8))
+print('{:24} {:>20.4f}{:>16.4f}'.format('Electricity price',  col1, col2))
+print('{:24} {:>17.4f}{:>18.4f}'.format('Biomass transportation cost', col9, col10))
+print('{:24} {:>20.4f}{:>21.4f}'.format('Collection radius', col11, col12))
