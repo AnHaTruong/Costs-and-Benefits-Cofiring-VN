@@ -10,10 +10,9 @@
 """ Print table for the net present value calculation in  npv.py
 """
 
-from parameters import MongDuong1, NinhBinh, discount_rate, depreciation_period
+from parameters import MongDuong1, MongDuong1Cofire, NinhBinh, NinhBinhCofire
+from parameters import discount_rate, depreciation_period, tax_rate
 from units import time_horizon
-# DEBUG
-#time_horizon = 1
 
 from npv import (
             net_present_value, cash_inflow, sales,
@@ -31,9 +30,10 @@ print('Depreciation', depreciation_period, 'years')
 print('')
 
 
-def print_tableA(plant):
+def print_tableA_old(plant):
     """Print out the cashflows from NPV calculation in npv.py
     """
+    print('----- OLD -----')
     print(plant.name)
     result = net_present_value(plant)
     result.display_unit = 'kUSD'
@@ -90,8 +90,18 @@ def print_tableA(plant):
         print(line)
 
 
-print_tableA(MongDuong1)
+def print_tableA_new(plant):
+    print('----- NEW -----')
+    print(plant.name)
+    print("NPV  =", plant.net_present_value(discount_rate, tax_rate, depreciation_period))
+    plant.pretty_table(tax_rate, depreciation_period)
+#    print("LCOE =", plant.lcoe(discount_rate, tax_rate, depreciation_period))
+    print('---------------')
+
+print_tableA_old(MongDuong1)
+print_tableA_new(MongDuong1Cofire)
 
 print('')
 
-print_tableA(NinhBinh)
+print_tableA_old(NinhBinh)
+print_tableA_new(NinhBinhCofire)
