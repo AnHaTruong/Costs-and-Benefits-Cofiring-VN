@@ -10,6 +10,7 @@
 """print the LCOE calculation results in file lcoe.py"""
 
 from parameters import MongDuong1, MongDuong1Cofire, NinhBinh, NinhBinhCofire
+from parameters import discount_rate, tax_rate, depreciation_period
 
 from npv import (
             fuel_cost_coal, fuel_cost_biomass, operation_maintenance_cost,
