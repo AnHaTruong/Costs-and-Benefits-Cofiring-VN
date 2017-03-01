@@ -107,7 +107,13 @@ class PowerPlant(Investment):
         return result
 
 
+def boiler_efficiency_loss(biomass_ratio_mass):
+    """Boiler efficiency loss due to cofiring, according to Tillman 2000"""
+    return 0.0044 * biomass_ratio_mass**2 + 0.0055 * biomass_ratio_mass
+
+
 class CofiringPlant(PowerPlant):
+
     def __init__(self,
                  plant,             # type: PowerPlant
                  biomass_ratio,
@@ -118,12 +124,12 @@ class CofiringPlant(PowerPlant):
                  supply_chain
                  ):
 
-        """Accounting for the efficiency loss due to cofiring, according to Tillman 2000"""
-        boiler_efficiency_loss = 0.0044 * biomass_ratio**2 + 0.0055 * biomass_ratio
-        cofiring_boiler_efficiency = plant.boiler_efficiency - boiler_efficiency_loss
-        cofiring_plant_efficiency = (plant.plant_efficiency *
-                                     plant.boiler_efficiency / cofiring_boiler_efficiency
-                                     )
+        biomass_ratio_mass = biomass_ratio * (plant.coal.heat_value/biomass.heat_value)
+        cofiring_boiler_efficiency = (plant.boiler_efficiency -
+                                      boiler_efficiency_loss(biomass_ratio_mass)
+                                      )
+        derating = cofiring_boiler_efficiency / plant.boiler_efficiency
+        cofiring_plant_efficiency = plant.plant_efficiency * derating
         super().__init__(
                  name=plant.name + " Cofire",
                  capacity=plant.capacity,
