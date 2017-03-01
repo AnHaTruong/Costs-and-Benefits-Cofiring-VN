@@ -14,9 +14,9 @@ Encapsulate the class
 
 Read data from data file
 
-Hourly dispatch, with ramp-up and ramp-down constraints, maintenance downtime, and variable electricity price
-
 Sensitivity analysis
+
+Cleanup the *timestep
 
 Consider more indicators that LCOE:
   Debt Service Coverage Ratio (requires Cash Flow Available for Debt Service ) - minimum over all periods and average
@@ -53,3 +53,4 @@ Refactoring the model to fix the zero biomass percentage bug
 
 Add modules as necessary to compute intermediate values like coal saved or collection radius
 
+Hourly dispatch, with ramp-up and ramp-down constraints, maintenance downtime, and variable electricity price --> WONTFIX, different model

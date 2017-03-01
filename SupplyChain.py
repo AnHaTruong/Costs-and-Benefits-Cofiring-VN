@@ -6,9 +6,10 @@
 # minh.haduong@gmail.com
 # Creative Commons Attribution-ShareAlike 4.0 International
 #
-from units import v_after_invest, as_kUSD, time_step
+from units import v_after_invest, time_step
 from natu.units import t, USD
 from copy import copy
+
 
 class SupplyZone():
     def __init__(self, shape, straw_density, transport_tariff, tortuosity_factor):

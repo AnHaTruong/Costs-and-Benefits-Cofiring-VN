@@ -22,7 +22,6 @@ print('')
 row = '{:35}' + '{:16.2f}'
 
 
-
 def print_emission(plant):
     """Print table 7-Emission reduction from co-firing """
 

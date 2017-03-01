@@ -15,7 +15,7 @@
 from parameters import biomass_heat_value, carbon_price
 from biomassrequired import biomass_required
 from coalsaved import coal_saved
-from biomasscost import bm_transportation_activity
+from biomasscost import bm_transport_tkm
 
 
 def emission_coal_combust_base(plant):
@@ -62,7 +62,7 @@ def emission_biomass_transport(plant):
     activity (t.km) multiplied by emission factor of transportation
 
     """
-    return plant.ef_biomass_transport * bm_transportation_activity(plant)
+    return plant.ef_biomass_transport * bm_transport_tkm(plant)
 
 
 def total_emission_coal(plant):

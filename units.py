@@ -37,10 +37,10 @@ zero_VND = 0 * VND
 zero_km = 0 * km
 
 
-def as_kUSD(v):
-    """Sets the vector to be displayed in kUSD"""
+def display_as(v, unit):
+    """Sets the vector to be displayed in 'unit' and returns it"""
     for i in range(time_horizon+1):
-        v[i].display_unit = 'kUSD'
+        v[i].display_unit = unit
     return v
 
 
