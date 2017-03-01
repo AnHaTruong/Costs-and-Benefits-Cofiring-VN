@@ -59,8 +59,6 @@ class PowerPlant(Investment):
         self.capacity_factor = capacity_factor
         self.commissioning = commissioning
         self.boiler_technology = boiler_technology
-        self.plant_efficiency = plant_efficiency
-        self.boiler_efficiency = boiler_efficiency
         self.electricity_tariff = electricity_tariff
         self.electricity_tariff.display_unit = 'USD/kWh'
         self.fix_om_coal = fix_om_coal
@@ -68,18 +66,22 @@ class PowerPlant(Investment):
         self.esp_efficiency = esp_efficiency
         self.desulfur_efficiency = desulfur_efficiency
 
+        # Backward compatibility
+        self.coal_consumption = capacity * capacity_factor / plant_efficiency / coal.heat_value
 
-#        self.power_generation = v_ones.copy() * capacity * capacity_factor
         self.power_generation = np.full(time_horizon+1, capacity * capacity_factor, dtype=object)
-
-        self.coal_used = self.power_generation / plant_efficiency / coal.heat_value
-        self.coal_consumption = self.coal_used[0]  # Backward compatibility
-
         self.elec_sale = self.power_generation * time_step
-#        self.elec_sale.display_unit = 'GWh'   # Now vectorized, need to fix Table1 too
+        display_as(self.elec_sale, 'GWh')
+
+        self.plant_efficiency = np.full(time_horizon+1, plant_efficiency)
+        self.boiler_efficiency = np.full(time_horizon+1, boiler_efficiency)
 
         self.coal = coal
         super().__init__(capital)
+
+    def coal_used(self):
+        mass = self.power_generation / self.plant_efficiency / self.coal.heat_value
+        return display_as(mass, 't/y')
 
     def income(self):
         return display_as(self.elec_sale * self.electricity_tariff, 'kUSD')
@@ -87,10 +89,13 @@ class PowerPlant(Investment):
     def operating_expenses(self):
         return display_as(self.fuel_cost() + self.operation_maintenance_cost(), 'kUSD')
 
-    def fuel_cost(self):
+    def coal_cost(self):
         # natu bugs if in the multiplication,
         # the coal price (scalar) comes before the power generation (vector) ??
-        return self.coal_used * self.coal.price * time_step
+        return self.coal_used() * self.coal.price * time_step
+
+    def fuel_cost(self):
+        return self.coal_cost()
 
     def operation_maintenance_cost(self):
         # fixed_om_coal = v_ones.copy() * self.fix_om_coal * self.capacity
@@ -124,20 +129,14 @@ class CofiringPlant(PowerPlant):
                  supply_chain
                  ):
 
-        biomass_ratio_mass = biomass_ratio * (plant.coal.heat_value/biomass.heat_value)
-        cofiring_boiler_efficiency = (plant.boiler_efficiency -
-                                      boiler_efficiency_loss(biomass_ratio_mass)
-                                      )
-        derating = cofiring_boiler_efficiency / plant.boiler_efficiency
-        cofiring_plant_efficiency = plant.plant_efficiency * derating
         super().__init__(
                  name=plant.name + " Cofire",
                  capacity=plant.capacity,
                  capacity_factor=plant.capacity_factor,
                  commissioning=plant.commissioning,
                  boiler_technology=plant.boiler_technology,
-                 plant_efficiency=cofiring_plant_efficiency,
-                 boiler_efficiency=cofiring_boiler_efficiency,
+                 plant_efficiency=plant.plant_efficiency[0],
+                 boiler_efficiency=plant.boiler_efficiency[0],
                  electricity_tariff=plant.electricity_tariff,
                  fix_om_coal=plant.fix_om_coal,
                  variable_om_coal=plant.variable_om_coal,
@@ -156,6 +155,20 @@ class CofiringPlant(PowerPlant):
         self.biomass = biomass
         self.supply_chain = supply_chain
 
+        biomass_ratio_mass = biomass_ratio * (plant.coal.heat_value/biomass.heat_value)
+        cofiring_boiler_efficiency = (plant.boiler_efficiency -
+                                      boiler_efficiency_loss(biomass_ratio_mass)
+                                      )
+        # TODO: use vector algebra in case investment takes more than 1 period
+        self.boiler_efficiency = cofiring_boiler_efficiency
+        self.boiler_efficiency[0] = plant.boiler_efficiency[0]
+
+        derating = cofiring_boiler_efficiency / plant.boiler_efficiency
+        cofiring_plant_efficiency = plant.plant_efficiency * derating
+        # TODO: use vector algebra in case investment takes more than 1 period
+        self.plant_efficiency = cofiring_plant_efficiency
+        self.plant_efficiency[0] = plant.plant_efficiency[0]
+
         self.gross_heat_input = self.power_generation / self.plant_efficiency
         self.biomass_heat = v_after_invest * self.gross_heat_input * biomass_ratio
         self.biomass_used = self.biomass_heat / biomass.heat_value
@@ -167,11 +180,16 @@ class CofiringPlant(PowerPlant):
                 self.biomass_used_nan[i] = float('nan') * t/y
 
         self.coal_saved = self.biomass_heat / plant.coal.heat_value
-        self.coal_used -= self.coal_saved
-        self.coal_consumption = self.coal_used[0]  # Backward compatibility
+        display_as(self.coal_saved, 't/y')
+
+    def coal_used(self):
+        mass = self.power_generation / self.plant_efficiency / self.coal.heat_value
+        mass = mass - self.coal_saved
+        return display_as(mass, 't/y')
 
     def fuel_cost(self):
-        return display_as(super().fuel_cost() + self.biomass_cost(), 'kUSD')
+        cost = self.coal_cost() + self.biomass_cost()
+        return display_as(cost, 'kUSD')
 
     def biomass_cost(self):
         cost = (self.biomass_used * self.biomass.price * time_step +

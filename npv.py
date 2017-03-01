@@ -15,7 +15,7 @@
 
 from parameters import biomass_ratio, tax_rate, discount_rate, depreciation_period
 from units import time_horizon, time_step, zero_USD, zero_VND
-from biomassrequired import biomass_required
+from biomassrequired import biomass_required, coal_consumption_new_efficiency
 from biomasscost import bm_unit_cost
 from coalsaved import coal_saved
 from natu.numpy import npv
@@ -66,7 +66,7 @@ def fuel_cost_coal(plant, year):
     if year == 0:
         return plant.coal_consumption * plant.coal.price * time_step
     else:
-        return plant.coal.price * (plant.coal_consumption - coal_saved(plant)) * time_step
+        return plant.coal.price * (coal_consumption_new_efficiency(plant) - coal_saved(plant)) * time_step
 
 
 def fuel_cost_biomass(plant, year):

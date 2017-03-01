@@ -22,8 +22,6 @@ from units import print_with_unit
 
 print('')
 
-print('')
-
 row = '{:30}' + '{:8.0f}'
 row1 = '{:30}' + '{:8.4f}'
 

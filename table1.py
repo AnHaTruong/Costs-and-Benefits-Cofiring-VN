@@ -31,5 +31,5 @@ print('{:24}{:>20.0f}{:>17.0f}'.format('Installed capacity', MongDuong1.capacity
 print('{:24}{:>20.2f}{:>20.2f}'.format('Capacity factor', MongDuong1.capacity_factor, NinhBinh.capacity_factor))
 print('{:24}{:>20.0f}{:>16.0f}'.format('Coal consumption',  col1, col2))
 print('{:24}{:>20.0f}{:>14.0f}'.format('Heat value of coal', MongDuong1.coal.heat_value, NinhBinh.coal.heat_value))
-print('{:24}{:>20.4f}{:>20.4f}'.format('Plant efficiency', MongDuong1.plant_efficiency, NinhBinh.plant_efficiency))
-print('{:24}{:>20.4f}{:>20.4f}'.format('Boiler efficiency', MongDuong1.boiler_efficiency, NinhBinh.boiler_efficiency))
+print('{:24}{:>20.4f}{:>20.4f}'.format('Plant efficiency', MongDuong1.plant_efficiency[0], NinhBinh.plant_efficiency[0]))
+print('{:24}{:>20.4f}{:>20.4f}'.format('Boiler efficiency', MongDuong1.boiler_efficiency[0], NinhBinh.boiler_efficiency[0]))

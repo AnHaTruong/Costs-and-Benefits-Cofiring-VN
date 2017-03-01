@@ -17,6 +17,7 @@ from biomassrequired import gross_heat_input
 
 def coal_saved(plant):
     """ amount of coal saved with biomass co-firing
+    Does not work for a CofiringPlant
 
     """
     return gross_heat_input(plant) * biomass_ratio / plant.coal.heat_value

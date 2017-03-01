@@ -41,7 +41,7 @@ def boiler_efficiency_bm(plant):
 
     """
     ratio = biomass_ratio_mass(biomass_ratio, plant.coal.heat_value, biomass_heat_value)
-    return plant.boiler_efficiency - boiler_efficiency_loss(ratio)
+    return plant.boiler_efficiency[0] - boiler_efficiency_loss(ratio)
 
 
 # def boiler_efficiency_bm(boiler_efficiency, boiler_efficiency_loss):
@@ -56,18 +56,24 @@ def boiler_efficiency_bm(plant):
 #    return boiler_efficiency - boiler_efficiency_loss
 
 
-def plant_efficency_bm(plant):
+def plant_efficiency_bm(plant):
     """ Plant efficiency with biomass co-firing
 
     """
-    return (plant.plant_efficiency / plant.boiler_efficiency) * boiler_efficiency_bm(plant)
+    return (plant.plant_efficiency[0] / plant.boiler_efficiency[0]) * boiler_efficiency_bm(plant)
 
 
 def gross_heat_input(plant):
     """total amount of heat needed to generate the same amount of electricity as in base case
     Not a vector
+    Does not work for a CofiringPlant
     """
-    return plant.power_generation[0] / plant_efficency_bm(plant)
+    # print(plant.name)
+    return plant.power_generation[0] / plant_efficiency_bm(plant)
+
+
+def coal_consumption_new_efficiency(plant):
+    return gross_heat_input(plant) / plant.coal.heat_value
 
 
 def biomass_required(plant):
