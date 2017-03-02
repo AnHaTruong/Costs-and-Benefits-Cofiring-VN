@@ -68,6 +68,7 @@ class PowerPlant(Investment):
 
         # Backward compatibility
         self.coal_consumption = capacity * capacity_factor / plant_efficiency / coal.heat_value
+        self.coal_consumption.display_unit = 't/y'
 
         self.power_generation = np.full(time_horizon+1, capacity * capacity_factor, dtype=object)
         self.elec_sale = self.power_generation * time_step
@@ -84,15 +85,18 @@ class PowerPlant(Investment):
         return display_as(mass, 't/y')
 
     def income(self):
-        return display_as(self.elec_sale * self.electricity_tariff, 'kUSD')
+        revenue = self.elec_sale * self.electricity_tariff
+        return display_as(revenue, 'kUSD')
 
     def operating_expenses(self):
-        return display_as(self.fuel_cost() + self.operation_maintenance_cost(), 'kUSD')
+        cost = self.fuel_cost() + self.operation_maintenance_cost()
+        return display_as(cost, 'kUSD')
 
     def coal_cost(self):
         # natu bugs if in the multiplication,
         # the coal price (scalar) comes before the power generation (vector) ??
-        return self.coal_used() * self.coal.price * time_step
+        cost = self.coal_used() * self.coal.price * time_step
+        return display_as(cost, 'kUSD')
 
     def fuel_cost(self):
         return self.coal_cost()
@@ -105,7 +109,7 @@ class PowerPlant(Investment):
         return (fixed_om_coal + variable_om_coal) * time_step
 
     def operation_maintenance_cost(self):
-        return self.coal_om_cost()
+        return display_as(self.coal_om_cost(), 'kUSD')
 
     def lcoe(self, discount_rate, tax_rate, depreciation_period):
         total_lifetime_power_production = np.npv(discount_rate, self.elec_sale)
@@ -113,6 +117,26 @@ class PowerPlant(Investment):
         result = total_life_cycle_cost / total_lifetime_power_production  # * time_step
         result.display_unit = 'USD/kWh'  # Fixme: once TableC is no regression, use /MWh for integer
         return result
+
+    def table_LCOE(self, discount_rate, tax_rate, depreciation_period):
+        def printRowInt(label, quantity):
+            print('{:30}{:8.0f}'.format(label, quantity))
+
+        def printRowFloat(label, value):
+            print('{:30}{:8.4f}'.format(label, value))
+
+        def printRowNPV(label, vector):
+            printRowInt(label, np.npv(discount_rate, vector))
+
+        print("Levelized cost of electricity -", self.name, "\n")
+        printRowInt("Investment", self.capital)
+        printRowNPV("Fuel cost", self.fuel_cost())
+        printRowNPV("O&M cost", self.operation_maintenance_cost())
+        printRowNPV("Tax", self.income_tax(tax_rate, depreciation_period))
+        printRowNPV("Sum of costs", self.cash_out(tax_rate, depreciation_period))
+        printRowNPV("Electricity produced", self.elec_sale)
+        printRowFloat("LCOE", self.lcoe(discount_rate, tax_rate, depreciation_period))
+        print('')
 
 
 def boiler_efficiency_loss(biomass_ratio_mass):
@@ -128,7 +152,7 @@ class CofiringPlant(PowerPlant):
                  capital_cost,
                  fix_om_cost,
                  variable_om_cost,
-                 biomass,             # type: Fuel
+                 biomass,           # type: Fuel
                  supply_chain
                  ):
 
@@ -227,7 +251,8 @@ class CofiringPlant(PowerPlant):
         # Variable costs proportional to generation after capacity factor
         variable_om_coal = self.power_generation * self.variable_om_coal * (1 - self.biomass_ratio)
         variable_om_coal[0] = self.power_generation[0] * self.variable_om_coal
-        return (fixed_om_coal + variable_om_coal) * time_step
+        cost = (fixed_om_coal + variable_om_coal) * time_step
+        return display_as(cost, 'kUSD')
 
     def biomass_om_cost(self):
         fixed_om_bm = v_ones * self.fix_om_cost * self.capacity * self.biomass_ratio * time_step
@@ -240,28 +265,26 @@ class CofiringPlant(PowerPlant):
         return display_as(cost, 'kUSD')
 
     def tableC(self, discount_rate, tax_rate, depreciation_period):
-        def printRowInt(label, quantity, unit='kUSD'):
-            quantity.display_unit = unit
+        def printRowInt(label, quantity):
             print('{:30}{:8.0f}'.format(label, quantity))
-            return None
 
         def printRowFloat(label, value):
             print('{:30}{:8.4f}'.format(label, value))
-            return None
 
-        def printRowNPV(label, vector, unit='kUSD'):
-            printRowInt(label, np.npv(discount_rate, vector), unit)
+        def printRowNPV(label, vector):
+            printRowInt(label, np.npv(discount_rate, vector))
 
         print("Levelized cost of electricity - ", self.name, "\n")
         printRowInt("Investment", self.capital)
-        printRowNPV("Fuel cost: Coal", super().fuel_cost())
-        printRowNPV("Fuel cost: Biomass", self.biomass_cost())
-        printRowNPV("  transportation", self.biomass_transport_cost())
-        printRowNPV("  straw at field", self.biomass_field_cost())
+        printRowNPV("Fuel cost", self.fuel_cost())
+        printRowNPV("  Coal", self.coal_cost())
+        printRowNPV("  Biomass", self.biomass_cost())
+        printRowNPV("    transportation", self.biomass_transport_cost())
+        printRowNPV("    straw at field", self.biomass_field_cost())
         printRowNPV("O&M cost", self.operation_maintenance_cost())
         printRowNPV("  coal", self.coal_om_cost())
         printRowNPV("  biomass", self.biomass_om_cost())
         printRowNPV("Tax", self.income_tax(tax_rate, depreciation_period))
         printRowNPV("Sum of costs", self.cash_out(tax_rate, depreciation_period))
-        printRowNPV("Electricity produced", self.elec_sale, 'GWh')
+        printRowNPV("Electricity produced", self.elec_sale)
         printRowFloat("LCOE", self.lcoe(discount_rate, tax_rate, depreciation_period))

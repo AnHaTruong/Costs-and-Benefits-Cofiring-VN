@@ -11,8 +11,6 @@ from units import time_horizon, v_zeros, USD, display_as
 import natu.numpy as np
 import pandas as pd
 
-# FIXME: Use a decorator to set the display unit on these functions
-
 
 class Investment:
     """An investment of capital made in period 0,
@@ -94,7 +92,9 @@ class Investment:
                      )
         return t
 
-    def pretty_table(self, tax_rate, depreciation_period):
+    def pretty_table(self, discount_rate, tax_rate, depreciation_period):
+        print(self.name)
+        print("NPV  =", self.net_present_value(discount_rate, tax_rate, depreciation_period))
         t = self.table(tax_rate, depreciation_period)
         t = np.transpose(t)
         labels = ["Income",
