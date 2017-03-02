@@ -31,7 +31,7 @@ class Disk(Shape):
         return 2 * pi * self.radius**3 / 3
 
     def shrink(self, factor):
-        """Shrink or extend the area by a given factor"""
+        """Returns a new homotetic disk"""
         assert factor >= 0
         return Disk(self.radius * sqrt(factor))
 
@@ -57,7 +57,7 @@ class Annulus(Shape):
         return 2 * pi * (self.R**3 - self.r**3) / 3
 
     def shrink(self, factor):
-        """Shrink or extend the area by a given factor, keeping the inner radius constant"""
+        """Returns a new Annulus, with same inner radius and total area scaled by factor"""
         assert factor >= 0
         new_R = sqrt(self.r**2 + factor * (self.R**2 - self.r**2))
         return Annulus(self.r, new_R)
@@ -80,7 +80,7 @@ class Semi_Annulus(Annulus):
         return super().first_moment_of_area() / 2
 
     def shrink(self, factor):
-        """Shrink or extend the area by a given factor, keeping the inner radius constant"""
+        """Returns a new Semiannulus, with same inner radius and total area scaled by factor"""
         assert factor >= 0
         new_R = sqrt(self.r**2 + factor * (self.R**2 - self.r**2))
         return Semi_Annulus(self.r, new_R)
