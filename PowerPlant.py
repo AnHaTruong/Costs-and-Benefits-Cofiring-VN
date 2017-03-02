@@ -238,6 +238,8 @@ class CofiringPlant(PowerPlant):
         printRowInt("Investment", self.capital)
         printRowNPV("Fuel cost: Coal", super().fuel_cost())
         printRowNPV("Fuel cost: Biomass", self.biomass_cost())
+        printRowNPV("  transportation", self.supply_chain.v_transport_cost(self.biomass_used))
+        printRowNPV("  straw at field", self.biomass_used * self.biomass.price * time_step)
         printRowNPV("O&M cost", self.operation_maintenance_cost())
         printRowNPV("Tax", self.income_tax(tax_rate, depreciation_period))
         printRowNPV("Sum of costs", self.cash_out(tax_rate, depreciation_period))

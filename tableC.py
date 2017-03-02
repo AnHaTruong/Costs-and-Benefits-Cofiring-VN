@@ -15,7 +15,7 @@ from parameters import discount_rate, tax_rate, depreciation_period
 from npv import (
             fuel_cost_coal, fuel_cost_biomass, operation_maintenance_cost,
             income_tax, tot_capital_cost, discounted_total_power_gen,
-            discount
+            discount, cost_field_straw, cost_straw_transport
             )
 from natu.math import fsum
 from units import print_with_unit
@@ -30,6 +30,8 @@ def print_lcoe(plant):
     col1 = print_with_unit(tot_capital_cost(plant, 0), 'kUSD')
     col2 = print_with_unit(discount(fuel_cost_coal, plant), 'kUSD')
     col3 = print_with_unit(discount(fuel_cost_biomass, plant), 'kUSD')
+    col3a = print_with_unit(discount(cost_straw_transport, plant), 'kUSD')
+    col3b = print_with_unit(discount(cost_field_straw, plant), 'kUSD')
     col4 = print_with_unit(discount(operation_maintenance_cost, plant), 'kUSD')
     col5 = print_with_unit(discount(income_tax, plant), 'kUSD')
     col6 = fsum([col2, col3, col4, col5])
@@ -42,6 +44,8 @@ def print_lcoe(plant):
     print(row.format('Investment', col1))
     print(row.format('Fuel cost: Coal', col2))
     print(row.format('Fuel cost: Biomass', col3))
+    print(row.format('  transportation', col3a))
+    print(row.format('  straw at field', col3b))
     print(row.format('O&M cost', col4))
     print(row.format('Tax', col5))
     print(row.format('Sum of costs', col6))

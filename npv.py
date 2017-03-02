@@ -16,9 +16,11 @@
 from parameters import biomass_ratio, tax_rate, discount_rate, depreciation_period
 from units import time_horizon, time_step, zero_USD, zero_VND
 from biomassrequired import biomass_required, coal_consumption_new_efficiency
-from biomasscost import bm_unit_cost
+from biomasscost import bm_unit_cost, bm_transportation_cost
 from coalsaved import coal_saved
 from natu.numpy import npv
+
+from parameters import biomass_fix_cost
 
 
 def discount(func, plant):
@@ -66,15 +68,36 @@ def fuel_cost_coal(plant, year):
     if year == 0:
         return plant.coal_consumption * plant.coal.price * time_step
     else:
-        return plant.coal.price * (coal_consumption_new_efficiency(plant) - coal_saved(plant)) * time_step
+        return (plant.coal.price *
+                (coal_consumption_new_efficiency(plant) - coal_saved(plant)) *
+                time_step
+                )
+
+
+def cost_field_straw(plant, year):
+    if year == 0:
+        return zero_USD
+    else:
+        return biomass_fix_cost * biomass_required(plant) * time_step
+
+
+def cost_straw_transport(plant, year):
+    if year == 0:
+        return zero_USD
+    else:
+        return bm_transportation_cost(plant) * time_step
 
 
 def fuel_cost_biomass(plant, year):
     """Fuel expense on biomass"""
-    if year == 0:
-        return zero_USD
-    else:
-        return bm_unit_cost(plant) * biomass_required(plant) * time_step
+    return cost_field_straw(plant, year) + cost_straw_transport(plant, year)
+#    if year == 0:
+#        return zero_USD
+#    else:
+#        cost_field_straw = biomass_fix_cost * biomass_required(plant) * time_step
+#        cost_transport = bm_transportation_cost(plant) * time_step
+#        return cost_field_straw + cost_transport
+#        return bm_unit_cost(plant) * biomass_required(plant) * time_step
 
 
 def fuel_cost(plant, year):
