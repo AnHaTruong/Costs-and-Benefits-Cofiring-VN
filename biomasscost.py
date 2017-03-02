@@ -134,11 +134,11 @@ def bm_transport_tkm(plant):
         return cost_area1 + cost_area2
 
     if plant == NinhBinh:
-        return transport_tkm(collection_radius(NinhBinh),
-                             0*km,
-                             NinhBinh_straw_density,
-                             tortuosity_factor
-                             )
+        return 2 * transport_tkm(collection_radius(NinhBinh),
+                                 0*km,
+                                 NinhBinh_straw_density,
+                                 tortuosity_factor
+                                 )
 
 
 def bm_transportation_cost(plant):
