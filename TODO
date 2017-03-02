@@ -14,9 +14,13 @@ Encapsulate the class
 
 Read data from data file
 
+Use decorator to set display_unit of results
+
+Simpler call parent constructor in CofiringPlant constructor
+
 Sensitivity analysis
 
-Cleanup the *timestep
+Cleanup the *timestep and clarify time units (period or year)
 
 Consider more indicators that LCOE:
   Debt Service Coverage Ratio (requires Cash Flow Available for Debt Service ) - minimum over all periods and average

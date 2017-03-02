@@ -10,6 +10,7 @@
 from natu.math import sqrt, pi
 from natu.units import m
 
+
 class Shape:
     pass
 
@@ -18,6 +19,9 @@ class Disk(Shape):
     def __init__(self, radius):
         assert radius >= 0 * m
         self.radius = radius
+
+    def __str__(self):
+        return "Disk with radius " + str(self.radius) + ", area " + str(self.area())
 
     def area(self):
         return pi * self.radius**2
@@ -39,6 +43,12 @@ class Annulus(Shape):
         self.r = r
         self.R = R
 
+    def __str__(self):
+        return ("Annulus with inner radius " + str(self.r) +
+                ", outer radius " + str(self.R) +
+                ", area " + str(self.area())
+                )
+
     def area(self):
         return pi * (self.R**2 - self.r**2)
 
@@ -56,6 +66,12 @@ class Annulus(Shape):
 class Semi_Annulus(Annulus):
     def __init__(self, r, R):
         super().__init__(r, R)
+
+    def __str__(self):
+        return ("Semiannulus with inner radius " + str(self.r) +
+                ", outer radius " + str(self.R) +
+                ", area " + str(self.area())
+                )
 
     def area(self):
         return super().area() / 2
