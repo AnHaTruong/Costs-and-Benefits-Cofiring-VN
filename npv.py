@@ -16,7 +16,7 @@
 from parameters import biomass_ratio, tax_rate, discount_rate, depreciation_period
 from units import time_horizon, time_step, zero_USD, zero_VND
 from biomassrequired import biomass_required, coal_consumption_new_efficiency
-from biomasscost import bm_unit_cost, bm_transportation_cost
+from biomasscost import bm_transportation_cost
 from coalsaved import coal_saved
 from natu.numpy import npv
 
@@ -107,20 +107,41 @@ def fuel_cost(plant, year):
     return fuel_cost_coal(plant, year) + fuel_cost_biomass(plant, year)
 
 
-def operation_maintenance_cost(plant, year):
-    """total expense for the plant
-       O&M cost remain constant from year 1 onwards:
-    """
+def biomass_om_cost(plant, year):
+    if year == 0:
+        return zero_USD
+    else:
+        fixed_om_bm = plant.fix_om_cost * plant.capacity * biomass_ratio * time_step
+        variable_om_bm = plant.variable_om_cost * plant.elec_sale[0] * biomass_ratio
+        return fixed_om_bm + variable_om_bm
+
+
+def coal_om_cost(plant, year):
     if year == 0:
         fixed_om_coal = plant.fix_om_coal * plant.capacity * time_step
         variable_om_coal = plant.variable_om_coal * plant.elec_sale[0]
         return fixed_om_coal + variable_om_coal
     else:
-        fixed_om_bm = plant.fix_om_cost * plant.capacity * biomass_ratio * time_step
-        variable_om_bm = plant.variable_om_cost * plant.elec_sale[0] * biomass_ratio
         fixed_om_coal = plant.fix_om_coal * plant.capacity * (1 - biomass_ratio) * time_step
         variable_om_coal = plant.variable_om_coal * plant.elec_sale[0] * (1 - biomass_ratio)
-        return fixed_om_bm + variable_om_bm + fixed_om_coal + variable_om_coal
+        return fixed_om_coal + variable_om_coal
+
+
+def operation_maintenance_cost(plant, year):
+    """total expense for the plant
+       O&M cost remain constant from year 1 onwards:
+    """
+    return coal_om_cost(plant, year) + biomass_om_cost(plant, year)
+#    if year == 0:
+#        fixed_om_coal = plant.fix_om_coal * plant.capacity * time_step
+#        variable_om_coal = plant.variable_om_coal * plant.elec_sale[0]
+#        return fixed_om_coal + variable_om_coal
+#    else:
+#        fixed_om_bm = plant.fix_om_cost * plant.capacity * biomass_ratio * time_step
+#        variable_om_bm = plant.variable_om_cost * plant.elec_sale[0] * biomass_ratio
+#        fixed_om_coal = plant.fix_om_coal * plant.capacity * (1 - biomass_ratio) * time_step
+#        variable_om_coal = plant.variable_om_coal * plant.elec_sale[0] * (1 - biomass_ratio)
+#        return fixed_om_bm + variable_om_bm + fixed_om_coal + variable_om_coal
 
 
 def income_tax(plant, year):

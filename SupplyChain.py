@@ -6,7 +6,7 @@
 # minh.haduong@gmail.com
 # Creative Commons Attribution-ShareAlike 4.0 International
 #
-from units import v_after_invest, time_step
+from units import isclose
 from natu.units import t, USD
 from copy import copy
 
@@ -56,7 +56,7 @@ class SupplyChain():
     def __str__(self):
         s = "Supply chain\n"
         s += "Capacity = " + str(self.capacity()) + "\n"
-        s += "Cost to transport all = " + str(self.transport_all_cost()) + "\n"
+        s += "Cost to transport all = " + str(self.transport_cost()) + "\n"
         for zone in self.zones:
             s += str(zone) + "\n"
         return s
@@ -67,14 +67,15 @@ class SupplyChain():
             total += zone.capacity()
         return total
 
-    def transport_all_cost(self):
+    def transport_cost(self):
         cost = 0 * USD
         for zone in self.zones:
             cost += zone.transport_cost()
         cost.display_unit = 'kUSD'
         return cost
 
-    def transport_quantity_cost(self, quantity):
+    def fit(self, quantity):
+        """Returns an new supply chain, disgard unused zone(s) and shrink the last one"""
         assert quantity <= self.capacity(), 'Not enough biomass in supply chain: '
 
         i = 0
@@ -88,15 +89,13 @@ class SupplyChain():
         reduction_factor = 1 - excess / collected.zones[i].capacity()
         collected.zones[i] = collected.zones[i].shrink(reduction_factor)
 
-#        quantity.display_unit = 't'
-#        print('Quantity transported: ', quantity, '\n')
-#        print('Initial ', self)
-#        print('Excess = ', excess)
-#        print('Reduction factor = ', reduction_factor)
-#        print('')
-#        print('Collected ', collected)
+        #        quantity.display_unit = 't'
+        #        print('Quantity transported: ', quantity, '\n')
+        #        print('Initial ', self)
+        #        print('Excess = ', excess)
+        #        print('Reduction factor = ', reduction_factor)
+        #        print('')
+        #        print('Collected ', collected)
 
-        return collected.transport_all_cost()
-
-    def v_transport_cost(self, biomass_used):
-        return v_after_invest * self.transport_quantity_cost(biomass_used[1] * time_step)
+        assert isclose(collected.capacity(), quantity)
+        return collected

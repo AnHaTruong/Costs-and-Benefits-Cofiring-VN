@@ -47,3 +47,6 @@ print('{:24} {:>19.0f}{:>22.0f}'.format('Straw required', col3, col4))
 print('{:24} {:>22.2f}{:>18.2f}'.format('Straw cost', col5, col6))
 print('{:24} {:>22.2f}{:>18.2f}'.format('Biomass raw cost', col5 - col9, col6 - col10))
 print('{:24} {:>19.2f}{:>18.2f}'.format('Biomass transportation cost', col9, col10))
+
+print("\nMong Duong", MongDuong1Cofire.active_chain)
+print("\nNinh Binh", NinhBinhCofire.active_chain)

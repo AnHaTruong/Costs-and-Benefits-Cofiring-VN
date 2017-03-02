@@ -13,7 +13,8 @@ from parameters import MongDuong1, MongDuong1Cofire, NinhBinh, NinhBinhCofire
 from parameters import discount_rate, tax_rate, depreciation_period
 
 from npv import (
-            fuel_cost_coal, fuel_cost_biomass, operation_maintenance_cost,
+            fuel_cost_coal, fuel_cost_biomass,
+            operation_maintenance_cost, coal_om_cost, biomass_om_cost,
             income_tax, tot_capital_cost, discounted_total_power_gen,
             discount, cost_field_straw, cost_straw_transport
             )
@@ -33,8 +34,10 @@ def print_lcoe(plant):
     col3a = print_with_unit(discount(cost_straw_transport, plant), 'kUSD')
     col3b = print_with_unit(discount(cost_field_straw, plant), 'kUSD')
     col4 = print_with_unit(discount(operation_maintenance_cost, plant), 'kUSD')
+    col4a = print_with_unit(discount(coal_om_cost, plant), 'kUSD')
+    col4b = print_with_unit(discount(biomass_om_cost, plant), 'kUSD')
     col5 = print_with_unit(discount(income_tax, plant), 'kUSD')
-    col6 = fsum([col2, col3, col4, col5])
+    col6 = fsum([col1, col2, col3, col4, col5])
     col7 = discounted_total_power_gen(plant)
     col8 = col6 / col7
 
@@ -47,6 +50,8 @@ def print_lcoe(plant):
     print(row.format('  transportation', col3a))
     print(row.format('  straw at field', col3b))
     print(row.format('O&M cost', col4))
+    print(row.format('  coal', col4a))
+    print(row.format('  biomass', col4b))
     print(row.format('Tax', col5))
     print(row.format('Sum of costs', col6))
     print(row.format('Electricity produced', col7))
