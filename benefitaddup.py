@@ -31,7 +31,18 @@ def benefit_add_up(func, plant):
     return value
 
 
-def total_benefit_addup(plant):
+def new_benefit_add_up(func, plant, cofiringplant):
+    """return the present value of cumulative benefits of co-firing
+    discounted at DiscountRate from 0 to TimeHorizon included
+
+    """
+    value = zero_USD
+    for year in range(time_horizon+1):
+        value += (func(plant, cofiringplant) * time_step) / (1 + discount_rate)**year
+    return value
+
+
+def total_benefit_addup(plant, cofiringplant):
     """Total benefit of co-firing added up for the same number of year as used
        in NPV calculation discounted at same DiscountRate
 
@@ -39,8 +50,8 @@ def total_benefit_addup(plant):
     """
     return (benefit_add_up(total_health_benefit, plant) +
             benefit_add_up(total_income_benefit, plant) +
-            benefit_add_up(emission_reduction_benefit, plant) +
-            benefit_add_up(total_job_benefit, plant)
+            new_benefit_add_up(emission_reduction_benefit, plant, cofiringplant) +
+            new_benefit_add_up(total_job_benefit, plant, cofiringplant)
             )
 
 if __name__ == "__main__":

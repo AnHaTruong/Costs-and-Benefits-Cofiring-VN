@@ -10,7 +10,7 @@
 """ Tests for the emission functions in  emission.py
 """
 
-from parameters import MongDuong1, NinhBinh
+from parameters import MongDuong1, NinhBinh, MongDuong1Cofire, NinhBinhCofire
 
 from emission import emission_coal_combust_base, emission_coal_transport_base
 from emission import emission_biomass_combust, emission_biomass_transport
@@ -22,16 +22,16 @@ print('')
 row = '{:35}' + '{:16.2f}'
 
 
-def print_emission(plant):
+def print_emission(plant, cofiringplant):
     """Print table 7-Emission reduction from co-firing """
 
     col1 = emission_biomass_combust(plant) + emission_coal_combust_cofire(plant)
-    col2 = emission_biomass_transport(plant) + emission_coal_transport_cofire(plant)
-    col3 = total_emission_cofire(plant)
+    col2 = emission_biomass_transport(cofiringplant) + emission_coal_transport_cofire(plant)
+    col3 = total_emission_cofire(plant, cofiringplant)
     col4 = emission_coal_combust_base(plant)
     col5 = emission_coal_transport_base(plant)
     col6 = total_emission_coal(plant)
-    col7 = emission_reduction(plant)
+    col7 = emission_reduction(plant, cofiringplant)
 
     col1.display_unit = 't/y'
     col2.display_unit = 't/y'
@@ -50,8 +50,8 @@ def print_emission(plant):
     print(row.format('Emission reduction', col7))
 
 print('Greenhouse gas emission reduction Mong Duong 1')
-print_emission(MongDuong1)
+print_emission(MongDuong1, MongDuong1Cofire)
 print('')
 
 print('Greenhouse gas emission reduction NinhBinh')
-print_emission(NinhBinh)
+print_emission(NinhBinh, NinhBinhCofire)

@@ -10,7 +10,7 @@
 """ Print table D for job created from co-firing in job.py
 """
 
-from parameters import MongDuong1, NinhBinh
+from parameters import MongDuong1, NinhBinh, MongDuong1Cofire, NinhBinhCofire
 
 from job import bm_collection_work, bm_transport_work, benefit_bm_collection
 from job import number_of_truck, transport_time, benefit_bm_transport
@@ -23,14 +23,14 @@ print('')
 row = '{:40}' + '{:25.1f}'
 
 
-def print_job(plant):
+def print_job(plant, cofiringplant):
 
     col1 = benefit_bm_collection(plant)
-    col2 = benefit_bm_transport(plant)
+    col2 = benefit_bm_transport(cofiringplant)
     col3 = benefit_om(plant)
-    col4 = total_job_benefit(plant)
-    col5 = number_of_truck(plant)
-    col6 = transport_time(plant)
+    col4 = total_job_benefit(plant, cofiringplant)
+    col5 = number_of_truck(cofiringplant)
+    col6 = transport_time(cofiringplant)
 
     col1.display_unit = 'USD/y'
     col2.display_unit = 'USD/y'
@@ -49,7 +49,7 @@ def print_job(plant):
           )
 
     print(row.format('total hour for biomass transportation',
-                     bm_transport_work(plant) * h_per_yr
+                     bm_transport_work(cofiringplant) * h_per_yr
                      )
           )
 
@@ -61,13 +61,13 @@ def print_job(plant):
           )
 
     print(row.format('FTE job from biomass transportation',
-                     bm_transport_work(plant) / FTE
+                     bm_transport_work(cofiringplant) / FTE
                      )
           )
 
     print(row.format('FTE job from co-firing O&M', om_work(plant) / FTE))
 
-    print(row.format('Total FTE job', cofiring_work(plant) / FTE))
+    print(row.format('Total FTE job', cofiring_work(plant, cofiringplant) / FTE))
 
     print(row.format('Job benefit from biomass collection', col1))
 
@@ -81,9 +81,9 @@ def print_job(plant):
 print('')
 print('Benefit from job creation Mong Duong 1')
 print('')
-print_job(MongDuong1)
+print_job(MongDuong1, MongDuong1Cofire)
 
 print('')
 print('Benefit from job creation Ninh Binh')
 print('')
-print_job(NinhBinh)
+print_job(NinhBinh, NinhBinhCofire)

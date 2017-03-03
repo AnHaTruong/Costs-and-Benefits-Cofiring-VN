@@ -7,7 +7,7 @@
 # Creative Commons Attribution-ShareAlike 4.0 International
 #
 from units import isclose
-from natu.units import t, USD
+from natu.units import t, km, USD
 from copy import copy
 
 
@@ -27,6 +27,7 @@ class SupplyZone():
                 "\n Capacity = " + str(self.capacity()) +
                 "\n Transport tariff: " + str(self.transport_tariff) +
                 "\n Tortuosity: " + str(self.tortuosity_factor) +
+                "\n Activity to transport all = " + str(self.transport_tkm()) +
                 "\n Cost to transport all = " + str(self.transport_cost())
                 )
 
@@ -35,12 +36,13 @@ class SupplyZone():
         mass.display_unit = 't'
         return mass
 
+    def transport_tkm(self):
+        activity = self.straw_density * self.shape.first_moment_of_area() * self.tortuosity_factor
+        activity.display_unit = 't*km'
+        return activity
+
     def transport_cost(self):
-        cost = (self.transport_tariff *
-                self.straw_density *
-                self.shape.first_moment_of_area() *
-                self.tortuosity_factor
-                )
+        cost = self.transport_tariff * self.transport_tkm()
         cost.display_unit = 'kUSD'
         return cost
 
@@ -57,15 +59,24 @@ class SupplyChain():
         s = "Supply chain\n"
         s += "Capacity = " + str(self.capacity()) + "\n"
         s += "Cost to transport all = " + str(self.transport_cost()) + "\n"
+        s += "Collection_radius = " + str(self.collection_radius()) + "\n"
         for zone in self.zones:
             s += str(zone) + "\n"
         return s
 
     def capacity(self):
-        total = 0 * t
+        mass = 0 * t
         for zone in self.zones:
-            total += zone.capacity()
-        return total
+            mass += zone.capacity()
+        mass.display_unit = 't'
+        return mass
+
+    def transport_tkm(self):
+        activity = 0 * t * km
+        for zone in self.zones:
+            activity += zone.transport_tkm()
+        activity.display_unit = 't * km'
+        return activity
 
     def transport_cost(self):
         cost = 0 * USD
@@ -99,3 +110,6 @@ class SupplyChain():
 
         assert isclose(collected.capacity(), quantity)
         return collected
+
+    def collection_radius(self):
+        return self.zones[-1].shape.outer_radius()

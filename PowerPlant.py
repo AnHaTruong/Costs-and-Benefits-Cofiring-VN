@@ -34,6 +34,11 @@ class Fuel:
         self.ef_pm10 = ef_pm10
         self.ef_nox = ef_nox
 
+    def cost_per_GJ(self):
+        cost = self.price / self.heat_value
+        cost.display_unit = 'USD / GJ'
+        return cost
+
 
 class PowerPlant(Investment):
     """ A coal power plant, without co-firing
@@ -233,8 +238,13 @@ class CofiringPlant(PowerPlant):
         return display_as(cost, 'kUSD')
 
     def biomass_cost_per_t(self):
+        """Including transport cost"""
         cost_per_t = self.biomass_cost() / self.biomass_used_nan
         return display_as(cost_per_t, 'USD*y/t')
+
+    def biomass_cost_per_GJ(self):
+        cost = self.biomass_cost_per_t() / self.biomass.heat_value / time_step
+        return display_as(cost, 'USD / GJ')
 
     def biomass_transport_cost_per_t(self):
         cost_per_t = self.biomass_transport_cost() / self.biomass_used_nan

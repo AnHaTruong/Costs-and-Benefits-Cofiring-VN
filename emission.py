@@ -15,7 +15,7 @@
 from parameters import biomass_heat_value, carbon_price
 from biomassrequired import biomass_required
 from coalsaved import coal_saved
-from biomasscost import bm_transport_tkm
+from units import time_step
 
 
 def emission_coal_combust_base(plant):
@@ -56,13 +56,10 @@ def emission_biomass_combust(plant):
     return plant.ef_biomass_combust * biomass_required(plant) * biomass_heat_value
 
 
-# FIXME: use the level of transport activity (t km)
-def emission_biomass_transport(plant):
-    """return emission from transportation of straw, which is transportation
-    activity (t.km) multiplied by emission factor of transportation
-
-    """
-    return plant.ef_biomass_transport * bm_transport_tkm(plant)
+def emission_biomass_transport(cofiringplant):
+    mass = cofiringplant.biomass.ef_transport * cofiringplant.active_chain.transport_tkm() / time_step
+    mass.display_unit = 't/y'
+    return mass
 
 
 def total_emission_coal(plant):
@@ -73,31 +70,31 @@ def total_emission_coal(plant):
     return emission_coal_combust_base(plant) + emission_coal_transport_base(plant)
 
 
-def total_emission_cofire(plant):
+def total_emission_cofire(plant, cofiringplant):
     """sum of emission from biomass combustion and biomass transportation for
        co-firing case
 
     """
     return (emission_biomass_combust(plant) +
-            emission_biomass_transport(plant) +
+            emission_biomass_transport(cofiringplant) +
             emission_coal_combust_cofire(plant) +
             emission_coal_transport_cofire(plant)
             )
 
 
-def emission_reduction(plant):
+def emission_reduction(plant, cofiringplant):
     """different between total emission from coal (base case) and total
        emission from biomass (co-firing case)
 
     """
-    return total_emission_coal(plant) - total_emission_cofire(plant)
+    return total_emission_coal(plant) - total_emission_cofire(plant, cofiringplant)
 
 
-def emission_reduction_benefit(plant):
+def emission_reduction_benefit(plant, cofiringplant):
     """ return the monetary benefit from greenhouse gas emission reduction
 
     """
-    return emission_reduction(plant) * carbon_price
+    return emission_reduction(plant, cofiringplant) * carbon_price
 
 if __name__ == "__main__":
     import doctest

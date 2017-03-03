@@ -13,7 +13,6 @@ from parameters import winder_capacity, truck_velocity, work_hour_day
 from parameters import truck_load, OM_hour_MWh, biomass_ratio, wage_bm_transport
 from parameters import wage_bm_collect, wage_operation_maintenance
 from biomassrequired import biomass_required
-from biomasscost import collection_radius
 
 
 def bm_collection_work(plant):
@@ -22,22 +21,22 @@ def bm_collection_work(plant):
     return biomass_required(plant) * work_hour_day / winder_capacity
 
 
-def bm_transport_work(plant):
+# FIXME: Use tkm instead
+def bm_transport_work(cofiringplant):
     """Total number of hour needed to transport rice straw to the plant per year
     """
-    return number_of_truck(plant) * transport_time(plant)
+    return number_of_truck(cofiringplant) * transport_time(cofiringplant)
 
 
-def number_of_truck(plant):
+def number_of_truck(cofiringplant):
     """Number of trucks to deliver the required biomass for co-firing to plant
     """
-    return biomass_required(plant) / truck_load
+    return cofiringplant.biomass_used[1] / truck_load
 
 
-def transport_time(plant):
-    """Time for 1 truck to deliver biomass to the plant (round trip)
-    """
-    return collection_radius(plant) * 2 / truck_velocity
+# FIXME: Trucks don't have to start from the border of the collection zone. Use tkm instead
+def transport_time(cofiringplant):
+    return cofiringplant.active_chain.collection_radius() * 2 / truck_velocity
 
 
 def om_work(plant):
@@ -46,10 +45,10 @@ def om_work(plant):
     return plant.power_generation[0] * biomass_ratio * OM_hour_MWh
 
 
-def cofiring_work(plant):
+def cofiring_work(plant, cofiringplant):
     """Total number of hours created from co-firing
     """
-    return bm_collection_work(plant) + bm_transport_work(plant) + om_work(plant)
+    return bm_collection_work(plant) + bm_transport_work(cofiringplant) + om_work(plant)
 
 
 def benefit_bm_collection(plant):
@@ -58,10 +57,10 @@ def benefit_bm_collection(plant):
     return bm_collection_work(plant) * wage_bm_collect
 
 
-def benefit_bm_transport(plant):
+def benefit_bm_transport(cofiringplant):
     """Benefit from job creation from biomass transportation
     """
-    return bm_transport_work(plant) * wage_bm_transport
+    return bm_transport_work(cofiringplant) * wage_bm_transport
 
 
 def benefit_om(plant):
@@ -70,10 +69,10 @@ def benefit_om(plant):
     return om_work(plant) * wage_operation_maintenance
 
 
-def total_job_benefit(plant):
+def total_job_benefit(plant, cofiringplant):
     """Total benefit from job creation from biomass co-firing
     """
-    return benefit_bm_collection(plant) + benefit_bm_transport(plant) + benefit_om(plant)
+    return benefit_bm_collection(plant) + benefit_bm_transport(cofiringplant) + benefit_om(plant)
 
 if __name__ == "__main__":
     import doctest

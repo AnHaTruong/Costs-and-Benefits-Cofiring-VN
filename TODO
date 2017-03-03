@@ -1,10 +1,10 @@
 ﻿TODO
 
+Fix transport work calculations
+
 store emissions factors in a dictionary
 
 Check emission calculation against CDM ACM0002 methodology
-
-Recode biomasscost.py
 
 Generate figures in EPS format (or SVG or PDF) and adjust the Makefile
 
@@ -29,6 +29,8 @@ Consider more indicators that LCOE:
 
 
 DONE
+
+Recode biomasscost.py
 
 Setup  git  to collaborate
 

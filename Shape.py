@@ -35,6 +35,9 @@ class Disk(Shape):
         assert factor >= 0
         return Disk(self.radius * sqrt(factor))
 
+    def outer_radius(self):
+        return self.radius
+
 
 class Annulus(Shape):
     """An annulus is the area between two concentric disks"""
@@ -61,6 +64,9 @@ class Annulus(Shape):
         assert factor >= 0
         new_R = sqrt(self.r**2 + factor * (self.R**2 - self.r**2))
         return Annulus(self.r, new_R)
+
+    def outer_radius(self):
+        return self.R
 
 
 class Semi_Annulus(Annulus):

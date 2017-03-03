@@ -55,7 +55,7 @@ health_damage_so2 = 3767 * USD / t
 health_damage_pm10 = 5883 * USD / t
 health_damage_nox = 286 * USD / t
 
-MD_coal = Fuel(heat_value=19.43468 * MJ / kg,
+MD_Coal = Fuel(heat_value=19.43468 * MJ / kg,
                price=1131400 * VND / t,
                transport_distance=0 * km,
                ef_combust=0.0966 * kg / MJ,
@@ -77,7 +77,7 @@ MongDuong1 = PowerPlant(name="Mong Duong 1",
                         variable_om_coal=0.0048 * USD / kWh,
                         esp_efficiency=0.996,
                         desulfur_efficiency=0.982,
-                        coal=MD_coal
+                        coal=MD_Coal
                         )
 
 MongDuong1.capital_cost = 50 * USD / kW
@@ -119,7 +119,7 @@ MongDuong1Cofire = CofiringPlant(MongDuong1,
                                  MD_SupplyChain
                                  )
 
-NB_coal = Fuel(heat_value=21.5476 * MJ / kg,
+NB_Coal = Fuel(heat_value=21.5476 * MJ / kg,
                price=1825730 * VND / t,  # Includes transport
                transport_distance=200 * km,
                ef_combust=0.0966 * kg / MJ,
@@ -142,7 +142,7 @@ NinhBinh = PowerPlant(name="Ninh Binh",
                       variable_om_coal=0.0048 * USD / kWh,
                       esp_efficiency=0.992,
                       desulfur_efficiency=0,
-                      coal=NB_coal
+                      coal=NB_Coal
                       )
 
 NinhBinh.capital_cost = 100 * USD / kW
