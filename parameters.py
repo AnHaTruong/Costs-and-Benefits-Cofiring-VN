@@ -25,7 +25,7 @@ depreciation_period = 10
 tax_rate = 0.25  # Corporate tax in Vietnam
 
 biomass_heat_value = 11.7 * MJ / kg
-biomass_ratio = 0.05             # As percent of energy coming from biomass
+biomass_ratio = 0.05           # As percent of energy coming from biomass
 
 straw_burn_rate = 0.9  # Percentage of straw burned infield after harvest
 winder_capacity = 6.57 * t / d

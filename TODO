@@ -1,5 +1,7 @@
 ﻿TODO
 
+Check emissions in the 0% biomass ratio
+
 Fix transport work calculations
 
 store emissions factors in a dictionary

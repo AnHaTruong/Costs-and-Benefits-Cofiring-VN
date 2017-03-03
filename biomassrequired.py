@@ -72,10 +72,6 @@ def gross_heat_input(plant):
     return plant.power_generation[0] / plant_efficiency_bm(plant)
 
 
-def coal_consumption_new_efficiency(plant):
-    return gross_heat_input(plant) / plant.coal.heat_value
-
-
 def biomass_required(plant):
     """Mass of biomass for co-firing
     """

@@ -2,13 +2,15 @@
 #
 # A Power plant
 #
-# (c) Minh Ha-Duong, An Ha Truong 2016
+# (c) Minh Ha-Duong, An Ha Truong 2016-2017
 # minh.haduong@gmail.com
 # Creative Commons Attribution-ShareAlike 4.0 International
 #
 #
+# pylint: disable=E0611
+
 from units import time_horizon, time_step, v_ones, v_after_invest, display_as, USD
-import natu.numpy as np
+from natu.numpy import full, npv
 from natu.units import t, y
 from Investment import Investment
 
@@ -75,12 +77,12 @@ class PowerPlant(Investment):
         self.coal_consumption = capacity * capacity_factor / plant_efficiency / coal.heat_value
         self.coal_consumption.display_unit = 't/y'
 
-        self.power_generation = np.full(time_horizon+1, capacity * capacity_factor, dtype=object)
+        self.power_generation = full(time_horizon+1, capacity * capacity_factor, dtype=object)
         self.elec_sale = self.power_generation * time_step
         display_as(self.elec_sale, 'GWh')
 
-        self.plant_efficiency = np.full(time_horizon+1, plant_efficiency)
-        self.boiler_efficiency = np.full(time_horizon+1, boiler_efficiency)
+        self.plant_efficiency = full(time_horizon+1, plant_efficiency)
+        self.boiler_efficiency = full(time_horizon+1, boiler_efficiency)
 
         self.coal = coal
         super().__init__(capital)
@@ -108,7 +110,7 @@ class PowerPlant(Investment):
 
     def coal_om_cost(self):
         # fixed_om_coal = v_ones.copy() * self.fix_om_coal * self.capacity
-        fixed_om_coal = np.full(time_horizon+1, self.fix_om_coal * self.capacity, dtype=object)
+        fixed_om_coal = full(time_horizon+1, self.fix_om_coal * self.capacity, dtype=object)
         # Same comment:  vector * scalar => okay, scalar * vector => natu.core complains
         variable_om_coal = self.power_generation * self.variable_om_coal
         return (fixed_om_coal + variable_om_coal) * time_step
@@ -117,8 +119,8 @@ class PowerPlant(Investment):
         return display_as(self.coal_om_cost(), 'kUSD')
 
     def lcoe(self, discount_rate, tax_rate, depreciation_period):
-        total_lifetime_power_production = np.npv(discount_rate, self.elec_sale)
-        total_life_cycle_cost = np.npv(discount_rate, self.cash_out(tax_rate, depreciation_period))
+        total_lifetime_power_production = npv(discount_rate, self.elec_sale)
+        total_life_cycle_cost = npv(discount_rate, self.cash_out(tax_rate, depreciation_period))
         result = total_life_cycle_cost / total_lifetime_power_production  # * time_step
         result.display_unit = 'USD/kWh'  # Fixme: once TableC is no regression, use /MWh for integer
         return result
@@ -131,7 +133,7 @@ class PowerPlant(Investment):
             print('{:30}{:8.4f}'.format(label, value))
 
         def printRowNPV(label, vector):
-            printRowInt(label, np.npv(discount_rate, vector))
+            printRowInt(label, npv(discount_rate, vector))
 
         print("Levelized cost of electricity -", self.name, "\n")
         printRowInt("Investment", self.capital)
@@ -185,19 +187,17 @@ class CofiringPlant(PowerPlant):
         self.ef_biomass_transport = biomass.ef_transport  # REPLACE AWAY
         self.biomass_heat_value = biomass.heat_value      # REPLACE AWAY
         self.biomass = biomass
-        self.supply_chain = supply_chain
 
         biomass_ratio_mass = biomass_ratio * (plant.coal.heat_value/biomass.heat_value)
         cofiring_boiler_efficiency = (plant.boiler_efficiency -
                                       boiler_efficiency_loss(biomass_ratio_mass)
                                       )
-        # TODO: use vector algebra in case investment takes more than 1 period
         self.boiler_efficiency = cofiring_boiler_efficiency
         self.boiler_efficiency[0] = plant.boiler_efficiency[0]
 
         derating = cofiring_boiler_efficiency / plant.boiler_efficiency
         cofiring_plant_efficiency = plant.plant_efficiency * derating
-        # TODO: use vector algebra in case investment takes more than 1 period
+
         self.plant_efficiency = cofiring_plant_efficiency
         self.plant_efficiency[0] = plant.plant_efficiency[0]
 
@@ -282,7 +282,7 @@ class CofiringPlant(PowerPlant):
             print('{:30}{:8.4f}'.format(label, value))
 
         def printRowNPV(label, vector):
-            printRowInt(label, np.npv(discount_rate, vector))
+            printRowInt(label, npv(discount_rate, vector))
 
         print("Levelized cost of electricity - ", self.name, "\n")
         printRowInt("Investment", self.capital)
