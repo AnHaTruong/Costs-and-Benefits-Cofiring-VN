@@ -48,13 +48,6 @@ ef_so2_biomass = 0.18 * g / kg
 ef_pm10_biomass = 9.1 * g / kg
 ef_nox_biomass = 2.28 * g / kg
 
-carbon_price = 1 * USD / t
-coal_import_price = 73 * USD / t
-
-health_damage_so2 = 3767 * USD / t
-health_damage_pm10 = 5883 * USD / t
-health_damage_nox = 286 * USD / t
-
 MD_Coal = Fuel(heat_value=19.43468 * MJ / kg,
                price=1131400 * VND / t,
                transport_distance=0 * km,
@@ -64,6 +57,56 @@ MD_Coal = Fuel(heat_value=19.43468 * MJ / kg,
                ef_pm10=43.8 * kg / t,
                ef_nox=18 * kg / t
                )
+
+NB_Coal = Fuel(heat_value=21.5476 * MJ / kg,
+               price=1825730 * VND / t,  # Includes transport
+               transport_distance=200 * km,
+               ef_combust=0.0966 * kg / MJ,
+               ef_transport=0.071 * kg / t / km,  # coal transported by barge
+               ef_so2=11.5 * kg / t,
+               ef_pm10=26.1 * kg / t,
+               ef_nox=18 * kg / t
+               )
+
+MD_Biomass = Fuel(heat_value=biomass_heat_value,
+                  price=biomass_fix_cost,
+                  transport_distance='Endogenous',
+                  ef_combust=0.0858 * kg / MJ,
+                  ef_transport=0.110 * kg / t / km,  # biomass transported by truck
+                  ef_so2=ef_so2_biomass,
+                  ef_pm10=ef_pm10_biomass,
+                  ef_nox=ef_nox_biomass
+                  )
+
+emission_factor = {
+    '6b_coal': {'CO2': 0.0966 * kg / MJ * MD_Coal.heat_value,
+                'SO2': 11.5 * kg / t,
+                'NOx': 18 * kg / t,
+                'PM10': 43.8 * kg / t
+                },
+    '4b_coal': {'CO2': 0.0966 * kg / MJ * NB_Coal.heat_value,
+                'SO2': 11.5 * kg / t,
+                'NOx': 18 * kg / t,
+                'PM10': 261 * kg / t
+                },
+    'Straw': {'CO2': 0.0858 * kg / MJ * MD_Biomass.heat_value,
+              'SO2': 0.18 * kg / t,
+              'NOx': 2.28 * kg / t,
+              'PM10': 9.1 * kg / t
+              },
+    'Road transport': {'CO2': 0.110 * kg / t / km},
+    'Barge transport': {'CO2': 0.071 * kg / t / km}
+    }
+
+
+carbon_price = 1 * USD / t
+coal_import_price = 73 * USD / t
+
+health_damage_so2 = 3767 * USD / t
+health_damage_pm10 = 5883 * USD / t
+health_damage_nox = 286 * USD / t
+
+MD_controls = {'CO2': 0.0, 'SO2': 0.982, 'NOx': 0.0, 'PM10': 0.996}
 
 MongDuong1 = PowerPlant(name="Mong Duong 1",
                         capacity=1080 * MW,
@@ -85,16 +128,6 @@ MongDuong1.fix_om_cost = 32.24 * USD / kW / y
 MongDuong1.variable_om_cost = 0.006 * USD / (kW*hr)
 MongDuong1.ef_biomass_combust = 0.0858 * kg / MJ
 MongDuong1.ef_biomass_transport = 0.110 * kg / t / km  # biomass transported by truck
-
-MD_Biomass = Fuel(heat_value=biomass_heat_value,
-                  price=biomass_fix_cost,
-                  transport_distance='Endogenous',
-                  ef_combust=MongDuong1.ef_biomass_combust,
-                  ef_transport=MongDuong1.ef_biomass_transport,
-                  ef_so2=ef_so2_biomass,
-                  ef_pm10=ef_pm10_biomass,
-                  ef_nox=ef_nox_biomass
-                  )
 
 MDSupplyZone1 = SupplyZone(shape=Semi_Annulus(0 * km, 50 * km),
                            straw_density=MongDuong1_straw_density1 * time_step, # ??
@@ -118,17 +151,6 @@ MongDuong1Cofire = CofiringPlant(MongDuong1,
                                  MD_Biomass,
                                  MD_SupplyChain
                                  )
-
-NB_Coal = Fuel(heat_value=21.5476 * MJ / kg,
-               price=1825730 * VND / t,  # Includes transport
-               transport_distance=200 * km,
-               ef_combust=0.0966 * kg / MJ,
-               ef_transport=0.071 * kg / t / km,  # coal transported by barge
-               ef_so2=11.5 * kg / t,
-               ef_pm10=26.1 * kg / t,
-               ef_nox=18 * kg / t
-               )
-
 
 NinhBinh = PowerPlant(name="Ninh Binh",
                       capacity=100 * MW,

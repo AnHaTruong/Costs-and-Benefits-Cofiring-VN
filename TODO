@@ -1,10 +1,18 @@
 ﻿TODO
 
+Unify the interface in CofiringPlant: Coal_Used() is a method but Biomass_Used is a member
+
 Check emissions in the 0% biomass ratio
 
 Fix transport work calculations
 
 store emissions factors in a dictionary
+
+Add smokestack to PowerPlant emissions
+
+Add transport emissions to SupplyChain
+
+Check in tables 7 and 8 that emissions in the new code match the old code
 
 Check emission calculation against CDM ACM0002 methodology
 
