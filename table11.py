@@ -7,33 +7,24 @@
 #     Creative Commons Attribution-ShareAlike 4.0 International
 #
 #
-""" Print table for the effect of co-firing on coal saving and national trade
-    balance in coalsaved.py
+""" Quantity and value of coal saved by co-firing.
 """
 
-from coalsaved import coal_saved, coal_import_saving
-from parameters import MongDuong1, NinhBinh
+from parameters import MongDuong1Cofire, NinhBinhCofire, coal_import_price
 
-print('')
-
-row = '{:35}' + '{:23.0f}'
 
 def print_coal_saved(plant):
-    col1 = coal_saved(plant)
-    col2 = coal_import_saving(plant)
-
-    col1.display_unit = 't/y'
+    col1 = plant.coal_saved[1]
+    col2 = col1 * coal_import_price
     col2.display_unit = 'kUSD/y'
 
-    print (row.format('Amount of coal saved from co-firing', col1))
-    print (row.format('Maximum benefit for trade balance', col2))
+    row = '{:35}{:23.0f}'
+    print('Coal saved at', plant.name)
+    print(row.format('Amount of coal saved from co-firing', col1))
+    print(row.format('Maximum benefit for trade balance', col2))
 
-
-print('Coal saved benefit Mong Duong1')
-print('')
-print_coal_saved(MongDuong1)
+print_coal_saved(MongDuong1Cofire)
 
 print('')
-print('Coal saved benefit Ninh Binh')
-print('')
-print_coal_saved(NinhBinh)
+
+print_coal_saved(NinhBinhCofire)
