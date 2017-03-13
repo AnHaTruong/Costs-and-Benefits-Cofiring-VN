@@ -38,12 +38,16 @@ zero_km = 0 * km
 
 
 def display_as(v, unit):
-    """Sets the vector to be displayed in 'unit' and returns it"""
+    """Sets the display_unit of every element of the vector to 'unit'.
+       Returns the vector
+    """
     for i in range(time_horizon+1):
         v[i].display_unit = unit
     return v
 
 
+# TODO: all functions should set the display_unit of their result
+# to make this function unnecessary
 def print_with_unit(func, unit):
     """ Display the desired unit on Tables"""
     value = func

@@ -11,7 +11,8 @@
 """
 
 from parameters import MongDuong1, NinhBinh, MongDuong1Cofire, NinhBinhCofire
-
+from parameters import emission_factor, MD_controls
+from Emitter import Emitter
 from emission import emission_coal_combust_base, emission_coal_transport_base
 from emission import emission_biomass_combust, emission_biomass_transport
 from emission import total_emission_coal, total_emission_cofire
@@ -53,5 +54,47 @@ print('Greenhouse gas emission reduction Mong Duong 1')
 print_emission(MongDuong1, MongDuong1Cofire)
 print('')
 
+
+print("Mong Duong 1 baseline")
+MD_plant_stack = Emitter({'6b_coal': MongDuong1.coal_consumption},
+                         emission_factor,
+                         MD_controls
+                         )
+
+print(MD_plant_stack, "\n")
+
+print("Mong Duong 1 cofiring")
+MDCofire_plant_stack = Emitter({'6b_coal': MongDuong1Cofire.coal_used()[1],
+                                'Straw': MongDuong1Cofire.biomass_used[1]},
+                               emission_factor,
+                               MD_controls)
+
+print(MDCofire_plant_stack, "\n")
+
+print("Mong Duong 1 reduction")
+print(MD_plant_stack.emissions["Total"] - MDCofire_plant_stack.emissions["Total"], "\n")
+
+
+print("==================")
+
 print('Greenhouse gas emission reduction NinhBinh')
 print_emission(NinhBinh, NinhBinhCofire)
+
+
+print("Ninh Binh baseline")
+NB_plant_stack = Emitter({'6b_coal': NinhBinh.coal_consumption},
+                         emission_factor
+                         )
+
+print(NB_plant_stack, "\n")
+
+print("Ninh Binh cofire")
+NBCofire_plant_stack = Emitter({'6b_coal': NinhBinhCofire.coal_used()[1],
+                                'Straw': NinhBinhCofire.biomass_used[1]},
+                               emission_factor
+                               )
+
+print(NBCofire_plant_stack, "\n")
+
+print("Ninh Binh reduction")
+print(NB_plant_stack.emissions["Total"] - NBCofire_plant_stack.emissions["Total"], "\n")

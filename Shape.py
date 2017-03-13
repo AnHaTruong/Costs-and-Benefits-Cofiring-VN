@@ -31,7 +31,7 @@ class Disk(Shape):
         return 2 * pi * self.radius**3 / 3
 
     def shrink(self, factor):
-        """Returns a new homotetic disk"""
+        """Returns a new homotetic disk, changing the area by factor."""
         assert factor >= 0
         return Disk(self.radius * sqrt(factor))
 

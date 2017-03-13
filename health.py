@@ -73,11 +73,12 @@ def nox_emission_base(plant):
 """ Estimation of pollutant emission of co-firing case
 """
 
+
 def so2_emission_field_cofire(plant):
     """ SO2 emission from open straw burning in co-firing case
 
     """
-    return (straw_burned_infield(plant) - biomass_required(plant))* ef_so2_biomass
+    return (straw_burned_infield(plant) - biomass_required(plant)) * ef_so2_biomass
 
 
 def so2_emission_plant_cofire(plant):
@@ -117,11 +118,13 @@ def pm10_emission_cofire(plant):
     """
     return pm10_emission_plant_cofire(plant) + pm10_emission_field_cofire (plant)
 
+
 def nox_emission_field_cofire(plant):
     """NOx emission from open straw burning in co-firing case
 
     """
     return (straw_burned_infield(plant) - biomass_required(plant))* ef_nox_biomass
+
 
 def nox_emission_plant_cofire(plant):
     """NOx emission from co-firing
@@ -130,6 +133,7 @@ def nox_emission_plant_cofire(plant):
     nox_emit_bm = biomass_required(plant) * ef_nox_biomass
     nox_emit_coal = (plant.coal_consumption - coal_saved(plant)) * plant.coal.ef_nox
     return nox_emit_bm + nox_emit_coal
+
 
 def nox_emission_cofire(plant):
     """ NOx emission in co-firing case
@@ -179,11 +183,13 @@ def health_benefit_pm10(plant):
     """
     return pm10_emission_reduction(plant) * health_damage_pm10
 
+
 def health_benefit_nox(plant):
     """ Health benefit from nox emission reduction by co-firing
 
     """
     return nox_emission_reduction(plant) * health_damage_nox
+
 
 def total_health_benefit(plant):
     """ Total health benefit from co-firing
