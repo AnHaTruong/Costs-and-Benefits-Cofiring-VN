@@ -20,7 +20,9 @@ def coal_saved(plant):
     Does not work for a CofiringPlant
 
     """
-    return gross_heat_input(plant) * biomass_ratio / plant.coal.heat_value
+    mass = gross_heat_input(plant) * biomass_ratio / plant.coal.heat_value
+    mass.display_unit = 't/y'
+    return mass
 
 
 def coal_import_saving(plant):

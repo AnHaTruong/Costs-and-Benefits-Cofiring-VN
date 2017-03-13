@@ -87,9 +87,9 @@ emission_factor = {
     '4b_coal': {'CO2': 0.0966 * kg / MJ * NB_Coal.heat_value,
                 'SO2': 11.5 * kg / t,
                 'NOx': 18 * kg / t,
-                'PM10': 261 * kg / t
+                'PM10': 26.1 * kg / t
                 },
-    'Straw': {'CO2': 0.0858 * kg / MJ * MD_Biomass.heat_value,
+    'Straw': {'CO2': 0.0858 * kg / MJ * biomass_heat_value,
               'SO2': 0.18 * kg / t,
               'NOx': 2.28 * kg / t,
               'PM10': 9.1 * kg / t
@@ -152,6 +152,8 @@ MongDuong1Cofire = CofiringPlant(MongDuong1,
                                  MD_Biomass,
                                  MD_SupplyChain
                                  )
+
+NB_controls = {'CO2': 0.0, 'SO2': 0.0, 'NOx': 0.0, 'PM10': 0.992}
 
 NinhBinh = PowerPlant(name="Ninh Binh",
                       capacity=100 * MW,

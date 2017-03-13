@@ -35,11 +35,10 @@ def emission_coal_transport_base(plant):
     return plant.coal.ef_transport * 2 * plant.coal.transport_distance * plant.coal_consumption
 
 
-def emission_coal_combust_cofire(plant):
+def emission_coal_combust_cofire(plant, cofiringplant):
     """ emission from coal combustion when co-fire
-
     """
-    return plant.coal.ef_combust * (plant.coal_consumption - coal_saved(plant)) * plant.coal.heat_value
+    return plant.coal.ef_combust * cofiringplant.coal_consumption * plant.coal.heat_value
 
 
 def emission_coal_transport_cofire(plant):
@@ -77,7 +76,7 @@ def total_emission_cofire(plant, cofiringplant):
     """
     return (emission_biomass_combust(plant) +
             emission_biomass_transport(cofiringplant) +
-            emission_coal_combust_cofire(plant) +
+            emission_coal_combust_cofire(plant, cofiringplant) +
             emission_coal_transport_cofire(plant)
             )
 

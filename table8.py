@@ -10,7 +10,7 @@
 """Print out the result on health benefits of co-firing project from health.py
 """
 
-from parameters import MongDuong1, NinhBinh
+from parameters import MongDuong1, NinhBinh, MongDuong1Cofire, NinhBinhCofire
 
 from health import *
 from strawburned import so2_emission_field_base, pm10_emission_field_base, nox_emission_field_base
@@ -23,7 +23,7 @@ row = '{:10}' + '{:18.2f}' * 7 + '{:15.0f}'
 print('')
 
 
-def print_health(plant):
+def print_health(plant, cofiringplant):
 
     print(head.format('Pollutant',
                       'Field emission base',
@@ -48,20 +48,20 @@ def print_health(plant):
     col41 = so2_emission_field_cofire(plant)
     col42 = pm10_emission_field_cofire(plant)
     col43 = nox_emission_field_cofire(plant)
-    col51 = so2_emission_plant_cofire(plant)
-    col52 = pm10_emission_plant_cofire(plant)
-    col53 = nox_emission_plant_cofire (plant)
-    col61 = so2_emission_cofire(plant)
-    col62 = pm10_emission_cofire(plant)
-    col63 = nox_emission_cofire(plant)
-    col71 = so2_emission_reduction(plant)
-    col72 = pm10_emission_reduction(plant)
-    col73 = nox_emission_reduction(plant)
-    col81 = health_benefit_so2(plant)
-    col82 = health_benefit_pm10(plant)
-    col83 = health_benefit_nox(plant)
-    col9 = total_health_benefit(plant)
-    
+    col51 = so2_emission_plant_cofire(plant, cofiringplant)
+    col52 = pm10_emission_plant_cofire(plant, cofiringplant)
+    col53 = nox_emission_plant_cofire (plant, cofiringplant)
+    col61 = so2_emission_cofire(plant, cofiringplant)
+    col62 = pm10_emission_cofire(plant, cofiringplant)
+    col63 = nox_emission_cofire(plant, cofiringplant)
+    col71 = so2_emission_reduction(plant, cofiringplant)
+    col72 = pm10_emission_reduction(plant, cofiringplant)
+    col73 = nox_emission_reduction(plant, cofiringplant)
+    col81 = health_benefit_so2(plant, cofiringplant)
+    col82 = health_benefit_pm10(plant, cofiringplant)
+    col83 = health_benefit_nox(plant, cofiringplant)
+    col9 = total_health_benefit(plant, cofiringplant)
+
     col11.display_unit = 't/y'
     col12.display_unit = 't/y'
     col13.display_unit = 't/y'
@@ -88,7 +88,7 @@ def print_health(plant):
     col83.display_unit = 'kUSD/y'
 
     col9.display_unit = 'kUSD/y'
-   
+
     print(row.format('SO2', col11, col21, col31, col41, col51, col61, col71, col81))
 
     print(row.format('PM10', col12, col22, col32, col42, col52, col62, col72, col82))
@@ -98,9 +98,9 @@ def print_health(plant):
     print('Total health benefit ', col9)
 
 print('Health benefit - Mong Duong 1')
-print_health(MongDuong1)
+print_health(MongDuong1, MongDuong1Cofire)
 
 print('')
 
 print('Health benefit - Ninh Binh')
-print_health(NinhBinh)
+print_health(NinhBinh, NinhBinhCofire)
