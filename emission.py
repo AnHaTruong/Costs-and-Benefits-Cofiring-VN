@@ -13,8 +13,6 @@
 
 
 from parameters import biomass_heat_value, carbon_price
-from biomassrequired import biomass_required
-from coalsaved import coal_saved
 from units import time_step
 
 
@@ -32,27 +30,27 @@ def emission_coal_transport_base(plant):
        distance because round trip is accounted
 
     """
-    return plant.coal.ef_transport * 2 * plant.coal.transport_distance * plant.coal_consumption
+    return plant.coal.ef_transport * 2 * plant.coal.transport_distance * plant.coal_used[1]
 
 
 def emission_coal_combust_cofire(plant, cofiringplant):
     """ emission from coal combustion when co-fire
     """
-    return plant.coal.ef_combust * cofiringplant.coal_consumption * plant.coal.heat_value
+    return plant.coal.ef_combust * cofiringplant.coal_used[1] * plant.coal.heat_value
 
 
-def emission_coal_transport_cofire(plant):
+def emission_coal_transport_cofire(plant, cofiringplant):
     """emission from coal transportation when co-fire
 
     """
-    return plant.coal.ef_transport * 2 * plant.coal.transport_distance * (plant.coal_consumption - coal_saved(plant))
+    return plant.coal.ef_transport * 2 * plant.coal.transport_distance * cofiringplant.coal_used[1]
 
 
-def emission_biomass_combust(plant):
+def emission_biomass_combust(plant, cofiringplant):
     """return the emission from biomass combustion with co-firing
 
     """
-    return plant.ef_biomass_combust * biomass_required(plant) * biomass_heat_value
+    return plant.ef_biomass_combust * cofiringplant.biomass_used[1] * biomass_heat_value
 
 
 def emission_biomass_transport(cofiringplant):
@@ -74,10 +72,10 @@ def total_emission_cofire(plant, cofiringplant):
        co-firing case
 
     """
-    return (emission_biomass_combust(plant) +
+    return (emission_biomass_combust(plant, cofiringplant) +
             emission_biomass_transport(cofiringplant) +
             emission_coal_combust_cofire(plant, cofiringplant) +
-            emission_coal_transport_cofire(plant)
+            emission_coal_transport_cofire(plant, cofiringplant)
             )
 
 
