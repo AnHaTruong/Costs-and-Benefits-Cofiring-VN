@@ -55,6 +55,8 @@ health_damage_so2 = 3767 * USD / t
 health_damage_pm10 = 5883 * USD / t
 health_damage_nox = 286 * USD / t
 
+
+
 MD_Coal = Fuel(heat_value=19.43468 * MJ / kg,
                price=1131400 * VND / t,
                transport_distance=0 * km,
@@ -95,6 +97,7 @@ MD_Biomass = Fuel(heat_value=biomass_heat_value,
                   ef_pm10=ef_pm10_biomass,
                   ef_nox=ef_nox_biomass
                   )
+
 
 MDSupplyZone1 = SupplyZone(shape=Semi_Annulus(0 * km, 50 * km),
                            straw_density=MongDuong1_straw_density1 * time_step, # ??

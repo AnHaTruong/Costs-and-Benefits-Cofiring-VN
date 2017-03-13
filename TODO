@@ -4,7 +4,7 @@ Fix transport work calculations
 
 store emissions factors in a dictionary
 
-Check emission calculation against CDM ACM0002 methodology
+Check emission calculation against CDM ACM0020 methodology
 
 Generate figures in EPS format (or SVG or PDF) and adjust the Makefile
 
