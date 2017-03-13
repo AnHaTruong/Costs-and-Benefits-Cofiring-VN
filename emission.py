@@ -37,7 +37,6 @@ def emission_coal_transport_base(plant):
 
 def emission_coal_combust_cofire(plant):
     """ emission from coal combustion when co-fire
-
     """
     return plant.coal.ef_combust * (plant.coal_consumption - coal_saved(plant)) * plant.coal.heat_value
 

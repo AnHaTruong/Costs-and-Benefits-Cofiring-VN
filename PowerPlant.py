@@ -81,15 +81,18 @@ class PowerPlant(Investment):
         self.elec_sale = self.power_generation * time_step
         display_as(self.elec_sale, 'GWh')
 
-        self.plant_efficiency = full(time_horizon+1, plant_efficiency)
         self.boiler_efficiency = full(time_horizon+1, boiler_efficiency)
+        self.plant_efficiency = full(time_horizon+1, plant_efficiency)
+
+        self.coal_used = self.power_generation / plant_efficiency / coal.heat_value
+        display_as(self.coal_used, 't/y')
 
         self.coal = coal
         super().__init__(capital)
 
-    def coal_used(self):
-        mass = self.power_generation / self.plant_efficiency / self.coal.heat_value
-        return display_as(mass, 't/y')
+#    def coal_used(self):
+#        mass = self.power_generation / self.plant_efficiency / self.coal.heat_value
+#        return display_as(mass, 't/y')
 
     def income(self):
         revenue = self.elec_sale * self.electricity_tariff
@@ -102,7 +105,7 @@ class PowerPlant(Investment):
     def coal_cost(self):
         # natu bugs if in the multiplication,
         # the coal price (scalar) comes before the power generation (vector) ??
-        cost = self.coal_used() * self.coal.price * time_step
+        cost = self.coal_used * self.coal.price * time_step
         return display_as(cost, 'kUSD')
 
     def fuel_cost(self):
@@ -214,12 +217,15 @@ class CofiringPlant(PowerPlant):
         self.coal_saved = self.biomass_heat / plant.coal.heat_value
         display_as(self.coal_saved, 't/y')
 
+        self.coal_used = (self.gross_heat_input - self.biomass_heat) / self.coal.heat_value
+        display_as(self.coal_used, 't/y')
+
         self.active_chain = supply_chain.fit(self.biomass_used[1] * time_step)
 
-    def coal_used(self):
-        mass = self.power_generation / self.plant_efficiency / self.coal.heat_value
-        mass = mass - self.coal_saved
-        return display_as(mass, 't/y')
+#    def coal_used(self):
+#        mass = self.power_generation / self.plant_efficiency / self.coal.heat_value
+#        mass = mass - self.coal_saved
+#        return display_as(mass, 't/y')
 
     def fuel_cost(self):
         cost = self.coal_cost() + self.biomass_cost()

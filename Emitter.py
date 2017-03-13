@@ -26,7 +26,7 @@ class Emitter:
 
        Real example:
        from parameters import emission_factor, MongDuong1
-       MD_plant_stack = Emitter({'6b_coal': MongDuong1.coal_consumption, 'Straw': 0*t/y},
+       MD_plant_stack = Emitter({'6b_coal': MongDuong1.coal_used[1], 'Straw': 0*t/y},
                                 emission_factor,
                                 {'CO2': 0.0, 'SO2': 0.982, 'NOx': 0.0, 'PM10': 0.996}
                                 )
@@ -49,4 +49,4 @@ class Emitter:
         self.emissions['Total'] = self.emissions.sum(axis=1)
 
     def __str__(self):
-        return str(self.emissions.transpose())
+        return self.emissions.transpose().to_string()
