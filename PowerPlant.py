@@ -73,10 +73,6 @@ class PowerPlant(Investment):
         self.esp_efficiency = esp_efficiency
         self.desulfur_efficiency = desulfur_efficiency
 
-        # Backward compatibility
-        self.coal_consumption = capacity * capacity_factor / plant_efficiency / coal.heat_value
-        self.coal_consumption.display_unit = 't/y'
-
         self.power_generation = full(time_horizon+1, capacity * capacity_factor, dtype=object)
         self.elec_sale = self.power_generation * time_step
         display_as(self.elec_sale, 'GWh')
@@ -86,6 +82,10 @@ class PowerPlant(Investment):
 
         self.coal_used = self.power_generation / plant_efficiency / coal.heat_value
         display_as(self.coal_used, 't/y')
+
+        # Backward compatibility
+        self.coal_consumption = self.coal_used[1]
+        self.coal_consumption.display_unit = 't/y'
 
         self.coal = coal
         super().__init__(capital)
@@ -219,6 +219,10 @@ class CofiringPlant(PowerPlant):
 
         self.coal_used = (self.gross_heat_input - self.biomass_heat) / self.coal.heat_value
         display_as(self.coal_used, 't/y')
+
+        # Backward compatibility
+        self.coal_consumption = self.coal_used[1]
+        self.coal_consumption.display_unit = 't/y'
 
         self.active_chain = supply_chain.fit(self.biomass_used[1] * time_step)
 
