@@ -21,7 +21,6 @@ class Fuel:
                  heat_value,
                  price,
                  transport_distance,
-                 ef_combust,
                  ef_transport
                  ):
         self.name = name
@@ -29,7 +28,6 @@ class Fuel:
         self.price = price
         self.price.display_unit = 'USD/t'
         self.transport_distance = transport_distance
-        self.ef_combust = ef_combust
         self.ef_transport = ef_transport
 
     def cost_per_GJ(self):
@@ -182,7 +180,6 @@ class CofiringPlant(PowerPlant):
         self.biomass_ratio = biomass_ratio
         self.fix_om_cost = fix_om_cost
         self.variable_om_cost = variable_om_cost
-        self.ef_biomass_combust = biomass.ef_combust      # REPLACE AWAY
         self.ef_biomass_transport = biomass.ef_transport  # REPLACE AWAY
         self.biomass_heat_value = biomass.heat_value      # REPLACE AWAY
         self.biomass = biomass
@@ -221,13 +218,6 @@ class CofiringPlant(PowerPlant):
         self.coal_consumption.display_unit = 't/y'
 
         self.active_chain = supply_chain.fit(self.biomass_used[1] * time_step)
-
-
-#    def coal_used(self):
-#        mass = self.power_generation / self.plant_efficiency / self.coal.heat_value
-#        mass = mass - self.coal_saved
-#        return display_as(mass, 't/y')
-
 
     def fuel_cost(self):
         cost = self.coal_cost() + self.biomass_cost()

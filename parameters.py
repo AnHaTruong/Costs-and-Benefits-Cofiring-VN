@@ -48,7 +48,6 @@ MD_Coal = Fuel(name="6b_coal",
                heat_value=19.43468 * MJ / kg,
                price=1131400 * VND / t,
                transport_distance=0 * km,
-               ef_combust=0.0966 * kg / MJ,
                ef_transport=0 * kg / t / km
                )
 
@@ -56,7 +55,6 @@ NB_Coal = Fuel(name="4b_coal",
                heat_value=21.5476 * MJ / kg,
                price=1825730 * VND / t,  # Includes transport
                transport_distance=200 * km,
-               ef_combust=0.0966 * kg / MJ,
                ef_transport=0.071 * kg / t / km  # coal transported by barge
                )
 
@@ -84,7 +82,6 @@ MD_Biomass = Fuel(name='Straw',
                   heat_value=biomass_heat_value,
                   price=biomass_fix_cost,
                   transport_distance='Endogenous',
-                  ef_combust=0.0858 * kg / MJ,
                   ef_transport=0.110 * kg / t / km  # biomass transported by truck
                   )
 
@@ -92,7 +89,6 @@ NB_Biomass = Fuel(name='Straw',
                   heat_value=biomass_heat_value,
                   price=biomass_fix_cost,
                   transport_distance='Endogenous',
-                  ef_combust=0.0858 * kg / MJ,
                   ef_transport=0.110 * kg / t / km  # biomass transported by truck
                   )
 
@@ -124,7 +120,6 @@ MongDuong1 = PowerPlant(name="Mong Duong 1",
 MongDuong1.capital_cost = 50 * USD / kW
 MongDuong1.fix_om_cost = 32.24 * USD / kW / y
 MongDuong1.variable_om_cost = 0.006 * USD / (kW*hr)
-MongDuong1.ef_biomass_combust = 0.0858 * kg / MJ
 MongDuong1.ef_biomass_transport = 0.110 * kg / t / km  # biomass transported by truck
 
 
@@ -171,7 +166,6 @@ NinhBinh = PowerPlant(name="Ninh Binh",
 NinhBinh.capital_cost = 100 * USD / kW
 NinhBinh.fix_om_cost = 32.24 * USD / kW / y
 NinhBinh.variable_om_cost = 0.006 * USD / (kW*hr)
-NinhBinh.ef_biomass_combust = 0.0858 * kg / MJ
 NinhBinh.ef_biomass_transport = 0.110 * kg / t / km  # biomass transported by truck
 
 NBSupplyZone = SupplyZone(shape=Disk(50 * km),
