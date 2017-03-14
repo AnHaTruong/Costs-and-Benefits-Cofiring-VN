@@ -9,7 +9,7 @@
 #
 
 from units import USD, VND, time_step
-from natu.units import MJ, kg, t, d, hr, km, MW, ha, g, kW, y, kWh
+from natu.units import MJ, kg, t, d, hr, km, MW, ha, kW, y, kWh
 from PowerPlant import Fuel, PowerPlant, CofiringPlant
 from Shape import Semi_Annulus, Disk
 from SupplyChain import SupplyChain, SupplyZone
@@ -44,24 +44,20 @@ wage_bm_transport = 1.11 * USD / hr
 wage_operation_maintenance = 1.67 * USD / hr
 winder_rental_cost = 40 * USD / ha
 
-MD_Coal = Fuel(heat_value=19.43468 * MJ / kg,
+MD_Coal = Fuel(name="6b_coal",
+               heat_value=19.43468 * MJ / kg,
                price=1131400 * VND / t,
                transport_distance=0 * km,
                ef_combust=0.0966 * kg / MJ,
-               ef_transport=0 * kg / t / km,
-               ef_so2=11.5 * kg / t,
-               ef_pm10=43.8 * kg / t,
-               ef_nox=18 * kg / t
+               ef_transport=0 * kg / t / km
                )
 
-NB_Coal = Fuel(heat_value=21.5476 * MJ / kg,
+NB_Coal = Fuel(name="4b_coal",
+               heat_value=21.5476 * MJ / kg,
                price=1825730 * VND / t,  # Includes transport
                transport_distance=200 * km,
                ef_combust=0.0966 * kg / MJ,
-               ef_transport=0.071 * kg / t / km,  # coal transported by barge
-               ef_so2=11.5 * kg / t,
-               ef_pm10=26.1 * kg / t,
-               ef_nox=18 * kg / t
+               ef_transport=0.071 * kg / t / km  # coal transported by barge
                )
 
 emission_factor = {
@@ -84,24 +80,20 @@ emission_factor = {
     'Barge transport': {'CO2': 0.071 * kg / t / km}
     }
 
-MD_Biomass = Fuel(heat_value=biomass_heat_value,
+MD_Biomass = Fuel(name='Straw',
+                  heat_value=biomass_heat_value,
                   price=biomass_fix_cost,
                   transport_distance='Endogenous',
                   ef_combust=0.0858 * kg / MJ,
-                  ef_transport=0.110 * kg / t / km,  # biomass transported by truck
-                  ef_so2=emission_factor["Straw"]["SO2"],
-                  ef_pm10=emission_factor["Straw"]["PM10"],
-                  ef_nox=emission_factor["Straw"]["NOx"]
+                  ef_transport=0.110 * kg / t / km  # biomass transported by truck
                   )
 
-NB_Biomass = Fuel(heat_value=biomass_heat_value,
+NB_Biomass = Fuel(name='Straw',
+                  heat_value=biomass_heat_value,
                   price=biomass_fix_cost,
                   transport_distance='Endogenous',
                   ef_combust=0.0858 * kg / MJ,
-                  ef_transport=0.110 * kg / t / km,  # biomass transported by truck
-                  ef_so2=emission_factor["Straw"]["SO2"],
-                  ef_pm10=emission_factor["Straw"]["PM10"],
-                  ef_nox=emission_factor["Straw"]["NOx"]
+                  ef_transport=0.110 * kg / t / km  # biomass transported by truck
                   )
 
 

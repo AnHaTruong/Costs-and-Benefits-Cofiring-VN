@@ -17,24 +17,20 @@ from Investment import Investment
 
 class Fuel:
     def __init__(self,
+                 name,
                  heat_value,
                  price,
                  transport_distance,
                  ef_combust,
-                 ef_transport,
-                 ef_so2,
-                 ef_pm10,
-                 ef_nox
+                 ef_transport
                  ):
+        self.name = name
         self.heat_value = heat_value
         self.price = price
         self.price.display_unit = 'USD/t'
         self.transport_distance = transport_distance
         self.ef_combust = ef_combust
         self.ef_transport = ef_transport
-        self.ef_so2 = ef_so2
-        self.ef_pm10 = ef_pm10
-        self.ef_nox = ef_nox
 
     def cost_per_GJ(self):
         cost = self.price / self.heat_value
