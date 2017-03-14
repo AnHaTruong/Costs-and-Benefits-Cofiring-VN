@@ -46,7 +46,8 @@ class Emitter:
        print(MD_plant_stack.emissions['Total']['CO2'], "\n")
 
        """
-    def __init__(self, quantities, emission_factors, controls={'CO2': 0, 'SO2': 0, 'NOx': 0, 'PM10': 0}):
+    def __init__(self, quantities, emission_factors,
+                 controls={'CO2': 0, 'SO2': 0, 'NOx': 0, 'PM10': 0}):
         self.controls = pd.Series(controls)
         self.quantities = pd.Series(quantities)
         self.emissions = pd.DataFrame(

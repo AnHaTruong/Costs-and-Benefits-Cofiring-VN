@@ -56,4 +56,4 @@ def print_with_unit(func, unit):
 
 
 def isclose(a, b, rel_tol=1e-09, abs_tol=0.0):   # From PEP 485
-    return abs(a-b) <= max(rel_tol * max(abs(a), abs(b)), abs_tol)
+    return abs(a - b) <= max(rel_tol * max(abs(a), abs(b)), abs_tol)

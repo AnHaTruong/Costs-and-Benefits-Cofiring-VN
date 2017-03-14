@@ -69,9 +69,11 @@ def benefit_om(plant):
 
 
 def total_job_benefit(plant, cofiringplant):
-    """Total benefit from job creation from biomass co-firing
-    """
-    return benefit_bm_collection(cofiringplant) + benefit_bm_transport(cofiringplant) + benefit_om(plant)
+    """Total benefit from job creation from biomass co-firing"""
+    return (benefit_bm_collection(cofiringplant)
+            + benefit_bm_transport(cofiringplant)
+            + benefit_om(plant)
+            )
 
 if __name__ == "__main__":
     import doctest

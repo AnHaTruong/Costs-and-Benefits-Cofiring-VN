@@ -83,8 +83,7 @@ emission_factor = {
               'PM10': 9.1 * kg / t
               },
     'Road transport': {'CO2': 0.110 * kg / t / km},
-    'Barge transport': {'CO2': 0.071 * kg / t / km}
-    }
+    'Barge transport': {'CO2': 0.071 * kg / t / km}}
 
 specific_cost = pd.Series({'CO2': 1 * USD / t,
                            'SO2': 3767 * USD / t,
@@ -127,7 +126,7 @@ MongDuong1Cofire = CofiringPlant(MongDuong1,
                                  biomass_ratio,
                                  capital_cost=50 * USD / kW,
                                  fix_om_cost=32.24 * USD / kW / y,
-                                 variable_om_cost=0.006 * USD / (kW*hr),
+                                 variable_om_cost=0.006 * USD / (kW * hr),
                                  biomass=straw,
                                  supply_chain=MD_SupplyChain
                                  )
