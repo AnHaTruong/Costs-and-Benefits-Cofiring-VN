@@ -15,7 +15,7 @@ from natu.math import fsum
 from natu.units import t, y
 from strawdata import residue_to_product_ratio_straw
 from parameters import straw_burn_rate
-from parameters import ef_so2_biomass, ef_pm10_biomass, ef_nox_biomass
+from parameters import emission_factor
 from parameters import MongDuong1, NinhBinh
 from strawdata import df
 
@@ -47,21 +47,21 @@ def so2_emission_field_base(plant):
     """SO2 emission from burning straw in field at provincial level
 
     """
-    return straw_burned_infield(plant) * ef_so2_biomass
+    return straw_burned_infield(plant) * emission_factor["Straw"]["SO2"]
 
 
 def nox_emission_field_base(plant):
     """SO2 emission from burning straw in field at provincial level
 
     """
-    return straw_burned_infield(plant) * ef_nox_biomass
+    return straw_burned_infield(plant) * emission_factor["Straw"]["NOx"]
 
 
 def pm10_emission_field_base(plant):
     """SO2 emission from burning straw in field at provincial level
 
     """
-    return straw_burned_infield(plant) * ef_pm10_biomass
+    return straw_burned_infield(plant) * emission_factor["Straw"]["PM10"]
 
 if __name__ == "__main__":
     import doctest

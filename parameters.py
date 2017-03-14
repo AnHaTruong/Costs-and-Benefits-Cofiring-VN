@@ -44,10 +44,6 @@ wage_bm_transport = 1.11 * USD / hr
 wage_operation_maintenance = 1.67 * USD / hr
 winder_rental_cost = 40 * USD / ha
 
-ef_so2_biomass = 0.18 * g / kg
-ef_pm10_biomass = 9.1 * g / kg
-ef_nox_biomass = 2.28 * g / kg
-
 MD_Coal = Fuel(heat_value=19.43468 * MJ / kg,
                price=1131400 * VND / t,
                transport_distance=0 * km,
@@ -68,16 +64,6 @@ NB_Coal = Fuel(heat_value=21.5476 * MJ / kg,
                ef_nox=18 * kg / t
                )
 
-MD_Biomass = Fuel(heat_value=biomass_heat_value,
-                  price=biomass_fix_cost,
-                  transport_distance='Endogenous',
-                  ef_combust=0.0858 * kg / MJ,
-                  ef_transport=0.110 * kg / t / km,  # biomass transported by truck
-                  ef_so2=ef_so2_biomass,
-                  ef_pm10=ef_pm10_biomass,
-                  ef_nox=ef_nox_biomass
-                  )
-
 emission_factor = {
     '6b_coal': {'CO2': 0.0966 * kg / MJ * MD_Coal.heat_value,
                 'SO2': 11.5 * kg / t,
@@ -97,6 +83,26 @@ emission_factor = {
     'Road transport': {'CO2': 0.110 * kg / t / km},
     'Barge transport': {'CO2': 0.071 * kg / t / km}
     }
+
+MD_Biomass = Fuel(heat_value=biomass_heat_value,
+                  price=biomass_fix_cost,
+                  transport_distance='Endogenous',
+                  ef_combust=0.0858 * kg / MJ,
+                  ef_transport=0.110 * kg / t / km,  # biomass transported by truck
+                  ef_so2=emission_factor["Straw"]["SO2"],
+                  ef_pm10=emission_factor["Straw"]["PM10"],
+                  ef_nox=emission_factor["Straw"]["NOx"]
+                  )
+
+NB_Biomass = Fuel(heat_value=biomass_heat_value,
+                  price=biomass_fix_cost,
+                  transport_distance='Endogenous',
+                  ef_combust=0.0858 * kg / MJ,
+                  ef_transport=0.110 * kg / t / km,  # biomass transported by truck
+                  ef_so2=emission_factor["Straw"]["SO2"],
+                  ef_pm10=emission_factor["Straw"]["PM10"],
+                  ef_nox=emission_factor["Straw"]["NOx"]
+                  )
 
 
 carbon_price = 1 * USD / t
@@ -175,16 +181,6 @@ NinhBinh.fix_om_cost = 32.24 * USD / kW / y
 NinhBinh.variable_om_cost = 0.006 * USD / (kW*hr)
 NinhBinh.ef_biomass_combust = 0.0858 * kg / MJ
 NinhBinh.ef_biomass_transport = 0.110 * kg / t / km  # biomass transported by truck
-
-NB_Biomass = Fuel(heat_value=biomass_heat_value,
-                  price=biomass_fix_cost,
-                  transport_distance='Endogenous',
-                  ef_combust=NinhBinh.ef_biomass_combust,
-                  ef_transport=NinhBinh.ef_biomass_transport,
-                  ef_so2=ef_so2_biomass,
-                  ef_pm10=ef_pm10_biomass,
-                  ef_nox=ef_nox_biomass
-                  )
 
 NBSupplyZone = SupplyZone(shape=Disk(50 * km),
                           straw_density=NinhBinh_straw_density * time_step,

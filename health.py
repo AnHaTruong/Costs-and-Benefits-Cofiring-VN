@@ -7,9 +7,8 @@
 # Creative Commons Attribution-ShareAlike 4.0 International
 #
 #
-from parameters import ef_so2_biomass, ef_pm10_biomass
-from parameters import ef_nox_biomass, health_damage_so2
-from parameters import health_damage_pm10, health_damage_nox
+from parameters import emission_factor
+from parameters import health_damage_so2, health_damage_pm10, health_damage_nox
 from strawburned import so2_emission_field_base, pm10_emission_field_base
 from strawburned import straw_burned_infield, nox_emission_field_base
 
@@ -74,14 +73,14 @@ def so2_emission_field_cofire(plant, cofiringplant):
     """ SO2 emission from open straw burning in co-firing case
 
     """
-    return (straw_burned_infield(plant) - cofiringplant.biomass_used[1]) * ef_so2_biomass
+    return (straw_burned_infield(plant) - cofiringplant.biomass_used[1]) * emission_factor["Straw"]["SO2"]
 
 
 def so2_emission_plant_cofire(plant, cofiringplant):
     """ SO2 emission from coal and straw combustion in plant
 
     """
-    so2_emit_bm = cofiringplant.biomass_used[1] * ef_so2_biomass* (1 - plant.desulfur_efficiency)
+    so2_emit_bm = cofiringplant.biomass_used[1] * emission_factor["Straw"]["SO2"] * (1 - plant.desulfur_efficiency)
     so2_emit_coal = (cofiringplant.coal_used[1] *
                      plant.coal.ef_so2 *
                      (1 - plant.desulfur_efficiency)
@@ -99,13 +98,13 @@ def so2_emission_cofire(plant, cofiringplant):
 def pm10_emission_field_cofire(plant, cofiringplant):
     """ PM10 emission from open straw burning in co-firing case
     """
-    return (straw_burned_infield(plant) - cofiringplant.biomass_used[1]) * ef_pm10_biomass
+    return (straw_burned_infield(plant) - cofiringplant.biomass_used[1]) * emission_factor["Straw"]["PM10"]
 
 
 def pm10_emission_plant_cofire(plant, cofiringplant):
     """PM10 emission from coal and straw combustion in plant
     """
-    pm10_emit_bm = cofiringplant.biomass_used[1] * ef_pm10_biomass * (1 - plant.esp_efficiency)
+    pm10_emit_bm = cofiringplant.biomass_used[1] * emission_factor["Straw"]["PM10"] * (1 - plant.esp_efficiency)
     pm10_emit_coal = (cofiringplant.coal_used[1]*
                       plant.coal.ef_pm10 *
                       (1 - plant.esp_efficiency)
@@ -122,14 +121,15 @@ def pm10_emission_cofire(plant, cofiringplant):
 def nox_emission_field_cofire(plant, cofiringplant):
     """NOx emission from open straw burning in co-firing case
     """
-    return (straw_burned_infield(plant) - cofiringplant.biomass_used[1]) * ef_nox_biomass
+    return (straw_burned_infield(plant) - cofiringplant.biomass_used[1]) * emission_factor["Straw"]["NOx"]
+
 
 
 def nox_emission_plant_cofire(plant, cofiringplant):
     """NOx emission from co-firing
 
     """
-    nox_emit_bm = cofiringplant.biomass_used[1] * ef_nox_biomass
+    nox_emit_bm = cofiringplant.biomass_used[1] * emission_factor["Straw"]["NOx"]
     nox_emit_coal = cofiringplant.coal_used[1] * plant.coal.ef_nox
     return nox_emit_bm + nox_emit_coal
 
