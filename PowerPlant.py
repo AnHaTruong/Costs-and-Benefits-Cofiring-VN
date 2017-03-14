@@ -71,13 +71,13 @@ class PowerPlant(Investment):
 
         self.power_generation = full(time_horizon+1, capacity * capacity_factor, dtype=object)
         self.elec_sale = self.power_generation * time_step
-        display_as(self.elec_sale, 'GWh')
+        display_as(self.elec_sale, time_horizon+1, 'GWh')
 
         self.boiler_efficiency = full(time_horizon+1, boiler_efficiency)
         self.plant_efficiency = full(time_horizon+1, plant_efficiency)
 
         self.coal_used = self.power_generation / plant_efficiency / coal.heat_value
-        display_as(self.coal_used, 't/y')
+        display_as(self.coal_used, time_horizon + 1, 't/y')
 
         # Backward compatibility
         self.coal_consumption = self.coal_used[1]
@@ -88,21 +88,21 @@ class PowerPlant(Investment):
 
 #    def coal_used(self):
 #        mass = self.power_generation / self.plant_efficiency / self.coal.heat_value
-#        return display_as(mass, 't/y')
+#        return display_as(mass, time_horizon+1, 't/y')
 
     def income(self):
         revenue = self.elec_sale * self.electricity_tariff
-        return display_as(revenue, 'kUSD')
+        return display_as(revenue, time_horizon+1, 'kUSD')
 
     def operating_expenses(self):
         cost = self.fuel_cost() + self.operation_maintenance_cost()
-        return display_as(cost, 'kUSD')
+        return display_as(cost, time_horizon+1, 'kUSD')
 
     def coal_cost(self):
         # natu bugs if in the multiplication,
         # the coal price (scalar) comes before the power generation (vector) ??
         cost = self.coal_used * self.coal.price * time_step
-        return display_as(cost, 'kUSD')
+        return display_as(cost, time_horizon+1, 'kUSD')
 
     def fuel_cost(self):
         return self.coal_cost()
@@ -115,7 +115,7 @@ class PowerPlant(Investment):
         return (fixed_om_coal + variable_om_coal) * time_step
 
     def operation_maintenance_cost(self):
-        return display_as(self.coal_om_cost(), 'kUSD')
+        return display_as(self.coal_om_cost(), time_horizon+1, 'kUSD')
 
     def lcoe(self, discount_rate, tax_rate, depreciation_period):
         total_lifetime_power_production = npv(discount_rate, self.elec_sale)
@@ -203,7 +203,7 @@ class CofiringPlant(PowerPlant):
         self.gross_heat_input = self.power_generation / self.plant_efficiency
         self.biomass_heat = v_after_invest * self.gross_heat_input * biomass_ratio
         self.biomass_used = self.biomass_heat / biomass.heat_value
-        display_as(self.biomass_used, 't/y')
+        display_as(self.biomass_used, time_horizon+1, 't/y')
 
         self.biomass_used_nan = self.biomass_used.copy()
         for i in range(time_horizon + 1):
@@ -211,10 +211,10 @@ class CofiringPlant(PowerPlant):
                 self.biomass_used_nan[i] = float('nan') * t/y
 
         self.coal_saved = self.biomass_heat / plant.coal.heat_value
-        display_as(self.coal_saved, 't/y')
+        display_as(self.coal_saved, time_horizon +1, 't/y')
 
         self.coal_used = (self.gross_heat_input - self.biomass_heat) / self.coal.heat_value
-        display_as(self.coal_used, 't/y')
+        display_as(self.coal_used, time_horizon+1, 't/y')
 
         # Backward compatibility
         self.coal_consumption = self.coal_used[1]
@@ -226,41 +226,41 @@ class CofiringPlant(PowerPlant):
 #    def coal_used(self):
 #        mass = self.power_generation / self.plant_efficiency / self.coal.heat_value
 #        mass = mass - self.coal_saved
-#        return display_as(mass, 't/y')
+#        return display_as(mass, time_horizon+1, 't/y')
 
 
     def fuel_cost(self):
         cost = self.coal_cost() + self.biomass_cost()
-        return display_as(cost, 'kUSD')
+        return display_as(cost, time_horizon+1, 'kUSD')
 
     def biomass_transport_cost(self):
         cost = v_after_invest * self.active_chain.transport_cost()
-        return display_as(cost, 'kUSD')
+        return display_as(cost, time_horizon+1, 'kUSD')
 
     def biomass_field_cost(self):
         cost = self.biomass_used * self.biomass.price * time_step
-        return display_as(cost, 'kUSD')
+        return display_as(cost, time_horizon+1, 'kUSD')
 
     def biomass_cost(self):
         cost = self.biomass_field_cost() + self.biomass_transport_cost()
-        return display_as(cost, 'kUSD')
+        return display_as(cost, time_horizon+1, 'kUSD')
 
     def biomass_cost_per_t(self):
         """Including transport cost"""
         cost_per_t = self.biomass_cost() / self.biomass_used_nan
-        return display_as(cost_per_t, 'USD*y/t')
+        return display_as(cost_per_t, time_horizon+1, 'USD*y/t')
 
     def biomass_cost_per_GJ(self):
         cost = self.biomass_cost_per_t() / self.biomass.heat_value / time_step
-        return display_as(cost, 'USD / GJ')
+        return display_as(cost, time_horizon+1, 'USD / GJ')
 
     def biomass_transport_cost_per_t(self):
         cost_per_t = self.biomass_transport_cost() / self.biomass_used_nan
-        return display_as(cost_per_t, 'USD*y/t')
+        return display_as(cost_per_t, time_horizon+1, 'USD*y/t')
 
     def operation_maintenance_cost(self):
         cost = self.coal_om_cost() + self.biomass_om_cost()
-        return display_as(cost, 'kUSD')
+        return display_as(cost, time_horizon+1, 'kUSD')
 
     def coal_om_cost(self):  # DISCUSS THIS
         # Fixed costs are proportional to capacity
@@ -270,17 +270,17 @@ class CofiringPlant(PowerPlant):
         variable_om_coal = self.power_generation * self.variable_om_coal * (1 - self.biomass_ratio)
         variable_om_coal[0] = self.power_generation[0] * self.variable_om_coal
         cost = (fixed_om_coal + variable_om_coal) * time_step
-        return display_as(cost, 'kUSD')
+        return display_as(cost, time_horizon+1, 'kUSD')
 
     def biomass_om_cost(self):
         fixed_om_bm = v_ones * self.fix_om_cost * self.capacity * self.biomass_ratio * time_step
         var_om_bm = v_after_invest * self.elec_sale * self.variable_om_cost * self.biomass_ratio
         cost = v_after_invest * (fixed_om_bm + var_om_bm)
-        return display_as(cost, 'kUSD')
+        return display_as(cost, time_horizon+1, 'kUSD')
 
     def coal_saved_cost(self):
         cost = self.coal_saved * self.coal.price * time_step
-        return display_as(cost, 'kUSD')
+        return display_as(cost, time_horizon+1, 'kUSD')
 
     def tableC(self, discount_rate, tax_rate, depreciation_period):
         def printRowInt(label, quantity):

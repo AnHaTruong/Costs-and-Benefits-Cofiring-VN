@@ -25,14 +25,14 @@ class Investment:
     def __init__(self, capital=0*USD):
         self.capital = capital
         self.capital.display_unit = 'kUSD'
-        self.investment = display_as(v_zeros.copy()*USD, 'kUSD')
+        self.investment = display_as(v_zeros.copy()*USD, time_horizon+1, 'kUSD')
         self.investment[0] = capital
 
     def income(self):
-        return display_as(v_zeros * USD, 'kUSD')
+        return display_as(v_zeros * USD, time_horizon+1, 'kUSD')
 
     def operating_expenses(self):
-        return display_as(v_zeros * USD, 'kUSD')
+        return display_as(v_zeros * USD, time_horizon+1, 'kUSD')
 
     def amortization(self, depreciation_period):
         assert type(depreciation_period) is int, "Depreciation period not an integer"
@@ -40,18 +40,18 @@ class Investment:
         v_cost = v_zeros.copy()*USD
         for year in range(1, depreciation_period + 1):
             v_cost[year] = self.capital / float(depreciation_period)
-        return display_as(v_cost, 'kUSD')
+        return display_as(v_cost, time_horizon+1, 'kUSD')
 
     def earning_before_tax(self, depreciation_period):
         earning = self.income() - self.operating_expenses() - self.amortization(depreciation_period)
-        display_as(earning, 'kUSD')
+        display_as(earning, time_horizon+1, 'kUSD')
         return earning
 
     def income_tax(self, tax_rate, depreciation_period):
         assert 0 <= tax_rate <= 1, "Tax rate not in [0, 1["
         # Allows tax credits in lossy periods
         income = tax_rate * self.earning_before_tax(depreciation_period)
-        display_as(income, 'kUSD')
+        display_as(income, time_horizon+1, 'kUSD')
         return income
 
     def cash_out(self, tax_rate, depreciation_period):
@@ -59,12 +59,12 @@ class Investment:
                 self.operating_expenses() +
                 self.income_tax(tax_rate, depreciation_period)
                 )
-        display_as(flow, 'kUSD')
+        display_as(flow, time_horizon+1, 'kUSD')
         return flow
 
     def net_cash_flow(self, tax_rate, depreciation_period):
         flow = self.income() - self.cash_out(tax_rate, depreciation_period)
-        display_as(flow, 'kUSD')
+        display_as(flow, time_horizon+1, 'kUSD')
         return flow
 
     def net_present_value(self, discount_rate, tax_rate, depreciation_period):

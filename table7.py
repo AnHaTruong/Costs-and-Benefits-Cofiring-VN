@@ -21,7 +21,7 @@ from emission import emission_coal_combust_cofire
 from strawburned import straw_burned_infield
 
 import pandas as pd
-from units import isclose
+from units import isclose, display_as
 from natu.units import t, km, y
 
 print("\nMong Duong 1 BASELINE\n")
@@ -85,7 +85,7 @@ MD_total_ER = MD_plant_ER + MD_transport_ER + MD_field_ER
 print("Total emission reduction pollutants \n", MD_total_ER, "\n")
 
 MD_total_benefit = MD_total_ER * specific_cost
-print("Benefit\n", MD_total_benefit)
+print("Benefit\n", display_as(MD_total_benefit, 4, 'kUSD/y'))
 
 
 print("==================\n")
@@ -157,5 +157,5 @@ NB_total_ER = NB_plant_ER + NB_transport_ER + NB_field_ER
 print("Total emission reduction pollutants \n", NB_total_ER, "\n")
 
 NB_total_benefit = NB_total_ER * specific_cost
-NB_total_benefit.display_unit = 'kUSD/y'
-print("Benefit\n", NB_total_benefit)
+
+print("Benefit\n", display_as(NB_total_benefit, 4, 'kUSD/y'))
