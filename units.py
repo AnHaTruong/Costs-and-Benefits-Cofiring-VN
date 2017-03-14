@@ -37,12 +37,12 @@ zero_VND = 0 * VND
 zero_km = 0 * km
 
 
-def display_as(v, t, unit):
+def display_as(v, unit):
     """Sets the display_unit of every element of the vector to 'unit'.
        Returns the vector
     """
-    for i in range(t):
-        v[i].display_unit = unit
+    for element in v:
+        element.display_unit = unit
     return v
 
 

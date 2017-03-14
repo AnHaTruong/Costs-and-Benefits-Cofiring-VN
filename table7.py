@@ -85,7 +85,7 @@ MD_total_ER = MD_plant_ER + MD_transport_ER + MD_field_ER
 print("Total emission reduction pollutants \n", MD_total_ER, "\n")
 
 MD_total_benefit = MD_total_ER * specific_cost
-print("Benefit\n", display_as(MD_total_benefit, 4, 'kUSD/y'))
+print("Benefit\n", display_as(MD_total_benefit, 'kUSD/y'))
 
 
 print("==================\n")
@@ -158,4 +158,4 @@ print("Total emission reduction pollutants \n", NB_total_ER, "\n")
 
 NB_total_benefit = NB_total_ER * specific_cost
 
-print("Benefit\n", display_as(NB_total_benefit, 4, 'kUSD/y'))
+print("Benefit\n", display_as(NB_total_benefit, 'kUSD/y'))
