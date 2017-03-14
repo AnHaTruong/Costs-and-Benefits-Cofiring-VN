@@ -44,6 +44,8 @@ wage_bm_transport = 1.11 * USD / hr
 wage_operation_maintenance = 1.67 * USD / hr
 winder_rental_cost = 40 * USD / ha
 
+coal_import_price = 73 * USD / t
+
 MD_Coal = Fuel(name="6b_coal",
                heat_value=19.43468 * MJ / kg,
                price=1131400 * VND / t,
@@ -96,13 +98,11 @@ NB_Biomass = Fuel(name='Straw',
                   ef_transport=0.110 * kg / t / km  # biomass transported by truck
                   )
 
-
-carbon_price = 1 * USD / t
-coal_import_price = 73 * USD / t
-
-health_damage_so2 = 3767 * USD / t
-health_damage_pm10 = 5883 * USD / t
-health_damage_nox = 286 * USD / t
+specific_cost = {'CO2': 1 * USD / t,
+                 'SO2': 3767 * USD / t,
+                 'PM10': 5883 * USD / t,
+                 'NOx': 286 * USD / t
+                 }
 
 MD_controls = {'CO2': 0.0, 'SO2': 0.982, 'NOx': 0.0, 'PM10': 0.996}
 

@@ -7,7 +7,7 @@
 # Creative Commons Attribution-ShareAlike 4.0 International
 #
 #
-from parameters import emission_factor
+from parameters import emission_factor, specific_cost
 from parameters import health_damage_so2, health_damage_pm10, health_damage_nox
 from strawburned import so2_emission_field_base, pm10_emission_field_base
 from strawburned import straw_burned_infield, nox_emission_field_base
@@ -173,21 +173,21 @@ def health_benefit_so2(plant, cofiringplant):
     """ Health benefit (in USD/year) from SO2 reduction by co-firing
 
     """
-    return so2_emission_reduction(plant, cofiringplant) * health_damage_so2
+    return so2_emission_reduction(plant, cofiringplant) * specific_cost['SO2']
 
 
 def health_benefit_pm10(plant, cofiringplant):
     """ Health benefit from pm10 reduction by co-firing
 
     """
-    return pm10_emission_reduction(plant, cofiringplant) * health_damage_pm10
+    return pm10_emission_reduction(plant, cofiringplant) * specific_cost['PM10']
 
 
 def health_benefit_nox(plant, cofiringplant):
     """ Health benefit from nox emission reduction by co-firing
 
     """
-    return nox_emission_reduction(plant, cofiringplant) * health_damage_nox
+    return nox_emission_reduction(plant, cofiringplant) * specific_cost['NOx']
 
 
 def total_health_benefit(plant, cofiringplant):

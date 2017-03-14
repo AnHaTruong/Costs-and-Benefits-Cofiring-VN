@@ -12,8 +12,9 @@
 """
 
 
-from parameters import biomass_heat_value, carbon_price
+from parameters import biomass_heat_value
 from units import time_step
+from parameters import specific_cost
 
 
 def emission_coal_combust_base(plant):
@@ -91,7 +92,7 @@ def emission_reduction_benefit(plant, cofiringplant):
     """ return the monetary benefit from greenhouse gas emission reduction
 
     """
-    return emission_reduction(plant, cofiringplant) * carbon_price
+    return emission_reduction(plant, cofiringplant) * specific_cost['CO2']
 
 if __name__ == "__main__":
     import doctest
