@@ -180,7 +180,6 @@ class CofiringPlant(PowerPlant):
         self.biomass_ratio = biomass_ratio
         self.fix_om_cost = fix_om_cost
         self.variable_om_cost = variable_om_cost
-        self.biomass_heat_value = biomass.heat_value      # REPLACE AWAY
         self.biomass = biomass
 
         biomass_ratio_mass = biomass_ratio * (plant.coal.heat_value/biomass.heat_value)
