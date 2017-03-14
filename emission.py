@@ -21,7 +21,7 @@ def emission_coal_combust_base(plant):
        when there is no co-firing
 
     """
-    return emission_factor[plant.coal.name]["CO2"] * plant.coal_consumption
+    return emission_factor[plant.coal.name]["CO2"] * plant.coal_used[1]
 
 
 def emission_coal_transport_base(plant):

@@ -77,16 +77,8 @@ class PowerPlant(Investment):
         self.coal_used = self.power_generation / plant_efficiency / coal.heat_value
         display_as(self.coal_used, 't/y')
 
-        # Backward compatibility
-        self.coal_consumption = self.coal_used[1]
-        self.coal_consumption.display_unit = 't/y'
-
         self.coal = coal
         super().__init__(capital)
-
-#    def coal_used(self):
-#        mass = self.power_generation / self.plant_efficiency / self.coal.heat_value
-#        return display_as(mass, 't/y')
 
     def income(self):
         revenue = self.elec_sale * self.electricity_tariff
@@ -210,10 +202,6 @@ class CofiringPlant(PowerPlant):
 
         self.coal_used = (self.gross_heat_input - self.biomass_heat) / self.coal.heat_value
         display_as(self.coal_used, 't/y')
-
-        # Backward compatibility
-        self.coal_consumption = self.coal_used[1]
-        self.coal_consumption.display_unit = 't/y'
 
         self.active_chain = supply_chain.fit(self.biomass_used[1] * time_step)
 
