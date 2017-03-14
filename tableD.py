@@ -25,7 +25,7 @@ row = '{:40}' + '{:25.1f}'
 
 def print_job(plant, cofiringplant):
 
-    col1 = benefit_bm_collection(plant)
+    col1 = benefit_bm_collection(cofiringplant)
     col2 = benefit_bm_transport(cofiringplant)
     col3 = benefit_om(plant)
     col4 = total_job_benefit(plant, cofiringplant)
@@ -44,7 +44,7 @@ def print_job(plant, cofiringplant):
     print(row.format('number of truck', col5))
 
     print(row.format('total hour for biomass collection',
-                     bm_collection_work(plant) * h_per_yr
+                     bm_collection_work(cofiringplant) * h_per_yr
                      )
           )
 
@@ -56,7 +56,7 @@ def print_job(plant, cofiringplant):
     print(row.format('total hour for O&M', om_work(plant) * h_per_yr))
 
     print(row.format('FTE job from biomass collection',
-                     bm_collection_work(plant) / FTE
+                     bm_collection_work(cofiringplant) / FTE
                      )
           )
 
