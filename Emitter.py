@@ -7,6 +7,16 @@
 # Creative Commons Attribution-ShareAlike 4.0 International
 #
 import pandas as pd
+import numpy as np
+
+
+def outer(a, b):
+    """The outer product of two series.
+    The outer product of two coordinate vectors  u  and  v
+    is a matrix  w  such that the coordinates satisfy
+    w_ij = u_i * v_j.
+    """
+    return a[:, np.newaxis] * b[np.newaxis, :]
 
 
 class Emitter:
@@ -41,7 +51,7 @@ class Emitter:
         self.quantities = pd.Series(quantities)
         self.emissions = pd.DataFrame(
             {fuel: (pd.Series(emission_factors[fuel]) *
-                    (1 - self.controls) *
+                    (1 - self.controls) *     # TODO: Use outer product, quantities are time series
                     self.quantities[fuel]
                     )
              for fuel in quantities.keys()
