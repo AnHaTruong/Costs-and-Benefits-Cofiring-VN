@@ -73,7 +73,7 @@ MD_plant_ER = MD_plant_stack.emissions["Total"] - MDCofire_plant_stack.emissions
 print("From plant\n", MD_plant_ER, "\n")
 
 MD_transport_CO2 = MD_transport.emissions["Total"] - MDCofire_transport.emissions["Total"]
-MD_transport_pollutant = pd.Series([0.0 * t / y, 0.0 * t/y, 0.0 * t / y],
+MD_transport_pollutant = pd.Series([0.0 * t / y, 0.0 * t / y, 0.0 * t / y],
                                    index=['SO2', 'PM10', 'NOx'])
 MD_transport_ER = MD_transport_CO2.append(MD_transport_pollutant)
 print("From transport\n", MD_transport_ER, "\n")
@@ -100,7 +100,7 @@ print("Emissions from power plant\n", NB_plant_stack, "\n")
 
 assert isclose(NB_plant_stack.emissions['Total']['CO2'], emission_coal_combust_base(NinhBinh))
 
-NB_transport = Emitter({'Road transport': 0 * t*km/y,
+NB_transport = Emitter({'Road transport': 0 * t * km / y,
                         'Barge transport': NB_Coal.transport_distance * 2 * NinhBinh.coal_used[1]
                         },
                        emission_factor,
@@ -122,8 +122,8 @@ NBCofire_plant_stack = Emitter({'4b_coal': NinhBinhCofire.coal_used[1],
                                NB_controls)
 
 assert isclose(NBCofire_plant_stack.emissions['Total']['CO2'],
-               emission_biomass_combust(NinhBinh, NinhBinhCofire) +
-               emission_coal_combust_cofire(NinhBinh, NinhBinhCofire))
+               emission_biomass_combust(NinhBinhCofire)
+               + emission_coal_combust_cofire(NinhBinhCofire))
 
 print("Emission from power plant\n", NBCofire_plant_stack, "\n")
 
@@ -145,7 +145,7 @@ NB_plant_ER = NB_plant_stack.emissions["Total"] - NBCofire_plant_stack.emissions
 print("From plant\n", NB_plant_ER, "\n")
 
 NB_transport_CO2 = NB_transport.emissions["Total"] - NBCofire_transport.emissions["Total"]
-NB_transport_pollutant = pd.Series([0.0 * t / y, 0.0 * t/y, 0.0 * t / y],
+NB_transport_pollutant = pd.Series([0.0 * t / y, 0.0 * t / y, 0.0 * t / y],
                                    index=['SO2', 'PM10', 'NOx'])
 NB_transport_ER = NB_transport_CO2.append(NB_transport_pollutant)
 print("From transport\n", NB_transport_ER, "\n")

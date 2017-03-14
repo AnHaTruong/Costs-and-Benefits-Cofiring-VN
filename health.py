@@ -23,24 +23,24 @@ in the plant
 
 
 def so2_emission_plant_base(plant):
-    """SO2 emission from the plant without co-firing.
-
-    """
-    return plant.coal_used[1] * emission_factor[plant.coal.name]["SO2"] * (1 - plant.desulfur_efficiency)
+    """SO2 emission from the plant without co-firing."""
+    return (plant.coal_used[1]
+            * emission_factor[plant.coal.name]["SO2"]
+            * (1 - plant.desulfur_efficiency)
+            )
 
 
 def so2_emission_base(plant):
-    """ SO2 emission of baseline case
-
-    """
+    """ SO2 emission of baseline case"""
     return so2_emission_plant_base(plant) + so2_emission_field_base(plant)
 
 
 def pm10_emission_plant_base(plant):
-    """ PM10 emission from the plant without co-firing.
-
-    """
-    return plant.coal_used[1] *  emission_factor[plant.coal.name]["PM10"] * (1 - plant.esp_efficiency)
+    """ PM10 emission from the plant without co-firing."""
+    return (plant.coal_used[1]
+            * emission_factor[plant.coal.name]["PM10"]
+            * (1 - plant.esp_efficiency)
+            )
 
 
 def pm10_emission_base(plant):
@@ -51,16 +51,12 @@ def pm10_emission_base(plant):
 
 
 def nox_emission_plant_base(plant):
-    """ NOx emission from the plant without co-firing.
-
-    """
-    return plant.coal_used[1] *  emission_factor[plant.coal.name]["NOx"]
+    """ NOx emission from the plant without co-firing"""
+    return plant.coal_used[1] * emission_factor[plant.coal.name]["NOx"]
 
 
 def nox_emission_base(plant):
-    """ NOx emission of baseline case
-
-    """
+    """ NOx emission of baseline case"""
     return nox_emission_plant_base(plant) + nox_emission_field_base(plant)
 
 
@@ -69,44 +65,50 @@ def nox_emission_base(plant):
 
 
 def so2_emission_field_cofire(plant, cofiringplant):
-    """ SO2 emission from open straw burning in co-firing case
-
-    """
-    return (straw_burned_infield(plant) - cofiringplant.biomass_used[1]) * emission_factor["Straw"]["SO2"]
+    """ SO2 emission from open straw burning in co-firing case"""
+    return ((straw_burned_infield(plant) - cofiringplant.biomass_used[1])
+            * emission_factor["Straw"]["SO2"]
+            )
 
 
 def so2_emission_plant_cofire(plant, cofiringplant):
-    """ SO2 emission from coal and straw combustion in plant
-
-    """
-    so2_emit_bm = cofiringplant.biomass_used[1] * emission_factor["Straw"]["SO2"] * (1 - plant.desulfur_efficiency)
-    so2_emit_coal = (cofiringplant.coal_used[1] *
-                     emission_factor[plant.coal.name]["SO2"] *
-                     (1 - plant.desulfur_efficiency)
+    """ SO2 emission from coal and straw combustion in plant"""
+    so2_emit_bm = (cofiringplant.biomass_used[1]
+                   * emission_factor["Straw"]["SO2"]
+                   * (1 - plant.desulfur_efficiency)
+                   )
+    so2_emit_coal = (cofiringplant.coal_used[1]
+                     * emission_factor[plant.coal.name]["SO2"]
+                     * (1 - plant.desulfur_efficiency)
                      )
     return so2_emit_bm + so2_emit_coal
 
 
 def so2_emission_cofire(plant, cofiringplant):
-    """ SO2 emission of co-firing case
-
-    """
-    return so2_emission_plant_cofire(plant, cofiringplant) + so2_emission_field_cofire(plant, cofiringplant)
+    """ SO2 emission of co-firing case"""
+    return (so2_emission_plant_cofire(plant, cofiringplant)
+            + so2_emission_field_cofire(plant, cofiringplant)
+            )
 
 
 def pm10_emission_field_cofire(plant, cofiringplant):
     """ PM10 emission from open straw burning in co-firing case
     """
-    return (straw_burned_infield(plant) - cofiringplant.biomass_used[1]) * emission_factor["Straw"]["PM10"]
+    return ((straw_burned_infield(plant) - cofiringplant.biomass_used[1])
+            * emission_factor["Straw"]["PM10"]
+            )
 
 
 def pm10_emission_plant_cofire(plant, cofiringplant):
     """PM10 emission from coal and straw combustion in plant
     """
-    pm10_emit_bm = cofiringplant.biomass_used[1] * emission_factor["Straw"]["PM10"] * (1 - plant.esp_efficiency)
-    pm10_emit_coal = (cofiringplant.coal_used[1]*
-                      emission_factor[plant.coal.name]["PM10"] *
-                      (1 - plant.esp_efficiency)
+    pm10_emit_bm = (cofiringplant.biomass_used[1]
+                    * emission_factor["Straw"]["PM10"]
+                    * (1 - plant.esp_efficiency)
+                    )
+    pm10_emit_coal = (cofiringplant.coal_used[1]
+                      * emission_factor[plant.coal.name]["PM10"]
+                      * (1 - plant.esp_efficiency)
                       )
     return pm10_emit_bm + pm10_emit_coal
 
@@ -114,30 +116,31 @@ def pm10_emission_plant_cofire(plant, cofiringplant):
 def pm10_emission_cofire(plant, cofiringplant):
     """ PM10 emission of co-firing case
     """
-    return pm10_emission_plant_cofire(plant, cofiringplant) + pm10_emission_field_cofire(plant, cofiringplant)
+    return (pm10_emission_plant_cofire(plant, cofiringplant)
+            + pm10_emission_field_cofire(plant, cofiringplant)
+            )
 
 
 def nox_emission_field_cofire(plant, cofiringplant):
     """NOx emission from open straw burning in co-firing case
     """
-    return (straw_burned_infield(plant) - cofiringplant.biomass_used[1]) * emission_factor["Straw"]["NOx"]
-
+    return ((straw_burned_infield(plant) - cofiringplant.biomass_used[1])
+            * emission_factor["Straw"]["NOx"]
+            )
 
 
 def nox_emission_plant_cofire(plant, cofiringplant):
-    """NOx emission from co-firing
-
-    """
+    """NOx emission from co-firing"""
     nox_emit_bm = cofiringplant.biomass_used[1] * emission_factor["Straw"]["NOx"]
     nox_emit_coal = cofiringplant.coal_used[1] * emission_factor[plant.coal.name]["NOx"]
     return nox_emit_bm + nox_emit_coal
 
 
 def nox_emission_cofire(plant, cofiringplant):
-    """ NOx emission in co-firing case
-
-    """
-    return nox_emission_field_cofire(plant, cofiringplant) + nox_emission_plant_cofire(plant, cofiringplant)
+    """ NOx emission in co-firing case"""
+    return (nox_emission_field_cofire(plant, cofiringplant)
+            + nox_emission_plant_cofire(plant, cofiringplant)
+            )
 
 """ Pollutant emission reduction is baseline emission minus co-firing emission
 """
