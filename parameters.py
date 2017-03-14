@@ -17,6 +17,7 @@ from SupplyChain import SupplyChain, SupplyZone
 from strawdata import MongDuong1_straw_density1, MongDuong1_straw_density2
 from strawdata import NinhBinh_straw_density
 
+import pandas as pd
 
 """Input parameters of the model"""
 
@@ -98,11 +99,11 @@ NB_Biomass = Fuel(name='Straw',
                   ef_transport=0.110 * kg / t / km  # biomass transported by truck
                   )
 
-specific_cost = {'CO2': 1 * USD / t,
-                 'SO2': 3767 * USD / t,
-                 'PM10': 5883 * USD / t,
-                 'NOx': 286 * USD / t
-                 }
+specific_cost = pd.Series({'CO2': 1 * USD / t,
+                           'SO2': 3767 * USD / t,
+                           'PM10': 5883 * USD / t,
+                           'NOx': 286 * USD / t
+                           })
 
 MD_controls = {'CO2': 0.0, 'SO2': 0.982, 'NOx': 0.0, 'PM10': 0.996}
 

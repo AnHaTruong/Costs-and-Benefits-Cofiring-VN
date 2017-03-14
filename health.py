@@ -8,7 +8,6 @@
 #
 #
 from parameters import emission_factor, specific_cost
-from parameters import health_damage_so2, health_damage_pm10, health_damage_nox
 from strawburned import so2_emission_field_base, pm10_emission_field_base
 from strawburned import straw_burned_infield, nox_emission_field_base
 

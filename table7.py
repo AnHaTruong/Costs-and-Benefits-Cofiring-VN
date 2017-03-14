@@ -13,11 +13,11 @@
 from parameters import MongDuong1, NinhBinh, MongDuong1Cofire, NinhBinhCofire
 from parameters import emission_factor, MD_controls
 from parameters import NB_controls, NB_Coal
+from parameters import specific_cost
 from Emitter import Emitter
 from emission import emission_coal_combust_base
-from emission import emission_biomass_combust 
+from emission import emission_biomass_combust
 from emission import emission_coal_combust_cofire
-from emission import emission_coal_transport_cofire
 from strawburned import straw_burned_infield
 
 import pandas as pd
@@ -83,6 +83,9 @@ print("From field\n", MD_field_ER, "\n")
 
 MD_total_ER = MD_plant_ER + MD_transport_ER + MD_field_ER
 print("Total emission reduction pollutants \n", MD_total_ER, "\n")
+
+MD_total_benefit = MD_total_ER * specific_cost
+print("Benefit\n", MD_total_benefit)
 
 
 print("==================\n")
@@ -152,3 +155,7 @@ print("From field\n", NB_field_ER, "\n")
 
 NB_total_ER = NB_plant_ER + NB_transport_ER + NB_field_ER
 print("Total emission reduction pollutants \n", NB_total_ER, "\n")
+
+NB_total_benefit = NB_total_ER * specific_cost
+NB_total_benefit.display_unit = 'kUSD/y'
+print("Benefit\n", NB_total_benefit)
