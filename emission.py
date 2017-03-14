@@ -12,7 +12,7 @@
 """
 
 
-from parameters import biomass_heat_value, carbon_price, emission_factor
+from parameters import carbon_price, emission_factor
 from units import time_step
 
 
@@ -36,7 +36,7 @@ def emission_coal_transport_base(plant):
 def emission_coal_combust_cofire(plant, cofiringplant):
     """ emission from coal combustion when co-fire
     """
-    return emission_factor[plant.coal.name]["CO2"]  * cofiringplant.coal_used[1]
+    return emission_factor[plant.coal.name]["CO2"] * cofiringplant.coal_used[1]
 
 
 def emission_coal_transport_cofire(plant, cofiringplant):

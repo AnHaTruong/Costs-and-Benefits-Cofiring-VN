@@ -117,20 +117,17 @@ MongDuong1 = PowerPlant(name="Mong Duong 1",
                         coal=MD_Coal
                         )
 
-MongDuong1.capital_cost = 50 * USD / kW
-MongDuong1.fix_om_cost = 32.24 * USD / kW / y
-MongDuong1.variable_om_cost = 0.006 * USD / (kW*hr)
 MongDuong1.ef_biomass_transport = 0.110 * kg / t / km  # biomass transported by truck
 
 
 MDSupplyZone1 = SupplyZone(shape=Semi_Annulus(0 * km, 50 * km),
-                           straw_density=MongDuong1_straw_density1 * time_step, # ??
+                           straw_density=MongDuong1_straw_density1 * time_step,
                            transport_tariff=transport_tariff,
                            tortuosity_factor=tortuosity_factor
                            )
 
 MDSupplyZone2 = SupplyZone(shape=Semi_Annulus(50 * km, 100 * km),
-                           straw_density=MongDuong1_straw_density2 * time_step, # ??
+                           straw_density=MongDuong1_straw_density2 * time_step,
                            transport_tariff=transport_tariff,
                            tortuosity_factor=tortuosity_factor
                            )
@@ -139,11 +136,11 @@ MD_SupplyChain = SupplyChain(zones=[MDSupplyZone1, MDSupplyZone2])
 
 MongDuong1Cofire = CofiringPlant(MongDuong1,
                                  biomass_ratio,
-                                 MongDuong1.capital_cost,
-                                 MongDuong1.fix_om_cost,
-                                 MongDuong1.variable_om_cost,
-                                 MD_Biomass,
-                                 MD_SupplyChain
+                                 capital_cost=50 * USD / kW,
+                                 fix_om_cost=32.24 * USD / kW / y,
+                                 variable_om_cost=0.006 * USD / (kW*hr),
+                                 biomass=MD_Biomass,
+                                 supply_chain=MD_SupplyChain
                                  )
 
 NB_controls = {'CO2': 0.0, 'SO2': 0.0, 'NOx': 0.0, 'PM10': 0.992}
@@ -163,9 +160,6 @@ NinhBinh = PowerPlant(name="Ninh Binh",
                       coal=NB_Coal
                       )
 
-NinhBinh.capital_cost = 100 * USD / kW
-NinhBinh.fix_om_cost = 32.24 * USD / kW / y
-NinhBinh.variable_om_cost = 0.006 * USD / (kW*hr)
 NinhBinh.ef_biomass_transport = 0.110 * kg / t / km  # biomass transported by truck
 
 NBSupplyZone = SupplyZone(shape=Disk(50 * km),
@@ -178,9 +172,9 @@ NB_SupplyChain = SupplyChain(zones=[NBSupplyZone])
 
 NinhBinhCofire = CofiringPlant(NinhBinh,
                                biomass_ratio,
-                               NinhBinh.capital_cost,
-                               NinhBinh.fix_om_cost,
-                               NinhBinh.variable_om_cost,
-                               NB_Biomass,
-                               NB_SupplyChain
+                               capital_cost=100 * USD / kW,
+                               fix_om_cost=32.24 * USD / kW / y,
+                               variable_om_cost=0.006 * USD / (kW * hr),
+                               biomass=NB_Biomass,
+                               supply_chain=NB_SupplyChain
                                )
