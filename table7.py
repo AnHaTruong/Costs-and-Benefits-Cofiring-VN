@@ -115,3 +115,9 @@ assert isclose(NBCofire_plant_stack.emissions['Total']['CO2'],
 
 print("Ninh Binh reduction")
 print(NB_plant_stack.emissions["Total"] - NBCofire_plant_stack.emissions["Total"], "\n")
+
+NBCofire_plant_stack = Emitter({'4b_coal': NinhBinhCofire.coal_used,
+                                'Straw': NinhBinhCofire.biomass_used},
+                               emission_factor,
+                               NB_controls
+                               )
