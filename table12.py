@@ -24,7 +24,7 @@ row = '{:35}' + '{:23.0f}'
 
 
 def print_benefit_add_up(plant, cofiringplant):
-    col1 = benefit_add_up(total_health_benefit, plant)
+    col1 = new_benefit_add_up(total_health_benefit, plant, cofiringplant)
     col2 = new_benefit_add_up(emission_reduction_benefit, plant, cofiringplant)
     col3 = new_benefit_add_up(total_job_benefit, plant, cofiringplant)
     col4 = benefit_add_up(total_income_benefit, plant)
