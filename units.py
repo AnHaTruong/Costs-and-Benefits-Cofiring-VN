@@ -41,8 +41,8 @@ def display_as(v, unit):
     """Sets the display_unit of every element of the vector to 'unit'.
        Returns the vector
     """
-    for i in range(time_horizon+1):
-        v[i].display_unit = unit
+    for element in v:
+        element.display_unit = unit
     return v
 
 
