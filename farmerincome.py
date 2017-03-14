@@ -9,7 +9,7 @@
 #
 """ Assessment of extra income for farmer from co-firing projects"""
 
-from parameters import winder_rental_cost, biomass_fix_cost, MongDuong1, NinhBinh
+from parameters import winder_rental_cost, straw, MongDuong1, NinhBinh
 from biomassrequired import biomass_required
 from strawdata import df
 from natu.numpy import mean
@@ -34,9 +34,9 @@ def bm_sell_revenue(plant):
                                     df.loc['Hai Phong', 'straw yield'],
                                     df.loc['Quang Ninh', 'straw yield']
                                    ])
-        return average_straw_yield * biomass_fix_cost
+        return average_straw_yield * straw.price
     if plant == NinhBinh:
-        return df.loc['Ninh Binh', 'straw yield'] * biomass_fix_cost
+        return df.loc['Ninh Binh', 'straw yield'] * straw.price
 
 
 def cultivation_area(plant):

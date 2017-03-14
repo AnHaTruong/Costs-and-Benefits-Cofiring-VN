@@ -36,7 +36,6 @@ truck_velocity = 45 * km / hr
 truck_load = 20 * t
 OM_hour_MWh = 0.12 * hr / MW / hr  # working hour for OM per MWh    # O&M of co-firing per MWh
 
-biomass_fix_cost = 37.26 * USD / t
 transport_tariff = 2000 * VND / t / km  # vantaiduongviet.com
 tortuosity_factor = 1.5
 # wage per hour is calculated from base salary defined in governmental regulations
@@ -83,7 +82,7 @@ emission_factor = {
 
 straw = Fuel(name='Straw',
              heat_value=biomass_heat_value,
-             price=biomass_fix_cost,
+             price=37.26 * USD / t,
              transport_distance='Endogenous',
              ef_transport=0.110 * kg / t / km  # biomass transported by truck
              )
