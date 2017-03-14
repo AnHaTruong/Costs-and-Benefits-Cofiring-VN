@@ -78,19 +78,12 @@ emission_factor = {
     'Barge transport': {'CO2': 0.071 * kg / t / km}
     }
 
-MD_Biomass = Fuel(name='Straw',
-                  heat_value=biomass_heat_value,
-                  price=biomass_fix_cost,
-                  transport_distance='Endogenous',
-                  ef_transport=0.110 * kg / t / km  # biomass transported by truck
-                  )
-
-NB_Biomass = Fuel(name='Straw',
-                  heat_value=biomass_heat_value,
-                  price=biomass_fix_cost,
-                  transport_distance='Endogenous',
-                  ef_transport=0.110 * kg / t / km  # biomass transported by truck
-                  )
+straw = Fuel(name='Straw',
+             heat_value=biomass_heat_value,
+             price=biomass_fix_cost,
+             transport_distance='Endogenous',
+             ef_transport=0.110 * kg / t / km  # biomass transported by truck
+             )
 
 
 carbon_price = 1 * USD / t
@@ -136,7 +129,7 @@ MongDuong1Cofire = CofiringPlant(MongDuong1,
                                  capital_cost=50 * USD / kW,
                                  fix_om_cost=32.24 * USD / kW / y,
                                  variable_om_cost=0.006 * USD / (kW*hr),
-                                 biomass=MD_Biomass,
+                                 biomass=straw,
                                  supply_chain=MD_SupplyChain
                                  )
 
@@ -170,6 +163,6 @@ NinhBinhCofire = CofiringPlant(NinhBinh,
                                capital_cost=100 * USD / kW,
                                fix_om_cost=32.24 * USD / kW / y,
                                variable_om_cost=0.006 * USD / (kW * hr),
-                               biomass=NB_Biomass,
+                               biomass=straw,
                                supply_chain=NB_SupplyChain
                                )

@@ -4,19 +4,13 @@ Check emissions in the 0% biomass ratio
 
 Fix transport work calculations
 
-store emissions factors in a dictionary
-
-Add smokestack to PowerPlant emissions
+Add smokestack and controls to PowerPlant class
 
 Add transport emissions to SupplyChain
-
-Check in tables 7 and 8 that emissions in the new code match the old code
 
 Check emission calculation against CDM ACM0002 methodology
 
 Generate figures in EPS format (or SVG or PDF) and adjust the Makefile
-
-Use a list or an array rather than a function for time-dependant variables
 
 Encapsulate the class
 
@@ -37,6 +31,12 @@ Consider more indicators that LCOE:
 
 
 DONE
+
+Use a list or an array rather than a function for time-dependant variables
+
+Check in tables 7 and 8 that emissions in the new code match the old code
+
+store emissions factors in a dictionary
 
 Unify the interface in CofiringPlant: Coal_Used() is a method but Biomass_Used is a member
 
