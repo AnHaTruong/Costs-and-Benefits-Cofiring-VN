@@ -117,9 +117,6 @@ MongDuong1 = PowerPlant(name="Mong Duong 1",
                         coal=MD_Coal
                         )
 
-MongDuong1.ef_biomass_transport = 0.110 * kg / t / km  # biomass transported by truck
-
-
 MDSupplyZone1 = SupplyZone(shape=Semi_Annulus(0 * km, 50 * km),
                            straw_density=MongDuong1_straw_density1 * time_step,
                            transport_tariff=transport_tariff,
@@ -159,8 +156,6 @@ NinhBinh = PowerPlant(name="Ninh Binh",
                       desulfur_efficiency=0,
                       coal=NB_Coal
                       )
-
-NinhBinh.ef_biomass_transport = 0.110 * kg / t / km  # biomass transported by truck
 
 NBSupplyZone = SupplyZone(shape=Disk(50 * km),
                           straw_density=NinhBinh_straw_density * time_step,
