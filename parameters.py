@@ -129,6 +129,7 @@ MongDuong1.variable_om_cost = 0.006 * USD / (kW*hr)
 MongDuong1.ef_biomass_combust = 0.0858 * kg / MJ
 MongDuong1.ef_biomass_transport = 0.110 * kg / t / km  # biomass transported by truck
 
+
 MDSupplyZone1 = SupplyZone(shape=Semi_Annulus(0 * km, 50 * km),
                            straw_density=MongDuong1_straw_density1 * time_step, # ??
                            transport_tariff=transport_tariff,

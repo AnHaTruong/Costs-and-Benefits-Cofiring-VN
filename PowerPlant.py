@@ -226,10 +226,12 @@ class CofiringPlant(PowerPlant):
 
         self.active_chain = supply_chain.fit(self.biomass_used[1] * time_step)
 
+
 #    def coal_used(self):
 #        mass = self.power_generation / self.plant_efficiency / self.coal.heat_value
 #        mass = mass - self.coal_saved
 #        return display_as(mass, 't/y')
+
 
     def fuel_cost(self):
         cost = self.coal_cost() + self.biomass_cost()

@@ -6,6 +6,8 @@
 # minh.haduong@gmail.com
 # Creative Commons Attribution-ShareAlike 4.0 International
 #
+# pylint: disable=E0611
+
 from units import isclose
 from natu.units import t, km, USD
 from copy import copy
