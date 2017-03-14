@@ -25,7 +25,6 @@ discount_rate = 0.087771 * time_step / y
 depreciation_period = 10
 tax_rate = 0.25  # Corporate tax in Vietnam
 
-biomass_heat_value = 11.7 * MJ / kg
 biomass_ratio = 0.05           # As percent of energy coming from biomass
 
 straw_burn_rate = 0.9  # Percentage of straw burned infield after harvest
@@ -60,6 +59,13 @@ NB_Coal = Fuel(name="4b_coal",
                ef_transport=0.071 * kg / t / km  # coal transported by barge
                )
 
+straw = Fuel(name='Straw',
+             heat_value=11.7 * MJ / kg,
+             price=37.26 * USD / t,
+             transport_distance='Endogenous',
+             ef_transport=0.110 * kg / t / km  # biomass transported by truck
+             )
+
 emission_factor = {
     '6b_coal': {'CO2': 0.0966 * kg / MJ * MD_Coal.heat_value,
                 'SO2': 11.5 * kg / t,
@@ -71,7 +77,7 @@ emission_factor = {
                 'NOx': 18 * kg / t,
                 'PM10': 26.1 * kg / t
                 },
-    'Straw': {'CO2': 0.0858 * kg / MJ * biomass_heat_value,
+    'Straw': {'CO2': 0.0858 * kg / MJ * straw.heat_value,
               'SO2': 0.18 * kg / t,
               'NOx': 2.28 * kg / t,
               'PM10': 9.1 * kg / t
@@ -79,13 +85,6 @@ emission_factor = {
     'Road transport': {'CO2': 0.110 * kg / t / km},
     'Barge transport': {'CO2': 0.071 * kg / t / km}
     }
-
-straw = Fuel(name='Straw',
-             heat_value=biomass_heat_value,
-             price=37.26 * USD / t,
-             transport_distance='Endogenous',
-             ef_transport=0.110 * kg / t / km  # biomass transported by truck
-             )
 
 specific_cost = pd.Series({'CO2': 1 * USD / t,
                            'SO2': 3767 * USD / t,

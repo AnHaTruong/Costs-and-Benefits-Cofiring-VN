@@ -14,7 +14,7 @@
 """
 
 
-from parameters import biomass_ratio, biomass_heat_value
+from parameters import biomass_ratio, straw
 
 
 def biomass_ratio_mass(biomass_ratio, heat_value_coal, heat_value_bm):
@@ -40,7 +40,7 @@ def boiler_efficiency_bm(plant):
     """Return the boiler efficiency when co-firing
 
     """
-    ratio = biomass_ratio_mass(biomass_ratio, plant.coal.heat_value, biomass_heat_value)
+    ratio = biomass_ratio_mass(biomass_ratio, plant.coal.heat_value, straw.heat_value)
     return plant.boiler_efficiency[0] - boiler_efficiency_loss(ratio)
 
 
@@ -75,7 +75,7 @@ def gross_heat_input(plant):
 def biomass_required(plant):
     """Mass of biomass for co-firing
     """
-    mass = gross_heat_input(plant) * biomass_ratio / biomass_heat_value
+    mass = gross_heat_input(plant) * biomass_ratio / straw.heat_value
     mass.display_unit = 't/y'
     return mass
 
