@@ -12,11 +12,15 @@
 """
 
 from benefitaddup import benefit_add_up, new_benefit_add_up, total_benefit_addup
+from benefitaddup import benefit_add_up_new
 from health import total_health_benefit
 from farmerincome import total_income_benefit
 from emission import emission_reduction_benefit
 from job import total_job_benefit
 from parameters import MongDuong1, NinhBinh, MongDuong1Cofire, NinhBinhCofire
+from table7 import MD_total_benefit, NB_total_benefit
+from units import display_as
+
 
 print('')
 
@@ -36,21 +40,21 @@ def print_benefit_add_up(plant, cofiringplant):
     col4.display_unit = 'kUSD'
     col5.display_unit = 'kUSD'
 
-
-    print (row.format('Added up health benefit', col1))
-    print (row.format('Added up emission reduction benefit', col2))
-    print (row.format('Added up job benefit', col3))
-    print (row.format('Added up farmer income benefit', col4))
-    print (row.format('Added up total benefit', col5))
+    print(row.format('Added up health benefit', col1))
+    print(row.format('Added up emission reduction benefit', col2))
+    print(row.format('Added up job benefit', col3))
+    print(row.format('Added up farmer income benefit', col4))
+    print(row.format('Added up total benefit', col5))
 
 
 print('Added up benefit Mong Duong1')
 print('')
 print_benefit_add_up(MongDuong1, MongDuong1Cofire)
+print(display_as(benefit_add_up_new(MD_total_benefit), 'kUSD'))
+print(display_as(benefit_add_up_new(MD_total_benefit.drop('CO2')), 'kUSD'))
 
 print('')
 print('Added up benefit Ninh Binh')
 print('')
 print_benefit_add_up(NinhBinh, NinhBinhCofire)
-
-
+print(display_as(benefit_add_up_new(NB_total_benefit), 'kUSD'))

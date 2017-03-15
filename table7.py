@@ -85,6 +85,8 @@ MD_total_ER = MD_plant_ER + MD_transport_ER + MD_field_ER
 print("Total emission reduction pollutants \n", MD_total_ER, "\n")
 
 MD_total_benefit = MD_total_ER * specific_cost
+MD_ER_benefit = MD_total_benefit['CO2']
+MD_health_benefit = MD_total_benefit.drop('CO2').sum()
 print("Benefit\n", display_as(MD_total_benefit, 'kUSD/y'))
 
 
@@ -157,5 +159,6 @@ NB_total_ER = NB_plant_ER + NB_transport_ER + NB_field_ER
 print("Total emission reduction pollutants \n", NB_total_ER, "\n")
 
 NB_total_benefit = NB_total_ER * specific_cost
-
+NB_ER_benefit = NB_total_benefit['CO2']
+NB_health_benefit = NB_total_benefit.drop('CO2').sum()
 print("Benefit\n", display_as(NB_total_benefit, 'kUSD/y'))
