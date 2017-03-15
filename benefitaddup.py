@@ -27,6 +27,7 @@ def benefit_add_up(func, plant):
     value = zero_USD
     for year in range(time_horizon + 1):
         value += (func(plant) * time_step) / (1 + discount_rate)**year
+    value.display_unit = 'kUSD'
     return value
 
 
@@ -37,6 +38,7 @@ def new_benefit_add_up(func, plant, cofiringplant):
     value = zero_USD
     for year in range(time_horizon + 1):
         value += (func(plant, cofiringplant) * time_step) / (1 + discount_rate)**year
+    value.display_unit = 'kUSD'
     return value
 
 
@@ -52,9 +54,10 @@ def total_benefit_addup(plant, cofiringplant):
 
 
 def benefit_add_up_new(func):
-    value = np.zeros(len(func)) * zero_USD
+    value = zero_USD
     for year in range(time_horizon + 1):
         value += (func) * time_step / (1 + discount_rate)**year
+    value.display_unit = 'kUSD'
     return value
 
 if __name__ == "__main__":

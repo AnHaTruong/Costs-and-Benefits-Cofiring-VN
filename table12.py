@@ -18,43 +18,45 @@ from farmerincome import total_income_benefit
 from emission import emission_reduction_benefit
 from job import total_job_benefit
 from parameters import MongDuong1, NinhBinh, MongDuong1Cofire, NinhBinhCofire
-from table7 import MD_total_benefit, NB_total_benefit
-from units import display_as
-
-
-print('')
+from table7 import MD_ER_benefit, NB_ER_benefit, MD_health_benefit, NB_health_benefit
 
 row = '{:35}' + '{:23.0f}'
 
 
 def print_benefit_add_up(plant, cofiringplant):
-    col1 = new_benefit_add_up(total_health_benefit, plant, cofiringplant)
-    col2 = new_benefit_add_up(emission_reduction_benefit, plant, cofiringplant)
-    col3 = new_benefit_add_up(total_job_benefit, plant, cofiringplant)
-    col4 = benefit_add_up(total_income_benefit, plant)
-    col5 = total_benefit_addup(plant, cofiringplant)
+    print(row.format('Added up health benefit',
+                     new_benefit_add_up(total_health_benefit, plant, cofiringplant)
+                     )
+          )
+    print(row.format('Added up emission reduction benefit',
+                     new_benefit_add_up(emission_reduction_benefit, plant, cofiringplant)
+                     )
+          )
+    print(row.format('Added up job benefit',
+                     new_benefit_add_up(total_job_benefit, plant, cofiringplant)
+                     )
+          )
+    print(row.format('Added up farmer income benefit',
+                     benefit_add_up(total_income_benefit, plant)
+                     )
+          )
+    print(row.format('Added up total benefit',
+                     total_benefit_addup(plant, cofiringplant)
+                     )
+          )
 
-    col1.display_unit = 'kUSD'
-    col2.display_unit = 'kUSD'
-    col3.display_unit = 'kUSD'
-    col4.display_unit = 'kUSD'
-    col5.display_unit = 'kUSD'
-
-    print(row.format('Added up health benefit', col1))
-    print(row.format('Added up emission reduction benefit', col2))
-    print(row.format('Added up job benefit', col3))
-    print(row.format('Added up farmer income benefit', col4))
-    print(row.format('Added up total benefit', col5))
-
-
-print('Added up benefit Mong Duong1')
-print('')
+print('\nOld version\n')
+print('Added up benefit Mong Duong1\n')
 print_benefit_add_up(MongDuong1, MongDuong1Cofire)
-print(display_as(benefit_add_up_new(MD_total_benefit), 'kUSD'))
-print(display_as(benefit_add_up_new(MD_total_benefit.drop('CO2')), 'kUSD'))
 
-print('')
-print('Added up benefit Ninh Binh')
-print('')
+print('\nAdded up benefit Ninh Binh\n')
 print_benefit_add_up(NinhBinh, NinhBinhCofire)
-print(display_as(benefit_add_up_new(NB_total_benefit), 'kUSD'))
+
+print('==================')
+print('New version')
+print('Added up benefit Mong Duong1\n')
+print('Added up health benefit', benefit_add_up_new(MD_health_benefit))
+print('Added up emission reduction benefit', benefit_add_up_new(MD_ER_benefit))
+print('\nAdded up benefit Ninh Binh\n')
+print('Added up health benefit', benefit_add_up_new(NB_health_benefit))
+print('Added up emission reduction benefit', benefit_add_up_new(NB_ER_benefit))
