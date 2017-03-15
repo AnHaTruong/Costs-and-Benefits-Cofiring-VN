@@ -9,11 +9,11 @@
 #
 """ Assessment of extra income for farmer from co-firing projects"""
 
-from parameters import winder_rental_cost, biomass_fix_cost, MongDuong1, NinhBinh
-from biomassrequired import biomass_required
+from parameters import MongDuong1, NinhBinh, MongDuong1Cofire, NinhBinhCofire
+from parameters import winder_rental_cost, straw
 from strawdata import df
 from natu.numpy import mean
-from units  import time_step
+from units import time_step
 
 
 def farmer_income(plant):
@@ -33,10 +33,10 @@ def bm_sell_revenue(plant):
                                     df.loc['Hai Duong', 'straw yield'],
                                     df.loc['Hai Phong', 'straw yield'],
                                     df.loc['Quang Ninh', 'straw yield']
-                                   ])
-        return average_straw_yield * biomass_fix_cost
+                                    ])
+        return average_straw_yield * straw.price
     if plant == NinhBinh:
-        return df.loc['Ninh Binh', 'straw yield'] * biomass_fix_cost
+        return df.loc['Ninh Binh', 'straw yield'] * straw.price
 
 
 def cultivation_area(plant):
@@ -48,10 +48,10 @@ def cultivation_area(plant):
                                     df.loc['Hai Duong', 'straw yield'],
                                     df.loc['Hai Phong', 'straw yield'],
                                     df.loc['Quang Ninh', 'straw yield'],
-                                  ])
-        return biomass_required(plant) / average_straw_yield
+                                    ])
+        return MongDuong1Cofire.biomass_used[1] / average_straw_yield
     if plant == NinhBinh:
-        return biomass_required(plant) / df.loc['Ninh Binh', 'straw yield']
+        return NinhBinhCofire.biomass_used[1] / df.loc['Ninh Binh', 'straw yield']
 
 
 def total_income_benefit(plant):

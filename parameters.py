@@ -25,7 +25,6 @@ discount_rate = 0.087771 * time_step / y
 depreciation_period = 10
 tax_rate = 0.25  # Corporate tax in Vietnam
 
-biomass_heat_value = 11.7 * MJ / kg
 biomass_ratio = 0.05           # As percent of energy coming from biomass
 
 straw_burn_rate = 0.9  # Percentage of straw burned infield after harvest
@@ -36,7 +35,6 @@ truck_velocity = 45 * km / hr
 truck_load = 20 * t
 OM_hour_MWh = 0.12 * hr / MW / hr  # working hour for OM per MWh    # O&M of co-firing per MWh
 
-biomass_fix_cost = 37.26 * USD / t
 transport_tariff = 2000 * VND / t / km  # vantaiduongviet.com
 tortuosity_factor = 1.5
 # wage per hour is calculated from base salary defined in governmental regulations
@@ -51,7 +49,6 @@ MD_Coal = Fuel(name="6b_coal",
                heat_value=19.43468 * MJ / kg,
                price=1131400 * VND / t,
                transport_distance=0 * km,
-               ef_combust=0.0966 * kg / MJ,
                ef_transport=0 * kg / t / km
                )
 
@@ -59,9 +56,15 @@ NB_Coal = Fuel(name="4b_coal",
                heat_value=21.5476 * MJ / kg,
                price=1825730 * VND / t,  # Includes transport
                transport_distance=200 * km,
-               ef_combust=0.0966 * kg / MJ,
                ef_transport=0.071 * kg / t / km  # coal transported by barge
                )
+
+straw = Fuel(name='Straw',
+             heat_value=11.7 * MJ / kg,
+             price=37.26 * USD / t,
+             transport_distance='Endogenous',
+             ef_transport=0.110 * kg / t / km  # biomass transported by truck
+             )
 
 emission_factor = {
     '6b_coal': {'CO2': 0.0966 * kg / MJ * MD_Coal.heat_value,
@@ -74,30 +77,13 @@ emission_factor = {
                 'NOx': 18 * kg / t,
                 'PM10': 26.1 * kg / t
                 },
-    'Straw': {'CO2': 0.0858 * kg / MJ * biomass_heat_value,
+    'Straw': {'CO2': 0.0858 * kg / MJ * straw.heat_value,
               'SO2': 0.18 * kg / t,
               'NOx': 2.28 * kg / t,
               'PM10': 9.1 * kg / t
               },
     'Road transport': {'CO2': 0.110 * kg / t / km},
-    'Barge transport': {'CO2': 0.071 * kg / t / km}
-    }
-
-MD_Biomass = Fuel(name='Straw',
-                  heat_value=biomass_heat_value,
-                  price=biomass_fix_cost,
-                  transport_distance='Endogenous',
-                  ef_combust=0.0858 * kg / MJ,
-                  ef_transport=0.110 * kg / t / km  # biomass transported by truck
-                  )
-
-NB_Biomass = Fuel(name='Straw',
-                  heat_value=biomass_heat_value,
-                  price=biomass_fix_cost,
-                  transport_distance='Endogenous',
-                  ef_combust=0.0858 * kg / MJ,
-                  ef_transport=0.110 * kg / t / km  # biomass transported by truck
-                  )
+    'Barge transport': {'CO2': 0.071 * kg / t / km}}
 
 specific_cost = pd.Series({'CO2': 1 * USD / t,
                            'SO2': 3767 * USD / t,
@@ -122,21 +108,14 @@ MongDuong1 = PowerPlant(name="Mong Duong 1",
                         coal=MD_Coal
                         )
 
-MongDuong1.capital_cost = 50 * USD / kW
-MongDuong1.fix_om_cost = 32.24 * USD / kW / y
-MongDuong1.variable_om_cost = 0.006 * USD / (kW*hr)
-MongDuong1.ef_biomass_combust = 0.0858 * kg / MJ
-MongDuong1.ef_biomass_transport = 0.110 * kg / t / km  # biomass transported by truck
-
-
 MDSupplyZone1 = SupplyZone(shape=Semi_Annulus(0 * km, 50 * km),
-                           straw_density=MongDuong1_straw_density1 * time_step, # ??
+                           straw_density=MongDuong1_straw_density1 * time_step,
                            transport_tariff=transport_tariff,
                            tortuosity_factor=tortuosity_factor
                            )
 
 MDSupplyZone2 = SupplyZone(shape=Semi_Annulus(50 * km, 100 * km),
-                           straw_density=MongDuong1_straw_density2 * time_step, # ??
+                           straw_density=MongDuong1_straw_density2 * time_step,
                            transport_tariff=transport_tariff,
                            tortuosity_factor=tortuosity_factor
                            )
@@ -145,11 +124,11 @@ MD_SupplyChain = SupplyChain(zones=[MDSupplyZone1, MDSupplyZone2])
 
 MongDuong1Cofire = CofiringPlant(MongDuong1,
                                  biomass_ratio,
-                                 MongDuong1.capital_cost,
-                                 MongDuong1.fix_om_cost,
-                                 MongDuong1.variable_om_cost,
-                                 MD_Biomass,
-                                 MD_SupplyChain
+                                 capital_cost=50 * USD / kW,
+                                 fix_om_cost=32.24 * USD / kW / y,
+                                 variable_om_cost=0.006 * USD / (kW * hr),
+                                 biomass=straw,
+                                 supply_chain=MD_SupplyChain
                                  )
 
 NB_controls = {'CO2': 0.0, 'SO2': 0.0, 'NOx': 0.0, 'PM10': 0.992}
@@ -169,12 +148,6 @@ NinhBinh = PowerPlant(name="Ninh Binh",
                       coal=NB_Coal
                       )
 
-NinhBinh.capital_cost = 100 * USD / kW
-NinhBinh.fix_om_cost = 32.24 * USD / kW / y
-NinhBinh.variable_om_cost = 0.006 * USD / (kW*hr)
-NinhBinh.ef_biomass_combust = 0.0858 * kg / MJ
-NinhBinh.ef_biomass_transport = 0.110 * kg / t / km  # biomass transported by truck
-
 NBSupplyZone = SupplyZone(shape=Disk(50 * km),
                           straw_density=NinhBinh_straw_density * time_step,
                           transport_tariff=transport_tariff,
@@ -185,9 +158,9 @@ NB_SupplyChain = SupplyChain(zones=[NBSupplyZone])
 
 NinhBinhCofire = CofiringPlant(NinhBinh,
                                biomass_ratio,
-                               NinhBinh.capital_cost,
-                               NinhBinh.fix_om_cost,
-                               NinhBinh.variable_om_cost,
-                               NB_Biomass,
-                               NB_SupplyChain
+                               capital_cost=100 * USD / kW,
+                               fix_om_cost=32.24 * USD / kW / y,
+                               variable_om_cost=0.006 * USD / (kW * hr),
+                               biomass=straw,
+                               supply_chain=NB_SupplyChain
                                )

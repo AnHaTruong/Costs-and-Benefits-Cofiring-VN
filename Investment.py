@@ -22,10 +22,10 @@ class Investment:
            return a vector of quantities of size time_horizon+1
            which has the display unit set to kUSD
     """
-    def __init__(self, capital=0*USD):
+    def __init__(self, capital=0 * USD):
         self.capital = capital
         self.capital.display_unit = 'kUSD'
-        self.investment = display_as(v_zeros.copy()*USD, 'kUSD')
+        self.investment = display_as(v_zeros.copy() * USD, 'kUSD')
         self.investment[0] = capital
 
     def income(self):
@@ -37,7 +37,7 @@ class Investment:
     def amortization(self, depreciation_period):
         assert type(depreciation_period) is int, "Depreciation period not an integer"
         assert 0 < depreciation_period < time_horizon - 1, "Depreciation not in {1..timehorizon-1}"
-        v_cost = v_zeros.copy()*USD
+        v_cost = v_zeros.copy() * USD
         for year in range(1, depreciation_period + 1):
             v_cost[year] = self.capital / float(depreciation_period)
         return display_as(v_cost, 'kUSD')
@@ -55,9 +55,9 @@ class Investment:
         return income
 
     def cash_out(self, tax_rate, depreciation_period):
-        flow = (self.investment +
-                self.operating_expenses() +
-                self.income_tax(tax_rate, depreciation_period)
+        flow = (self.investment
+                + self.operating_expenses()
+                + self.income_tax(tax_rate, depreciation_period)
                 )
         display_as(flow, 'kUSD')
         return flow

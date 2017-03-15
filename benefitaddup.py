@@ -23,8 +23,6 @@ import natu.numpy as np
 def benefit_add_up(func, plant):
     """return the present value of cumulative benefits of co-firing
     discounted at DiscountRate from 0 to TimeHorizon included
-
-
     """
     value = zero_USD
     for year in range(time_horizon + 1):
@@ -35,7 +33,6 @@ def benefit_add_up(func, plant):
 def new_benefit_add_up(func, plant, cofiringplant):
     """return the present value of cumulative benefits of co-firing
     discounted at DiscountRate from 0 to TimeHorizon included
-
     """
     value = zero_USD
     for year in range(time_horizon + 1):
@@ -46,13 +43,11 @@ def new_benefit_add_up(func, plant, cofiringplant):
 def total_benefit_addup(plant, cofiringplant):
     """Total benefit of co-firing added up for the same number of year as used
        in NPV calculation discounted at same DiscountRate
-
-
     """
-    return (new_benefit_add_up(total_health_benefit, plant, cofiringplant) +
-            benefit_add_up(total_income_benefit, plant) +
-            new_benefit_add_up(emission_reduction_benefit, plant, cofiringplant) +
-            new_benefit_add_up(total_job_benefit, plant, cofiringplant)
+    return (new_benefit_add_up(total_health_benefit, plant, cofiringplant)
+            + benefit_add_up(total_income_benefit, plant)
+            + new_benefit_add_up(emission_reduction_benefit, plant, cofiringplant)
+            + new_benefit_add_up(total_job_benefit, plant, cofiringplant)
             )
 
 

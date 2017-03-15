@@ -12,13 +12,12 @@
 from parameters import winder_capacity, truck_velocity, work_hour_day
 from parameters import truck_load, OM_hour_MWh, biomass_ratio, wage_bm_transport
 from parameters import wage_bm_collect, wage_operation_maintenance
-from biomassrequired import biomass_required
 
 
-def bm_collection_work(plant):
+def bm_collection_work(cofiringplant):
     """Total number of hour needed to collect straw for co-firing per year
     """
-    return biomass_required(plant) * work_hour_day / winder_capacity
+    return cofiringplant.biomass_used[1] * work_hour_day / winder_capacity
 
 
 # FIXME: Use tkm instead
@@ -48,13 +47,13 @@ def om_work(plant):
 def cofiring_work(plant, cofiringplant):
     """Total number of hours created from co-firing
     """
-    return bm_collection_work(plant) + bm_transport_work(cofiringplant) + om_work(plant)
+    return bm_collection_work(cofiringplant) + bm_transport_work(cofiringplant) + om_work(plant)
 
 
-def benefit_bm_collection(plant):
+def benefit_bm_collection(cofiringplant):
     """Benefit from job creation from biomass collection
     """
-    return bm_collection_work(plant) * wage_bm_collect
+    return bm_collection_work(cofiringplant) * wage_bm_collect
 
 
 def benefit_bm_transport(cofiringplant):
@@ -70,9 +69,11 @@ def benefit_om(plant):
 
 
 def total_job_benefit(plant, cofiringplant):
-    """Total benefit from job creation from biomass co-firing
-    """
-    return benefit_bm_collection(plant) + benefit_bm_transport(cofiringplant) + benefit_om(plant)
+    """Total benefit from job creation from biomass co-firing"""
+    return (benefit_bm_collection(cofiringplant)
+            + benefit_bm_transport(cofiringplant)
+            + benefit_om(plant)
+            )
 
 if __name__ == "__main__":
     import doctest

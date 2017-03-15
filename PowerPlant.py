@@ -21,7 +21,6 @@ class Fuel:
                  heat_value,
                  price,
                  transport_distance,
-                 ef_combust,
                  ef_transport
                  ):
         self.name = name
@@ -29,7 +28,6 @@ class Fuel:
         self.price = price
         self.price.display_unit = 'USD/t'
         self.transport_distance = transport_distance
-        self.ef_combust = ef_combust
         self.ef_transport = ef_transport
 
     def cost_per_GJ(self):
@@ -55,7 +53,7 @@ class PowerPlant(Investment):
                  esp_efficiency,
                  desulfur_efficiency,
                  coal,                # type:  Fuel
-                 capital=0*USD
+                 capital=0 * USD
                  ):
         self.name = name
         self.capacity = capacity
@@ -69,26 +67,18 @@ class PowerPlant(Investment):
         self.esp_efficiency = esp_efficiency
         self.desulfur_efficiency = desulfur_efficiency
 
-        self.power_generation = full(time_horizon+1, capacity * capacity_factor, dtype=object)
+        self.power_generation = full(time_horizon + 1, capacity * capacity_factor, dtype=object)
         self.elec_sale = self.power_generation * time_step
         display_as(self.elec_sale, 'GWh')
 
-        self.boiler_efficiency = full(time_horizon+1, boiler_efficiency)
-        self.plant_efficiency = full(time_horizon+1, plant_efficiency)
+        self.boiler_efficiency = full(time_horizon + 1, boiler_efficiency)
+        self.plant_efficiency = full(time_horizon + 1, plant_efficiency)
 
         self.coal_used = self.power_generation / plant_efficiency / coal.heat_value
         display_as(self.coal_used, 't/y')
 
-        # Backward compatibility
-        self.coal_consumption = self.coal_used[1]
-        self.coal_consumption.display_unit = 't/y'
-
         self.coal = coal
         super().__init__(capital)
-
-#    def coal_used(self):
-#        mass = self.power_generation / self.plant_efficiency / self.coal.heat_value
-#        return display_as(mass, 't/y')
 
     def income(self):
         revenue = self.elec_sale * self.electricity_tariff
@@ -109,7 +99,7 @@ class PowerPlant(Investment):
 
     def coal_om_cost(self):
         # fixed_om_coal = v_ones.copy() * self.fix_om_coal * self.capacity
-        fixed_om_coal = full(time_horizon+1, self.fix_om_coal * self.capacity, dtype=object)
+        fixed_om_coal = full(time_horizon + 1, self.fix_om_coal * self.capacity, dtype=object)
         # Same comment:  vector * scalar => okay, scalar * vector => natu.core complains
         variable_om_coal = self.power_generation * self.variable_om_coal
         return (fixed_om_coal + variable_om_coal) * time_step
@@ -163,33 +153,29 @@ class CofiringPlant(PowerPlant):
                  ):
 
         super().__init__(
-                 name=plant.name + " Cofire",
-                 capacity=plant.capacity,
-                 capacity_factor=plant.capacity_factor,
-                 commissioning=plant.commissioning,
-                 boiler_technology=plant.boiler_technology,
-                 plant_efficiency=plant.plant_efficiency[0],
-                 boiler_efficiency=plant.boiler_efficiency[0],
-                 electricity_tariff=plant.electricity_tariff,
-                 fix_om_coal=plant.fix_om_coal,
-                 variable_om_coal=plant.variable_om_coal,
-                 esp_efficiency=plant.esp_efficiency,
-                 desulfur_efficiency=plant.desulfur_efficiency,
-                 coal=plant.coal,
-                 capital=capital_cost * plant.capacity * biomass_ratio
-                 )
+            name=plant.name + " Cofire",
+            capacity=plant.capacity,
+            capacity_factor=plant.capacity_factor,
+            commissioning=plant.commissioning,
+            boiler_technology=plant.boiler_technology,
+            plant_efficiency=plant.plant_efficiency[0],
+            boiler_efficiency=plant.boiler_efficiency[0],
+            electricity_tariff=plant.electricity_tariff,
+            fix_om_coal=plant.fix_om_coal,
+            variable_om_coal=plant.variable_om_coal,
+            esp_efficiency=plant.esp_efficiency,
+            desulfur_efficiency=plant.desulfur_efficiency,
+            coal=plant.coal,
+            capital=capital_cost * plant.capacity * biomass_ratio)
 
         self.biomass_ratio = biomass_ratio
         self.fix_om_cost = fix_om_cost
         self.variable_om_cost = variable_om_cost
-        self.ef_biomass_combust = biomass.ef_combust      # REPLACE AWAY
-        self.ef_biomass_transport = biomass.ef_transport  # REPLACE AWAY
-        self.biomass_heat_value = biomass.heat_value      # REPLACE AWAY
         self.biomass = biomass
 
-        biomass_ratio_mass = biomass_ratio * (plant.coal.heat_value/biomass.heat_value)
-        cofiring_boiler_efficiency = (plant.boiler_efficiency -
-                                      boiler_efficiency_loss(biomass_ratio_mass)
+        biomass_ratio_mass = biomass_ratio * (plant.coal.heat_value / biomass.heat_value)
+        cofiring_boiler_efficiency = (plant.boiler_efficiency
+                                      - boiler_efficiency_loss(biomass_ratio_mass)
                                       )
         self.boiler_efficiency = cofiring_boiler_efficiency
         self.boiler_efficiency[0] = plant.boiler_efficiency[0]
@@ -207,8 +193,8 @@ class CofiringPlant(PowerPlant):
 
         self.biomass_used_nan = self.biomass_used.copy()
         for i in range(time_horizon + 1):
-            if self.biomass_used[i] == 0 * t/y:
-                self.biomass_used_nan[i] = float('nan') * t/y
+            if self.biomass_used[i] == 0 * t / y:
+                self.biomass_used_nan[i] = float('nan') * t / y
 
         self.coal_saved = self.biomass_heat / plant.coal.heat_value
         display_as(self.coal_saved, 't/y')
@@ -216,18 +202,7 @@ class CofiringPlant(PowerPlant):
         self.coal_used = (self.gross_heat_input - self.biomass_heat) / self.coal.heat_value
         display_as(self.coal_used, 't/y')
 
-        # Backward compatibility
-        self.coal_consumption = self.coal_used[1]
-        self.coal_consumption.display_unit = 't/y'
-
         self.active_chain = supply_chain.fit(self.biomass_used[1] * time_step)
-
-
-#    def coal_used(self):
-#        mass = self.power_generation / self.plant_efficiency / self.coal.heat_value
-#        mass = mass - self.coal_saved
-#        return display_as(mass, 't/y')
-
 
     def fuel_cost(self):
         cost = self.coal_cost() + self.biomass_cost()
