@@ -64,13 +64,13 @@ Total  [0.0, 1003.86, 1003.86]  [0.0, 2.28, 2.28]  [0.0, 9.1, 9.1]  [0.0, 0.18, 
        """
     def __init__(self,
                  quantities,   # A dictionary of (fuel: emissions_time_series)
-                 emission_factors,
+                 emission_factor,
                  controls={'CO2': 0, 'SO2': 0, 'NOx': 0, 'PM10': 0}):
         # assert all(isinstance(v, np.ndarray) for v in quantities.values())
         self.quantities = quantities
         self.controled_emission_factor = pd.Series({
-            fuel: pd.Series(emission_factors[fuel]) * (1 - pd.Series(controls))
-            for fuel in emission_factors})
+            fuel: pd.Series(emission_factor[fuel]) * (1 - pd.Series(controls))
+            for fuel in emission_factor})
 
     def __str__(self):
         return self.emissions().transpose().to_string()
@@ -86,4 +86,4 @@ Total  [0.0, 1003.86, 1003.86]  [0.0, 2.28, 2.28]  [0.0, 9.1, 9.1]  [0.0, 0.18, 
             for fuel in self.quantities.keys()})
         df['Total'] = df.sum(axis=1)
 #        return df
-        return df.applymap(lambda v: v[1])   # For regression testing, actually return a scalar
+        return df.applymap(lambda v: v[1])   # Return a scalar (during regression testing)
