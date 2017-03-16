@@ -9,11 +9,12 @@
 #
 # pylint: disable=E0611
 
-from units import time_horizon, time_step, v_ones, v_after_invest, display_as, USD
 from natu.numpy import full, npv
 from natu.units import t, y
+
+from units import time_horizon, time_step, v_ones, v_after_invest, display_as, USD
 from Investment import Investment
-from Emitter import Fuel, Emitter
+from Emitter import Emitter
 
 
 class PowerPlant(Investment):
@@ -61,8 +62,8 @@ class PowerPlant(Investment):
 
         self.coal = coal
         self.plant_stack = Emitter({self.coal.name: self.coal_used},
-                                     self.emission_factor,
-                                     self.emission_controls)
+                                   self.emission_factor,
+                                   self.emission_controls)
         super().__init__(capital)
 
     def income(self):
@@ -148,8 +149,6 @@ class CofiringPlant(PowerPlant):
             electricity_tariff=plant.electricity_tariff,
             fix_om_coal=plant.fix_om_coal,
             variable_om_coal=plant.variable_om_coal,
-#            esp_efficiency=plant.esp_efficiency,
-#            desulfur_efficiency=plant.desulfur_efficiency,
             coal=plant.coal,
             emission_controls=plant.emission_controls,
             emission_factor=plant.emission_factor,
@@ -192,9 +191,9 @@ class CofiringPlant(PowerPlant):
         self.active_chain = supply_chain.fit(self.biomass_used[1] * time_step)
 
         self.plant_stack = Emitter({self.coal.name: self.coal_used,
-                                      self.biomass.name: self.biomass_used},
-                                     self.emission_factor,
-                                     self.emission_controls)
+                                    self.biomass.name: self.biomass_used},
+                                   self.emission_factor,
+                                   self.emission_controls)
 
     def fuel_cost(self):
         cost = self.coal_cost() + self.biomass_cost()
