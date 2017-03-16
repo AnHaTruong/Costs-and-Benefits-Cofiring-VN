@@ -33,23 +33,23 @@ MD_transport = Emitter({'Road transport': zero_transport,
                        )
 
 MD_field = Emitter({'Straw': straw_burned_infield(MongDuong1) * v_after_invest},
-                     emission_factor)
+                   emission_factor)
 
 MDCofire_transport = Emitter({'Road transport':
-                                (v_after_invest *
-                                 (MongDuong1Cofire.active_chain.transport_tkm() / y)
-                                 ),
-                               'Barge transport': zero_transport
-                                },
-                               emission_factor,
-                               {'CO2': 0.0}
-                               )
+                              (v_after_invest *
+                               (MongDuong1Cofire.active_chain.transport_tkm() / y)
+                               ),
+                             'Barge transport': zero_transport
+                              },
+                             emission_factor,
+                             {'CO2': 0.0}
+                             )
 
 MDCofire_field = Emitter({'Straw': (
-                            v_after_invest * straw_burned_infield(MongDuong1)
-                            - MongDuong1Cofire.biomass_used
-                            )},
-                           emission_factor)
+                          v_after_invest * straw_burned_infield(MongDuong1)
+                          - MongDuong1Cofire.biomass_used
+                          )},
+                         emission_factor)
 
 # Calculate emission reduction
 MD_plant_ER = (MongDuong1.plant_stack.emissions()["Total"]
@@ -92,26 +92,26 @@ NB_transport_activity = {'Road transport': zero_transport,
                          }
 
 NB_transport = Emitter(NB_transport_activity,
-                         emission_factor,
-                         {'CO2': 0.0}
-                         )
+                       emission_factor,
+                       {'CO2': 0.0}
+                       )
 
 NB_field = Emitter({'Straw': straw_burned_infield(NinhBinh) * v_after_invest},
-                     emission_factor)
+                   emission_factor)
 
 NBCofire_transport = Emitter({'Road transport': (v_after_invest *
-                                                   (NinhBinhCofire.active_chain.transport_tkm() / y)
-                                                   ),
-                                'Barge transport': (NinhBinhCofire.coal_used
-                                                    * NB_Coal.transport_distance * 2)
-                                },
-                               emission_factor,
-                               {'CO2': 0.0})
+                                                 (NinhBinhCofire.active_chain.transport_tkm() / y)
+                                                 ),
+                              'Barge transport': (NinhBinhCofire.coal_used
+                                                  * NB_Coal.transport_distance * 2)
+                              },
+                             emission_factor,
+                             {'CO2': 0.0})
 
 NBCofire_field = Emitter({'Straw': (
-                            v_after_invest * straw_burned_infield(NinhBinh)
-                            - NinhBinhCofire.biomass_used)},
-                           emission_factor)
+                          v_after_invest * straw_burned_infield(NinhBinh)
+                          - NinhBinhCofire.biomass_used)},
+                         emission_factor)
 
 # Calculate emission reduction
 NB_plant_ER = (NinhBinh.plant_stack.emissions()["Total"]
