@@ -11,6 +11,10 @@
 
 from natu.units import km, hr, y
 import natu.numpy as np
+# RTFM:  Units thread into arrays from the right but not from the left
+#  np.array([1, 2]) * m  -->  array([1 m, 2 m], dtype=object)
+#  m * np.array([1, 2])   --> [1  2] m
+# So when multiplying a vector by a quantity, put the vector left
 
 # Semantic overloading: we reuse the "amount" dimension to mean "value"
 from natu.core import ScalarUnit

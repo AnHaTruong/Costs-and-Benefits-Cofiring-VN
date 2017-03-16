@@ -8,15 +8,7 @@
 #
 import pandas as pd
 import numpy as np
-
-
-def outer(a, b):
-    """The outer product of two series.
-    The outer product of two coordinate vectors  u  and  v
-    is a matrix  w  such that the coordinates satisfy
-    w_ij = u_i * v_j.
-    """
-    return a[:, np.newaxis] * b[np.newaxis, :]
+import natu.core as nc
 
 
 class Emitter:
@@ -44,20 +36,79 @@ class Emitter:
        print(MD_plant_stack, "\n")
        print(MD_plant_stack.emissions['Total'], "\n")
        print(MD_plant_stack.emissions['Total']['CO2'], "\n")
-
        """
-    def __init__(self, quantities, emission_factors,
+    def __init__(self,
+                 quantities,
+                 emission_factors,
                  controls={'CO2': 0, 'SO2': 0, 'NOx': 0, 'PM10': 0}):
-        self.controls = pd.Series(controls)
         self.quantities = pd.Series(quantities)
-        self.emissions = pd.DataFrame(
-            {fuel: (pd.Series(emission_factors[fuel]) *
-                    (1 - self.controls) *     # TODO: Use outer product, quantities are time series
-                    self.quantities[fuel]
-                    )
-             for fuel in quantities.keys()
-             })
-        self.emissions['Total'] = self.emissions.sum(axis=1)
+        self.controled_emission_factor = pd.Series({
+            fuel: pd.Series(emission_factors[fuel]) * (1 - pd.Series(controls))
+            for fuel in emission_factors})
 
     def __str__(self):
-        return self.emissions.transpose().to_string()
+        return self.emissions().transpose().to_string()
+
+    def emissions(self):
+        df = pd.DataFrame({
+            fuel: self.controled_emission_factor[fuel] * self.quantities[fuel]
+            for fuel in self.quantities.keys()})
+        df['Total'] = df.sum(axis=1)
+        return df
+
+
+class v_Emitter:
+    """A system which emits pollutants.
+       Refer to emission_factor for the allowable keys in "quantities" and "controls"
+       Emissions are proportional to a quantity of fuel used (or to an activity level).
+       Multiple fuels can be used.
+       Each pollutant can be reduced by a given percentage (default: 0, no filter).
+
+       Simple example:
+
+       from parameters import emission_factor
+       import numpy as np
+       print(v_Emitter({'Straw': np.array([0., 1000., 1000.])}, emission_factor))
+
+                     CO2                NOx             PM10                SO2
+Straw  [0.0, 1003.86, 1003.86]  [0.0, 2.28, 2.28]  [0.0, 9.1, 9.1]  [0.0, 0.18, 0.18]
+Total  [0.0, 1003.86, 1003.86]  [0.0, 2.28, 2.28]  [0.0, 9.1, 9.1]  [0.0, 0.18, 0.18]
+
+       Real example:
+       from parameters import emission_factor, MongDuong1Cofire
+
+       MD_plant_stack = Emitter({'6b_coal': MongDuong1Cofire.coal_used,
+                                 'Straw': MongDuong1Cofire.biomass_used
+                                 },
+                                emission_factor,
+                                {'CO2': 0.0, 'SO2': 0.982, 'NOx': 0.0, 'PM10': 0.996}
+                                )
+
+       print(MD_plant_stack, "\n")
+       print(MD_plant_stack.emissions()['Total'], "\n")
+       print(MD_plant_stack.emissions()['Total']['CO2'], "\n")
+       """
+    def __init__(self,
+                 quantities,   # A dictionary of (fuel: emissions_time_series)
+                 emission_factors,
+                 controls={'CO2': 0, 'SO2': 0, 'NOx': 0, 'PM10': 0}):
+        # assert all(isinstance(v, np.ndarray) for v in quantities.values())
+        self.quantities = quantities
+        self.controled_emission_factor = pd.Series({
+            fuel: pd.Series(emission_factors[fuel]) * (1 - pd.Series(controls))
+            for fuel in emission_factors})
+
+    def __str__(self):
+        return self.emissions().transpose().to_string()
+
+    def emissions_fuel(self, fuel, v_quantity):
+        return {pollutant: v_quantity * self.controled_emission_factor[fuel][pollutant]
+                for pollutant in self.controled_emission_factor[fuel].keys()
+                }
+
+    def emissions(self):
+        df = pd.DataFrame({
+            fuel: self.emissions_fuel(fuel, self.quantities[fuel])
+            for fuel in self.quantities.keys()})
+        df['Total'] = df.sum(axis=1)
+        return df.applymap(lambda v: v[1])   # For regression testing, actually return a scalar
