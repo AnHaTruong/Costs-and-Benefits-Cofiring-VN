@@ -10,17 +10,17 @@
 """ Regression testing : Emitter.py  vs.  emission.py
 """
 
-from emission_new import MD_plant_stack, MD_transport, MD_field, MDCofire_plant_stack
+from emission_new import MD_transport, MD_field
 from emission_new import MDCofire_transport, MDCofire_field, MD_ER_table
 
-from emission_new import NB_plant_stack, NB_transport, NB_field, NBCofire_plant_stack
+from emission_new import NB_transport, NB_field
 from emission_new import NBCofire_transport, NBCofire_field, NB_ER_table
 
 from parameters import MongDuong1, NinhBinh, MongDuong1Cofire, NinhBinhCofire
 
 print("\nMong Duong 1 BASELINE EMISSIONS\n")
 
-print("Emissions from power plant\n", MD_plant_stack.emissions().T, "\n")
+print("Emissions from power plant\n", MongDuong1.plant_stack.emissions().T, "\n")
 
 print("Emissions from transport\n", MD_transport.emissions().T, "\n")
 
@@ -28,7 +28,7 @@ print("Emission from open field burning\n", MD_field.emissions().T, "\n")
 
 print("-------\nMong Duong 1 COFIRING EMISSIONS\n")
 
-print("Emissions from power plant\n", MDCofire_plant_stack.emissions().T, "\n")
+print("Emissions from power plant\n", MongDuong1Cofire.plant_stack.emissions().T, "\n")
 
 print("Emissions from transport\n", MDCofire_transport.emissions().T, "\n")
 
@@ -43,7 +43,7 @@ print("==================\n")
 
 print("\nNinh Binh BASELINE EMISSIONS\n")
 
-print("Emissions from power plant\n", NB_plant_stack.emissions().T, "\n")
+print("Emissions from power plant\n", NinhBinh.plant_stack.emissions().T, "\n")
 
 print("Emissions from transport\n", NB_transport.emissions().T, "\n")
 
@@ -51,7 +51,7 @@ print("Emission from open field burning\n", NB_field.emissions().T, "\n")
 
 print("-------\nNinh Binh COFIRING EMISSIONS\n")
 
-print("Emission from power plant\n", NBCofire_plant_stack.emissions().T, "\n")
+print("Emission from power plant\n", NinhBinhCofire.plant_stack.emissions().T, "\n")
 
 print("Emissions from transportation\n", NBCofire_transport.emissions().T, "\n")
 

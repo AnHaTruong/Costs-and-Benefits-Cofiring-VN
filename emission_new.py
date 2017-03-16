@@ -12,8 +12,8 @@
    Climate benefit and health benefit from GHG and air pollutant emission reduction
 """
 from parameters import MongDuong1, NinhBinh, MongDuong1Cofire, NinhBinhCofire
-from parameters import emission_factor, MD_controls
-from parameters import NB_controls, NB_Coal
+from parameters import emission_factor
+from parameters import NB_Coal
 from parameters import specific_cost
 from Emitter import Emitter
 from strawburned import straw_burned_infield
@@ -24,24 +24,16 @@ from natu.units import t, km, y
 
 zero_transport = v_zeros * t * km / y
 
-# Define objects
-MD_plant_stack = Emitter({'6b_coal': MongDuong1.coal_used},
-                           emission_factor,
-                           MD_controls)
 
+# Define objects
 MD_transport = Emitter({'Road transport': zero_transport,
-                          'Barge transport': zero_transport},
-                         emission_factor,
-                         {'CO2': 0.0}
-                         )
+                        'Barge transport': zero_transport},
+                       emission_factor,
+                       {'CO2': 0.0}
+                       )
 
 MD_field = Emitter({'Straw': straw_burned_infield(MongDuong1) * v_after_invest},
                      emission_factor)
-
-MDCofire_plant_stack = Emitter({'6b_coal': MongDuong1Cofire.coal_used,
-                                  'Straw': MongDuong1Cofire.biomass_used},
-                                 emission_factor,
-                                 MD_controls)
 
 MDCofire_transport = Emitter({'Road transport':
                                 (v_after_invest *
@@ -60,7 +52,8 @@ MDCofire_field = Emitter({'Straw': (
                            emission_factor)
 
 # Calculate emission reduction
-MD_plant_ER = MD_plant_stack.emissions()["Total"] - MDCofire_plant_stack.emissions()["Total"]
+MD_plant_ER = (MongDuong1.plant_stack.emissions()["Total"]
+               - MongDuong1Cofire.plant_stack.emissions()["Total"])
 
 MD_transport_CO2 = MD_transport.emissions()["Total"] - MDCofire_transport.emissions()["Total"]
 
@@ -89,9 +82,6 @@ MD_health_benefit = MD_total_benefit.drop('CO2').sum()
 
 # Ninh Binh
 # Define objects
-NB_plant_stack = Emitter({'4b_coal': NinhBinh.coal_used},
-                           emission_factor,
-                           NB_controls)
 
 NB_transport_activity = {'Road transport': zero_transport,
                          'Barge transport': NinhBinh.coal_used * NB_Coal.transport_distance * 2
@@ -109,11 +99,6 @@ NB_transport = Emitter(NB_transport_activity,
 NB_field = Emitter({'Straw': straw_burned_infield(NinhBinh) * v_after_invest},
                      emission_factor)
 
-NBCofire_plant_stack = Emitter({'4b_coal': NinhBinhCofire.coal_used,
-                                  'Straw': NinhBinhCofire.biomass_used},
-                                 emission_factor,
-                                 NB_controls)
-
 NBCofire_transport = Emitter({'Road transport': (v_after_invest *
                                                    (NinhBinhCofire.active_chain.transport_tkm() / y)
                                                    ),
@@ -129,7 +114,8 @@ NBCofire_field = Emitter({'Straw': (
                            emission_factor)
 
 # Calculate emission reduction
-NB_plant_ER = NB_plant_stack.emissions()["Total"] - NBCofire_plant_stack.emissions()["Total"]
+NB_plant_ER = (NinhBinh.plant_stack.emissions()["Total"]
+               - NinhBinhCofire.plant_stack.emissions()["Total"])
 
 NB_transport_CO2 = NB_transport.emissions()["Total"] - NBCofire_transport.emissions()["Total"]
 NB_transport_pollutant = pd.Series([0.0 * t / y, 0.0 * t / y, 0.0 * t / y],

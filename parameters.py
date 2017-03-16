@@ -91,8 +91,6 @@ specific_cost = pd.Series({'CO2': 1 * USD / t,
                            'NOx': 286 * USD / t
                            })
 
-MD_controls = {'CO2': 0.0, 'SO2': 0.982, 'NOx': 0.0, 'PM10': 0.996}
-
 MongDuong1 = PowerPlant(name="Mong Duong 1",
                         capacity=1080 * MW,
                         capacity_factor=0.60,
@@ -103,7 +101,7 @@ MongDuong1 = PowerPlant(name="Mong Duong 1",
                         electricity_tariff=1239.17 * VND / kWh,
                         fix_om_coal=29.31 * USD / kW / y,
                         variable_om_coal=0.0048 * USD / kWh,
-                        emission_controls=MD_controls,
+                        emission_controls={'CO2': 0.0, 'SO2': 0.982, 'NOx': 0.0, 'PM10': 0.996},
                         emission_factor=emission_factor,
                         coal=MD_Coal
                         )
@@ -132,8 +130,6 @@ MongDuong1Cofire = CofiringPlant(MongDuong1,
                                  supply_chain=MD_SupplyChain
                                  )
 
-NB_controls = {'CO2': 0.0, 'SO2': 0.0, 'NOx': 0.0, 'PM10': 0.992}
-
 NinhBinh = PowerPlant(name="Ninh Binh",
                       capacity=100 * MW,
                       capacity_factor=0.64,
@@ -144,7 +140,7 @@ NinhBinh = PowerPlant(name="Ninh Binh",
                       electricity_tariff=1665.6 * VND / kWh,
                       fix_om_coal=29.31 * USD / kW / y,
                       variable_om_coal=0.0048 * USD / kWh,
-                      emission_controls=NB_controls,
+                      emission_controls={'CO2': 0.0, 'SO2': 0.0, 'NOx': 0.0, 'PM10': 0.992},
                       emission_factor=emission_factor,
                       coal=NB_Coal
                       )
