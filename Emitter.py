@@ -1,3 +1,4 @@
+
 # Economic of co-firing in two power plants in Vietnam
 #
 # Pollutant emitter
@@ -7,55 +8,6 @@
 # Creative Commons Attribution-ShareAlike 4.0 International
 #
 import pandas as pd
-import numpy as np
-import natu.core as nc
-
-
-class Emitter:
-    """A system which emits pollutants.
-       Refer to emission_factor for the allowable keys in "quantities" and "controls"
-       Emissions are proportional to a quantity of fuel used (or to an activity level).
-       Multiple fuels can be used.
-       Each pollutant can be reduced by a given percentage (default: 0, no filter).
-
-       Simplest example:
-       from parameters import emission_factor
-       print(Emitter({'Straw': 1000}, emission_factor))
-
-                  CO2   NOx  PM10   SO2
-       Straw  1003.86  2.28   9.1  0.18
-       Total  1003.86  2.28   9.1  0.18
-
-       Real example:
-       from parameters import emission_factor, MongDuong1
-       MD_plant_stack = Emitter({'6b_coal': MongDuong1.coal_used[1], 'Straw': 0*t/y},
-                                emission_factor,
-                                {'CO2': 0.0, 'SO2': 0.982, 'NOx': 0.0, 'PM10': 0.996}
-                                )
-
-       print(MD_plant_stack, "\n")
-       print(MD_plant_stack.emissions['Total'], "\n")
-       print(MD_plant_stack.emissions['Total']['CO2'], "\n")
-       """
-    def __init__(self,
-                 quantities,
-                 emission_factors,
-                 controls={'CO2': 0, 'SO2': 0, 'NOx': 0, 'PM10': 0}):
-        self.quantities = pd.Series(quantities)
-        self.controled_emission_factor = pd.Series({
-            fuel: pd.Series(emission_factors[fuel]) * (1 - pd.Series(controls))
-            for fuel in emission_factors})
-
-    def __str__(self):
-        return self.emissions().transpose().to_string()
-
-    def emissions(self):
-        df = pd.DataFrame({
-            fuel: self.controled_emission_factor[fuel] * self.quantities[fuel]
-            for fuel in self.quantities.keys()})
-        df['Total'] = df.sum(axis=1)
-        return df
-
 
 class v_Emitter:
     """A system which emits pollutants.

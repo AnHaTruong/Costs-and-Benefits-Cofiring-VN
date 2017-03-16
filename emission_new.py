@@ -15,9 +15,9 @@ from parameters import MongDuong1, NinhBinh, MongDuong1Cofire, NinhBinhCofire
 from parameters import emission_factor, MD_controls
 from parameters import NB_controls, NB_Coal
 from parameters import specific_cost
-from Emitter import Emitter, v_Emitter
+from Emitter import v_Emitter
 from strawburned import straw_burned_infield
-from units import v_after_invest, v_zeros
+from units import v_after_invest, v_zeros, display_as
 
 import pandas as pd
 from natu.units import t, km, y
@@ -72,6 +72,11 @@ MD_field_ER = MD_field.emissions()["Total"] - MDCofire_field.emissions()["Total"
 MD_total_ER = MD_plant_ER + MD_transport_ER + MD_field_ER
 
 MD_total_benefit = MD_total_ER * specific_cost
+display_as(MD_total_benefit, 'kUSD/y')
+
+list_of_series = [MD_plant_ER, MD_transport_ER, MD_field_ER, MD_total_ER, MD_total_benefit]
+row = ['Plant', 'Transport', 'Field', 'Total', 'Benefit']
+MD_ER_table = pd.DataFrame(list_of_series, index=row)
 
 MD_ER_benefit = MD_total_benefit['CO2']
 MD_health_benefit = MD_total_benefit.drop('CO2').sum()
@@ -130,5 +135,11 @@ NB_field_ER = NB_field.emissions()["Total"] - NBCofire_field.emissions()["Total"
 NB_total_ER = NB_plant_ER + NB_transport_ER + NB_field_ER
 
 NB_total_benefit = NB_total_ER * specific_cost
+display_as(NB_total_benefit, 'kUSD/y')
+
+list_of_series = [NB_plant_ER, NB_transport_ER, NB_field_ER, NB_total_ER, NB_total_benefit]
+row = ['Plant', 'Transport', 'Field', 'Total', 'Benefit']
+NB_ER_table = pd.DataFrame(list_of_series, index=row)
+
 NB_ER_benefit = NB_total_benefit['CO2']
 NB_health_benefit = NB_total_benefit.drop('CO2').sum()
