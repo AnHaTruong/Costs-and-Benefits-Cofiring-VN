@@ -10,6 +10,27 @@
 import pandas as pd
 
 
+class Fuel:
+    def __init__(self,
+                 name,
+                 heat_value,
+                 price,
+                 transport_distance,
+                 ef_transport
+                 ):
+        self.name = name
+        self.heat_value = heat_value
+        self.price = price
+        self.price.display_unit = 'USD/t'
+        self.transport_distance = transport_distance
+        self.ef_transport = ef_transport
+
+    def cost_per_GJ(self):
+        cost = self.price / self.heat_value
+        cost.display_unit = 'USD / GJ'
+        return cost
+
+
 class Emitter:
     """A system which emits pollutants.
        Refer to emission_factor for the allowable keys in "quantities" and "controls"

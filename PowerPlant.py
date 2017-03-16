@@ -13,28 +13,7 @@ from units import time_horizon, time_step, v_ones, v_after_invest, display_as, U
 from natu.numpy import full, npv
 from natu.units import t, y
 from Investment import Investment
-from Emitter import Emitter
-
-
-class Fuel:
-    def __init__(self,
-                 name,
-                 heat_value,
-                 price,
-                 transport_distance,
-                 ef_transport
-                 ):
-        self.name = name
-        self.heat_value = heat_value
-        self.price = price
-        self.price.display_unit = 'USD/t'
-        self.transport_distance = transport_distance
-        self.ef_transport = ef_transport
-
-    def cost_per_GJ(self):
-        cost = self.price / self.heat_value
-        cost.display_unit = 'USD / GJ'
-        return cost
+from Emitter import Fuel, Emitter
 
 
 class PowerPlant(Investment):
@@ -51,8 +30,6 @@ class PowerPlant(Investment):
                  electricity_tariff,
                  fix_om_coal,
                  variable_om_coal,
-#                 esp_efficiency,
-#                 desulfur_efficiency,
                  emission_controls,
                  emission_factor,
                  coal,                # type:  Fuel
@@ -67,8 +44,8 @@ class PowerPlant(Investment):
         self.electricity_tariff.display_unit = 'USD/kWh'
         self.fix_om_coal = fix_om_coal
         self.variable_om_coal = variable_om_coal
-#        self.esp_efficiency = esp_efficiency
-#        self.desulfur_efficiency = desulfur_efficiency
+        self.esp_efficiency = emission_controls["PM10"]       # To fix in Table 12 and ...
+        self.desulfur_efficiency = emission_controls["SO2"]   # To fix in Table 12 and ...
         self.emission_controls = emission_controls
         self.emission_factor = emission_factor
 
