@@ -11,7 +11,8 @@ import pandas as pd
 from units import USD, VND, time_step
 from natu.units import MJ, kg, t, d, hr, km, MW, ha, kW, y, kWh
 
-from PowerPlant import Fuel, PowerPlant, CofiringPlant
+from Emitter import Fuel
+from PowerPlant import PowerPlant, CofiringPlant
 from Shape import Semi_Annulus, Disk
 from SupplyChain import SupplyChain, SupplyZone
 

@@ -18,7 +18,7 @@ from farmerincome import total_income_benefit
 from emission import emission_reduction_benefit
 from job import total_job_benefit
 from parameters import MongDuong1, NinhBinh, MongDuong1Cofire, NinhBinhCofire
-from emission_new import MD_ER_benefit, NB_ER_benefit, MD_health_benefit, NB_health_benefit
+from emission import MD_ER_benefit, NB_ER_benefit, MD_health_benefit, NB_health_benefit
 
 row = '{:35}' + '{:23.0f}'
 

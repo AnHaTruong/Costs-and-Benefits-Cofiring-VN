@@ -75,8 +75,9 @@ class PowerPlant(Investment):
         return display_as(cost, 'kUSD')
 
     def coal_cost(self):
-        # natu bugs if in the multiplication,
-        # the coal price (scalar) comes before the power generation (vector) ??
+        # Beware of the non commutative * operator that follows.
+        #  leave the scalar quantities rightside and the array leftside
+        #  so that natu.py will threads in units inside the array
         cost = self.coal_used * self.coal.price * time_step
         return display_as(cost, 'kUSD')
 
@@ -84,9 +85,8 @@ class PowerPlant(Investment):
         return self.coal_cost()
 
     def coal_om_cost(self):
-        # fixed_om_coal = v_ones.copy() * self.fix_om_coal * self.capacity
         fixed_om_coal = full(time_horizon + 1, self.fix_om_coal * self.capacity, dtype=object)
-        # Same comment:  vector * scalar => okay, scalar * vector => natu.core complains
+        # Again, the order of the array * scalar operation matters to natu.py
         variable_om_coal = self.power_generation * self.variable_om_coal
         return (fixed_om_coal + variable_om_coal) * time_step
 
