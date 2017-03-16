@@ -13,6 +13,7 @@ from units import time_horizon, time_step, v_ones, v_after_invest, display_as, U
 from natu.numpy import full, npv
 from natu.units import t, y
 from Investment import Investment
+from Emitter import v_Emitter
 
 
 class Fuel:
@@ -50,8 +51,10 @@ class PowerPlant(Investment):
                  electricity_tariff,
                  fix_om_coal,
                  variable_om_coal,
-                 esp_efficiency,
-                 desulfur_efficiency,
+#                 esp_efficiency,
+#                 desulfur_efficiency,
+                 emission_controls,
+                 emission_factor,
                  coal,                # type:  Fuel
                  capital=0 * USD
                  ):
@@ -64,8 +67,10 @@ class PowerPlant(Investment):
         self.electricity_tariff.display_unit = 'USD/kWh'
         self.fix_om_coal = fix_om_coal
         self.variable_om_coal = variable_om_coal
-        self.esp_efficiency = esp_efficiency
-        self.desulfur_efficiency = desulfur_efficiency
+#        self.esp_efficiency = esp_efficiency
+#        self.desulfur_efficiency = desulfur_efficiency
+        self.emission_controls = emission_controls
+        self.emission_factor = emission_factor
 
         self.power_generation = full(time_horizon + 1, capacity * capacity_factor, dtype=object)
         self.elec_sale = self.power_generation * time_step
@@ -78,6 +83,9 @@ class PowerPlant(Investment):
         display_as(self.coal_used, 't/y')
 
         self.coal = coal
+        self.plant_stack = v_Emitter({self.coal.name: self.coal_used},
+                                     self.emission_factor,
+                                     self.emission_controls)
         super().__init__(capital)
 
     def income(self):
@@ -163,9 +171,11 @@ class CofiringPlant(PowerPlant):
             electricity_tariff=plant.electricity_tariff,
             fix_om_coal=plant.fix_om_coal,
             variable_om_coal=plant.variable_om_coal,
-            esp_efficiency=plant.esp_efficiency,
-            desulfur_efficiency=plant.desulfur_efficiency,
+#            esp_efficiency=plant.esp_efficiency,
+#            desulfur_efficiency=plant.desulfur_efficiency,
             coal=plant.coal,
+            emission_controls=plant.emission_controls,
+            emission_factor=plant.emission_factor,
             capital=capital_cost * plant.capacity * biomass_ratio)
 
         self.biomass_ratio = biomass_ratio
@@ -203,6 +213,11 @@ class CofiringPlant(PowerPlant):
         display_as(self.coal_used, 't/y')
 
         self.active_chain = supply_chain.fit(self.biomass_used[1] * time_step)
+
+        self.plant_stack = v_Emitter({self.coal.name: self.coal_used,
+                                      self.biomass.name: self.biomass_used},
+                                     self.emission_factor,
+                                     self.emission_controls)
 
     def fuel_cost(self):
         cost = self.coal_cost() + self.biomass_cost()

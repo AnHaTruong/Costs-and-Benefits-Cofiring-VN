@@ -9,6 +9,7 @@
 #
 import pandas as pd
 
+
 class v_Emitter:
     """A system which emits pollutants.
        Refer to emission_factor for the allowable keys in "quantities" and "controls"
@@ -63,4 +64,5 @@ Total  [0.0, 1003.86, 1003.86]  [0.0, 2.28, 2.28]  [0.0, 9.1, 9.1]  [0.0, 0.18, 
             fuel: self.emissions_fuel(fuel, self.quantities[fuel])
             for fuel in self.quantities.keys()})
         df['Total'] = df.sum(axis=1)
+#        return df
         return df.applymap(lambda v: v[1])   # For regression testing, actually return a scalar

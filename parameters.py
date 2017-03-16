@@ -13,6 +13,7 @@ from natu.units import MJ, kg, t, d, hr, km, MW, ha, kW, y, kWh
 from PowerPlant import Fuel, PowerPlant, CofiringPlant
 from Shape import Semi_Annulus, Disk
 from SupplyChain import SupplyChain, SupplyZone
+from Emitter import v_Emitter
 
 from strawdata import MongDuong1_straw_density1, MongDuong1_straw_density2
 from strawdata import NinhBinh_straw_density
@@ -103,10 +104,13 @@ MongDuong1 = PowerPlant(name="Mong Duong 1",
                         electricity_tariff=1239.17 * VND / kWh,
                         fix_om_coal=29.31 * USD / kW / y,
                         variable_om_coal=0.0048 * USD / kWh,
-                        esp_efficiency=0.996,
-                        desulfur_efficiency=0.982,
+#                        esp_efficiency=0.996,
+#                        desulfur_efficiency=0.982,
+                        emission_controls=MD_controls,
+                        emission_factor=emission_factor,
                         coal=MD_Coal
                         )
+
 
 MDSupplyZone1 = SupplyZone(shape=Semi_Annulus(0 * km, 50 * km),
                            straw_density=MongDuong1_straw_density1 * time_step,
@@ -143,8 +147,10 @@ NinhBinh = PowerPlant(name="Ninh Binh",
                       electricity_tariff=1665.6 * VND / kWh,
                       fix_om_coal=29.31 * USD / kW / y,
                       variable_om_coal=0.0048 * USD / kWh,
-                      esp_efficiency=0.992,
-                      desulfur_efficiency=0,
+#                      esp_efficiency=0.992,
+#                      desulfur_efficiency=0,
+                      emission_controls=NB_controls,
+                      emission_factor=emission_factor,
                       coal=NB_Coal
                       )
 

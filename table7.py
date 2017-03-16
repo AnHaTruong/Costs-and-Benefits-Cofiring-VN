@@ -16,6 +16,8 @@ from emission_new import MDCofire_transport, MDCofire_field, MD_ER_table
 from emission_new import NB_plant_stack, NB_transport, NB_field, NBCofire_plant_stack
 from emission_new import NBCofire_transport, NBCofire_field, NB_ER_table
 
+from parameters import MongDuong1, NinhBinh, MongDuong1Cofire, NinhBinhCofire
+
 print("\nMong Duong 1 BASELINE EMISSIONS\n")
 
 print("Emissions from power plant\n", MD_plant_stack.emissions().T, "\n")
@@ -58,3 +60,18 @@ print("Emission from open field burning\n", NBCofire_field.emissions().T, "\n")
 print("-------\nNinh Binh EMISSION REDUCTION")
 
 print(NB_ER_table, "\n")
+
+print("NEW table - move plant_stack into PowerPlant class\n")
+
+
+def print_plant_emission(plant, cofireplant):
+    print(plant.name, 'BASELINE EMISSION')
+    print('Emission from power plant')
+    print(plant.plant_stack.emissions().T)
+    print(plant.name, 'COFIRING EMISSION')
+    print('Emission from power plant')
+    print(cofireplant.plant_stack.emissions().T)
+
+print_plant_emission(MongDuong1, MongDuong1Cofire)
+print_plant_emission(NinhBinh, NinhBinhCofire)
+
