@@ -7,18 +7,17 @@
 # Creative Commons Attribution-ShareAlike 4.0 International
 #
 #
-
+import pandas as pd
 from units import USD, VND, time_step
 from natu.units import MJ, kg, t, d, hr, km, MW, ha, kW, y, kWh
+
 from PowerPlant import Fuel, PowerPlant, CofiringPlant
 from Shape import Semi_Annulus, Disk
 from SupplyChain import SupplyChain, SupplyZone
-from Emitter import v_Emitter
 
 from strawdata import MongDuong1_straw_density1, MongDuong1_straw_density2
 from strawdata import NinhBinh_straw_density
 
-import pandas as pd
 
 """Input parameters of the model"""
 

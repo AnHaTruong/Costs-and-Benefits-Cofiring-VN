@@ -13,7 +13,7 @@ from units import time_horizon, time_step, v_ones, v_after_invest, display_as, U
 from natu.numpy import full, npv
 from natu.units import t, y
 from Investment import Investment
-from Emitter import v_Emitter
+from Emitter import Emitter
 
 
 class Fuel:
@@ -83,7 +83,7 @@ class PowerPlant(Investment):
         display_as(self.coal_used, 't/y')
 
         self.coal = coal
-        self.plant_stack = v_Emitter({self.coal.name: self.coal_used},
+        self.plant_stack = Emitter({self.coal.name: self.coal_used},
                                      self.emission_factor,
                                      self.emission_controls)
         super().__init__(capital)
@@ -214,7 +214,7 @@ class CofiringPlant(PowerPlant):
 
         self.active_chain = supply_chain.fit(self.biomass_used[1] * time_step)
 
-        self.plant_stack = v_Emitter({self.coal.name: self.coal_used,
+        self.plant_stack = Emitter({self.coal.name: self.coal_used,
                                       self.biomass.name: self.biomass_used},
                                      self.emission_factor,
                                      self.emission_controls)

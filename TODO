@@ -4,6 +4,10 @@ Check emissions in the 0% biomass ratio
 
 Fix transport work calculations
 
+straw_burned_infield  should be a vector
+
+transport_tkm  should be a vector
+
 Add smokestack and controls to PowerPlant class
 
 Add transport emissions to SupplyChain

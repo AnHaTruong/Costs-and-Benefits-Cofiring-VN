@@ -15,7 +15,7 @@ from parameters import MongDuong1, NinhBinh, MongDuong1Cofire, NinhBinhCofire
 from parameters import emission_factor, MD_controls
 from parameters import NB_controls, NB_Coal
 from parameters import specific_cost
-from Emitter import v_Emitter
+from Emitter import Emitter
 from strawburned import straw_burned_infield
 from units import v_after_invest, v_zeros, display_as
 
@@ -25,25 +25,25 @@ from natu.units import t, km, y
 zero_transport = v_zeros * t * km / y
 
 # Define objects
-MD_plant_stack = v_Emitter({'6b_coal': MongDuong1.coal_used},
+MD_plant_stack = Emitter({'6b_coal': MongDuong1.coal_used},
                            emission_factor,
                            MD_controls)
 
-MD_transport = v_Emitter({'Road transport': zero_transport,
+MD_transport = Emitter({'Road transport': zero_transport,
                           'Barge transport': zero_transport},
                          emission_factor,
                          {'CO2': 0.0}
                          )
 
-MD_field = v_Emitter({'Straw': straw_burned_infield(MongDuong1) * v_after_invest},
+MD_field = Emitter({'Straw': straw_burned_infield(MongDuong1) * v_after_invest},
                      emission_factor)
 
-MDCofire_plant_stack = v_Emitter({'6b_coal': MongDuong1Cofire.coal_used,
+MDCofire_plant_stack = Emitter({'6b_coal': MongDuong1Cofire.coal_used,
                                   'Straw': MongDuong1Cofire.biomass_used},
                                  emission_factor,
                                  MD_controls)
 
-MDCofire_transport = v_Emitter({'Road transport':
+MDCofire_transport = Emitter({'Road transport':
                                 (v_after_invest *
                                  (MongDuong1Cofire.active_chain.transport_tkm() / y)
                                  ),
@@ -53,7 +53,7 @@ MDCofire_transport = v_Emitter({'Road transport':
                                {'CO2': 0.0}
                                )
 
-MDCofire_field = v_Emitter({'Straw': (
+MDCofire_field = Emitter({'Straw': (
                             v_after_invest * straw_burned_infield(MongDuong1)
                             - MongDuong1Cofire.biomass_used
                             )},
@@ -89,7 +89,7 @@ MD_health_benefit = MD_total_benefit.drop('CO2').sum()
 
 # Ninh Binh
 # Define objects
-NB_plant_stack = v_Emitter({'4b_coal': NinhBinh.coal_used},
+NB_plant_stack = Emitter({'4b_coal': NinhBinh.coal_used},
                            emission_factor,
                            NB_controls)
 
@@ -101,20 +101,20 @@ NB_transport_activity = {'Road transport': zero_transport,
                          'Barge transport': NinhBinh.coal_used * NB_Coal.transport_distance * 2
                          }
 
-NB_transport = v_Emitter(NB_transport_activity,
+NB_transport = Emitter(NB_transport_activity,
                          emission_factor,
                          {'CO2': 0.0}
                          )
 
-NB_field = v_Emitter({'Straw': straw_burned_infield(NinhBinh) * v_after_invest},
+NB_field = Emitter({'Straw': straw_burned_infield(NinhBinh) * v_after_invest},
                      emission_factor)
 
-NBCofire_plant_stack = v_Emitter({'4b_coal': NinhBinhCofire.coal_used,
+NBCofire_plant_stack = Emitter({'4b_coal': NinhBinhCofire.coal_used,
                                   'Straw': NinhBinhCofire.biomass_used},
                                  emission_factor,
                                  NB_controls)
 
-NBCofire_transport = v_Emitter({'Road transport': (v_after_invest *
+NBCofire_transport = Emitter({'Road transport': (v_after_invest *
                                                    (NinhBinhCofire.active_chain.transport_tkm() / y)
                                                    ),
                                 'Barge transport': (NinhBinhCofire.coal_used
@@ -123,7 +123,7 @@ NBCofire_transport = v_Emitter({'Road transport': (v_after_invest *
                                emission_factor,
                                {'CO2': 0.0})
 
-NBCofire_field = v_Emitter({'Straw': (
+NBCofire_field = Emitter({'Straw': (
                             v_after_invest * straw_burned_infield(NinhBinh)
                             - NinhBinhCofire.biomass_used)},
                            emission_factor)

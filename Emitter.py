@@ -10,7 +10,7 @@
 import pandas as pd
 
 
-class v_Emitter:
+class Emitter:
     """A system which emits pollutants.
        Refer to emission_factor for the allowable keys in "quantities" and "controls"
        Emissions are proportional to a quantity of fuel used (or to an activity level).
@@ -21,7 +21,7 @@ class v_Emitter:
 
        from parameters import emission_factor
        import numpy as np
-       print(v_Emitter({'Straw': np.array([0., 1000., 1000.])}, emission_factor))
+       print(Emitter({'Straw': np.array([0., 1000., 1000.])}, emission_factor))
 
                      CO2                NOx             PM10                SO2
 Straw  [0.0, 1003.86, 1003.86]  [0.0, 2.28, 2.28]  [0.0, 9.1, 9.1]  [0.0, 0.18, 0.18]
