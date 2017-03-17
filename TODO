@@ -1,18 +1,24 @@
 ﻿TODO
 
+Get rid of old code in emission.py
+
+Use npv, get rid of benefitaddup
+
 Pass boiler_efficiency_loss function as an initialization parameter
 
-Rename the tables meaningfully
+Rename the tables meaningfully (add legend keywords after number)
 
 Check emissions in the 0% biomass ratio
 
 Fix transport work calculations
 
-straw_burned_infield  should be a vector
+straw_burned_infield  depends on time -> return a vector 
 
-transport_tkm  should be a vector
+transport_tkm  depends on time -> returns a vector
 
-SupplyChain resizing: by quantity rather than %
+Benefits depends on time -> return a vector
+
+SupplyChain sizing: by quantity rather than %
 
 Add transport emissions to SupplyChain
 
@@ -39,6 +45,7 @@ Consider more indicators that LCOE:
 
 
 DONE
+
 Add smokestack and controls to PowerPlant class
 
 Use a list or an array rather than a function for time-dependant variables
