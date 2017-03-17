@@ -35,11 +35,8 @@ MD_transport = Emitter({'Road transport': zero_transport,
 MD_field = Emitter({'Straw': straw_burned_infield(MongDuong1) * v_after_invest},
                    emission_factor)
 
-MDCofire_transport = Emitter({'Road transport':
-                              (v_after_invest *
-                               (MongDuong1Cofire.active_chain.transport_tkm() / y)
-                               ),
-                             'Barge transport': zero_transport
+MDCofire_transport = Emitter({'Road transport': MongDuong1Cofire.active_chain.transport_tkm() / y,
+                              'Barge transport': zero_transport
                               },
                              emission_factor,
                              {'CO2': 0.0}
@@ -99,9 +96,7 @@ NB_transport = Emitter(NB_transport_activity,
 NB_field = Emitter({'Straw': straw_burned_infield(NinhBinh) * v_after_invest},
                    emission_factor)
 
-NBCofire_transport = Emitter({'Road transport': (v_after_invest *
-                                                 (NinhBinhCofire.active_chain.transport_tkm() / y)
-                                                 ),
+NBCofire_transport = Emitter({'Road transport': NinhBinhCofire.active_chain.transport_tkm() / y,
                               'Barge transport': (NinhBinhCofire.coal_used
                                                   * NB_Coal.transport_distance * 2)
                               },
@@ -183,7 +178,7 @@ def emission_biomass_combust(cofiringplant):
 
 def emission_biomass_transport(cofiringplant):
     mass = (cofiringplant.biomass.ef_transport
-            * cofiringplant.active_chain.transport_tkm() / time_step
+            * cofiringplant.active_chain.transport_tkm()[1] / time_step
             )
     mass.display_unit = 't/y'
     return mass

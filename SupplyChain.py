@@ -8,9 +8,10 @@
 #
 # pylint: disable=E0611
 
-from units import isclose
-from natu.units import t, km, USD
 from copy import copy
+from units import isclose, v_after_invest, v_zeros, display_as
+
+from natu.units import t, km, USD
 
 
 class SupplyZone():
@@ -29,8 +30,8 @@ class SupplyZone():
                 "\n Capacity = " + str(self.capacity()) +
                 "\n Transport tariff: " + str(self.transport_tariff) +
                 "\n Tortuosity: " + str(self.tortuosity_factor) +
-                "\n Activity to transport all = " + str(self.transport_tkm()) +
-                "\n Cost to transport all = " + str(self.transport_cost())
+                "\n Activity to transport all = " + str(self.transport_tkm()[1]) +
+                "\n Cost to transport all = " + str(self.transport_cost()[1])
                 )
 
     def capacity(self):
@@ -39,14 +40,16 @@ class SupplyZone():
         return mass
 
     def transport_tkm(self):
-        activity = self.straw_density * self.shape.first_moment_of_area() * self.tortuosity_factor
-        activity.display_unit = 't*km'
-        return activity
+        activity = (v_after_invest
+                    * self.straw_density
+                    * self.shape.first_moment_of_area()
+                    * self.tortuosity_factor
+                    )
+        return display_as(activity, 't * km')
 
     def transport_cost(self):
-        cost = self.transport_tariff * self.transport_tkm()
-        cost.display_unit = 'kUSD'
-        return cost
+        cost = self.transport_tkm() * self.transport_tariff
+        return display_as(cost, 'kUSD')
 
     def shrink(self, factor):
         self.shape = self.shape.shrink(factor)
@@ -60,7 +63,7 @@ class SupplyChain():
     def __str__(self):
         s = "Supply chain\n"
         s += "Capacity = " + str(self.capacity()) + "\n"
-        s += "Cost to transport all = " + str(self.transport_cost()) + "\n"
+        s += "Cost to transport all = " + str(self.transport_cost()[1]) + "\n"
         s += "Collection_radius = " + str(self.collection_radius()) + "\n"
         for zone in self.zones:
             s += str(zone) + "\n"
@@ -74,18 +77,16 @@ class SupplyChain():
         return mass
 
     def transport_tkm(self):
-        activity = 0 * t * km
+        activity = v_zeros * t * km
         for zone in self.zones:
             activity += zone.transport_tkm()
-        activity.display_unit = 't * km'
         return activity
 
     def transport_cost(self):
-        cost = 0 * USD
+        cost = v_zeros * USD
         for zone in self.zones:
             cost += zone.transport_cost()
-        cost.display_unit = 'kUSD'
-        return cost
+        return display_as(cost, 'kUSD')
 
     def fit(self, quantity):
         """Returns an new supply chain, disgard unused zone(s) and shrink the last one"""

@@ -74,4 +74,3 @@ def print_plant_emission(plant, cofireplant):
 
 print_plant_emission(MongDuong1, MongDuong1Cofire)
 print_plant_emission(NinhBinh, NinhBinhCofire)
-

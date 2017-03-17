@@ -199,16 +199,12 @@ class CofiringPlant(PowerPlant):
         cost = self.coal_cost() + self.biomass_cost()
         return display_as(cost, 'kUSD')
 
-    def biomass_transport_cost(self):
-        cost = v_after_invest * self.active_chain.transport_cost()
-        return display_as(cost, 'kUSD')
-
     def biomass_field_cost(self):
         cost = self.biomass_used * self.biomass.price * time_step
         return display_as(cost, 'kUSD')
 
     def biomass_cost(self):
-        cost = self.biomass_field_cost() + self.biomass_transport_cost()
+        cost = self.biomass_field_cost() + self.active_chain.transport_cost()
         return display_as(cost, 'kUSD')
 
     def biomass_cost_per_t(self):
@@ -221,7 +217,7 @@ class CofiringPlant(PowerPlant):
         return display_as(cost, 'USD / GJ')
 
     def biomass_transport_cost_per_t(self):
-        cost_per_t = self.biomass_transport_cost() / self.biomass_used_nan
+        cost_per_t = self.active_chain.transport_cost() / self.biomass_used_nan
         return display_as(cost_per_t, 'USD*y/t')
 
     def operation_maintenance_cost(self):
@@ -263,7 +259,7 @@ class CofiringPlant(PowerPlant):
         printRowNPV("Fuel cost", self.fuel_cost())
         printRowNPV("  Coal", self.coal_cost())
         printRowNPV("  Biomass", self.biomass_cost())
-        printRowNPV("    transportation", self.biomass_transport_cost())
+        printRowNPV("    transportation", self.active_chain.transport_cost())
         printRowNPV("    straw at field", self.biomass_field_cost())
         printRowNPV("O&M cost", self.operation_maintenance_cost())
         printRowNPV("  coal", self.coal_om_cost())

@@ -1,5 +1,6 @@
 ﻿TODO
 
+rename units.py
 
 Pass boiler_efficiency_loss function as an initialization parameter
 
@@ -10,8 +11,6 @@ Write a test that check CofiringPowerPlant with 0% biomass ratio yields same res
 Fix transport work calculations
 
 straw_burned_infield  depends on time -> return a vector 
-
-transport_tkm  depends on time -> returns a vector
 
 Benefits depends on time -> return a vector
 
@@ -46,6 +45,8 @@ Consider more indicators that LCOE:
 
 
 DONE
+
+Transport_tkm  depends on time -> returns a vector
 
 Add smokestack and controls to PowerPlant class
 
