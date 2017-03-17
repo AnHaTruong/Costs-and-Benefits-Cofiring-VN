@@ -28,6 +28,11 @@ tax_rate = 0.25  # Corporate tax in Vietnam
 
 biomass_ratio = 0.05           # As percent of energy coming from biomass
 
+
+def boiler_efficiency_loss(biomass_ratio_mass):
+    """Boiler efficiency loss due to cofiring, according to Tillman 2000"""
+    return 0.0044 * biomass_ratio_mass**2 + 0.0055 * biomass_ratio_mass
+
 straw_burn_rate = 0.9  # Percentage of straw burned infield after harvest
 winder_capacity = 6.57 * t / d
 work_hour_day = 8 * hr / d
@@ -128,6 +133,7 @@ MongDuong1Cofire = CofiringPlant(MongDuong1,
                                  fix_om_cost=32.24 * USD / kW / y,
                                  variable_om_cost=0.006 * USD / (kW * hr),
                                  biomass=straw,
+                                 boiler_efficiency_loss=boiler_efficiency_loss,
                                  supply_chain=MD_SupplyChain
                                  )
 
@@ -160,5 +166,6 @@ NinhBinhCofire = CofiringPlant(NinhBinh,
                                fix_om_cost=32.24 * USD / kW / y,
                                variable_om_cost=0.006 * USD / (kW * hr),
                                biomass=straw,
+                               boiler_efficiency_loss=boiler_efficiency_loss,
                                supply_chain=NB_SupplyChain
                                )
