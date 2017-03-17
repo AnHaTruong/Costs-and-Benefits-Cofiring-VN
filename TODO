@@ -1,14 +1,11 @@
 ﻿TODO
 
-Get rid of old code in emission.py
-
-Use npv, get rid of benefitaddup
 
 Pass boiler_efficiency_loss function as an initialization parameter
 
 Rename the tables meaningfully (add legend keywords after number)
 
-Check emissions in the 0% biomass ratio
+Write a test that check CofiringPowerPlant with 0% biomass ratio yields same results as PowerPlant
 
 Fix transport work calculations
 
@@ -18,25 +15,29 @@ transport_tkm  depends on time -> returns a vector
 
 Benefits depends on time -> return a vector
 
-SupplyChain sizing: by quantity rather than %
+Use npv, get rid of benefitaddup
+
+Get rid of old code in emission.py
+
+SupplyChain sizing check invariance to repeat calls
 
 Add transport emissions to SupplyChain
 
-Check emission calculation against CDM ACM0002 methodology
+Check emission calculation against CDM ACM0085 methodology
 
 Generate figures in EPS format (or SVG or PDF) and adjust the Makefile
 
 Encapsulate the class
 
-Read data from data file
+Read data from data file - separate primary data processing from secondary data input by an intermediate secondary data file
 
 Use decorator to set display_unit of results
 
 Simpler call parent constructor in CofiringPlant constructor
 
-Sensitivity analysis
+Cleanup the * time_step and clarify time units (period or year)
 
-Cleanup the *timestep and clarify time units (period or year)
+Sensitivity analysis
 
 Consider more indicators that LCOE:
   Debt Service Coverage Ratio (requires Cash Flow Available for Debt Service ) - minimum over all periods and average
