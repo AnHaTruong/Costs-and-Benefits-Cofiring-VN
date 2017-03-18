@@ -11,20 +11,19 @@
     number of years as used for NPV calculation
 """
 
-from init import zero_USD, time_horizon, time_step
+from init import USD, time_horizon, time_step
 from parameters import discount_rate
 from health import total_health_benefit
 from farmerincome import total_income_benefit
 from emission import emission_reduction_benefit
 from job import total_job_benefit
-import natu.numpy as np
 
 
 def benefit_add_up(func, plant):
     """return the present value of cumulative benefits of co-firing
     discounted at DiscountRate from 0 to TimeHorizon included
     """
-    value = zero_USD
+    value = 0 * USD
     for year in range(time_horizon + 1):
         value += (func(plant) * time_step) / (1 + discount_rate)**year
     value.display_unit = 'kUSD'
@@ -35,7 +34,7 @@ def new_benefit_add_up(func, plant, cofiringplant):
     """return the present value of cumulative benefits of co-firing
     discounted at DiscountRate from 0 to TimeHorizon included
     """
-    value = zero_USD
+    value = 0 * USD
     for year in range(time_horizon + 1):
         value += (func(plant, cofiringplant) * time_step) / (1 + discount_rate)**year
     value.display_unit = 'kUSD'
@@ -54,7 +53,7 @@ def total_benefit_addup(plant, cofiringplant):
 
 
 def benefit_add_up_new(func):
-    value = zero_USD
+    value = 0 * USD
     for year in range(time_horizon + 1):
         value += (func) * time_step / (1 + discount_rate)**year
     value.display_unit = 'kUSD'

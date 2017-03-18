@@ -9,7 +9,7 @@
 #
 
 
-from natu.units import km, hr, y
+from natu.units import hr, y
 import natu.numpy as np
 # RTFM:  Units thread into arrays from the right but not from the left
 #  np.array([1, 2]) * m  -->  array([1 m, 2 m], dtype=object)
@@ -36,10 +36,6 @@ v_ones = np.ones(time_horizon + 1, dtype=np.float64)
 v_after_invest = np.ones(time_horizon + 1, dtype=np.float64)
 v_after_invest[0] = 0
 
-zero_USD = 0 * USD
-zero_VND = 0 * VND
-zero_km = 0 * km
-
 
 def display_as(v, unit):
     """Sets the display_unit of every element of the vector to 'unit'.
@@ -48,15 +44,6 @@ def display_as(v, unit):
     for element in v:
         element.display_unit = unit
     return v
-
-
-# TODO: all functions should set the display_unit of their result
-# to make this function unnecessary
-def print_with_unit(func, unit):
-    """ Display the desired unit on Tables"""
-    value = func
-    value.display_unit = unit
-    return value
 
 
 def isclose(a, b, rel_tol=1e-09, abs_tol=0.0):   # From PEP 485

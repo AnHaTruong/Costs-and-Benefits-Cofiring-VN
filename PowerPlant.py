@@ -129,8 +129,8 @@ class CofiringPlant(PowerPlant):
                  capital_cost,
                  fix_om_cost,
                  variable_om_cost,
-                 biomass,
-                 boiler_efficiency_loss,  # type: Fuel
+                 biomass,          # type: Fuel
+                 boiler_efficiency_loss,
                  supply_chain
                  ):
 
