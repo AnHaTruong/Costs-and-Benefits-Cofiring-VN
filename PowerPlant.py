@@ -12,7 +12,7 @@
 from natu.numpy import full, npv
 from natu.units import t, y
 
-from units import time_horizon, time_step, v_ones, v_after_invest, display_as, USD
+from init import time_horizon, time_step, v_ones, v_after_invest, display_as, USD
 from Investment import Investment
 from Emitter import Emitter
 

@@ -9,7 +9,7 @@
 # pylint: disable=E0611
 
 from copy import copy
-from units import isclose, v_after_invest, v_zeros, display_as
+from init import isclose, v_after_invest, v_zeros, display_as
 
 from natu.units import t, km, USD
 

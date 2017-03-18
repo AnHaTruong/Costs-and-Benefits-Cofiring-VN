@@ -17,7 +17,7 @@ from parameters import NB_Coal
 from parameters import specific_cost
 from Emitter import Emitter
 from strawburned import straw_burned_infield
-from units import v_after_invest, v_zeros, display_as, time_step
+from init import v_after_invest, v_zeros, display_as, time_step
 
 import pandas as pd
 from natu.units import t, km, y

@@ -8,7 +8,7 @@
 #
 #
 import pandas as pd
-from units import USD, VND, time_step
+from init import USD, VND, time_step
 from natu.units import MJ, kg, t, d, hr, km, MW, ha, kW, y, kWh
 
 from Emitter import Fuel

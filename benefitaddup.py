@@ -11,7 +11,7 @@
     number of years as used for NPV calculation
 """
 
-from units import zero_USD, time_horizon, time_step
+from init import zero_USD, time_horizon, time_step
 from parameters import discount_rate
 from health import total_health_benefit
 from farmerincome import total_income_benefit

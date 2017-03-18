@@ -15,7 +15,7 @@ from health import *
 import numpy as np
 
 from parameters import MongDuong1, NinhBinh
-from units import t, y, print_with_unit
+from init import t, y, print_with_unit
 
 
 value1 = ([print_with_unit(so2_emission_field_base(MongDuong1), 't/y')/t*y, 

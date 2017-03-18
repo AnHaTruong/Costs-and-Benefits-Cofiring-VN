@@ -11,7 +11,7 @@
 
 from parameters import MongDuong1, NinhBinh, MongDuong1Cofire, NinhBinhCofire
 from parameters import discount_rate, depreciation_period, tax_rate
-from units import time_horizon
+from init import time_horizon
 
 print('')
 

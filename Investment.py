@@ -7,7 +7,7 @@
 # Creative Commons Attribution-ShareAlike 4.0 International
 #
 #
-from units import time_horizon, v_zeros, USD, display_as
+from init import time_horizon, v_zeros, USD, display_as
 import natu.numpy as np
 import pandas as pd
 

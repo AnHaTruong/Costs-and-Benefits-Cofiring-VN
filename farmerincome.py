@@ -13,7 +13,7 @@ from parameters import MongDuong1, NinhBinh, MongDuong1Cofire, NinhBinhCofire
 from parameters import winder_rental_cost, straw
 from strawdata import df
 from natu.numpy import mean
-from units import time_step
+from init import time_step
 
 
 def farmer_income(plant):
