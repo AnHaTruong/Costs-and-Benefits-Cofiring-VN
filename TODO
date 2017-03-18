@@ -1,9 +1,5 @@
 ﻿TODO
 
-rename units.py
-
-Pass boiler_efficiency_loss function as an initialization parameter
-
 Rename the tables meaningfully (add legend keywords after number)
 
 Write a test that check CofiringPowerPlant with 0% biomass ratio yields same results as PowerPlant
@@ -47,6 +43,10 @@ Consider more indicators that LCOE:
 
 
 DONE
+
+Pass boiler_efficiency_loss function as an initialization parameter
+
+rename units.py
 
 Transport_tkm  depends on time -> returns a vector
 
