@@ -14,11 +14,9 @@ the provinces that supply straw to the plant"""
 from natu.math import fsum
 from natu.units import t, y
 from init import v_after_invest
-from strawdata import residue_to_product_ratio_straw
-from parameters import straw_burn_rate
-from parameters import emission_factor
+from strawdata import df, residue_to_product_ratio_straw
+from parameters import straw_burn_rate, emission_factor
 from parameters import MongDuong1, NinhBinh
-from strawdata import df
 
 
 def straw_production(plant):

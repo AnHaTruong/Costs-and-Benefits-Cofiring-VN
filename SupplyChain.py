@@ -9,9 +9,10 @@
 # pylint: disable=E0611
 
 from copy import copy
-from init import isclose, v_after_invest, v_zeros, display_as
+from init import isclose, v_after_invest, v_zeros, display_as, time_step
 
 from natu.units import t, km, USD
+from Emitter import Emitter
 
 
 class SupplyZone():
@@ -57,8 +58,9 @@ class SupplyZone():
 
 
 class SupplyChain():
-    def __init__(self, zones):
+    def __init__(self, zones, emission_factor):
         self.zones = zones
+        self.emission_factor = emission_factor
 
     def __str__(self):
         s = "Supply chain\n"
@@ -88,12 +90,17 @@ class SupplyChain():
             cost += zone.transport_cost()
         return display_as(cost, 'kUSD')
 
+    def transport_emissions(self):
+        trucks = Emitter({'Road transport': self.transport_tkm() / time_step},
+                         self.emission_factor)
+        return trucks.emissions()
+
     def fit(self, quantity):
         """Returns an new supply chain, disgard unused zone(s) and shrink the last one"""
         assert quantity <= self.capacity(), 'Not enough biomass in supply chain: '
 
         i = 0
-        collected = SupplyChain([copy(self.zones[0])])
+        collected = SupplyChain([copy(self.zones[0])], emission_factor=self.emission_factor)
         while collected.capacity() < quantity:
             i += 1
             collected.zones.append(copy(self.zones[i]))
@@ -102,14 +109,6 @@ class SupplyChain():
         assert excess >= 0 * t
         reduction_factor = 1 - excess / collected.zones[i].capacity()
         collected.zones[i] = collected.zones[i].shrink(reduction_factor)
-
-        #        quantity.display_unit = 't'
-        #        print('Quantity transported: ', quantity, '\n')
-        #        print('Initial ', self)
-        #        print('Excess = ', excess)
-        #        print('Reduction factor = ', reduction_factor)
-        #        print('')
-        #        print('Collected ', collected)
 
         assert isclose(collected.capacity(), quantity)
         return collected

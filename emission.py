@@ -2,7 +2,7 @@
 #
 #  Greenhouse gas emissions reduction assessment
 #
-# (c) Minh Ha-Duong, An Ha Truong   2016
+# (c) Minh Ha-Duong, An Ha Truong   2016-2017
 #     minh.haduong@gmail.com
 #     Creative Commons Attribution-ShareAlike 4.0 International
 #
@@ -11,16 +11,16 @@
    Total emission include emission from fuel combustion, fuel transportation and open field burning
    Climate benefit and health benefit from GHG and air pollutant emission reduction
 """
-from parameters import MongDuong1, NinhBinh, MongDuong1Cofire, NinhBinhCofire
-from parameters import emission_factor
-from parameters import NB_Coal
-from parameters import specific_cost
-from Emitter import Emitter
-from strawburned import straw_burned_infield
-from init import v_zeros, display_as, time_step
-
 import pandas as pd
 from natu.units import t, km, y
+
+from init import v_zeros, display_as, time_step
+
+from parameters import MongDuong1, NinhBinh, MongDuong1Cofire, NinhBinhCofire
+from parameters import emission_factor, NB_Coal, specific_cost
+from Emitter import Emitter
+from strawburned import straw_burned_infield
+
 
 zero_transport = v_zeros * t * km / y
 
@@ -42,6 +42,10 @@ MDCofire_transport = Emitter({'Road transport': MongDuong1Cofire.active_chain.tr
                              {'CO2': 0.0}
                              )
 
+MDCofire_coal_transport = Emitter({'Barge transport': zero_transport}, emission_factor)
+
+MDCofire_straw_emissions = MongDuong1Cofire.active_chain.transport_emissions()
+
 MDCofire_field = Emitter({'Straw': straw_burned_infield(MongDuong1) - MongDuong1Cofire.biomass_used
                           },
                          emission_factor)
@@ -50,7 +54,9 @@ MDCofire_field = Emitter({'Straw': straw_burned_infield(MongDuong1) - MongDuong1
 MD_plant_ER = (MongDuong1.plant_stack.emissions()["Total"]
                - MongDuong1Cofire.plant_stack.emissions()["Total"])
 
-MD_transport_CO2 = MD_transport.emissions()["Total"] - MDCofire_transport.emissions()["Total"]
+MD_transport_CO2 = (MD_transport.emissions()["Total"]
+                    - MDCofire_coal_transport.emissions()["Total"]["CO2"]
+                    - MDCofire_straw_emissions["Total"]["CO2"])
 
 MD_transport_pollutant = pd.Series([0.0 * t / y, 0.0 * t / y, 0.0 * t / y],
                                    index=['SO2', 'PM10', 'NOx'])
@@ -86,13 +92,9 @@ NB_transport_activity = {'Road transport': zero_transport,
                          'Barge transport': NinhBinh.coal_used * NB_Coal.transport_distance * 2
                          }
 
-NB_transport = Emitter(NB_transport_activity,
-                       emission_factor,
-                       {'CO2': 0.0}
-                       )
+NB_transport = Emitter(NB_transport_activity, emission_factor, {'CO2': 0.0})
 
-NB_field = Emitter({'Straw': straw_burned_infield(NinhBinh)},
-                   emission_factor)
+NB_field = Emitter({'Straw': straw_burned_infield(NinhBinh)}, emission_factor)
 
 NBCofire_transport = Emitter({'Road transport': NinhBinhCofire.active_chain.transport_tkm() / y,
                               'Barge transport': (NinhBinhCofire.coal_used

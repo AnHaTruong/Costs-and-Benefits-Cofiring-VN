@@ -1,7 +1,5 @@
 ﻿TODO
 
-Write a test that check CofiringPowerPlant with 0% biomass ratio yields same results as PowerPlant
-
 Fix transport work calculations
 
 move CofiringPlant.biomass_*() methods into class SupplyChain
@@ -23,6 +21,8 @@ Generate figures in EPS format (or SVG or PDF) and adjust the Makefile
 Encapsulate the class
 
 Read data from data file - separate primary data processing from secondary data input by an intermediate secondary data file
+
+Write a test that check CofiringPowerPlant with 0% biomass ratio yields same results as PowerPlant
 
 Use decorator to set display_unit of results
 

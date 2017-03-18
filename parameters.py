@@ -2,7 +2,7 @@
 #
 # Plant parameters
 #
-# (c) Minh Ha-Duong, An Ha Truong 2016
+# (c) Minh Ha-Duong, An Ha Truong 2016-2017
 # minh.haduong@gmail.com
 # Creative Commons Attribution-ShareAlike 4.0 International
 #
@@ -11,13 +11,13 @@ import pandas as pd
 from init import USD, VND, time_step
 from natu.units import MJ, kg, t, d, hr, km, MW, ha, kW, y, kWh
 
+from strawdata import MongDuong1_straw_density1, MongDuong1_straw_density2
+from strawdata import NinhBinh_straw_density
+
 from Emitter import Fuel
 from PowerPlant import PowerPlant, CofiringPlant
 from Shape import Semi_Annulus, Disk
 from SupplyChain import SupplyChain, SupplyZone
-
-from strawdata import MongDuong1_straw_density1, MongDuong1_straw_density2
-from strawdata import NinhBinh_straw_density
 
 
 """Input parameters of the model"""
@@ -125,7 +125,7 @@ MDSupplyZone2 = SupplyZone(shape=Semi_Annulus(50 * km, 100 * km),
                            tortuosity_factor=tortuosity_factor
                            )
 
-MD_SupplyChain = SupplyChain(zones=[MDSupplyZone1, MDSupplyZone2])
+MD_SupplyChain = SupplyChain(zones=[MDSupplyZone1, MDSupplyZone2], emission_factor=emission_factor)
 
 MongDuong1Cofire = CofiringPlant(MongDuong1,
                                  biomass_ratio,
@@ -158,7 +158,7 @@ NBSupplyZone = SupplyZone(shape=Disk(50 * km),
                           tortuosity_factor=tortuosity_factor
                           )
 
-NB_SupplyChain = SupplyChain(zones=[NBSupplyZone])
+NB_SupplyChain = SupplyChain(zones=[NBSupplyZone], emission_factor=emission_factor)
 
 NinhBinhCofire = CofiringPlant(NinhBinh,
                                biomass_ratio,

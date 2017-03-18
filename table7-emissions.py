@@ -12,6 +12,7 @@
 
 from emission import MD_transport, MD_field
 from emission import MDCofire_transport, MDCofire_field, MD_ER_table
+from emission import MDCofire_coal_transport, MDCofire_straw_emissions
 
 from emission import NB_transport, NB_field
 from emission import NBCofire_transport, NBCofire_field, NB_ER_table
@@ -31,6 +32,9 @@ print("-------\nMong Duong 1 COFIRING EMISSIONS\n")
 print("Emissions from power plant\n", MongDuong1Cofire.plant_stack.emissions().T, "\n")
 
 print("Emissions from transport\n", MDCofire_transport.emissions().T, "\n")
+
+print("Emissions from coal transport\n", MDCofire_coal_transport.emissions().T, "\n")
+print("Emissions from straw transport\n", MDCofire_straw_emissions.T, "\n")
 
 print("Emission from open field burning\n", MDCofire_field.emissions().T, "\n")
 
