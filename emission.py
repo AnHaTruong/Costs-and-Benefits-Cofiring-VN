@@ -14,7 +14,7 @@
 import pandas as pd
 from natu.units import t, km, y
 
-from init import v_zeros, display_as, time_step
+from init import v_zeros, display_as
 
 from parameters import MongDuong1, NinhBinh, MongDuong1Cofire, NinhBinhCofire
 from parameters import emission_factor, NB_Coal, specific_cost
@@ -42,10 +42,6 @@ MDCofire_transport = Emitter({'Road transport': MongDuong1Cofire.active_chain.tr
                              {'CO2': 0.0}
                              )
 
-MDCofire_coal_transport = Emitter({'Barge transport': zero_transport}, emission_factor)
-
-MDCofire_straw_emissions = MongDuong1Cofire.active_chain.transport_emissions()
-
 MDCofire_field = Emitter({'Straw': straw_burned_infield(MongDuong1) - MongDuong1Cofire.biomass_used
                           },
                          emission_factor)
@@ -54,9 +50,7 @@ MDCofire_field = Emitter({'Straw': straw_burned_infield(MongDuong1) - MongDuong1
 MD_plant_ER = (MongDuong1.plant_stack.emissions()["Total"]
                - MongDuong1Cofire.plant_stack.emissions()["Total"])
 
-MD_transport_CO2 = (MD_transport.emissions()["Total"]
-                    - MDCofire_coal_transport.emissions()["Total"]["CO2"]
-                    - MDCofire_straw_emissions["Total"]["CO2"])
+MD_transport_CO2 = MD_transport.emissions()["Total"] - MDCofire_transport.emissions()["Total"]
 
 MD_transport_pollutant = pd.Series([0.0 * t / y, 0.0 * t / y, 0.0 * t / y],
                                    index=['SO2', 'PM10', 'NOx'])
@@ -136,79 +130,28 @@ NB_health_benefit = NB_total_benefit.drop('CO2').sum()
 
 # OLD FILE CONTENT
 
-def emission_coal_combust_base(plant):
-    """return the greenhouse gas emission in tonCO2eq from coal combustion
-       when there is no co-firing
-
-    """
-    return emission_factor[plant.coal.name]["CO2"] * plant.coal_used[1]
-
-
-def emission_coal_transport_base(plant):
-    """return the greenhouse gas emission in tonCO2eq from coal transportation
-       in no co-firing case. transported distance is 2 times of coal transport
-       distance because round trip is accounted
-
-    """
-    return plant.coal.ef_transport * 2 * plant.coal.transport_distance * plant.coal_used[1]
-
-
-def emission_coal_combust_cofire(cofiringplant):
-    """ emission from coal combustion when co-fire
-    """
-    return emission_factor[cofiringplant.coal.name]["CO2"] * cofiringplant.coal_used[1]
-
-
-def emission_coal_transport_cofire(cofiringplant):
-    """emission from coal transportation when co-fire
-
-    """
-    return (cofiringplant.coal.ef_transport
-            * 2 * cofiringplant.coal.transport_distance
-            * cofiringplant.coal_used[1]
-            )
-
-
-def emission_biomass_combust(cofiringplant):
-    """return the emission from biomass combustion with co-firing
-
-    """
-    return emission_factor[cofiringplant.biomass.name]["CO2"] * cofiringplant.biomass_used[1]
-
-
-def emission_biomass_transport(cofiringplant):
-    mass = (cofiringplant.biomass.ef_transport
-            * cofiringplant.active_chain.transport_tkm()[1] / time_step
-            )
-    mass.display_unit = 't/y'
-    return mass
-
-
-def total_emission_coal(plant):
-    """emission from coal in base case. only account for the percentage of coal
-       substituted by biomass8
-    """
-    return emission_coal_combust_base(plant) + emission_coal_transport_base(plant)
-
-
-def total_emission_cofire(cofiringplant):
-    """sum of emission from biomass combustion and biomass transportation for
-       co-firing case
-    """
-    return (emission_biomass_combust(cofiringplant)
-            + emission_biomass_transport(cofiringplant)
-            + emission_coal_combust_cofire(cofiringplant)
-            + emission_coal_transport_cofire(cofiringplant)
-            )
-
-
-def emission_reduction(plant, cofiringplant):
-    """different between total emission from coal (base case) and total
-       emission from biomass (co-firing case)
-    """
-    return total_emission_coal(plant) - total_emission_cofire(cofiringplant)
+#def total_emission_coal(plant):
+#    return (plant.plant_stack.emissions()["Total"]["CO2"]
+#            + plant.coal_transport_emission()
+#            )
+#
+#
+#def total_emission_cofire(cofiringplant):
+#    return (cofiringplant.plant_stack.emissions()["Total"]["CO2"] +
+#            + cofiringplant.coal_transport_emission()
+#            + cofiringplant.active_chain.transport_emissions()["Road transport"]["CO2"]
+#            )
 
 
 def emission_reduction_benefit(plant, cofiringplant):
     """ return the monetary benefit from greenhouse gas emission reduction"""
-    return emission_reduction(plant, cofiringplant) * specific_cost['CO2']
+    plant_emissions = (
+        plant.plant_stack.emissions()["Total"]["CO2"]
+        + plant.coal_transport_emission())
+
+    cofiringplant_emissions = (
+        cofiringplant.plant_stack.emissions()["Total"]["CO2"]
+        + cofiringplant.coal_transport_emission()
+        + cofiringplant.active_chain.transport_emissions()["Road transport"]["CO2"])
+
+    return (plant_emissions - cofiringplant_emissions) * specific_cost['CO2']

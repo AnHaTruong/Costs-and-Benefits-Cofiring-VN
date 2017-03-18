@@ -81,6 +81,12 @@ class PowerPlant(Investment):
         cost = self.coal_used * self.coal.price * time_step
         return display_as(cost, 'kUSD')
 
+    def coal_transport_emission(self):
+        return (self.coal_used[1]
+                * self.coal.ef_transport
+                * 2 * self.coal.transport_distance   # Trucks do round trip
+                )
+
     def fuel_cost(self):
         return self.coal_cost()
 
