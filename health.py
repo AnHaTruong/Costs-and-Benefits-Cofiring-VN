@@ -66,7 +66,7 @@ def nox_emission_base(plant):
 
 def so2_emission_field_cofire(plant, cofiringplant):
     """ SO2 emission from open straw burning in co-firing case"""
-    return ((straw_burned_infield(plant) - cofiringplant.biomass_used[1])
+    return ((straw_burned_infield(plant)[1] - cofiringplant.biomass_used[1])
             * emission_factor["Straw"]["SO2"]
             )
 
@@ -94,7 +94,7 @@ def so2_emission_cofire(plant, cofiringplant):
 def pm10_emission_field_cofire(plant, cofiringplant):
     """ PM10 emission from open straw burning in co-firing case
     """
-    return ((straw_burned_infield(plant) - cofiringplant.biomass_used[1])
+    return ((straw_burned_infield(plant)[1] - cofiringplant.biomass_used[1])
             * emission_factor["Straw"]["PM10"]
             )
 
@@ -124,7 +124,7 @@ def pm10_emission_cofire(plant, cofiringplant):
 def nox_emission_field_cofire(plant, cofiringplant):
     """NOx emission from open straw burning in co-firing case
     """
-    return ((straw_burned_infield(plant) - cofiringplant.biomass_used[1])
+    return ((straw_burned_infield(plant)[1] - cofiringplant.biomass_used[1])
             * emission_factor["Straw"]["NOx"]
             )
 

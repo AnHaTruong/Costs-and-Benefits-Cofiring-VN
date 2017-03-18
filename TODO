@@ -6,8 +6,6 @@ Fix transport work calculations
 
 move CofiringPlant.biomass_*() methods into class SupplyChain
 
-straw_burned_infield  depends on time -> return a vector 
-
 Benefits depends on time -> return a vector
 
 Use npv, get rid of benefitaddup
@@ -41,6 +39,8 @@ Consider more indicators that LCOE:
 
 
 DONE
+
+straw_burned_infield  depends on time -> return a vector 
 
 Rename the tables meaningfully (add legend keywords after number)
 

@@ -13,6 +13,7 @@ the provinces that supply straw to the plant"""
 
 from natu.math import fsum
 from natu.units import t, y
+from init import v_after_invest
 from strawdata import residue_to_product_ratio_straw
 from parameters import straw_burn_rate
 from parameters import emission_factor
@@ -25,43 +26,35 @@ def straw_production(plant):
 
     """
     if plant == MongDuong1:
-        rice_production = fsum([df.loc['Bac Giang', 'rice production (ton)']*t/y,
-                                df.loc['Hai Duong', 'rice production (ton)']*t/y,
-                                df.loc['Hai Phong', 'rice production (ton)']*t/y,
-                                df.loc['Quang Ninh', 'rice production (ton)']*t/y
+        rice_production = fsum([df.loc['Bac Giang', 'rice production (ton)'] * t / y,
+                                df.loc['Hai Duong', 'rice production (ton)'] * t / y,
+                                df.loc['Hai Phong', 'rice production (ton)'] * t / y,
+                                df.loc['Quang Ninh', 'rice production (ton)'] * t / y
                                 ])
         return rice_production * residue_to_product_ratio_straw
 
     if plant == NinhBinh:
-        return df.loc['Ninh Binh', 'rice production (ton)']*t/y * residue_to_product_ratio_straw
+        return df.loc['Ninh Binh', 'rice production (ton)'] * t / y * residue_to_product_ratio_straw
 
 
 def straw_burned_infield(plant):
-    """Amount of straw burned in the open field after harvesting
-
-    """
-    return straw_production(plant) * straw_burn_rate
+    """Amount of straw burned in the open field after harvesting"""
+    return v_after_invest * straw_production(plant) * straw_burn_rate
 
 
 def so2_emission_field_base(plant):
-    """SO2 emission from burning straw in field at provincial level
-
-    """
-    return straw_burned_infield(plant) * emission_factor["Straw"]["SO2"]
+    """SO2 emission from burning straw in field at provincial level"""
+    return straw_burned_infield(plant)[1] * emission_factor["Straw"]["SO2"]
 
 
 def nox_emission_field_base(plant):
-    """SO2 emission from burning straw in field at provincial level
-
-    """
-    return straw_burned_infield(plant) * emission_factor["Straw"]["NOx"]
+    """SO2 emission from burning straw in field at provincial level"""
+    return straw_burned_infield(plant)[1] * emission_factor["Straw"]["NOx"]
 
 
 def pm10_emission_field_base(plant):
-    """SO2 emission from burning straw in field at provincial level
-
-    """
-    return straw_burned_infield(plant) * emission_factor["Straw"]["PM10"]
+    """SO2 emission from burning straw in field at provincial level"""
+    return straw_burned_infield(plant)[1] * emission_factor["Straw"]["PM10"]
 
 if __name__ == "__main__":
     import doctest

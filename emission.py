@@ -17,7 +17,7 @@ from parameters import NB_Coal
 from parameters import specific_cost
 from Emitter import Emitter
 from strawburned import straw_burned_infield
-from init import v_after_invest, v_zeros, display_as, time_step
+from init import v_zeros, display_as, time_step
 
 import pandas as pd
 from natu.units import t, km, y
@@ -32,7 +32,7 @@ MD_transport = Emitter({'Road transport': zero_transport,
                        {'CO2': 0.0}
                        )
 
-MD_field = Emitter({'Straw': straw_burned_infield(MongDuong1) * v_after_invest},
+MD_field = Emitter({'Straw': straw_burned_infield(MongDuong1)},
                    emission_factor)
 
 MDCofire_transport = Emitter({'Road transport': MongDuong1Cofire.active_chain.transport_tkm() / y,
@@ -42,10 +42,8 @@ MDCofire_transport = Emitter({'Road transport': MongDuong1Cofire.active_chain.tr
                              {'CO2': 0.0}
                              )
 
-MDCofire_field = Emitter({'Straw': (
-                          v_after_invest * straw_burned_infield(MongDuong1)
-                          - MongDuong1Cofire.biomass_used
-                          )},
+MDCofire_field = Emitter({'Straw': straw_burned_infield(MongDuong1) - MongDuong1Cofire.biomass_used
+                          },
                          emission_factor)
 
 # Calculate emission reduction
@@ -93,7 +91,7 @@ NB_transport = Emitter(NB_transport_activity,
                        {'CO2': 0.0}
                        )
 
-NB_field = Emitter({'Straw': straw_burned_infield(NinhBinh) * v_after_invest},
+NB_field = Emitter({'Straw': straw_burned_infield(NinhBinh)},
                    emission_factor)
 
 NBCofire_transport = Emitter({'Road transport': NinhBinhCofire.active_chain.transport_tkm() / y,
@@ -103,9 +101,7 @@ NBCofire_transport = Emitter({'Road transport': NinhBinhCofire.active_chain.tran
                              emission_factor,
                              {'CO2': 0.0})
 
-NBCofire_field = Emitter({'Straw': (
-                          v_after_invest * straw_burned_infield(NinhBinh)
-                          - NinhBinhCofire.biomass_used)},
+NBCofire_field = Emitter({'Straw': straw_burned_infield(NinhBinh) - NinhBinhCofire.biomass_used},
                          emission_factor)
 
 # Calculate emission reduction
