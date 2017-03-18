@@ -12,7 +12,6 @@
 
 from emission import MD_transport, MD_field
 from emission import MDCofire_transport, MDCofire_field, MD_ER_table
-from emission import MDCofire_coal_transport, MDCofire_straw_emissions
 
 from emission import NB_transport, NB_field
 from emission import NBCofire_transport, NBCofire_field, NB_ER_table
@@ -32,9 +31,6 @@ print("-------\nMong Duong 1 COFIRING EMISSIONS\n")
 print("Emissions from power plant\n", MongDuong1Cofire.plant_stack.emissions().T, "\n")
 
 print("Emissions from transport\n", MDCofire_transport.emissions().T, "\n")
-
-print("Emissions from coal transport\n", MDCofire_coal_transport.emissions().T, "\n")
-print("Emissions from straw transport\n", MDCofire_straw_emissions.T, "\n")
 
 print("Emission from open field burning\n", MDCofire_field.emissions().T, "\n")
 
@@ -71,10 +67,12 @@ print("NEW table - move plant_stack into PowerPlant class\n")
 def print_plant_emission(plant, cofireplant):
     print(plant.name, 'BASELINE EMISSION')
     print('Emission from power plant')
-    print(plant.plant_stack.emissions().T)
+    print(plant.plant_stack.emissions().T, '\n')
     print(plant.name, 'COFIRING EMISSION')
     print('Emission from power plant')
     print(cofireplant.plant_stack.emissions().T)
+    print('Emission from straw supply')
+    print(cofireplant.active_chain.transport_emissions().T, '\n')
 
 print_plant_emission(MongDuong1, MongDuong1Cofire)
 print_plant_emission(NinhBinh, NinhBinhCofire)

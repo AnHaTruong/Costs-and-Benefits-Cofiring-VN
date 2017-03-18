@@ -111,8 +111,10 @@ NB_plant_ER = (NinhBinh.plant_stack.emissions()["Total"]
                - NinhBinhCofire.plant_stack.emissions()["Total"])
 
 NB_transport_CO2 = NB_transport.emissions()["Total"] - NBCofire_transport.emissions()["Total"]
+
 NB_transport_pollutant = pd.Series([0.0 * t / y, 0.0 * t / y, 0.0 * t / y],
                                    index=['SO2', 'PM10', 'NOx'])
+
 NB_transport_ER = NB_transport_CO2.append(NB_transport_pollutant)
 
 NB_field_ER = NB_field.emissions()["Total"] - NBCofire_field.emissions()["Total"]

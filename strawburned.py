@@ -8,7 +8,7 @@
 #
 #
 
-"""Estimation of pullutant emission of open field burning of rice straw of
+"""Estimation of pollutant emission of open field burning of rice straw of
 the provinces that supply straw to the plant"""
 
 from natu.math import fsum
