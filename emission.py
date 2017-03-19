@@ -35,7 +35,7 @@ MD_transport = Emitter({'Road transport': zero_transport,
 MD_field = Emitter({'Straw': straw_burned_infield(MongDuong1)},
                    emission_factor)
 
-MDCofire_transport = Emitter({'Road transport': MongDuong1Cofire.active_chain.transport_tkm() / y,
+MDCofire_transport = Emitter({'Road transport': MongDuong1Cofire.straw_supply.transport_tkm() / y,
                               'Barge transport': zero_transport
                               },
                              emission_factor,
@@ -47,8 +47,8 @@ MDCofire_field = Emitter({'Straw': straw_burned_infield(MongDuong1) - MongDuong1
                          emission_factor)
 
 # Calculate emission reduction
-MD_plant_ER = (MongDuong1.plant_stack.emissions()["Total"]
-               - MongDuong1Cofire.plant_stack.emissions()["Total"])
+MD_plant_ER = (MongDuong1.stack.emissions()["Total"]
+               - MongDuong1Cofire.stack.emissions()["Total"])
 
 MD_transport_CO2 = MD_transport.emissions()["Total"] - MDCofire_transport.emissions()["Total"]
 
@@ -90,7 +90,7 @@ NB_transport = Emitter(NB_transport_activity, emission_factor, {'CO2': 0.0})
 
 NB_field = Emitter({'Straw': straw_burned_infield(NinhBinh)}, emission_factor)
 
-NBCofire_transport = Emitter({'Road transport': NinhBinhCofire.active_chain.transport_tkm() / y,
+NBCofire_transport = Emitter({'Road transport': NinhBinhCofire.straw_supply.transport_tkm() / y,
                               'Barge transport': (NinhBinhCofire.coal_used
                                                   * NB_Coal.transport_distance * 2)
                               },
@@ -101,8 +101,8 @@ NBCofire_field = Emitter({'Straw': straw_burned_infield(NinhBinh) - NinhBinhCofi
                          emission_factor)
 
 # Calculate emission reduction
-NB_plant_ER = (NinhBinh.plant_stack.emissions()["Total"]
-               - NinhBinhCofire.plant_stack.emissions()["Total"])
+NB_plant_ER = (NinhBinh.stack.emissions()["Total"]
+               - NinhBinhCofire.stack.emissions()["Total"])
 
 NB_transport_CO2 = NB_transport.emissions()["Total"] - NBCofire_transport.emissions()["Total"]
 
@@ -130,28 +130,15 @@ NB_health_benefit = NB_total_benefit.drop('CO2').sum()
 
 # OLD FILE CONTENT
 
-#def total_emission_coal(plant):
-#    return (plant.plant_stack.emissions()["Total"]["CO2"]
-#            + plant.coal_transport_emission()
-#            )
-#
-#
-#def total_emission_cofire(cofiringplant):
-#    return (cofiringplant.plant_stack.emissions()["Total"]["CO2"] +
-#            + cofiringplant.coal_transport_emission()
-#            + cofiringplant.active_chain.transport_emissions()["Road transport"]["CO2"]
-#            )
-
-
 def emission_reduction_benefit(plant, cofiringplant):
     """ return the monetary benefit from greenhouse gas emission reduction"""
     plant_emissions = (
-        plant.plant_stack.emissions()["Total"]["CO2"]
+        plant.stack.emissions()["Total"]["CO2"]
         + plant.coal_transport_emission())
 
     cofiringplant_emissions = (
-        cofiringplant.plant_stack.emissions()["Total"]["CO2"]
+        cofiringplant.stack.emissions()["Total"]["CO2"]
         + cofiringplant.coal_transport_emission()
-        + cofiringplant.active_chain.transport_emissions()["Road transport"]["CO2"])
+        + cofiringplant.straw_supply.transport_emissions()["Road transport"]["CO2"])
 
     return (plant_emissions - cofiringplant_emissions) * specific_cost['CO2']

@@ -46,5 +46,11 @@ def display_as(v, unit):
     return v
 
 
-def isclose(a, b, rel_tol=1e-09, abs_tol=0.0):   # From PEP 485
+def isclose(a, b, rel_tol=1e-09, abs_tol=0.0):
+    """Compare two floats for almost-equality according to PEP 485"""
     return abs(a - b) <= max(rel_tol * max(abs(a), abs(b)), abs_tol)
+
+
+def zero_to_NaN(vector):
+    """A copy of the vector, with  0 * unit  replaced by  NaN * unit"""
+    return [element if element else element * float('nan') for element in vector]

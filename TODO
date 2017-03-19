@@ -2,8 +2,6 @@
 
 Fix transport work calculations
 
-move CofiringPlant.biomass_*() methods into class SupplyChain
-
 Benefits depends on time -> return a vector
 
 Use npv, get rid of benefitaddup
@@ -11,8 +9,6 @@ Use npv, get rid of benefitaddup
 Get rid of old code in emission.py
 
 SupplyChain sizing check invariance to repeat calls
-
-Add transport emissions to SupplyChain
 
 Check emission calculation against CDM ACM0085 methodology
 
@@ -39,6 +35,10 @@ Consider more indicators that LCOE:
 
 
 DONE
+
+Add transport emissions to SupplyChain
+
+move CofiringPlant.biomass_*() methods into class SupplyChain
 
 straw_burned_infield  depends on time -> return a vector 
 

@@ -9,7 +9,7 @@
 # pylint: disable=E0611
 
 from copy import copy
-from init import isclose, v_after_invest, v_zeros, display_as, time_step
+from init import isclose, v_after_invest, v_zeros, display_as, time_step, zero_to_NaN
 
 from natu.units import t, km, USD
 from Emitter import Emitter
@@ -36,9 +36,8 @@ class SupplyZone():
                 )
 
     def capacity(self):
-        mass = self.shape.area() * self.straw_density
-        mass.display_unit = 't'
-        return mass
+        mass = v_after_invest * self.shape.area() * self.straw_density
+        return display_as(mass, 't')
 
     def transport_tkm(self):
         activity = (v_after_invest
@@ -58,6 +57,9 @@ class SupplyZone():
 
 
 class SupplyChain():
+    """A collection of supply zones
+    - The supply chain does not vary with time
+    """
     def __init__(self, zones, emission_factor):
         self.zones = zones
         self.emission_factor = emission_factor
@@ -72,17 +74,16 @@ class SupplyChain():
         return s
 
     def capacity(self):
-        mass = 0 * t
+        mass = v_zeros * t
         for zone in self.zones:
             mass += zone.capacity()
-        mass.display_unit = 't'
-        return mass
+        return display_as(mass, 't')
 
     def transport_tkm(self):
         activity = v_zeros * t * km
         for zone in self.zones:
             activity += zone.transport_tkm()
-        return activity
+        return display_as(activity, 't * km')
 
     def transport_cost(self):
         cost = v_zeros * USD
@@ -95,22 +96,43 @@ class SupplyChain():
                          self.emission_factor)
         return trucks.emissions()
 
+    def transport_cost_per_t(self):
+        cost_per_t = self.transport_cost() / zero_to_NaN(self.capacity())
+        return display_as(cost_per_t, 'USD/t')
+
+    def field_cost(self, price):
+        cost = self.capacity() * price
+        return display_as(cost, 'kUSD')
+
+    def cost(self, price):
+        cost = self.field_cost(price) + self.transport_cost()
+        return display_as(cost, 'kUSD')
+
+    def cost_per_t(self, price):
+        """Including transport cost"""
+        cost_per_t = self.cost(price) / zero_to_NaN(self.capacity())
+        return display_as(cost_per_t, 'USD/t')
+
+    def cost_per_GJ(self, price, heat_value):
+        cost = self.cost_per_t(price) / heat_value
+        return display_as(cost, 'USD / GJ')
+
     def fit(self, quantity):
         """Returns an new supply chain, disgard unused zone(s) and shrink the last one"""
-        assert quantity <= self.capacity(), 'Not enough biomass in supply chain: '
+        assert quantity <= self.capacity()[1], 'Not enough biomass in supply chain: '
 
         i = 0
         collected = SupplyChain([copy(self.zones[0])], emission_factor=self.emission_factor)
-        while collected.capacity() < quantity:
+        while collected.capacity()[1] < quantity:
             i += 1
             collected.zones.append(copy(self.zones[i]))
 
-        excess = collected.capacity() - quantity
+        excess = collected.capacity()[1] - quantity
         assert excess >= 0 * t
-        reduction_factor = 1 - excess / collected.zones[i].capacity()
+        reduction_factor = 1 - excess / collected.zones[i].capacity()[1]
         collected.zones[i] = collected.zones[i].shrink(reduction_factor)
 
-        assert isclose(collected.capacity(), quantity)
+        assert isclose(collected.capacity()[1], quantity)
         return collected
 
     def collection_radius(self):

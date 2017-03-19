@@ -35,7 +35,7 @@ def number_of_truck(cofiringplant):
 
 # FIXME: Trucks don't have to start from the border of the collection zone. Use tkm instead
 def transport_time(cofiringplant):
-    return cofiringplant.active_chain.collection_radius() * 2 / truck_velocity
+    return cofiringplant.straw_supply.collection_radius() * 2 / truck_velocity
 
 
 def om_work(plant):

@@ -61,9 +61,9 @@ class PowerPlant(Investment):
         display_as(self.coal_used, 't/y')
 
         self.coal = coal
-        self.plant_stack = Emitter({self.coal.name: self.coal_used},
-                                   self.emission_factor,
-                                   self.emission_controls)
+        self.stack = Emitter({self.coal.name: self.coal_used},
+                             self.emission_factor,
+                             self.emission_controls)
         super().__init__(capital)
 
     def income(self):
@@ -75,9 +75,6 @@ class PowerPlant(Investment):
         return display_as(cost, 'kUSD')
 
     def coal_cost(self):
-        # Beware of the non commutative * operator that follows.
-        #  leave the scalar quantities rightside and the array leftside
-        #  so that natu.py will threads in units inside the array
         cost = self.coal_used * self.coal.price * time_step
         return display_as(cost, 'kUSD')
 
@@ -92,7 +89,6 @@ class PowerPlant(Investment):
 
     def coal_om_cost(self):
         fixed_om_coal = full(time_horizon + 1, self.fix_om_coal * self.capacity, dtype=object)
-        # Again, the order of the array * scalar operation matters to natu.py
         variable_om_coal = self.power_generation * self.variable_om_coal
         return (fixed_om_coal + variable_om_coal) * time_step
 
@@ -190,37 +186,16 @@ class CofiringPlant(PowerPlant):
         self.coal_used = (self.gross_heat_input - self.biomass_heat) / self.coal.heat_value
         display_as(self.coal_used, 't/y')
 
-        self.active_chain = supply_chain.fit(self.biomass_used[1] * time_step)
+        self.straw_supply = supply_chain.fit(self.biomass_used[1] * time_step)
 
-        self.plant_stack = Emitter({self.coal.name: self.coal_used,
-                                    self.biomass.name: self.biomass_used},
-                                   self.emission_factor,
-                                   self.emission_controls)
+        self.stack = Emitter({self.coal.name: self.coal_used,
+                              self.biomass.name: self.biomass_used},
+                             self.emission_factor,
+                             self.emission_controls)
 
     def fuel_cost(self):
-        cost = self.coal_cost() + self.biomass_cost()
+        cost = self.coal_cost() + self.straw_supply.cost(self.biomass.price)
         return display_as(cost, 'kUSD')
-
-    def biomass_field_cost(self):
-        cost = self.biomass_used * self.biomass.price * time_step
-        return display_as(cost, 'kUSD')
-
-    def biomass_cost(self):
-        cost = self.biomass_field_cost() + self.active_chain.transport_cost()
-        return display_as(cost, 'kUSD')
-
-    def biomass_cost_per_t(self):
-        """Including transport cost"""
-        cost_per_t = self.biomass_cost() / self.biomass_used_nan
-        return display_as(cost_per_t, 'USD*y/t')
-
-    def biomass_cost_per_GJ(self):
-        cost = self.biomass_cost_per_t() / self.biomass.heat_value / time_step
-        return display_as(cost, 'USD / GJ')
-
-    def biomass_transport_cost_per_t(self):
-        cost_per_t = self.active_chain.transport_cost() / self.biomass_used_nan
-        return display_as(cost_per_t, 'USD*y/t')
 
     def operation_maintenance_cost(self):
         cost = self.coal_om_cost() + self.biomass_om_cost()
@@ -260,9 +235,9 @@ class CofiringPlant(PowerPlant):
         printRowInt("Investment", self.capital)
         printRowNPV("Fuel cost", self.fuel_cost())
         printRowNPV("  Coal", self.coal_cost())
-        printRowNPV("  Biomass", self.biomass_cost())
-        printRowNPV("    transportation", self.active_chain.transport_cost())
-        printRowNPV("    straw at field", self.biomass_field_cost())
+        printRowNPV("  Biomass", self.straw_supply.cost(self.biomass.price))
+        printRowNPV("    transportation", self.straw_supply.transport_cost())
+        printRowNPV("    straw at field", self.straw_supply.field_cost(self.biomass.price))
         printRowNPV("O&M cost", self.operation_maintenance_cost())
         printRowNPV("  coal", self.coal_om_cost())
         printRowNPV("  biomass", self.biomass_om_cost())

@@ -51,16 +51,16 @@ Total  [0.0, 1003.86, 1003.86]  [0.0, 2.28, 2.28]  [0.0, 9.1, 9.1]  [0.0, 0.18, 
        Real example:
        from parameters import emission_factor, MongDuong1Cofire
 
-       MD_plant_stack = Emitter({'6b_coal': MongDuong1Cofire.coal_used,
+       MD_stack = Emitter({'6b_coal': MongDuong1Cofire.coal_used,
                                  'Straw': MongDuong1Cofire.biomass_used
                                  },
                                 emission_factor,
                                 {'CO2': 0.0, 'SO2': 0.982, 'NOx': 0.0, 'PM10': 0.996}
                                 )
 
-       print(MD_plant_stack, "\n")
-       print(MD_plant_stack.emissions()['Total'], "\n")
-       print(MD_plant_stack.emissions()['Total']['CO2'], "\n")
+       print(MD_stack, "\n")
+       print(MD_stack.emissions()['Total'], "\n")
+       print(MD_stack.emissions()['Total']['CO2'], "\n")
        """
     def __init__(self,
                  quantities,   # A dictionary of (fuel: emissions_time_series)

@@ -17,5 +17,5 @@ from parameters import MD_Coal, NB_Coal, straw
 print("Cost of heat        MongDuong1          NinhBinh")
 print("Coal               ", MD_Coal.cost_per_GJ(), "    ", NB_Coal.cost_per_GJ())
 print("Biomass in field   ", straw.cost_per_GJ(), "    ", straw.cost_per_GJ())
-print("Biomass plant gate ", MongDuong1Cofire.biomass_cost_per_GJ()[1],
-      "    ", NinhBinhCofire.biomass_cost_per_GJ()[1])
+print("Biomass plant gate ", MongDuong1Cofire.straw_supply.cost_per_GJ(straw.price, straw.heat_value)[1],
+      "    ", NinhBinhCofire.straw_supply.cost_per_GJ(straw.price, straw.heat_value)[1])
