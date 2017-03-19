@@ -17,11 +17,11 @@ from init import time_step
 
 
 def farmer_income(plant):
-    """ Extra income per hecta of rice cultivation for farmer from selling rice
+    """ Extra income per hectare of rice cultivation for farmer from selling rice
         straw for co-firing after deducting the cost for renting straw winder
 
     """
-    return bm_sell_revenue(plant) - winder_rental_cost / time_step
+    return bm_sell_revenue(plant) - winder_rental_cost
 
 
 def bm_sell_revenue(plant):

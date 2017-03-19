@@ -13,7 +13,7 @@ the provinces that supply straw to the plant"""
 
 from natu.math import fsum
 from natu.units import t, y
-from init import v_after_invest
+from init import v_after_invest, time_step
 from strawdata import df, residue_to_product_ratio_straw
 from parameters import straw_burn_rate, emission_factor
 from parameters import MongDuong1, NinhBinh
@@ -37,7 +37,7 @@ def straw_production(plant):
 
 def straw_burned_infield(plant):
     """Amount of straw burned in the open field after harvesting"""
-    return v_after_invest * straw_production(plant) * straw_burn_rate
+    return v_after_invest * straw_production(plant) * straw_burn_rate * time_step
 
 
 def so2_emission_field_base(plant):

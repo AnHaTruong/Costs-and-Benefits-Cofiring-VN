@@ -92,7 +92,7 @@ class SupplyChain():
         return display_as(cost, 'kUSD')
 
     def transport_emissions(self):
-        trucks = Emitter({'Road transport': self.transport_tkm() / time_step},
+        trucks = Emitter({'Road transport': self.transport_tkm()},
                          self.emission_factor)
         return trucks.emissions()
 

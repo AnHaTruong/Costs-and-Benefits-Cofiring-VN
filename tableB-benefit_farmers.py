@@ -23,10 +23,6 @@ def print_income(plant):
     col2 = farmer_income(plant)
     col3 = total_income_benefit(plant)
 
-    col1.display_unit = 'USD/ha/y'
-    col2.display_unit = 'USD/ha/y'
-    col3.display_unit = 'USD/y'
-
     print(row.format('biomass sell revenue', col1))
 
     print(row.format('farmer income per ha', col2))

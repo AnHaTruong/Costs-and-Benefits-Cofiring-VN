@@ -25,7 +25,7 @@ def benefit_add_up(func, plant):
     """
     value = 0 * USD
     for year in range(time_horizon + 1):
-        value += (func(plant) * time_step) / (1 + discount_rate)**year
+        value += (func(plant)) / (1 + discount_rate)**year
     value.display_unit = 'kUSD'
     return value
 
@@ -36,7 +36,7 @@ def new_benefit_add_up(func, plant, cofiringplant):
     """
     value = 0 * USD
     for year in range(time_horizon + 1):
-        value += (func(plant, cofiringplant) * time_step) / (1 + discount_rate)**year
+        value += (func(plant, cofiringplant)) / (1 + discount_rate)**year
     value.display_unit = 'kUSD'
     return value
 
@@ -55,7 +55,7 @@ def total_benefit_addup(plant, cofiringplant):
 def benefit_add_up_new(func):
     value = 0 * USD
     for year in range(time_horizon + 1):
-        value += (func) * time_step / (1 + discount_rate)**year
+        value += (func) / (1 + discount_rate)**year
     value.display_unit = 'kUSD'
     return value
 

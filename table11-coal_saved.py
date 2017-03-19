@@ -16,7 +16,7 @@ from parameters import MongDuong1Cofire, NinhBinhCofire, coal_import_price
 def print_coal_saved(plant):
     col1 = plant.coal_saved[1]
     col2 = col1 * coal_import_price
-    col2.display_unit = 'kUSD/y'
+    col2.display_unit = 'kUSD'
 
     row = '{:35}{:23.0f}'
     print('Coal saved at', plant.name)

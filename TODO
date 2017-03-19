@@ -1,12 +1,16 @@
 ﻿TODO
 
-Fix transport work calculations
+Fix transport work calculations: it's proportional to   tkm / truck_capacity
+
+Check work calculations: biomass_ratio is in heat, why use % capacity ?
 
 Benefits depends on time -> return a vector
 
 Use npv, get rid of benefitaddup
 
 Get rid of old code in emission.py
+
+Define FTE as a display unit of time
 
 SupplyChain sizing check invariance to repeat calls
 
@@ -24,8 +28,6 @@ Use decorator to set display_unit of results
 
 Simpler call parent constructor in CofiringPlant constructor
 
-Cleanup the * time_step and clarify time units (period or year)
-
 Sensitivity analysis
 
 Consider more indicators that LCOE:
@@ -35,6 +37,8 @@ Consider more indicators that LCOE:
 
 
 DONE
+
+Cleanup the * time_step -- values in vectors are "amount during the period", not intensities
 
 Add transport emissions to SupplyChain
 

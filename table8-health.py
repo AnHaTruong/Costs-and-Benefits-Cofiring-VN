@@ -62,32 +62,11 @@ def print_health(plant, cofiringplant):
     col83 = health_benefit_nox(plant, cofiringplant)
     col9 = total_health_benefit(plant, cofiringplant)
 
-    col11.display_unit = 't/y'
-    col12.display_unit = 't/y'
-    col13.display_unit = 't/y'
-    col21.display_unit = 't/y'
-    col22.display_unit = 't/y'
-    col23.display_unit = 't/y'
-    col31.display_unit = 't/y'
-    col32.display_unit = 't/y'
-    col33.display_unit = 't/y'
-    col41.display_unit = 't/y'
-    col42.display_unit = 't/y'
-    col43.display_unit = 't/y'
-    col51.display_unit = 't/y'
-    col52.display_unit = 't/y'
-    col53.display_unit = 't/y'
-    col61.display_unit = 't/y'
-    col62.display_unit = 't/y'
-    col63.display_unit = 't/y'
-    col71.display_unit = 't/y'
-    col72.display_unit = 't/y'
-    col73.display_unit = 't/y'
-    col81.display_unit = 'kUSD/y'
-    col82.display_unit = 'kUSD/y'
-    col83.display_unit = 'kUSD/y'
+    col81.display_unit = 'kUSD'
+    col82.display_unit = 'kUSD'
+    col83.display_unit = 'kUSD'
 
-    col9.display_unit = 'kUSD/y'
+    col9.display_unit = 'kUSD'
 
     print(row.format('SO2', col11, col21, col31, col41, col51, col61, col71, col81))
 

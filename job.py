@@ -7,27 +7,34 @@
 # Creative Commons Attribution-ShareAlike 4.0 International
 #
 #
-""" Job creation assessment of a co-firing project"""
+"""Job creation assessment of a co-firing project"""
 
 from parameters import winder_capacity, truck_velocity, work_hour_day
 from parameters import truck_load, OM_hour_MWh, biomass_ratio, wage_bm_transport
 from parameters import wage_bm_collect, wage_operation_maintenance
 
+# Note to H: we are working with quantities not numbers
+# the results are a "work time" which is a "duration" not a "number of hours".
+# M.
+
 
 def bm_collection_work(cofiringplant):
-    """Total number of hour needed to collect straw for co-firing per year
-    """
-    return cofiringplant.biomass_used[1] * work_hour_day / winder_capacity
+    """Work time needed to collect straw for co-firing per year"""
+    result = cofiringplant.biomass_used[1] * work_hour_day / winder_capacity
+    result.display_unit = 'hr'
+    return result
 
 
 # FIXME: Use tkm instead
 def bm_transport_work(cofiringplant):
-    """Total number of hour needed to transport rice straw to the plant per year
+    """Work time needed to transport rice straw to the plant per year
     """
-    return number_of_truck(cofiringplant) * transport_time(cofiringplant)
+    result = number_of_truck_trips(cofiringplant) * transport_time(cofiringplant)
+    result.display_unit = 'hr'
+    return result
 
 
-def number_of_truck(cofiringplant):
+def number_of_truck_trips(cofiringplant):
     """Number of trucks to deliver the required biomass for co-firing to plant
     """
     return cofiringplant.biomass_used[1] / truck_load
@@ -35,25 +42,28 @@ def number_of_truck(cofiringplant):
 
 # FIXME: Trucks don't have to start from the border of the collection zone. Use tkm instead
 def transport_time(cofiringplant):
-    return cofiringplant.straw_supply.collection_radius() * 2 / truck_velocity
+    result = cofiringplant.straw_supply.collection_radius() * 2 / truck_velocity
+    result.display_unit = 'hr'
+    return result
 
 
 def om_work(plant):
-    """Total number of hour needed for operation and maintenance for co-firing
-    """
-    return plant.power_generation[0] * biomass_ratio * OM_hour_MWh
+    """Work time needed for operation and maintenance for co-firing"""
+    result = plant.power_generation[0] * biomass_ratio * OM_hour_MWh
+    result.display_unit = 'hr'
+    return result
 
 
 def cofiring_work(plant, cofiringplant):
-    """Total number of hours created from co-firing
-    """
+    """Total work time created from co-firing"""
     return bm_collection_work(cofiringplant) + bm_transport_work(cofiringplant) + om_work(plant)
 
 
 def benefit_bm_collection(cofiringplant):
-    """Benefit from job creation from biomass collection
-    """
-    return bm_collection_work(cofiringplant) * wage_bm_collect
+    """Benefit from job creation from biomass collection"""
+    amount = bm_collection_work(cofiringplant) * wage_bm_collect
+    amount.display_unit = "kUSD"
+    return amount
 
 
 def benefit_bm_transport(cofiringplant):

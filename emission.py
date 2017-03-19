@@ -22,8 +22,9 @@ from Emitter import Emitter
 from strawburned import straw_burned_infield
 
 
-zero_transport = v_zeros * t * km / y
+zero_transport = v_zeros * t * km
 
+zero_other_emissions = pd.Series({'SO2': 0.0 * t, 'PM10': 0.0 * t, 'NOx': 0.0 * t})
 
 # Define objects
 MD_transport = Emitter({'Road transport': zero_transport,
@@ -35,7 +36,7 @@ MD_transport = Emitter({'Road transport': zero_transport,
 MD_field = Emitter({'Straw': straw_burned_infield(MongDuong1)},
                    emission_factor)
 
-MDCofire_transport = Emitter({'Road transport': MongDuong1Cofire.straw_supply.transport_tkm() / y,
+MDCofire_transport = Emitter({'Road transport': MongDuong1Cofire.straw_supply.transport_tkm(),
                               'Barge transport': zero_transport
                               },
                              emission_factor,
@@ -52,10 +53,7 @@ MD_plant_ER = (MongDuong1.stack.emissions()["Total"]
 
 MD_transport_CO2 = MD_transport.emissions()["Total"] - MDCofire_transport.emissions()["Total"]
 
-MD_transport_pollutant = pd.Series([0.0 * t / y, 0.0 * t / y, 0.0 * t / y],
-                                   index=['SO2', 'PM10', 'NOx'])
-
-MD_transport_ER = MD_transport_CO2.append(MD_transport_pollutant)
+MD_transport_ER = MD_transport_CO2.append(zero_other_emissions)
 
 MD_field_ER = MD_field.emissions()["Total"] - MDCofire_field.emissions()["Total"]
 
@@ -63,7 +61,7 @@ MD_total_ER = MD_plant_ER + MD_transport_ER + MD_field_ER
 
 # Calculate benefit from emission reduction
 MD_total_benefit = MD_total_ER * specific_cost
-display_as(MD_total_benefit, 'kUSD/y')
+display_as(MD_total_benefit, 'kUSD')
 
 # Create pandas DataFrame from emission reduction Series
 list_of_series = [MD_plant_ER, MD_transport_ER, MD_field_ER, MD_total_ER, MD_total_benefit]
@@ -90,7 +88,7 @@ NB_transport = Emitter(NB_transport_activity, emission_factor, {'CO2': 0.0})
 
 NB_field = Emitter({'Straw': straw_burned_infield(NinhBinh)}, emission_factor)
 
-NBCofire_transport = Emitter({'Road transport': NinhBinhCofire.straw_supply.transport_tkm() / y,
+NBCofire_transport = Emitter({'Road transport': NinhBinhCofire.straw_supply.transport_tkm(),
                               'Barge transport': (NinhBinhCofire.coal_used
                                                   * NB_Coal.transport_distance * 2)
                               },
@@ -106,17 +104,14 @@ NB_plant_ER = (NinhBinh.stack.emissions()["Total"]
 
 NB_transport_CO2 = NB_transport.emissions()["Total"] - NBCofire_transport.emissions()["Total"]
 
-NB_transport_pollutant = pd.Series([0.0 * t / y, 0.0 * t / y, 0.0 * t / y],
-                                   index=['SO2', 'PM10', 'NOx'])
-
-NB_transport_ER = NB_transport_CO2.append(NB_transport_pollutant)
+NB_transport_ER = NB_transport_CO2.append(zero_other_emissions)
 
 NB_field_ER = NB_field.emissions()["Total"] - NBCofire_field.emissions()["Total"]
 NB_total_ER = NB_plant_ER + NB_transport_ER + NB_field_ER
 
 # Calculate benefit from emission reduction
 NB_total_benefit = NB_total_ER * specific_cost
-display_as(NB_total_benefit, 'kUSD/y')
+display_as(NB_total_benefit, 'kUSD')
 
 # Create pandas DataFrame from emission reduction Series
 list_of_series = [NB_plant_ER, NB_transport_ER, NB_field_ER, NB_total_ER, NB_total_benefit]
