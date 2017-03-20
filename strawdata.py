@@ -13,6 +13,8 @@ from natu.units import ha, t, y
 # from parameters import residue_to_product_ratio_straw, straw_collection_fraction
 # from parameters import straw_selling_proportion
 from natu.numpy import mean
+from natu.math import fsum
+from init import v_after_invest, time_step
 
 straw_collection_fraction = 0.5  # Refer to (Leinonen and Nguyen 2013)
 straw_selling_proportion = 0.79  # Refer to (Leinonen and Nguyen 2013)
@@ -27,23 +29,34 @@ df = df.set_index('Province')
 residue_to_product_ratio = pd.DataFrame({'Residue to product ratio straw': [residue_to_product_ratio_straw]})
 df['straw yield'] = df['Rice yield (ton/ha)'] * t / ha / y * residue_to_product_ratio['Residue to product ratio straw'].values
 
-#Calculate biomass available density from rice cultivation area density,collection fraction and selling fraction of straw
-collection_fraction = pd.DataFrame({'straw collection fraction':[straw_collection_fraction]})
-selling_proportion = pd.DataFrame({'straw selling proportion':[straw_selling_proportion]})
+# Calculate biomass available density from rice cultivation area density,collection fraction and selling fraction of straw
+collection_fraction = pd.DataFrame({'straw collection fraction': [straw_collection_fraction]})
+selling_proportion = pd.DataFrame({'straw selling proportion': [straw_selling_proportion]})
 
 # Rice planted density is the ratio between cultivation area and total area
-df['rice planted density'] = df['Cultivation area (ha)']*ha/(df['Total area (ha)']*ha)
+df['rice planted density'] = df['Cultivation area (ha)'] * ha / (df['Total area (ha)'] * ha)
 
 # Calculate straw density of each provinces
 df['straw density'] = (df['straw yield'] *
                        df['rice planted density'] *
                        collection_fraction['straw collection fraction'].values *
                        selling_proportion['straw selling proportion'].values
-                      )
+                       )
+
+df['straw production'] = df['rice production (ton)'] * t / y * residue_to_product_ratio_straw
 
 MongDuong1_straw_density1 = df.loc['Quang Ninh', 'straw density'] # straw density of Quang Ninh province
 MongDuong1_straw_density2 = mean([df.loc['Bac Giang', 'straw density'], # straw density of adjacent provinces
                                   df.loc['Hai Duong', 'straw density'],
                                   df.loc['Hai Phong', 'straw density']
-                                 ])
+                                  ])
 NinhBinh_straw_density = df.loc['Ninh Binh', 'straw density']
+
+MongDuong1_straw_production1 = df.loc['Quang Ninh', 'straw production']
+
+MongDuong1_straw_production2 = fsum([df.loc['Bac Giang', 'straw production'],
+                                     df.loc['Hai Duong', 'straw production'],
+                                     df.loc['Hai Phong', 'straw production']
+                                     ])
+
+NinhBinh_straw_production = df.loc['Ninh Binh', 'straw production']

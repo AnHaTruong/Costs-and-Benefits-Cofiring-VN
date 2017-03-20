@@ -13,7 +13,6 @@
 from parameters import MongDuong1, NinhBinh, MongDuong1Cofire, NinhBinhCofire
 
 from health import *
-from strawburned import so2_emission_field_base, pm10_emission_field_base, nox_emission_field_base
 
 print('')
 head = '{:22}' * 2 + '{:22}' * 7

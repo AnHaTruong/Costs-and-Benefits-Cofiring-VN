@@ -9,18 +9,26 @@
 # pylint: disable=E0611
 
 from copy import copy
-from init import isclose, v_after_invest, v_zeros, display_as, time_step, zero_to_NaN
+from init import isclose, v_after_invest, v_zeros, display_as, zero_to_NaN, time_step
 
 from natu.units import t, km, USD
 from Emitter import Emitter
 
 
 class SupplyZone():
-    def __init__(self, shape, straw_density, transport_tariff, tortuosity_factor):
+    def __init__(self,
+                 shape,
+                 straw_density,
+                 straw_production,
+                 straw_burn_rate,
+                 transport_tariff,
+                 tortuosity_factor):
         self.shape = shape
         self.straw_density = straw_density
         self.straw_density.display_unit = 't/km2'
         self.transport_tariff = transport_tariff
+        self.straw_production = straw_production
+        self.straw_burn_rate = straw_burn_rate
         self.transport_tariff.display_unit = 'USD/(t*km)'
         self.tortuosity_factor = tortuosity_factor
 
@@ -54,6 +62,13 @@ class SupplyZone():
     def shrink(self, factor):
         self.shape = self.shape.shrink(factor)
         return self
+
+    def field_emission(self, biomass_used, emission_factor):
+        field = Emitter({'Straw': (v_after_invest * self.straw_production *
+                                   self.straw_burn_rate * time_step) - biomass_used},
+                        emission_factor
+                        )
+        return field.emissions()
 
 
 class SupplyChain():
