@@ -41,8 +41,6 @@ class PowerPlant(Investment):
         self.boiler_technology = boiler_technology
         self.fix_om_coal = fix_om_coal
         self.variable_om_coal = variable_om_coal
-        self.esp_efficiency = emission_controls["PM10"]       # To fix in Table 12 and ...
-        self.desulfur_efficiency = emission_controls["SO2"]   # To fix in Table 12 and ...
         self.emission_controls = emission_controls
         self.emission_factor = emission_factor
 

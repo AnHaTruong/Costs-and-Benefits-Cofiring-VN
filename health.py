@@ -40,7 +40,7 @@ def so2_emission_plant_base(plant):
     """SO2 emission from the plant without co-firing."""
     return (plant.coal_used[1]
             * emission_factor[plant.coal.name]["SO2"]
-            * (1 - plant.desulfur_efficiency)
+            * (1 - plant.emission_controls["SO2"])
             )
 
 
@@ -53,7 +53,7 @@ def pm10_emission_plant_base(plant):
     """ PM10 emission from the plant without co-firing."""
     return (plant.coal_used[1]
             * emission_factor[plant.coal.name]["PM10"]
-            * (1 - plant.esp_efficiency)
+            * (1 - plant.emission_controls["PM10"])
             )
 
 
@@ -89,11 +89,11 @@ def so2_emission_plant_cofire(plant, cofiringplant):
     """ SO2 emission from coal and straw combustion in plant"""
     so2_emit_bm = (cofiringplant.biomass_used[1]
                    * emission_factor["Straw"]["SO2"]
-                   * (1 - plant.desulfur_efficiency)
+                   * (1 - plant.emission_controls["SO2"])
                    )
     so2_emit_coal = (cofiringplant.coal_used[1]
                      * emission_factor[plant.coal.name]["SO2"]
-                     * (1 - plant.desulfur_efficiency)
+                     * (1 - plant.emission_controls["SO2"])
                      )
     return so2_emit_bm + so2_emit_coal
 
@@ -118,11 +118,11 @@ def pm10_emission_plant_cofire(plant, cofiringplant):
     """
     pm10_emit_bm = (cofiringplant.biomass_used[1]
                     * emission_factor["Straw"]["PM10"]
-                    * (1 - plant.esp_efficiency)
+                    * (1 - plant.emission_controls["PM10"])
                     )
     pm10_emit_coal = (cofiringplant.coal_used[1]
                       * emission_factor[plant.coal.name]["PM10"]
-                      * (1 - plant.esp_efficiency)
+                      * (1 - plant.emission_controls["PM10"])
                       )
     return pm10_emit_bm + pm10_emit_coal
 
