@@ -13,10 +13,10 @@
    Climate benefit and health benefit from GHG and air pollutant emission reduction
 """
 import pandas as pd
-from natu.units import t, km
 
 from init import v_zeros, display_as
 
+from natu.units import t, km
 from parameters import MongDuong1, NinhBinh, MongDuong1Cofire, NinhBinhCofire
 from parameters import emission_factor, NB_Coal, specific_cost
 from Emitter import Emitter

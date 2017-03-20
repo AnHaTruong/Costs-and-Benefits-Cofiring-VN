@@ -25,6 +25,7 @@ df = df.set_index('Province')
 
 # Calculate straw yield of each province from rice yield and Residue-to-Product Ratio (RPR) of straw
 residue_to_product_ratio = pd.DataFrame({'Residue to product ratio straw': [residue_to_product_ratio_straw]})
+
 df['straw yield'] = df['Rice yield (ton/ha)'] * t / ha / y * residue_to_product_ratio['Residue to product ratio straw'].values
 
 #Calculate biomass available density from rice cultivation area density,collection fraction and selling fraction of straw

@@ -10,13 +10,13 @@
 """ Regression testing : Emitter.py  vs.  emission.py
 """
 
+from parameters import MongDuong1, NinhBinh, MongDuong1Cofire, NinhBinhCofire
+
 from emission import MD_transport, MD_field
 from emission import MDCofire_transport, MDCofire_field, MD_ER_table
 
 from emission import NB_transport, NB_field
 from emission import NBCofire_transport, NBCofire_field, NB_ER_table
-
-from parameters import MongDuong1, NinhBinh, MongDuong1Cofire, NinhBinhCofire
 
 print("\nMong Duong 1 BASELINE EMISSIONS\n")
 

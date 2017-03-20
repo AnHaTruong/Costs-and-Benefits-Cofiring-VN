@@ -15,7 +15,7 @@ from farmerincome import farmer_income, bm_sell_revenue, total_income_benefit
 
 print('')
 
-row = '{:20}' + '{:23.0f}'
+row = '{:20}' + '{:23.6G}'
 
 
 def print_income(plant):

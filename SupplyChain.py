@@ -11,7 +11,8 @@
 from copy import copy
 from init import isclose, v_after_invest, v_zeros, display_as, zero_to_NaN
 
-from natu.units import t, km, USD, ha
+from natu.units import t, km, ha
+from init import USD
 from Emitter import Emitter
 
 

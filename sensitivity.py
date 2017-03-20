@@ -8,16 +8,15 @@
 #
 #
 
-import numpy as np
-# import time
+import timeit
 
 from SALib.sample import saltelli
 from SALib.analyze import sobol
 
 from natu import config
-#config.use_quantities = False
+config.use_quantities = False
 
-from init import time_horizon, USD
+from init import time_horizon, USD, np
 from parameters import MongDuong1
 # from parameters import MongDuong1, MongDuong1Cofire, NinhBinh, NinhBinhCofire
 
@@ -33,7 +32,7 @@ problem = {'num_vars': 3,
                       [1, time_horizon - 1]]
            }
 
-param_values = saltelli.sample(problem, 10, calc_second_order=True)
+param_values = saltelli.sample(problem, 100, calc_second_order=True)
 
 Y = np.empty([param_values.shape[0]])
 
@@ -44,14 +43,19 @@ def model(X):
 for i, X in enumerate(param_values):
     Y[i] = model(X)
 
-#time.timeit(Si = sobol.analyze(problem, Y, print_to_console=False), repeat=1)
-Si = sobol.analyze(problem, Y, print_to_console=False)
 
-print(Si['S1'])
-print(Si['S1_conf'])
+def test():
+    """Stupid test function"""
+    Si = sobol.analyze(problem, Y, print_to_console=False)
+    return Si
 
-print(Si['ST'])
+print(timeit.timeit('test()', setup='from __main__ import test', number=3))
 
-print("x1-x2:", Si['S2'][0, 1])
-print("x1-x3:", Si['S2'][0, 2])
-print("x2-x3:", Si['S2'][1, 2])
+#print(Si['S1'])
+#print(Si['S1_conf'])
+#
+#print(Si['ST'])
+#
+#print("x1-x2:", Si['S2'][0, 1])
+#print("x1-x3:", Si['S2'][0, 2])
+#print("x2-x3:", Si['S2'][1, 2])

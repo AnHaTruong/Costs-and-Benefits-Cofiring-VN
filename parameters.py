@@ -9,6 +9,7 @@
 #
 #
 import pandas as pd
+
 from init import USD, VND, time_step
 from natu.units import MJ, kg, t, d, hr, km, MW, ha, kW, y, kWh
 
@@ -23,7 +24,7 @@ from SupplyChain import SupplyChain, SupplyZone
 
 """Input parameters of the model"""
 
-discount_rate = 0.087771 * time_step / y
+discount_rate = 0.087771
 depreciation_period = 10
 tax_rate = 0.25  # Corporate tax in Vietnam
 

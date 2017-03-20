@@ -6,31 +6,42 @@
 # minh.haduong@gmail.com
 # Creative Commons Attribution-ShareAlike 4.0 International
 #
+# Warning: This file should be imported before any "import natu ..."
+# otherwise use_quantities does not work
 #
-
-
-from natu.units import hr, y
-import natu.numpy as np
-# RTFM:  Units thread into arrays from the right but not from the left
+# Warning:
+# Units thread into arrays from the right but not from the left
 #  np.array([1, 2]) * m  -->  array([1 m, 2 m], dtype=object)
 #  m * np.array([1, 2])   --> [1  2] m
 # So when multiplying a vector by a quantity, put the vector left
+#
+# pylint: disable=E402
+
+
+from natu import config
+# config.use_quantities = False
+
+import natu.numpy as np
+from natu.units import hr, y
+from natu import units
+from natu.core import ScalarUnit
 
 # Semantic overloading: we reuse the "amount" dimension to mean "value"
-from natu.core import ScalarUnit
-from natu import units
 
-VND = ScalarUnit(1, 'N', 'mol', prefixable=True)
-units.VND = VND
+if config.use_quantities:
+    VND = ScalarUnit(1 / 22270, 'N', 'mol', prefixable=True)
+    units.VND = VND
 
-USD = ScalarUnit(22270, 'N', 'mol', prefixable=True)
-units.USD = USD
+    USD = ScalarUnit(1, 'N', 'mol', prefixable=True)
+    units.USD = USD
+else:
+    USD = 1
+    VND = USD / 22270
 
 # Full Time Equivalent, a work time unit amounting to "1 job".
 FTE = 1560 * hr
 units.FTE = FTE
 
-h_per_yr = 8760 * hr   # I thought natu would convert
 time_step = 1 * y
 time_horizon = 20
 
@@ -46,12 +57,11 @@ def display_as(v, unit):
        Don't set display_unit directly in the code:
            it would break when use_quantities = False
     """
-    if hasattr(v, '__iter__'):
-        if hasattr(v[0], 'display_unit'):
+    if config.use_quantities:
+        if hasattr(v, '__iter__'):
             for element in v:
                 element.display_unit = unit
-    else:
-        if hasattr(v, 'display_unit'):
+        else:
             v.display_unit = unit
     return v
 
