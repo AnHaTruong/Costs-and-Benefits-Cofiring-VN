@@ -68,8 +68,8 @@ class PowerPlant(Investment):
                                         )
         super().__init__(capital)
 
-    def income(self, electricity_tariff):
-        revenue = self.power_generation * electricity_tariff
+    def income(self, feedin_tariff):
+        revenue = self.power_generation * feedin_tariff
         return display_as(revenue, 'kUSD')
 
     def operating_expenses(self):
@@ -103,14 +103,17 @@ class PowerPlant(Investment):
     def operation_maintenance_cost(self):
         return display_as(self.coal_om_cost(), 'kUSD')
 
-    def lcoe(self, electricity_tariff, discount_rate, tax_rate, depreciation_period):
+    def lcoe(self, feedin_tariff, discount_rate, tax_rate, depreciation_period):
         total_lifetime_power_production = npv(discount_rate, self.power_generation)
-        total_life_cycle_cost = npv(discount_rate, self.cash_out(electricity_tariff, tax_rate, depreciation_period))
+        total_life_cycle_cost = npv(discount_rate,
+                                    self.cash_out(feedin_tariff,
+                                                  tax_rate,
+                                                  depreciation_period))
         result = total_life_cycle_cost / total_lifetime_power_production
         # Fixme: once TableC is no regression, use /MWh for integer
         return display_as(result, 'USD/kWh')
 
-    def table_LCOE(self, electricity_tariff, discount_rate, tax_rate, depreciation_period):
+    def table_LCOE(self, feedin_tariff, discount_rate, tax_rate, depreciation_period):
         def printRowInt(label, quantity):
             print('{:30}{:8.0f}'.format(label, quantity))
 
@@ -124,10 +127,15 @@ class PowerPlant(Investment):
         printRowInt("Investment", self.capital)
         printRowNPV("Fuel cost", self.fuel_cost())
         printRowNPV("O&M cost", self.operation_maintenance_cost())
-        printRowNPV("Tax", self.income_tax(electricity_tariff, tax_rate, depreciation_period))
-        printRowNPV("Sum of costs", self.cash_out(electricity_tariff, tax_rate, depreciation_period))
+        printRowNPV("Tax", self.income_tax(feedin_tariff, tax_rate, depreciation_period))
+        printRowNPV("Sum of costs", self.cash_out(feedin_tariff,
+                                                  tax_rate,
+                                                  depreciation_period))
         printRowNPV("Electricity produced", self.power_generation)
-        printRowFloat("LCOE", self.lcoe(electricity_tariff, discount_rate, tax_rate, depreciation_period))
+        printRowFloat("LCOE", self.lcoe(feedin_tariff,
+                                        discount_rate,
+                                        tax_rate,
+                                        depreciation_period))
         print('')
 
 
@@ -241,7 +249,7 @@ class CofiringPlant(PowerPlant):
         cost = self.coal_saved * self.coal.price
         return display_as(cost, 'kUSD')
 
-    def tableC(self, electricity_tariff, discount_rate, tax_rate, depreciation_period):
+    def tableC(self, feedin_tariff, discount_rate, tax_rate, depreciation_period):
         def printRowInt(label, quantity):
             print('{:30}{:8.0f}'.format(label, quantity))
 
@@ -261,7 +269,14 @@ class CofiringPlant(PowerPlant):
         printRowNPV("O&M cost", self.operation_maintenance_cost())
         printRowNPV("  coal", self.coal_om_cost())
         printRowNPV("  biomass", self.biomass_om_cost())
-        printRowNPV("Tax", self.income_tax(electricity_tariff, tax_rate, depreciation_period))
-        printRowNPV("Sum of costs", self.cash_out(electricity_tariff, tax_rate, depreciation_period))
+        printRowNPV("Tax", self.income_tax(feedin_tariff,
+                                           tax_rate,
+                                           depreciation_period))
+        printRowNPV("Sum of costs", self.cash_out(feedin_tariff,
+                                                  tax_rate,
+                                                  depreciation_period))
         printRowNPV("Electricity produced", self.power_generation)
-        printRowFloat("LCOE", self.lcoe(electricity_tariff, discount_rate, tax_rate, depreciation_period))
+        printRowFloat("LCOE", self.lcoe(feedin_tariff,
+                                        discount_rate,
+                                        tax_rate,
+                                        depreciation_period))

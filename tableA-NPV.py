@@ -21,13 +21,14 @@ print('Discount Rate', discount_rate)
 print('Depreciation', depreciation_period, 'years')
 
 print('')
-
+print('FIT', feedin_tarif['MD'])
 MongDuong1.pretty_table(feedin_tarif['MD'], discount_rate, tax_rate, depreciation_period)
 
 MongDuong1Cofire.pretty_table(feedin_tarif['MD'], discount_rate, tax_rate, depreciation_period)
 
 print('')
 
+print('FIT', feedin_tarif['NB'])
 NinhBinh.pretty_table(feedin_tarif['NB'], discount_rate, tax_rate, depreciation_period)
 
 NinhBinhCofire.pretty_table(feedin_tarif['NB'], discount_rate, tax_rate, depreciation_period)

@@ -27,7 +27,7 @@ class Investment:
         self.investment = display_as(v_zeros.copy() * USD, 'kUSD')
         self.investment[0] = capital
 
-    def income(self, electricity_tariff):
+    def income(self, feedin_tariff):
         return display_as(v_zeros * USD, 'kUSD')
 
     def operating_expenses(self):
@@ -41,31 +41,31 @@ class Investment:
             v_cost[year] = self.capital / float(depreciation_period)
         return display_as(v_cost, 'kUSD')
 
-    def earning_before_tax(self, electricity_tariff, depreciation_period):
-        earning = self.income(electricity_tariff) - self.operating_expenses() - self.amortization(depreciation_period)
+    def earning_before_tax(self, feedin_tariff, depreciation_period):
+        earning = self.income(feedin_tariff) - self.operating_expenses() - self.amortization(depreciation_period)
         return display_as(earning, 'kUSD')
 
-    def income_tax(self, electricity_tariff, tax_rate, depreciation_period):
+    def income_tax(self, feedin_tariff, tax_rate, depreciation_period):
         assert 0 <= tax_rate <= 1, "Tax rate not in [0, 1["
         # Allows tax credits in lossy periods
-        income = tax_rate * self.earning_before_tax(electricity_tariff, depreciation_period)
+        income = tax_rate * self.earning_before_tax(feedin_tariff, depreciation_period)
         return display_as(income, 'kUSD')
 
-    def cash_out(self, electricity_tariff, tax_rate, depreciation_period):
+    def cash_out(self, feedin_tariff, tax_rate, depreciation_period):
         flow = (self.investment
                 + self.operating_expenses()
-                + self.income_tax(electricity_tariff, tax_rate, depreciation_period)
+                + self.income_tax(feedin_tariff, tax_rate, depreciation_period)
                 )
         return display_as(flow, 'kUSD')
 
-    def net_cash_flow(self, electricity_tariff, tax_rate, depreciation_period):
-        flow = self.income(electricity_tariff) - self.cash_out(electricity_tariff, tax_rate, depreciation_period)
+    def net_cash_flow(self, feedin_tariff, tax_rate, depreciation_period):
+        flow = self.income(feedin_tariff) - self.cash_out(feedin_tariff, tax_rate, depreciation_period)
         return display_as(flow, 'kUSD')
 
-    def net_present_value(self, electricity_tariff, discount_rate, tax_rate, depreciation_period):
+    def net_present_value(self, feedin_tariff, discount_rate, tax_rate, depreciation_period):
         assert 0 <= discount_rate < 1, "Discount rate not in [0, 1["
         value = np.npv(discount_rate,
-                       self.net_cash_flow(electricity_tariff, tax_rate, depreciation_period))
+                       self.net_cash_flow(feedin_tariff, tax_rate, depreciation_period))
         return display_as(value, 'kUSD')
 
     def internal_rate_of_return(self):
@@ -74,26 +74,26 @@ class Investment:
     def payback_period(self):
         pass
 
-    def table(self, electricity_tariff, tax_rate=0.25, depreciation_period=10):
-        t = np.array([self.income(electricity_tariff),
+    def table(self, feedin_tariff, tax_rate=0.25, depreciation_period=10):
+        t = np.array([self.income(feedin_tariff),
                       self.investment,
                       self.amortization(depreciation_period),
                       self.operating_expenses(),
-                      self.earning_before_tax(electricity_tariff, depreciation_period),
-                      self.income_tax(electricity_tariff, tax_rate, depreciation_period),
-                      self.cash_out(electricity_tariff, tax_rate, depreciation_period),
-                      self.net_cash_flow(electricity_tariff, tax_rate, depreciation_period)
+                      self.earning_before_tax(feedin_tariff, depreciation_period),
+                      self.income_tax(feedin_tariff, tax_rate, depreciation_period),
+                      self.cash_out(feedin_tariff, tax_rate, depreciation_period),
+                      self.net_cash_flow(feedin_tariff, tax_rate, depreciation_period)
                       ]
                      )
         return t
 
-    def pretty_table(self, electricity_tariff, discount_rate, tax_rate, depreciation_period):
+    def pretty_table(self, feedin_tariff, discount_rate, tax_rate, depreciation_period):
         print(self.name)
-        print("NPV  =", self.net_present_value(electricity_tariff,
+        print("NPV  =", self.net_present_value(feedin_tariff,
                                                discount_rate,
                                                tax_rate,
                                                depreciation_period))
-        t = self.table(electricity_tariff, tax_rate, depreciation_period)
+        t = self.table(feedin_tariff, tax_rate, depreciation_period)
         t = np.transpose(t)
         labels = ["Income",
                   "Investment",
