@@ -8,8 +8,6 @@
 #
 #
 
-import timeit
-
 from SALib.sample import saltelli
 from SALib.analyze import sobol
 
@@ -20,10 +18,18 @@ from init import time_horizon, USD, np
 from parameters import MongDuong1
 # from parameters import MongDuong1, MongDuong1Cofire, NinhBinh, NinhBinhCofire
 
+# Only run interactively, for now
+try:
+    __IPYTHON__
+except NameError:
+    exit()   # Quietly
 
-# The depreciation period is an discrete parameter.
-#  -> Warning the Morris method is affected
-# https://waterprogramming.wordpress.com/2014/02/11/extensions-of-salib-for-more-complex-sensitivity-analyses/ (item 2 on the list)
+#import cProfile
+
+# The depreciation period is an discrete parameter. See item 2 on the list at
+# https://waterprogramming.wordpress.com/2014/02/11/
+# extensions-of-salib-for-more-complex-sensitivity-analyses/
+# TLDR: Warning the Morris method is affected
 
 problem = {'num_vars': 3,
            'names': ['discount_rate', 'tax_rate', 'depreciation_period'],
@@ -43,19 +49,13 @@ def model(X):
 for i, X in enumerate(param_values):
     Y[i] = model(X)
 
+Si = sobol.analyze(problem, Y, print_to_console=False)
 
-def test():
-    """Stupid test function"""
-    Si = sobol.analyze(problem, Y, print_to_console=False)
-    return Si
+print(Si['S1'])
+print(Si['S1_conf'])
 
-print(timeit.timeit('test()', setup='from __main__ import test', number=3))
+print(Si['ST'])
 
-#print(Si['S1'])
-#print(Si['S1_conf'])
-#
-#print(Si['ST'])
-#
-#print("x1-x2:", Si['S2'][0, 1])
-#print("x1-x3:", Si['S2'][0, 2])
-#print("x2-x3:", Si['S2'][1, 2])
+print("x1-x2:", Si['S2'][0, 1])
+print("x1-x3:", Si['S2'][0, 2])
+print("x2-x3:", Si['S2'][1, 2])
