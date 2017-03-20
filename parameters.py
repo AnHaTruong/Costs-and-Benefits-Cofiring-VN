@@ -14,7 +14,8 @@ from init import USD, VND
 from natu.units import MJ, kg, t, d, hr, km, MW, ha, kW, y, kWh
 
 from strawdata import MongDuong1_straw_density1, MongDuong1_straw_density2
-from strawdata import NinhBinh_straw_density
+from strawdata import NinhBinh_straw_density, NinhBinh_straw_production
+from strawdata import MongDuong1_straw_production1, MongDuong1_straw_production2
 
 from Emitter import Fuel
 from PowerPlant import PowerPlant, CofiringPlant
@@ -119,6 +120,8 @@ MongDuong1 = PowerPlant(name="Mong Duong 1",
 
 MDSupplyZone1 = SupplyZone(shape=Semi_Annulus(0 * km, 50 * km),
                            straw_density=MongDuong1_straw_density1,
+                           straw_production=MongDuong1_straw_production1,
+                           straw_burn_rate=straw_burn_rate,
                            transport_tariff=transport_tariff,
                            tortuosity_factor=tortuosity_factor
                            )
@@ -126,6 +129,8 @@ MDSupplyZone1 = SupplyZone(shape=Semi_Annulus(0 * km, 50 * km),
 MDSupplyZone2 = SupplyZone(shape=Semi_Annulus(50 * km, 100 * km),
                            straw_density=MongDuong1_straw_density2,
                            transport_tariff=transport_tariff,
+                           straw_production=MongDuong1_straw_production2,
+                           straw_burn_rate=straw_burn_rate,
                            tortuosity_factor=tortuosity_factor
                            )
 
@@ -158,6 +163,8 @@ NinhBinh = PowerPlant(name="Ninh Binh",
 
 NBSupplyZone = SupplyZone(shape=Disk(50 * km),
                           straw_density=NinhBinh_straw_density,
+                          straw_production=NinhBinh_straw_production,
+                          straw_burn_rate=straw_burn_rate,
                           transport_tariff=transport_tariff,
                           tortuosity_factor=tortuosity_factor
                           )

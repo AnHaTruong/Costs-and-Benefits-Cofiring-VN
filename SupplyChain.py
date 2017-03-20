@@ -16,10 +16,18 @@ from Emitter import Emitter
 
 
 class SupplyZone():
-    def __init__(self, shape, straw_density, transport_tariff, tortuosity_factor):
+    def __init__(self,
+                 shape,
+                 straw_density,
+                 straw_production,
+                 straw_burn_rate,
+                 transport_tariff,
+                 tortuosity_factor):
         self.shape = shape
         self.straw_density = display_as(straw_density, 't/km2')
         self.transport_tariff = display_as(transport_tariff, 'USD/(t*km)')
+        self.straw_production = straw_production
+        self.straw_burn_rate = straw_burn_rate
         self.tortuosity_factor = tortuosity_factor
 
     def __str__(self):
@@ -56,6 +64,13 @@ class SupplyZone():
     def shrink(self, factor):
         self.shape = self.shape.shrink(factor)
         return self
+
+    def field_emission(self, biomass_used, emission_factor):
+        field = Emitter({'Straw': (v_after_invest * self.straw_production *
+                                   self.straw_burn_rate * time_step) - biomass_used},
+                        emission_factor
+                        )
+        return field.emissions()
 
 
 class SupplyChain():

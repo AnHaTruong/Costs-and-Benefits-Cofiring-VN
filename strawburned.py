@@ -15,7 +15,7 @@ from natu.math import fsum
 from natu.units import t
 from init import v_after_invest
 from strawdata import df, residue_to_product_ratio_straw
-from parameters import straw_burn_rate, emission_factor
+from parameters import straw_burn_rate
 from parameters import MongDuong1, NinhBinh
 
 
@@ -39,20 +39,6 @@ def straw_burned_infield(plant):
     """Amount of straw burned in the open field after harvesting"""
     return v_after_invest * straw_production(plant) * straw_burn_rate
 
-
-def so2_emission_field_base(plant):
-    """SO2 emission from burning straw in field at provincial level"""
-    return straw_burned_infield(plant)[1] * emission_factor["Straw"]["SO2"]
-
-
-def nox_emission_field_base(plant):
-    """SO2 emission from burning straw in field at provincial level"""
-    return straw_burned_infield(plant)[1] * emission_factor["Straw"]["NOx"]
-
-
-def pm10_emission_field_base(plant):
-    """SO2 emission from burning straw in field at provincial level"""
-    return straw_burned_infield(plant)[1] * emission_factor["Straw"]["PM10"]
 
 if __name__ == "__main__":
     import doctest

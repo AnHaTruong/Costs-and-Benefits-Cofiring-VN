@@ -8,8 +8,7 @@
 #
 #
 from parameters import emission_factor, specific_cost
-from strawburned import so2_emission_field_base, pm10_emission_field_base
-from strawburned import straw_burned_infield, nox_emission_field_base
+from strawburned import straw_burned_infield
 
 """Evaluation of benefits of co-firing project to public health"""
 """Assuming if there is no co-firing then all the amount of straw required for
@@ -20,6 +19,21 @@ co-firing would be burned in the field.
 include emission from open straw burning in the field and emission from coal
 in the plant
 """
+
+
+def so2_emission_field_base(plant):
+    """SO2 emission from burning straw in field at provincial level"""
+    return straw_burned_infield(plant)[1] * emission_factor["Straw"]["SO2"]
+
+
+def nox_emission_field_base(plant):
+    """SO2 emission from burning straw in field at provincial level"""
+    return straw_burned_infield(plant)[1] * emission_factor["Straw"]["NOx"]
+
+
+def pm10_emission_field_base(plant):
+    """SO2 emission from burning straw in field at provincial level"""
+    return straw_burned_infield(plant)[1] * emission_factor["Straw"]["PM10"]
 
 
 def so2_emission_plant_base(plant):
