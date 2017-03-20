@@ -28,6 +28,7 @@ from SupplyChain import SupplyChain, SupplyZone
 discount_rate = 0.087771
 depreciation_period = 10
 tax_rate = 0.25  # Corporate tax in Vietnam
+feedin_tarif = {'MD': 1239.17 * VND / kWh, 'NB': 1665.6 * VND / kWh}
 
 biomass_ratio = 0.05           # As percent of energy coming from biomass
 
@@ -110,7 +111,6 @@ MongDuong1 = PowerPlant(name="Mong Duong 1",
                         boiler_technology='CFB',
                         plant_efficiency=38.84 / 100,
                         boiler_efficiency=87.03 / 100,
-                        electricity_tariff=1239.17 * VND / kWh,
                         fix_om_coal=29.31 * USD / kW / y,
                         variable_om_coal=0.0048 * USD / kWh,
                         emission_controls={'CO2': 0.0, 'SO2': 0.982, 'NOx': 0.0, 'PM10': 0.996},
@@ -153,7 +153,6 @@ NinhBinh = PowerPlant(name="Ninh Binh",
                       boiler_technology='PC',
                       plant_efficiency=21.77 / 100,
                       boiler_efficiency=81.61 / 100,
-                      electricity_tariff=1665.6 * VND / kWh,
                       fix_om_coal=29.31 * USD / kW / y,
                       variable_om_coal=0.0048 * USD / kWh,
                       emission_controls={'CO2': 0.0, 'SO2': 0.0, 'NOx': 0.0, 'PM10': 0.992},

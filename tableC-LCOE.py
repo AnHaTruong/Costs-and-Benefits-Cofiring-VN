@@ -10,14 +10,14 @@
 """Compares the LCOE with and without cofiring"""
 
 from parameters import MongDuong1, MongDuong1Cofire, NinhBinh, NinhBinhCofire
-from parameters import discount_rate, tax_rate, depreciation_period
+from parameters import discount_rate, tax_rate, depreciation_period, feedin_tarif
 
-MongDuong1.table_LCOE(discount_rate, tax_rate, depreciation_period)
+MongDuong1.table_LCOE(feedin_tarif['MD'], discount_rate, tax_rate, depreciation_period)
 
-MongDuong1Cofire.tableC(discount_rate, tax_rate, depreciation_period)
+MongDuong1Cofire.tableC(feedin_tarif['MD'], discount_rate, tax_rate, depreciation_period)
 
 print('')
 
-NinhBinh.table_LCOE(discount_rate, tax_rate, depreciation_period)
+NinhBinh.table_LCOE(feedin_tarif['NB'], discount_rate, tax_rate, depreciation_period)
 
-NinhBinhCofire.tableC(discount_rate, tax_rate, depreciation_period)
+NinhBinhCofire.tableC(feedin_tarif['NB'], discount_rate, tax_rate, depreciation_period)
