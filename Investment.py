@@ -42,7 +42,9 @@ class Investment:
         return display_as(v_cost, 'kUSD')
 
     def earning_before_tax(self, feedin_tariff, depreciation_period):
-        earning = self.income(feedin_tariff) - self.operating_expenses() - self.amortization(depreciation_period)
+        earning = (self.income(feedin_tariff)
+                   - self.operating_expenses()
+                   - self.amortization(depreciation_period))
         return display_as(earning, 'kUSD')
 
     def income_tax(self, feedin_tariff, tax_rate, depreciation_period):
@@ -54,12 +56,12 @@ class Investment:
     def cash_out(self, feedin_tariff, tax_rate, depreciation_period):
         flow = (self.investment
                 + self.operating_expenses()
-                + self.income_tax(feedin_tariff, tax_rate, depreciation_period)
-                )
+                + self.income_tax(feedin_tariff, tax_rate, depreciation_period))
         return display_as(flow, 'kUSD')
 
     def net_cash_flow(self, feedin_tariff, tax_rate, depreciation_period):
-        flow = self.income(feedin_tariff) - self.cash_out(feedin_tariff, tax_rate, depreciation_period)
+        flow = (self.income(feedin_tariff)
+                - self.cash_out(feedin_tariff, tax_rate, depreciation_period))
         return display_as(flow, 'kUSD')
 
     def net_present_value(self, feedin_tariff, discount_rate, tax_rate, depreciation_period):

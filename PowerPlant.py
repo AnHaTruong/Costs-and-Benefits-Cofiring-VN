@@ -39,23 +39,23 @@ class PowerPlant(Investment):
         self.capacity_factor = capacity_factor
         self.commissioning = commissioning
         self.boiler_technology = boiler_technology
+        self.plant_efficiency = plant_efficiency
+        self.boiler_efficiency = boiler_efficiency
         self.fix_om_coal = fix_om_coal
         self.variable_om_coal = variable_om_coal
         self.emission_controls = emission_controls
         self.emission_factor = emission_factor
+        self.coal = coal
+        super().__init__(capital)
 
         self.power_generation = full(time_horizon + 1,
                                      capacity * capacity_factor * time_step,
                                      dtype=object)
         display_as(self.power_generation, 'GWh')
 
-        self.boiler_efficiency = full(time_horizon + 1, boiler_efficiency)
-        self.plant_efficiency = full(time_horizon + 1, plant_efficiency)
-
         self.coal_used = self.power_generation / plant_efficiency / coal.heat_value
         display_as(self.coal_used, 't')
 
-        self.coal = coal
         self.stack = Emitter({self.coal.name: self.coal_used},
                              self.emission_factor,
                              self.emission_controls)
@@ -64,7 +64,6 @@ class PowerPlant(Investment):
         self.coal_transporter = Emitter({self.coal.transport_mean: self.coal_transport_activity},
                                         self.emission_factor
                                         )
-        super().__init__(capital)
 
     def income(self, feedin_tariff):
         revenue = self.power_generation * feedin_tariff
@@ -82,10 +81,7 @@ class PowerPlant(Investment):
         return self.coal_used * 2 * self.coal.transport_distance   # Return trip inputed
 
     def coal_transport_emission(self):
-        return (self.coal_used[1]
-                * self.coal.ef_transport
-                * 2 * self.coal.transport_distance   # Trucks do round trip
-                )
+        return self.coal_transport_tkm()[1] * self.coal.ef_transport
 
     def fuel_cost(self):
         return self.coal_cost()
@@ -156,8 +152,8 @@ class CofiringPlant(PowerPlant):
             capacity_factor=plant.capacity_factor,
             commissioning=plant.commissioning,
             boiler_technology=plant.boiler_technology,
-            plant_efficiency=plant.plant_efficiency[0],
-            boiler_efficiency=plant.boiler_efficiency[0],
+            plant_efficiency=plant.plant_efficiency,
+            boiler_efficiency=plant.boiler_efficiency,
             fix_om_coal=plant.fix_om_coal,
             variable_om_coal=plant.variable_om_coal,
             coal=plant.coal,

@@ -10,8 +10,9 @@
 #
 import pandas as pd
 
-from init import USD, VND
+from init import USD, VND, time_horizon
 from natu.units import MJ, kg, t, d, hr, km, MW, ha, kW, y, kWh
+from natu.numpy import full
 
 from strawdata import MongDuong1_straw_density1, MongDuong1_straw_density2
 from strawdata import NinhBinh_straw_density, NinhBinh_straw_production
@@ -109,8 +110,8 @@ MongDuong1 = PowerPlant(name="Mong Duong 1",
                         capacity_factor=0.60,
                         commissioning=2015,
                         boiler_technology='CFB',
-                        plant_efficiency=38.84 / 100,
-                        boiler_efficiency=87.03 / 100,
+                        plant_efficiency=full(time_horizon + 1, 38.84 / 100),
+                        boiler_efficiency=full(time_horizon + 1, 87.03 / 100),
                         fix_om_coal=29.31 * USD / kW / y,
                         variable_om_coal=0.0048 * USD / kWh,
                         emission_controls={'CO2': 0.0, 'SO2': 0.982, 'NOx': 0.0, 'PM10': 0.996},
@@ -151,8 +152,8 @@ NinhBinh = PowerPlant(name="Ninh Binh",
                       capacity_factor=0.64,
                       commissioning=1974,
                       boiler_technology='PC',
-                      plant_efficiency=21.77 / 100,
-                      boiler_efficiency=81.61 / 100,
+                      plant_efficiency=full(time_horizon + 1, 21.77 / 100),
+                      boiler_efficiency=full(time_horizon + 1, 81.61 / 100),
                       fix_om_coal=29.31 * USD / kW / y,
                       variable_om_coal=0.0048 * USD / kWh,
                       emission_controls={'CO2': 0.0, 'SO2': 0.0, 'NOx': 0.0, 'PM10': 0.992},
