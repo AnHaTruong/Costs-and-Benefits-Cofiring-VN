@@ -126,11 +126,11 @@ def emission_reduction_benefit(plant, cofiringplant):
     """ return the monetary benefit from greenhouse gas emission reduction"""
     plant_emissions = (
         plant.stack.emissions()["Total"]["CO2"]
-        + plant.coal_transport_emission())
+        + plant.coal_transporter().emissions()["Total"]["CO2"])
 
     cofiringplant_emissions = (
         cofiringplant.stack.emissions()["Total"]["CO2"]
-        + cofiringplant.coal_transport_emission()
+        + cofiringplant.coal_transporter().emissions()["Total"]["CO2"]
         + cofiringplant.straw_supply.transport_emissions()["Road transport"]["CO2"])
 
     return (plant_emissions - cofiringplant_emissions) * specific_cost['CO2']

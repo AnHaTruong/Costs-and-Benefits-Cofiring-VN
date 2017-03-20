@@ -29,7 +29,7 @@ class Investment:
         return display_as(v_zeros * USD, 'kUSD')
 
     def investment(self):
-        """Multi year investment not tested"""
+        """Multi year investment coded but not tested"""
         v_invest = 1 - v_after_invest
         return display_as(v_invest * self.capital / sum(v_invest), 'kUSD')
 

@@ -18,15 +18,13 @@ class Fuel:
                  heat_value,
                  price,
                  transport_distance,
-                 transport_mean,
-                 ef_transport
+                 transport_mean
                  ):
         self.name = name
         self.heat_value = heat_value
         self.price = display_as(price, 'USD/t')
         self.transport_distance = transport_distance
         self.transport_mean = transport_mean
-        self.ef_transport = ef_transport
 
     def cost_per_GJ(self):
         cost = self.price / self.heat_value

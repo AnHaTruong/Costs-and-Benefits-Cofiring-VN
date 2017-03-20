@@ -60,11 +60,6 @@ class PowerPlant(Investment):
                              self.emission_factor,
                              self.emission_controls)
 
-        self.coal_transport_activity = self.coal_used * 2 * self.coal.transport_distance
-        self.coal_transporter = Emitter({self.coal.transport_mean: self.coal_transport_activity},
-                                        self.emission_factor
-                                        )
-
     def income(self, feedin_tariff):
         revenue = self.power_generation * feedin_tariff
         return display_as(revenue, 'kUSD')
@@ -80,8 +75,10 @@ class PowerPlant(Investment):
     def coal_transport_tkm(self):
         return self.coal_used * 2 * self.coal.transport_distance   # Return trip inputed
 
-    def coal_transport_emission(self):
-        return self.coal_transport_tkm()[1] * self.coal.ef_transport
+    def coal_transporter(self):
+        return Emitter({self.coal.transport_mean: self.coal_transport_tkm()},
+                       self.emission_factor
+                       )
 
     def fuel_cost(self):
         return self.coal_cost()
@@ -147,19 +144,19 @@ class CofiringPlant(PowerPlant):
                  ):
 
         super().__init__(
-            name=plant.name + " Cofire",
-            capacity=plant.capacity,
-            capacity_factor=plant.capacity_factor,
-            commissioning=plant.commissioning,
-            boiler_technology=plant.boiler_technology,
-            plant_efficiency=plant.plant_efficiency,
-            boiler_efficiency=plant.boiler_efficiency,
-            fix_om_coal=plant.fix_om_coal,
-            variable_om_coal=plant.variable_om_coal,
-            coal=plant.coal,
-            emission_controls=plant.emission_controls,
-            emission_factor=plant.emission_factor,
-            capital=capital_cost * plant.capacity * biomass_ratio)
+            plant.name + " Cofire",
+            plant.capacity,
+            plant.capacity_factor,
+            plant.commissioning,
+            plant.boiler_technology,
+            plant.plant_efficiency,
+            plant.boiler_efficiency,
+            plant.fix_om_coal,
+            plant.variable_om_coal,
+            plant.emission_controls,
+            plant.emission_factor,
+            plant.coal,
+            capital_cost * plant.capacity * biomass_ratio)
 
         self.biomass_ratio = biomass_ratio
         self.fix_om_cost = fix_om_cost
@@ -200,11 +197,6 @@ class CofiringPlant(PowerPlant):
                               self.biomass.name: self.biomass_used},
                              self.emission_factor,
                              self.emission_controls)
-
-        self.coal_transport_activity = self.coal_used * 2 * self.coal.transport_distance
-        self.coal_transporter = Emitter({self.coal.transport_mean: self.coal_transport_activity},
-                                        self.emission_factor
-                                        )
 
     def fuel_cost(self):
         cost = self.coal_cost() + self.straw_supply.cost(self.biomass.price)

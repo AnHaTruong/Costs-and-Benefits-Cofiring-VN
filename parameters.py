@@ -59,24 +59,21 @@ MD_Coal = Fuel(name="6b_coal",
                heat_value=19.43468 * MJ / kg,
                price=1131400 * VND / t,
                transport_distance=0 * km,
-               transport_mean='Conveyor belt',
-               ef_transport=0 * kg / t / km
+               transport_mean='Conveyor belt'
                )
 
 NB_Coal = Fuel(name="4b_coal",
                heat_value=21.5476 * MJ / kg,
                price=1825730 * VND / t,  # Includes transport
                transport_distance=200 * km,
-               transport_mean='Barge transport',
-               ef_transport=0.071 * kg / t / km  # coal transported by barge
+               transport_mean='Barge transport'
                )
 
 straw = Fuel(name='Straw',
              heat_value=11.7 * MJ / kg,
              price=37.26 * USD / t,
              transport_distance='Endogenous',
-             transport_mean='Road transport',
-             ef_transport=0.110 * kg / t / km  # biomass transported by truck
+             transport_mean='Road transport'
              )
 
 emission_factor = {
