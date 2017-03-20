@@ -9,10 +9,9 @@
 # pylint: disable=E0611
 
 from copy import copy
-from init import isclose, v_after_invest, v_zeros, display_as, zero_to_NaN
+from init import isclose, v_after_invest, v_zeros, display_as, zero_to_NaN, USD
 
 from natu.units import t, km, ha
-from init import USD
 from Emitter import Emitter
 
 
@@ -27,7 +26,7 @@ class SupplyZone():
         return ("Supply zone" +
                 "\n Shape: " + str(self.shape) +
                 "\n Straw density: " + str(self.straw_density) +
-                "\n Capacity = " + str(self.capacity()) +
+                "\n tonnage = " + str(self.tonnage()) +
                 "\n Transport tariff: " + str(self.transport_tariff) +
                 "\n Tortuosity: " + str(self.tortuosity_factor) +
                 "\n Activity to transport all = " + str(self.transport_tkm()[1]) +
@@ -38,7 +37,7 @@ class SupplyZone():
         a = self.shape.area()
         return display_as(a, 'ha')
 
-    def capacity(self):
+    def tonnage(self):
         mass = v_after_invest * self.shape.area() * self.straw_density
         return display_as(mass, 't')
 
@@ -69,7 +68,7 @@ class SupplyChain():
 
     def __str__(self):
         s = "Supply chain\n"
-        s += "Capacity = " + str(self.capacity()) + "\n"
+        s += "tonnage = " + str(self.tonnage()) + "\n"
         s += "Cost to transport all = " + str(self.transport_cost()[1]) + "\n"
         s += "Collection_radius = " + str(self.collection_radius()) + "\n"
         for zone in self.zones:
@@ -82,10 +81,10 @@ class SupplyChain():
             a += zone.area()
         return display_as(a, 'km2')
 
-    def capacity(self):
+    def tonnage(self):
         mass = v_zeros * t
         for zone in self.zones:
-            mass += zone.capacity()
+            mass += zone.tonnage()
         return display_as(mass, 't')
 
     def transport_tkm(self):
@@ -106,11 +105,11 @@ class SupplyChain():
         return trucks.emissions()
 
     def transport_cost_per_t(self):
-        cost_per_t = self.transport_cost() / zero_to_NaN(self.capacity())
+        cost_per_t = self.transport_cost() / zero_to_NaN(self.tonnage())
         return display_as(cost_per_t, 'USD/t')
 
     def field_cost(self, price):
-        cost = self.capacity() * price
+        cost = self.tonnage() * price
         return display_as(cost, 'kUSD')
 
     def cost(self, price):
@@ -119,7 +118,7 @@ class SupplyChain():
 
     def cost_per_t(self, price):
         """Including transport cost"""
-        cost_per_t = self.cost(price) / zero_to_NaN(self.capacity())
+        cost_per_t = self.cost(price) / zero_to_NaN(self.tonnage())
         return display_as(cost_per_t, 'USD/t')
 
     def cost_per_GJ(self, price, heat_value):
@@ -128,20 +127,20 @@ class SupplyChain():
 
     def fit(self, quantity):
         """Returns an new supply chain, disgard unused zone(s) and shrink the last one"""
-        assert quantity <= self.capacity()[1], 'Not enough biomass in supply chain: '
+        assert quantity <= self.tonnage()[1], 'Not enough biomass in supply chain: '
 
         i = 0
         collected = SupplyChain([copy(self.zones[0])], emission_factor=self.emission_factor)
-        while collected.capacity()[1] < quantity:
+        while collected.tonnage()[1] < quantity:
             i += 1
             collected.zones.append(copy(self.zones[i]))
 
-        excess = collected.capacity()[1] - quantity
+        excess = collected.tonnage()[1] - quantity
         assert excess >= 0 * t
-        reduction_factor = 1 - excess / collected.zones[i].capacity()[1]
+        reduction_factor = 1 - excess / collected.zones[i].tonnage()[1]
         collected.zones[i] = collected.zones[i].shrink(reduction_factor)
 
-        assert isclose(collected.capacity()[1], quantity)
+        assert isclose(collected.tonnage()[1], quantity)
         return collected
 
     def collection_radius(self):
