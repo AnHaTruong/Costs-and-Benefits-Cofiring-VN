@@ -1,3 +1,4 @@
+
 # Economic of co-firing in two power plants in Vietnam
 #
 # Plant parameters
@@ -54,6 +55,7 @@ MD_Coal = Fuel(name="6b_coal",
                heat_value=19.43468 * MJ / kg,
                price=1131400 * VND / t,
                transport_distance=0 * km,
+               transport_mean='Conveyor belt',
                ef_transport=0 * kg / t / km
                )
 
@@ -61,6 +63,7 @@ NB_Coal = Fuel(name="4b_coal",
                heat_value=21.5476 * MJ / kg,
                price=1825730 * VND / t,  # Includes transport
                transport_distance=200 * km,
+               transport_mean='Barge transport',
                ef_transport=0.071 * kg / t / km  # coal transported by barge
                )
 
@@ -68,6 +71,7 @@ straw = Fuel(name='Straw',
              heat_value=11.7 * MJ / kg,
              price=37.26 * USD / t,
              transport_distance='Endogenous',
+             transport_mean='Road transport',
              ef_transport=0.110 * kg / t / km  # biomass transported by truck
              )
 
@@ -87,6 +91,7 @@ emission_factor = {
               'NOx': 2.28 * kg / t,
               'PM10': 9.1 * kg / t
               },
+    'Conveyor belt': {'CO2': 0.0 * kg / t / km},
     'Road transport': {'CO2': 0.110 * kg / t / km},
     'Barge transport': {'CO2': 0.071 * kg / t / km}}
 
@@ -110,7 +115,6 @@ MongDuong1 = PowerPlant(name="Mong Duong 1",
                         emission_factor=emission_factor,
                         coal=MD_Coal
                         )
-
 
 MDSupplyZone1 = SupplyZone(shape=Semi_Annulus(0 * km, 50 * km),
                            straw_density=MongDuong1_straw_density1 * time_step,

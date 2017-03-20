@@ -63,6 +63,11 @@ class PowerPlant(Investment):
         self.stack = Emitter({self.coal.name: self.coal_used},
                              self.emission_factor,
                              self.emission_controls)
+
+        self.coal_transport_activity = self.coal_used * 2 * self.coal.transport_distance
+        self.coal_transporter = Emitter({self.coal.transport_mean: self.coal_transport_activity},
+                                        self.emission_factor
+                                        )
         super().__init__(capital)
 
     def income(self):
@@ -196,6 +201,11 @@ class CofiringPlant(PowerPlant):
                               self.biomass.name: self.biomass_used},
                              self.emission_factor,
                              self.emission_controls)
+
+        self.coal_transport_activity = self.coal_used * 2 * self.coal.transport_distance
+        self.coal_transporter = Emitter({self.coal.transport_mean: self.coal_transport_activity},
+                                        self.emission_factor
+                                        )
 
     def fuel_cost(self):
         cost = self.coal_cost() + self.straw_supply.cost(self.biomass.price)
