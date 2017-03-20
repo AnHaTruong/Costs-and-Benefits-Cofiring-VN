@@ -1,4 +1,5 @@
 
+
 # Economic of co-firing in two power plants in Vietnam
 #
 # Pollutant emitter
@@ -16,6 +17,7 @@ class Fuel:
                  heat_value,
                  price,
                  transport_distance,
+                 transport_mean,
                  ef_transport
                  ):
         self.name = name
@@ -23,6 +25,7 @@ class Fuel:
         self.price = price
         self.price.display_unit = 'USD/t'
         self.transport_distance = transport_distance
+        self.transport_mean = transport_mean
         self.ef_transport = ef_transport
 
     def cost_per_GJ(self):

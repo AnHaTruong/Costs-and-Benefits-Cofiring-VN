@@ -1,3 +1,4 @@
+
 # Economic of co-firing in two power plants in Vietnam
 #
 #  Greenhouse gas emissions reduction assessment
@@ -12,7 +13,7 @@
    Climate benefit and health benefit from GHG and air pollutant emission reduction
 """
 import pandas as pd
-from natu.units import t, km, y
+from natu.units import t, km
 
 from init import v_zeros, display_as
 
@@ -75,10 +76,6 @@ MD_health_benefit = MD_total_benefit.drop('CO2').sum()
 
 # Ninh Binh
 # Define objects
-
-NB_transport_activity = {'Road transport': zero_transport,
-                         'Barge transport': NinhBinh.coal_used * NB_Coal.transport_distance * 2
-                         }
 
 NB_transport_activity = {'Road transport': zero_transport,
                          'Barge transport': NinhBinh.coal_used * NB_Coal.transport_distance * 2
