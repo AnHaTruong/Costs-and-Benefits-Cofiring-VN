@@ -9,9 +9,9 @@
 # pylint: disable=E0611
 
 from copy import copy
-from init import isclose, v_after_invest, v_zeros, display_as, time_step, zero_to_NaN
+from init import isclose, v_after_invest, v_zeros, display_as, zero_to_NaN
 
-from natu.units import t, km, USD
+from natu.units import t, km, USD, ha
 from Emitter import Emitter
 
 
@@ -34,6 +34,11 @@ class SupplyZone():
                 "\n Activity to transport all = " + str(self.transport_tkm()[1]) +
                 "\n Cost to transport all = " + str(self.transport_cost()[1])
                 )
+
+    def area(self):
+        a = self.shape.area()
+        a.display_unit = 'ha'
+        return a
 
     def capacity(self):
         mass = v_after_invest * self.shape.area() * self.straw_density
@@ -72,6 +77,13 @@ class SupplyChain():
         for zone in self.zones:
             s += str(zone) + "\n"
         return s
+
+    def area(self):
+        a = 0 * ha
+        for zone in self.zones:
+            a += zone.area()
+        a.display_unit = 'km2'
+        return a
 
     def capacity(self):
         mass = v_zeros * t

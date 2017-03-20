@@ -26,8 +26,11 @@ units.VND = VND
 USD = ScalarUnit(22270, 'N', 'mol', prefixable=True)
 units.USD = USD
 
+# Full Time Equivalent, a work time unit amounting to "1 job".
+FTE = 1560 * hr
+units.FTE = FTE
 
-h_per_yr = 8760 * hr
+h_per_yr = 8760 * hr   # I thought natu would convert
 time_step = 1 * y
 time_horizon = 20
 

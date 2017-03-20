@@ -11,77 +11,49 @@
 """
 
 from parameters import MongDuong1, NinhBinh, MongDuong1Cofire, NinhBinhCofire
+from init import FTE
 
 from job import bm_collection_work, bm_transport_work, benefit_bm_collection
 from job import number_of_truck_trips, transport_time, benefit_bm_transport
 from job import om_work, cofiring_work, benefit_om, total_job_benefit
-from parameters import FTE
 
 print('')
 
-row = '{:40}' + '{:25.1f}'
+cols = '{:25}{:12.1f}'
+cols2 = '{:25}{:12.1f}{:12.1f}'
 
 
 def print_job(plant, cofiringplant):
+    print('Benefit from job creation:', plant.name, '\n')
 
     row1 = benefit_bm_collection(cofiringplant)
     row2 = benefit_bm_transport(cofiringplant)
     row3 = benefit_om(plant)
+    row7 = bm_collection_work(cofiringplant)
+    row8 = bm_transport_work(cofiringplant)
+    row9 = om_work(plant)
+    row10 = cofiring_work(plant, cofiringplant)
     row4 = total_job_benefit(plant, cofiringplant)
-    row5 = number_of_truck_trips(cofiringplant)
-    row6 = transport_time(cofiringplant)
 
-    row1.display_unit = 'USD'
-    row2.display_unit = 'USD'
-    row3.display_unit = 'USD'
-    row4.display_unit = 'USD'
-    row6.display_unit = 'hr'
+    row7.display_unit = 'FTE'
+    row8.display_unit = 'FTE'
+    row9.display_unit = 'FTE'
+    row10.display_unit = 'FTE'
 
-    print(row.format('Transportation time', row6))
-
-    print(row.format('Truck trips', row5))
-
-    print(row.format('Work for biomass collection',
-                     bm_collection_work(cofiringplant)
-                     )
-          )
-
-    print(row.format('Work for biomass transportation',
-                     bm_transport_work(cofiringplant)
-                     )
-          )
-
-    print(row.format('Work for O&M', om_work(plant)))
-
-    print(row.format('FTE job from biomass collection',
-                     bm_collection_work(cofiringplant) / FTE
-                     )
-          )
-
-    print(row.format('FTE job from biomass transportation',
-                     bm_transport_work(cofiringplant) / FTE
-                     )
-          )
-
-    print(row.format('FTE job from co-firing O&M', om_work(plant) / FTE))
-
-    print(row.format('Total FTE job', cofiring_work(plant, cofiringplant) / FTE))
-
-    print(row.format('Job benefit from biomass collection', row1))
-
-    print(row.format('Job benefit from biomass transportation', row2))
-
-    print(row.format('Job benefit from co-firing O&M', row3))
-
-    print(row.format('Total job benefit from co-firing', row4))
+    print(cols2.format('Biomass collection', row7, row1))
+    print(cols2.format('Biomass transportation', row8, row2))
+    print(cols2.format('O&M', row9, row3))
+    print(cols2.format('Total', row10, row4))
+    print()
+    print(cols.format('Area collected', cofiringplant.straw_supply.area()))
+    print(cols.format('Collection radius', cofiringplant.straw_supply.collection_radius()))
+    print(cols.format('Truck trips: duration', transport_time(cofiringplant)))
+    print(cols.format('Truck trips: number', number_of_truck_trips(cofiringplant)))
+    print()
 
 
-print('')
-print('Benefit from job creation Mong Duong 1')
-print('')
 print_job(MongDuong1, MongDuong1Cofire)
 
-print('')
-print('Benefit from job creation Ninh Binh')
-print('')
 print_job(NinhBinh, NinhBinhCofire)
+
+print('Note: 1 FTE =', FTE)

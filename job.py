@@ -27,20 +27,19 @@ def bm_collection_work(cofiringplant):
 
 # FIXME: Use tkm instead
 def bm_transport_work(cofiringplant):
-    """Work time needed to transport rice straw to the plant per year
-    """
+    """Work time needed to transport rice straw to the plant per year"""
     result = number_of_truck_trips(cofiringplant) * transport_time(cofiringplant)
     result.display_unit = 'hr'
     return result
 
 
 def number_of_truck_trips(cofiringplant):
-    """Number of trucks to deliver the required biomass for co-firing to plant
-    """
+    """Number of trucks to deliver the required biomass for co-firing to plant"""
     return cofiringplant.biomass_used[1] / truck_load
 
 
 # FIXME: Trucks don't have to start from the border of the collection zone. Use tkm instead
+# FIXME: Trucks load/unload instantly
 def transport_time(cofiringplant):
     result = cofiringplant.straw_supply.collection_radius() * 2 / truck_velocity
     result.display_unit = 'hr'
@@ -67,15 +66,17 @@ def benefit_bm_collection(cofiringplant):
 
 
 def benefit_bm_transport(cofiringplant):
-    """Benefit from job creation from biomass transportation
-    """
-    return bm_transport_work(cofiringplant) * wage_bm_transport
+    """Benefit from job creation from biomass transportation"""
+    amount = bm_transport_work(cofiringplant) * wage_bm_transport
+    amount.display_unit = "kUSD"
+    return amount
 
 
 def benefit_om(plant):
-    """Benefit from job creation from co-firing operation and maintenance
-    """
-    return om_work(plant) * wage_operation_maintenance
+    """Benefit from job creation from co-firing operation and maintenance"""
+    amount = om_work(plant) * wage_operation_maintenance
+    amount.display_unit = "kUSD"
+    return amount
 
 
 def total_job_benefit(plant, cofiringplant):

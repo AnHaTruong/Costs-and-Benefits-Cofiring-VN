@@ -36,7 +36,6 @@ def boiler_efficiency_loss(biomass_ratio_mass):
 straw_burn_rate = 0.9  # Percentage of straw burned infield after harvest
 winder_capacity = 6.57 * t / d
 work_hour_day = 8 * hr / d
-FTE = 1560 * hr  # number of working hour for a full time equivalence job. FIXME: code as a unit.
 truck_velocity = 45 * km / hr
 truck_load = 20 * t
 OM_hour_MWh = 0.12 * hr / MW / hr  # working hour for OM per MWh    # O&M of co-firing per MWh

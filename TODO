@@ -10,15 +10,11 @@ Use npv, get rid of benefitaddup
 
 Get rid of old code in emission.py
 
-Define FTE as a display unit of time
-
-SupplyChain sizing check invariance to repeat calls
+In  health.py  compute all pollutants at once, all periods at once
 
 Check emission calculation against CDM ACM0085 methodology
 
 Generate figures in EPS format (or SVG or PDF) and adjust the Makefile
-
-Encapsulate the class
 
 Read data from data file - separate primary data processing from secondary data input by an intermediate secondary data file
 
@@ -37,6 +33,8 @@ Consider more indicators that LCOE:
 
 
 DONE
+
+Define FTE as a display unit of time
 
 Cleanup the * time_step -- values in vectors are "amount during the period", not intensities
 
