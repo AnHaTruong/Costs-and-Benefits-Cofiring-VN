@@ -10,7 +10,7 @@
 #
 import pandas as pd
 
-from init import USD, VND, time_step
+from init import USD, VND
 from natu.units import MJ, kg, t, d, hr, km, MW, ha, kW, y, kWh
 
 from strawdata import MongDuong1_straw_density1, MongDuong1_straw_density2
@@ -36,7 +36,7 @@ def boiler_efficiency_loss(biomass_ratio_mass):
     return 0.0044 * biomass_ratio_mass**2 + 0.0055 * biomass_ratio_mass
 
 straw_burn_rate = 0.9  # Percentage of straw burned infield after harvest
-winder_capacity = 6.57 * t / d
+winder_haul = 6.57 * t / d
 work_hour_day = 8 * hr / d
 truck_velocity = 45 * km / hr
 truck_load = 20 * t
@@ -48,7 +48,7 @@ tortuosity_factor = 1.5
 wage_bm_collect = 1.11 * USD / hr
 wage_bm_transport = 1.11 * USD / hr
 wage_operation_maintenance = 1.67 * USD / hr
-winder_rental_cost = 40 * USD / ha / y    # FIX: per year, HDM - 2017-03-19
+winder_rental_cost = 40 * USD / ha   # per period
 
 coal_import_price = 73 * USD / t
 
@@ -118,13 +118,13 @@ MongDuong1 = PowerPlant(name="Mong Duong 1",
                         )
 
 MDSupplyZone1 = SupplyZone(shape=Semi_Annulus(0 * km, 50 * km),
-                           straw_density=MongDuong1_straw_density1 * time_step,
+                           straw_density=MongDuong1_straw_density1,
                            transport_tariff=transport_tariff,
                            tortuosity_factor=tortuosity_factor
                            )
 
 MDSupplyZone2 = SupplyZone(shape=Semi_Annulus(50 * km, 100 * km),
-                           straw_density=MongDuong1_straw_density2 * time_step,
+                           straw_density=MongDuong1_straw_density2,
                            transport_tariff=transport_tariff,
                            tortuosity_factor=tortuosity_factor
                            )
@@ -157,7 +157,7 @@ NinhBinh = PowerPlant(name="Ninh Binh",
                       )
 
 NBSupplyZone = SupplyZone(shape=Disk(50 * km),
-                          straw_density=NinhBinh_straw_density * time_step,
+                          straw_density=NinhBinh_straw_density,
                           transport_tariff=transport_tariff,
                           tortuosity_factor=tortuosity_factor
                           )

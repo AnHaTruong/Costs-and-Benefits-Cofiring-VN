@@ -9,7 +9,7 @@
 
 
 import pandas as pd
-from natu.units import ha, t, y
+from natu.units import ha, t
 # from parameters import residue_to_product_ratio_straw, straw_collection_fraction
 # from parameters import straw_selling_proportion
 from natu.numpy import mean
@@ -26,7 +26,8 @@ df = df.set_index('Province')
 # Calculate straw yield of each province from rice yield and Residue-to-Product Ratio (RPR) of straw
 residue_to_product_ratio = pd.DataFrame({'Residue to product ratio straw': [residue_to_product_ratio_straw]})
 
-df['straw yield'] = df['Rice yield (ton/ha)'] * t / ha / y * residue_to_product_ratio['Residue to product ratio straw'].values
+# Yield per period, that is per year
+df['straw yield'] = df['Rice yield (ton/ha)'] * t / ha * residue_to_product_ratio['Residue to product ratio straw'].values
 
 #Calculate biomass available density from rice cultivation area density,collection fraction and selling fraction of straw
 collection_fraction = pd.DataFrame({'straw collection fraction':[straw_collection_fraction]})
@@ -43,6 +44,7 @@ df['straw density'] = (df['straw yield'] *
                       )
 
 MongDuong1_straw_density1 = df.loc['Quang Ninh', 'straw density'] # straw density of Quang Ninh province
+
 MongDuong1_straw_density2 = mean([df.loc['Bac Giang', 'straw density'], # straw density of adjacent provinces
                                   df.loc['Hai Duong', 'straw density'],
                                   df.loc['Hai Phong', 'straw density']

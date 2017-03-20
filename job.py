@@ -11,7 +11,7 @@
 
 from init import display_as
 
-from parameters import winder_capacity, truck_velocity, work_hour_day
+from parameters import winder_haul, truck_velocity, work_hour_day
 from parameters import truck_load, OM_hour_MWh, biomass_ratio, wage_bm_transport
 from parameters import wage_bm_collect, wage_operation_maintenance
 
@@ -22,7 +22,7 @@ from parameters import wage_bm_collect, wage_operation_maintenance
 
 def bm_collection_work(cofiringplant):
     """Work time needed to collect straw for co-firing per year"""
-    time = cofiringplant.biomass_used[1] * work_hour_day / winder_capacity
+    time = cofiringplant.biomass_used[1] * work_hour_day / winder_haul
     return display_as(time, 'hr')
 
 
