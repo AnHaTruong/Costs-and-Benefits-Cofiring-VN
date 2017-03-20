@@ -41,11 +41,18 @@ v_after_invest[0] = 0
 
 
 def display_as(v, unit):
-    """Sets the display_unit of every element of the vector to 'unit'.
-       Returns the vector
+    """Sets the display_unit of v or of v's items to 'unit'.
+       Returns v
+       Don't set display_unit directly in the code:
+           it would break when use_quantities = False
     """
-    for element in v:
-        element.display_unit = unit
+    if hasattr(v, '__iter__'):
+        if hasattr(v[0], 'display_unit'):
+            for element in v:
+                element.display_unit = unit
+    else:
+        if hasattr(v, 'display_unit'):
+            v.display_unit = unit
     return v
 
 

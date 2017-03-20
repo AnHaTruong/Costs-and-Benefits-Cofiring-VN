@@ -8,6 +8,7 @@
 # Creative Commons Attribution-ShareAlike 4.0 International
 #
 import pandas as pd
+from init import display_as
 
 
 class Fuel:
@@ -20,15 +21,13 @@ class Fuel:
                  ):
         self.name = name
         self.heat_value = heat_value
-        self.price = price
-        self.price.display_unit = 'USD/t'
+        self.price = display_as(price, 'USD/t')
         self.transport_distance = transport_distance
         self.ef_transport = ef_transport
 
     def cost_per_GJ(self):
         cost = self.price / self.heat_value
-        cost.display_unit = 'USD / GJ'
-        return cost
+        return display_as(cost, 'USD / GJ')
 
 
 class Emitter:

@@ -40,8 +40,7 @@ class PowerPlant(Investment):
         self.capacity_factor = capacity_factor
         self.commissioning = commissioning
         self.boiler_technology = boiler_technology
-        self.electricity_tariff = electricity_tariff
-        self.electricity_tariff.display_unit = 'USD/kWh'
+        self.electricity_tariff = display_as(electricity_tariff, 'USD/kWh')
         self.fix_om_coal = fix_om_coal
         self.variable_om_coal = variable_om_coal
         self.esp_efficiency = emission_controls["PM10"]       # To fix in Table 12 and ...
@@ -105,8 +104,8 @@ class PowerPlant(Investment):
         total_lifetime_power_production = npv(discount_rate, self.power_generation)
         total_life_cycle_cost = npv(discount_rate, self.cash_out(tax_rate, depreciation_period))
         result = total_life_cycle_cost / total_lifetime_power_production
-        result.display_unit = 'USD/kWh'  # Fixme: once TableC is no regression, use /MWh for integer
-        return result
+        # Fixme: once TableC is no regression, use /MWh for integer
+        return display_as(result, 'USD/kWh')
 
     def table_LCOE(self, discount_rate, tax_rate, depreciation_period):
         def printRowInt(label, quantity):

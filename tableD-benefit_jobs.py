@@ -10,8 +10,8 @@
 """ Print table D for job created from co-firing in job.py
 """
 
+from init import FTE, display_as
 from parameters import MongDuong1, NinhBinh, MongDuong1Cofire, NinhBinhCofire
-from init import FTE
 
 from job import bm_collection_work, bm_transport_work, benefit_bm_collection
 from job import number_of_truck_trips, transport_time, benefit_bm_transport
@@ -35,10 +35,10 @@ def print_job(plant, cofiringplant):
     row10 = cofiring_work(plant, cofiringplant)
     row4 = total_job_benefit(plant, cofiringplant)
 
-    row7.display_unit = 'FTE'
-    row8.display_unit = 'FTE'
-    row9.display_unit = 'FTE'
-    row10.display_unit = 'FTE'
+    display_as(row7, 'FTE')
+    display_as(row8, 'FTE')
+    display_as(row9, 'FTE')
+    display_as(row10, 'FTE')
 
     print(cols2.format('Biomass collection', row7, row1))
     print(cols2.format('Biomass transportation', row8, row2))

@@ -23,8 +23,7 @@ class Investment:
            which has the display unit set to kUSD
     """
     def __init__(self, capital=0 * USD):
-        self.capital = capital
-        self.capital.display_unit = 'kUSD'
+        self.capital = display_as(capital, 'kUSD')
         self.investment = display_as(v_zeros.copy() * USD, 'kUSD')
         self.investment[0] = capital
 
@@ -36,7 +35,7 @@ class Investment:
 
     def amortization(self, depreciation_period):
         assert type(depreciation_period) is int, "Depreciation period not an integer"
-        assert 0 < depreciation_period < time_horizon - 1, "Depreciation not in {1..timehorizon-1}"
+        assert 0 < depreciation_period < time_horizon - 1, "Depreciation not in {1..timehorizon-2}"
         v_cost = v_zeros.copy() * USD
         for year in range(1, depreciation_period + 1):
             v_cost[year] = self.capital / float(depreciation_period)
@@ -44,34 +43,29 @@ class Investment:
 
     def earning_before_tax(self, depreciation_period):
         earning = self.income() - self.operating_expenses() - self.amortization(depreciation_period)
-        display_as(earning, 'kUSD')
-        return earning
+        return display_as(earning, 'kUSD')
 
     def income_tax(self, tax_rate, depreciation_period):
         assert 0 <= tax_rate <= 1, "Tax rate not in [0, 1["
         # Allows tax credits in lossy periods
         income = tax_rate * self.earning_before_tax(depreciation_period)
-        display_as(income, 'kUSD')
-        return income
+        return display_as(income, 'kUSD')
 
     def cash_out(self, tax_rate, depreciation_period):
         flow = (self.investment
                 + self.operating_expenses()
                 + self.income_tax(tax_rate, depreciation_period)
                 )
-        display_as(flow, 'kUSD')
-        return flow
+        return display_as(flow, 'kUSD')
 
     def net_cash_flow(self, tax_rate, depreciation_period):
         flow = self.income() - self.cash_out(tax_rate, depreciation_period)
-        display_as(flow, 'kUSD')
-        return flow
+        return display_as(flow, 'kUSD')
 
     def net_present_value(self, discount_rate, tax_rate, depreciation_period):
         assert 0 <= discount_rate < 1, "Discount rate not in [0, 1["
         value = np.npv(discount_rate, self.net_cash_flow(tax_rate, depreciation_period))
-        value.display_unit = 'kUSD'
-        return value
+        return display_as(value, 'kUSD')
 
     def internal_rate_of_return(self):
         pass

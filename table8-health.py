@@ -10,6 +10,7 @@
 """Print out the result on health benefits of co-firing project from health.py
 """
 
+from init import display_as
 from parameters import MongDuong1, NinhBinh, MongDuong1Cofire, NinhBinhCofire
 
 from health import *
@@ -62,11 +63,10 @@ def print_health(plant, cofiringplant):
     col83 = health_benefit_nox(plant, cofiringplant)
     col9 = total_health_benefit(plant, cofiringplant)
 
-    col81.display_unit = 'kUSD'
-    col82.display_unit = 'kUSD'
-    col83.display_unit = 'kUSD'
-
-    col9.display_unit = 'kUSD'
+    display_as(col81, 'kUSD')
+    display_as(col82, 'kUSD')
+    display_as(col83, 'kUSD')
+    display_as(col9, 'kUSD')
 
     print(row.format('SO2', col11, col21, col31, col41, col51, col61, col71, col81))
 

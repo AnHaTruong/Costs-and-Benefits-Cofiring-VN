@@ -11,7 +11,7 @@
     number of years as used for NPV calculation
 """
 
-from init import USD, time_horizon, time_step
+from init import USD, time_horizon, display_as
 from parameters import discount_rate
 from health import total_health_benefit
 from farmerincome import total_income_benefit
@@ -26,8 +26,7 @@ def benefit_add_up(func, plant):
     value = 0 * USD
     for year in range(time_horizon + 1):
         value += (func(plant)) / (1 + discount_rate)**year
-    value.display_unit = 'kUSD'
-    return value
+    return display_as(value, 'kUSD')
 
 
 def new_benefit_add_up(func, plant, cofiringplant):
@@ -37,8 +36,7 @@ def new_benefit_add_up(func, plant, cofiringplant):
     value = 0 * USD
     for year in range(time_horizon + 1):
         value += (func(plant, cofiringplant)) / (1 + discount_rate)**year
-    value.display_unit = 'kUSD'
-    return value
+    return display_as(value, 'kUSD')
 
 
 def total_benefit_addup(plant, cofiringplant):
@@ -56,8 +54,7 @@ def benefit_add_up_new(func):
     value = 0 * USD
     for year in range(time_horizon + 1):
         value += (func) / (1 + discount_rate)**year
-    value.display_unit = 'kUSD'
-    return value
+    return display_as(value, 'kUSD')
 
 if __name__ == "__main__":
     import doctest

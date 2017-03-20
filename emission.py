@@ -12,7 +12,7 @@
    Climate benefit and health benefit from GHG and air pollutant emission reduction
 """
 import pandas as pd
-from natu.units import t, km, y
+from natu.units import t, km
 
 from init import v_zeros, display_as
 

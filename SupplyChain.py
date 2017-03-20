@@ -18,10 +18,8 @@ from Emitter import Emitter
 class SupplyZone():
     def __init__(self, shape, straw_density, transport_tariff, tortuosity_factor):
         self.shape = shape
-        self.straw_density = straw_density
-        self.straw_density.display_unit = 't/km2'
-        self.transport_tariff = transport_tariff
-        self.transport_tariff.display_unit = 'USD/(t*km)'
+        self.straw_density = display_as(straw_density, 't/km2')
+        self.transport_tariff = display_as(transport_tariff, 'USD/(t*km)')
         self.tortuosity_factor = tortuosity_factor
 
     def __str__(self):
@@ -37,8 +35,7 @@ class SupplyZone():
 
     def area(self):
         a = self.shape.area()
-        a.display_unit = 'ha'
-        return a
+        return display_as(a, 'ha')
 
     def capacity(self):
         mass = v_after_invest * self.shape.area() * self.straw_density
@@ -82,8 +79,7 @@ class SupplyChain():
         a = 0 * ha
         for zone in self.zones:
             a += zone.area()
-        a.display_unit = 'km2'
-        return a
+        return display_as(a, 'km2')
 
     def capacity(self):
         mass = v_zeros * t

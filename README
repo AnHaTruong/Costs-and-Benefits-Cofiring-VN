@@ -5,6 +5,7 @@ Python 3
 pandas
 natu
 sudo pip3 install xlrd
+sudo pip3 install SALib
 
 natu: 
 patch the file natu/core.py using the provided diff to remove the dependency on reduce()
