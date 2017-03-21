@@ -19,15 +19,11 @@ class SupplyZone():
     def __init__(self,
                  shape,
                  straw_density,
-                 straw_production,
-                 straw_burn_rate,
                  transport_tariff,
                  tortuosity_factor):
         self.shape = shape
         self.straw_density = display_as(straw_density, 't/km2')
         self.transport_tariff = display_as(transport_tariff, 'USD/(t*km)')
-        self.straw_production = straw_production
-        self.straw_burn_rate = straw_burn_rate
         self.tortuosity_factor = tortuosity_factor
 
     def __str__(self):
@@ -65,20 +61,15 @@ class SupplyZone():
         self.shape = self.shape.shrink(factor)
         return self
 
-    def field_emission(self, biomass_used, emission_factor):
-        field = Emitter({'Straw': (v_after_invest * self.straw_production *
-                                   self.straw_burn_rate * time_step) - biomass_used},
-                        emission_factor
-                        )
-        return field.emissions()
-
 
 class SupplyChain():
     """A collection of supply zones
     - The supply chain does not vary with time
     """
-    def __init__(self, zones, emission_factor):
+    def __init__(self, zones, straw_production, straw_burn_rate, emission_factor):
         self.zones = zones
+        self.straw_production = straw_production
+        self.straw_burn_rate = straw_burn_rate
         self.emission_factor = emission_factor
 
     def __str__(self):
@@ -145,7 +136,10 @@ class SupplyChain():
         assert quantity <= self.tonnage()[1], 'Not enough biomass in supply chain: '
 
         i = 0
-        collected = SupplyChain([copy(self.zones[0])], emission_factor=self.emission_factor)
+        collected = SupplyChain([copy(self.zones[0])],
+                                straw_production=self.straw_production,
+                                straw_burn_rate=self.straw_burn_rate,
+                                emission_factor=self.emission_factor)
         while collected.tonnage()[1] < quantity:
             i += 1
             collected.zones.append(copy(self.zones[i]))
@@ -160,3 +154,10 @@ class SupplyChain():
 
     def collection_radius(self):
         return self.zones[-1].shape.outer_radius()
+
+    def field_emission(self, biomass_used):
+        field = Emitter({'Straw': (v_after_invest * self.straw_production *
+                                   self.straw_burn_rate) - biomass_used},
+                        self.emission_factor
+                        )
+        return field.emissions()

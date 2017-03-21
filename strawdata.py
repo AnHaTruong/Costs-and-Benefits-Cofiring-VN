@@ -55,11 +55,9 @@ MongDuong1_straw_density2 = mean([df.loc['Bac Giang', 'straw density'], # straw 
                                   ])
 NinhBinh_straw_density = df.loc['Ninh Binh', 'straw density']
 
-MongDuong1_straw_production1 = df.loc['Quang Ninh', 'straw production']
-
-MongDuong1_straw_production2 = fsum([df.loc['Bac Giang', 'straw production'],
+MongDuong1_straw_production = fsum([df.loc['Bac Giang', 'straw production'],
                                      df.loc['Hai Duong', 'straw production'],
-                                     df.loc['Hai Phong', 'straw production']
+                                     df.loc['Hai Phong', 'straw production'],
+                                     df.loc['Quang Ninh', 'straw production']
                                      ])
-
 NinhBinh_straw_production = df.loc['Ninh Binh', 'straw production']
