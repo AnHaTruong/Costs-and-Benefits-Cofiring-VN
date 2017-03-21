@@ -92,9 +92,20 @@ emission_factor = {
               'NOx': 2.28 * kg / t,
               'PM10': 9.1 * kg / t
               },
-    'Conveyor belt': {'CO2': 0.0 * kg / t / km},
-    'Road transport': {'CO2': 0.110 * kg / t / km},
-    'Barge transport': {'CO2': 0.071 * kg / t / km}}
+    'Conveyor belt': {'CO2': 0.0 * kg / t / km,
+                      'SO2': 0. * kg / t / km,
+                      'NOx': 0. * kg / t / km,
+                      'PM10': 0. * kg / t / km
+                      },
+    'Road transport': {'CO2': 0.110 * kg / t / km,
+                       'SO2': 0. * kg / t / km,
+                       'NOx': 0. * kg / t / km,
+                       'PM10': 0. * kg / t / km
+                       },
+    'Barge transport': {'CO2': 0.071 * kg / t / km,
+                        'SO2': 0. * kg / t / km,
+                        'NOx': 0. * kg / t / km,
+                        'PM10': 0. * kg / t / km}}
 
 specific_cost = pd.Series({'CO2': 1 * USD / t,
                            'SO2': 3767 * USD / t,
