@@ -48,14 +48,3 @@ def total_benefit_addup(plant, cofiringplant):
             + new_benefit_add_up(emission_reduction_benefit, plant, cofiringplant)
             + new_benefit_add_up(total_job_benefit, plant, cofiringplant)
             )
-
-
-def benefit_add_up_new(func):
-    value = 0 * USD
-    for year in range(time_horizon + 1):
-        value += (func) / (1 + discount_rate)**year
-    return display_as(value, 'kUSD')
-
-if __name__ == "__main__":
-    import doctest
-    doctest.testmod()

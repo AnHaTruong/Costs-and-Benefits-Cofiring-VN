@@ -12,13 +12,11 @@
 """
 
 from benefitaddup import benefit_add_up, new_benefit_add_up, total_benefit_addup
-from benefitaddup import benefit_add_up_new
-from health import total_health_benefit
 from farmerincome import total_income_benefit
-from emission import emission_reduction_benefit
+from emission import emission_reduction_benefit, total_health_benefit
 from job import total_job_benefit
-from parameters import MongDuong1, NinhBinh, MongDuong1Cofire, NinhBinhCofire
-from emission import MD_ER_benefit, NB_ER_benefit, MD_health_benefit, NB_health_benefit
+from parameters import MongDuong1, MongDuong1Cofire, NinhBinh, NinhBinhCofire
+
 
 row = '{:35}' + '{:23.0f}'
 
@@ -45,18 +43,8 @@ def print_benefit_add_up(plant, cofiringplant):
                      )
           )
 
-print('\nOld version\n')
 print('Added up benefit Mong Duong1\n')
 print_benefit_add_up(MongDuong1, MongDuong1Cofire)
 
 print('\nAdded up benefit Ninh Binh\n')
 print_benefit_add_up(NinhBinh, NinhBinhCofire)
-
-print('==================')
-print('New version')
-print('Added up benefit Mong Duong1\n')
-print('Added up health benefit', benefit_add_up_new(MD_health_benefit))
-print('Added up emission reduction benefit', benefit_add_up_new(MD_ER_benefit))
-print('\nAdded up benefit Ninh Binh\n')
-print('Added up health benefit', benefit_add_up_new(NB_health_benefit))
-print('Added up emission reduction benefit', benefit_add_up_new(NB_ER_benefit))
