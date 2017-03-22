@@ -33,6 +33,11 @@ def bm_transport_work(cofiringplant):
     return display_as(time, 'hr')
 
 
+def bm_transport_work_new(cofiringplant):
+    time = cofiringplant.straw_supply.transport_tkm() / truck_load / truck_velocity
+    return display_as(time, 'hr')
+
+
 def number_of_truck_trips(cofiringplant):
     """Number of trucks to deliver the required biomass for co-firing to plant"""
     return cofiringplant.biomass_used[1] / truck_load
