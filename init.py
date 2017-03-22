@@ -74,3 +74,8 @@ def isclose(a, b, rel_tol=1e-09, abs_tol=0.0):
 def zero_to_NaN(vector):
     """A copy of the vector, with  0 * unit  replaced by  NaN * unit"""
     return [element if element else element * float('nan') for element in vector]
+
+
+def pythonForm(quantity):
+    """What repr(quantity) should be:a proper Python expression"""
+    return str(quantity).replace(" ", " * ")

@@ -19,10 +19,15 @@ figures = $(patsubst %.py,%.eps,$(figurespyfiles))
 allpyfiles  = $(wildcard *.py)
 nontable  = $(filter-out $(tablepyfiles),$(allpyfiles))
 nontablenonfigure  = $(filter-out $(figurespyfiles),$(nontable))
-tests = $(patsubst %.py,%.test,$(nontablenonfigure))
+tests = Shape.test Investment.test init.test
 
 
 all: $(tables)
+
+%.py: %-generator.py
+	$(PYTHON) $< > $@
+
+parameters.py: strawdata.py
 
 %.txt: %.py parameters.py
 	$(PYTHON) $< > $@
@@ -58,4 +63,5 @@ clean:
 
 cleaner: clean
 	find . -type f -name '*.pyc' -delete
+	rm -f strawdata.py
 	rm -rf __pycache__
