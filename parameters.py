@@ -17,6 +17,7 @@ from natu.numpy import full
 from strawdata import MongDuong1_straw_density1, MongDuong1_straw_density2
 from strawdata import NinhBinh_straw_density, NinhBinh_straw_production
 from strawdata import MongDuong1_straw_production
+from strawdata import MongDuong1_average_straw_yield, NinhBinh_average_straw_yield
 
 from Emitter import Fuel
 from PowerPlant import PowerPlant, CofiringPlant
@@ -142,6 +143,7 @@ MDSupplyZone2 = SupplyZone(shape=Semi_Annulus(50 * km, 100 * km),
 MD_SupplyChain = SupplyChain(zones=[MDSupplyZone1, MDSupplyZone2],
                              straw_production=MongDuong1_straw_production,
                              straw_burn_rate=straw_burn_rate,
+                             average_straw_yield=MongDuong1_average_straw_yield,
                              emission_factor=emission_factor)
 
 MongDuong1Cofire = CofiringPlant(MongDuong1,
@@ -177,6 +179,7 @@ NBSupplyZone = SupplyZone(shape=Disk(50 * km),
 NB_SupplyChain = SupplyChain(zones=[NBSupplyZone],
                              straw_production=NinhBinh_straw_production,
                              straw_burn_rate=straw_burn_rate,
+                             average_straw_yield=NinhBinh_average_straw_yield,
                              emission_factor=emission_factor)
 
 NinhBinhCofire = CofiringPlant(NinhBinh,

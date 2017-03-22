@@ -66,10 +66,16 @@ class SupplyChain():
     """A collection of supply zones
     - The supply chain does not vary with time
     """
-    def __init__(self, zones, straw_production, straw_burn_rate, emission_factor):
+    def __init__(self,
+                 zones,
+                 straw_production,
+                 straw_burn_rate,
+                 average_straw_yield,
+                 emission_factor):
         self.zones = zones
         self.straw_production = straw_production
         self.straw_burn_rate = straw_burn_rate
+        self.average_straw_yield = average_straw_yield
         self.emission_factor = emission_factor
 
     def __str__(self):
@@ -139,6 +145,7 @@ class SupplyChain():
         collected = SupplyChain([copy(self.zones[0])],
                                 straw_production=self.straw_production,
                                 straw_burn_rate=self.straw_burn_rate,
+                                average_straw_yield=self.average_straw_yield,
                                 emission_factor=self.emission_factor)
         while collected.tonnage()[1] < quantity:
             i += 1

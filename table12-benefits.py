@@ -35,7 +35,7 @@ def print_benefit_add_up(plant, cofiringplant):
                      )
           )
     print(row.format('Added up farmer income benefit',
-                     benefit_add_up(total_income_benefit, plant)
+                     benefit_add_up(total_income_benefit, cofiringplant)
                      )
           )
     print(row.format('Added up total benefit',

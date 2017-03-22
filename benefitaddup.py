@@ -43,7 +43,7 @@ def total_benefit_addup(plant, cofiringplant):
        in NPV calculation discounted at same DiscountRate
     """
     return (new_benefit_add_up(total_health_benefit, plant, cofiringplant)
-            + benefit_add_up(total_income_benefit, plant)
+            + benefit_add_up(total_income_benefit, cofiringplant)
             + new_benefit_add_up(emission_reduction_benefit, plant, cofiringplant)
             + new_benefit_add_up(total_job_benefit, plant, cofiringplant)
             )

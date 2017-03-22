@@ -9,7 +9,7 @@
 #
 """ Print the result of farmer extra income assessment from farmerincome.py"""
 
-from parameters import MongDuong1, NinhBinh
+from parameters import MongDuong1Cofire, NinhBinhCofire
 
 from farmerincome import farmer_income, bm_sell_revenue, total_income_benefit
 
@@ -18,10 +18,10 @@ print('')
 row = '{:20}' + '{:23.6G}'
 
 
-def print_income(plant):
-    col1 = bm_sell_revenue(plant)
-    col2 = farmer_income(plant)
-    col3 = total_income_benefit(plant)
+def print_income(cofireplant):
+    col1 = bm_sell_revenue(cofireplant)
+    col2 = farmer_income(cofireplant)
+    col3 = total_income_benefit(cofireplant)
 
     print(row.format('biomass sell revenue', col1))
 
@@ -31,9 +31,9 @@ def print_income(plant):
 
 print('total benefit from farmers extra income Mong Duong 1')
 print('')
-print_income(MongDuong1)
+print_income(MongDuong1Cofire)
 
 print('')
 print('total benefit from farmers extra income Ninh Binh')
 print('')
-print_income(NinhBinh)
+print_income(NinhBinhCofire)
