@@ -13,9 +13,8 @@
 
 from init import USD, time_horizon, display_as
 from parameters import discount_rate
-from health import total_health_benefit
 from farmerincome import total_income_benefit
-from emission import emission_reduction_benefit
+from emission import emission_reduction_benefit, total_health_benefit
 from job import total_job_benefit
 
 

@@ -11,54 +11,53 @@
 """
 
 import matplotlib.pyplot as plt
-from health import *
 import numpy as np
 
 from parameters import MongDuong1, MongDuong1Cofire, NinhBinh, NinhBinhCofire
-from natu.units import t, y
+from natu.units import t
 
 
-value1 = ([so2_emission_field_base(MongDuong1) / t * y,
-           so2_emission_field_cofire(MongDuong1, MongDuong1Cofire) / t * y,
-           so2_emission_plant_base(MongDuong1) / t * y,
-           so2_emission_plant_cofire(MongDuong1, MongDuong1Cofire) / t * y
-          ])
+value1 = ([MongDuong1Cofire.straw_supply.field_emission(MongDuong1Cofire.biomass_used[0])['Total']['SO2']/t,
+           MongDuong1Cofire.straw_supply.field_emission(MongDuong1Cofire.biomass_used)['Total']['SO2']/t,
+           MongDuong1.stack.emissions()['Total']['SO2'] / t,
+           MongDuong1Cofire.stack.emissions()['Total']['SO2'] /t
+           ])
 
 print(value1)
 
-value2 = ([so2_emission_field_base(NinhBinh) / t * y,
-           so2_emission_field_cofire(NinhBinh, NinhBinhCofire) / t * y,
-           so2_emission_plant_base(NinhBinh) / t * y,
-           so2_emission_plant_cofire(NinhBinh, NinhBinhCofire) / t * y
-          ])
+value2 = ([NinhBinhCofire.straw_supply.field_emission(NinhBinhCofire.biomass_used[0])['Total']['SO2']/t,
+           NinhBinhCofire.straw_supply.field_emission(NinhBinhCofire.biomass_used)['Total']['SO2']/t,
+           NinhBinh.stack.emissions()['Total']['SO2'] / t,
+           NinhBinhCofire.stack.emissions()['Total']['SO2'] / t
+           ])
 print(value2)
 
-value3 = ([pm10_emission_field_base(MongDuong1) / t * y,
-           pm10_emission_field_cofire(MongDuong1, MongDuong1Cofire) / t * y,
-           pm10_emission_plant_base(MongDuong1) / t * y,
-           pm10_emission_plant_cofire(MongDuong1, MongDuong1Cofire) / t * y
-          ])
+value3 = ([MongDuong1Cofire.straw_supply.field_emission(MongDuong1Cofire.biomass_used[0])['Total']['PM10']/t,
+           MongDuong1Cofire.straw_supply.field_emission(MongDuong1Cofire.biomass_used)['Total']['PM10']/t,
+           MongDuong1.stack.emissions()['Total']['PM10'] / t,
+           MongDuong1Cofire.stack.emissions()['Total']['PM10'] / t
+           ])
 print(value3)
 
-value4 = ([pm10_emission_field_base(NinhBinh) / t * y,
-           pm10_emission_field_cofire(NinhBinh, NinhBinhCofire) / t * y,
-           pm10_emission_plant_base(NinhBinh) / t * y,
-           pm10_emission_plant_cofire(NinhBinh, NinhBinhCofire) / t * y
-          ])
+value4 = ([NinhBinhCofire.straw_supply.field_emission(NinhBinhCofire.biomass_used[0])['Total']['PM10']/t,
+           NinhBinhCofire.straw_supply.field_emission(NinhBinhCofire.biomass_used)['Total']['PM10']/t,
+           NinhBinh.stack.emissions()['Total']['PM10'] / t,
+           NinhBinhCofire.stack.emissions()['Total']['PM10'] / t
+           ])
 print(value4)
 
-value5 = ([nox_emission_field_base(MongDuong1) / t * y,
-           nox_emission_field_cofire(MongDuong1, MongDuong1Cofire) / t * y,
-           nox_emission_plant_base(MongDuong1) / t * y,
-           nox_emission_plant_cofire(MongDuong1, MongDuong1Cofire) / t * y
-          ])
+value5 = ([MongDuong1Cofire.straw_supply.field_emission(MongDuong1Cofire.biomass_used[0])['Total']['NOx']/t,
+           MongDuong1Cofire.straw_supply.field_emission(MongDuong1Cofire.biomass_used)['Total']['NOx']/t,
+           MongDuong1.stack.emissions()['Total']['NOx'] / t,
+           MongDuong1Cofire.stack.emissions()['Total']['NOx'] / t
+           ])
 print(value5)
 
-value6 = ([nox_emission_field_base(NinhBinh) / t * y,
-           nox_emission_field_cofire(NinhBinh, NinhBinhCofire) / t * y,
-           nox_emission_plant_base(NinhBinh) / t * y,
-           nox_emission_plant_cofire(NinhBinh, NinhBinhCofire) / t * y
-          ])
+value6 = ([NinhBinhCofire.straw_supply.field_emission(NinhBinhCofire.biomass_used[0])['Total']['NOx']/t,
+           NinhBinhCofire.straw_supply.field_emission(NinhBinhCofire.biomass_used)['Total']['NOx']/t,
+           NinhBinh.stack.emissions()['Total']['NOx'] / t,
+           NinhBinhCofire.stack.emissions()['Total']['NOx'] / t
+           ])
 print(value6)
 
 bw = 0.3
