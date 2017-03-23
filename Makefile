@@ -19,10 +19,15 @@ figures = $(patsubst %.py,%.eps,$(figurespyfiles))
 allpyfiles  = $(wildcard *.py)
 nontable  = $(filter-out $(tablepyfiles),$(allpyfiles))
 nontablenonfigure  = $(filter-out $(figurespyfiles),$(nontable))
-tests = $(patsubst %.py,%.test,$(nontablenonfigure))
+tests = Investment.test init.test strawdata-generator.test
 
 
 all: $(tables)
+
+%.py: %-generator.py
+	$(PYTHON) $< > $@
+
+parameters.py: strawdata.py
 
 %.txt: %.py parameters.py
 	$(PYTHON) $< > $@
@@ -31,13 +36,8 @@ all: $(tables)
 	@diff $^  > $@
 	@if [ -s $@ ]; then exit 1; fi;
 
-%.test: %.py parameters.py
-	$(PYTHON) $< > $@
-	@#TODO: actually test if the file is empty or not and cry if error
-	@#@echo "Tests pass when the file is empty:"
-	@#@cat $@ 
-	@if [ -s $@ ]; then cat $@ && exit 1; fi;
-
+%.test: %.py
+	$(PYTHON) -m doctest -v $< > $@
 
 .PHONY: test doctests regtests clean cleaner
 
@@ -58,4 +58,5 @@ clean:
 
 cleaner: clean
 	find . -type f -name '*.pyc' -delete
+	rm -f strawdata.py
 	rm -rf __pycache__
