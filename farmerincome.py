@@ -30,8 +30,9 @@ def cultivation_area(cofireplant):
     return cofireplant.biomass_used[1] / cofireplant.straw_supply.average_straw_yield
 
 
-def total_income_benefit(cofireplant):
+def total_income_benefit(plant, cofireplant):
     """ Total benefit for the farmers from having extra income selling
         rice straw to the plant for co-firing
+        The "plant" argument not used by here to keep regular with other _benefit functions
     """
     return farmer_income(cofireplant) * cultivation_area(cofireplant)

@@ -11,7 +11,7 @@
     in benefitaddup.py
 """
 
-from benefitaddup import benefit_add_up, new_benefit_add_up, total_benefit_addup
+from benefitaddup import benefit_add_up, total_benefit_addup
 from farmerincome import total_income_benefit
 from emission import emission_reduction_benefit, total_health_benefit
 from job import total_job_benefit
@@ -23,19 +23,19 @@ row = '{:35}' + '{:23.0f}'
 
 def print_benefit_add_up(plant, cofiringplant):
     print(row.format('Added up health benefit',
-                     new_benefit_add_up(total_health_benefit, plant, cofiringplant)
+                     benefit_add_up(total_health_benefit, plant, cofiringplant)
                      )
           )
     print(row.format('Added up emission reduction benefit',
-                     new_benefit_add_up(emission_reduction_benefit, plant, cofiringplant)
+                     benefit_add_up(emission_reduction_benefit, plant, cofiringplant)
                      )
           )
     print(row.format('Added up job benefit',
-                     new_benefit_add_up(total_job_benefit, plant, cofiringplant)
+                     benefit_add_up(total_job_benefit, plant, cofiringplant)
                      )
           )
     print(row.format('Added up farmer income benefit',
-                     benefit_add_up(total_income_benefit, cofiringplant)
+                     benefit_add_up(total_income_benefit, plant, cofiringplant)
                      )
           )
     print(row.format('Added up total benefit',
