@@ -28,7 +28,8 @@ def emission_reduction(plant, cofireplant):
                 )
     total_ER = plant_ER + transport_ER + field_ER
     total_benefit = total_ER * specific_cost
-    display_as(total_benefit, 'kUSD')
+    for pollutant in total_benefit:
+        display_as(pollutant, 'kUSD')
     list_of_series = [plant_ER, transport_ER, field_ER, total_ER, total_benefit]
     row = ['Plant', 'Transport', 'Field', 'Total', 'Benefit']
     ER_table = pd.DataFrame(list_of_series, index=row)
