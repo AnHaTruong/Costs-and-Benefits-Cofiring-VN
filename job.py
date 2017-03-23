@@ -11,9 +11,9 @@
 
 from init import display_as
 
-from parameters import winder_haul, truck_velocity, work_hour_day
+from parameters import winder_haul, truck_velocity, work_hour_day, truck_loading_time
 from parameters import truck_load, OM_hour_MWh, biomass_ratio, wage_bm_transport
-from parameters import wage_bm_collect, wage_operation_maintenance
+from parameters import wage_bm_collect, wage_operation_maintenance, wage_bm_loading
 
 # Note to H: we are working with quantities not numbers
 # the results are a "work time" which is a "duration" not a "number of hours".
@@ -50,6 +50,11 @@ def transport_time(cofiringplant):
     return display_as(time, 'hr')
 
 
+def bm_loading_work(cofiringplant):  # Unloading work is included in om_work
+    time = cofiringplant.biomass_used[1] * truck_loading_time
+    return display_as(time, 'hr')
+
+
 def om_work(plant):
     """Work time needed for operation and maintenance for co-firing"""
     time = plant.power_generation[0] * biomass_ratio * OM_hour_MWh
@@ -59,6 +64,15 @@ def om_work(plant):
 def cofiring_work(plant, cofiringplant):
     """Total work time created from co-firing"""
     time = bm_collection_work(cofiringplant) + bm_transport_work(cofiringplant) + om_work(plant)
+    return display_as(time, 'hr')
+
+
+def cofiring_work_new(plant, cofiringplant):
+    """Total work time created from co-firing"""
+    time = (bm_collection_work(cofiringplant) +
+            bm_transport_work_new(cofiringplant)[1] +
+            om_work(plant) +
+            bm_loading_work(cofiringplant))
     return display_as(time, 'hr')
 
 
@@ -74,6 +88,17 @@ def benefit_bm_transport(cofiringplant):
     return display_as(amount, 'kUSD')
 
 
+def benefit_bm_transport_new(cofiringplant):
+    """Benefit from job creation from biomass transportation"""
+    amount = bm_transport_work_new(cofiringplant) * wage_bm_transport
+    return display_as(amount, 'kUSD')
+
+
+def benefit_bm_loading(cofiringplant):
+    amount = bm_loading_work(cofiringplant) * wage_bm_loading
+    return display_as(amount, 'kUSD')
+
+
 def benefit_om(plant):
     """Benefit from job creation from co-firing operation and maintenance"""
     amount = om_work(plant) * wage_operation_maintenance
@@ -85,6 +110,15 @@ def total_job_benefit(plant, cofiringplant):
     return (benefit_bm_collection(cofiringplant)
             + benefit_bm_transport(cofiringplant)
             + benefit_om(plant)
+            )
+
+
+def total_job_benefit_new(plant, cofiringplant):
+    """Total benefit from job creation from biomass co-firing"""
+    return (benefit_bm_collection(cofiringplant)
+            + benefit_bm_transport_new(cofiringplant)[1]
+            + benefit_om(plant)
+            + benefit_bm_loading(cofiringplant)
             )
 
 if __name__ == "__main__":

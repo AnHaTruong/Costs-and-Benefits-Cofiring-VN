@@ -51,8 +51,10 @@ tortuosity_factor = 1.5
 # wage per hour is calculated from base salary defined in governmental regulations
 wage_bm_collect = 1.11 * USD / hr
 wage_bm_transport = 1.11 * USD / hr
+wage_bm_loading = 1.11 * USD / hr
 wage_operation_maintenance = 1.67 * USD / hr
 winder_rental_cost = 40 * USD / ha   # per period
+truck_loading_time = 2.7 / 60 * hr / t  # (Ovaskainen & 2016 )
 
 coal_import_price = 73 * USD / t
 
