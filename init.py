@@ -67,15 +67,23 @@ def display_as(v, unit):
 
 
 def isclose(a, b, rel_tol=1e-09, abs_tol=0.0):
-    """Compare two floats for almost-equality according to PEP 485"""
+    """Compare two floats for almost-equality according to PEP 485
+
+    >>> .1 + .1 + .1 == .3
+    False
+
+    >>> isclose(.1 + .1 + .1, .3)
+    True
+    """
     return abs(a - b) <= max(rel_tol * max(abs(a), abs(b)), abs_tol)
 
 
 def zero_to_NaN(vector):
-    """A copy of the vector, with  0 * unit  replaced by  NaN * unit"""
+    """This zero_to_Nan function:
+    returns a copy of the vector (it's not modified in place), and
+    keeps the unit along
+
+    >>> zero_to_NaN([0, 1, 0 * hr, 'a'])
+    [nan, 1, nan hr, 'a']
+    """
     return [element if element else element * float('nan') for element in vector]
-
-
-def pythonForm(quantity):
-    """What repr(quantity) should be:a proper Python expression"""
-    return str(quantity).replace(" ", " * ")

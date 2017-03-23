@@ -11,11 +11,8 @@
 
 import pandas as pd
 from natu.units import ha, t
-# from parameters import residue_to_product_ratio_straw, straw_collection_fraction
-# from parameters import straw_selling_proportion
 from natu.numpy import mean
 from natu.math import fsum
-from init import pythonForm
 
 straw_collection_fraction = 0.5  # Refer to (Leinonen and Nguyen 2013)
 straw_selling_proportion = 0.79  # Refer to (Leinonen and Nguyen 2013)
@@ -73,18 +70,35 @@ NinhBinh_straw_production = df.loc['Ninh Binh', 'straw production']
 NinhBinh_average_straw_yield = df.loc['Ninh Binh', 'straw yield']
 
 
-def line(q):
-    print(q + ' = ' + pythonForm(eval(q)))
+def line(q, unit):
+    """Returns the Python expression defining the value of quantity  q
+    this expression is string litteral, to be saved for later evaluation
+    can be imported by another file
+    in base 10, as many significant digits as Python wants to print
+
+    >>> test_qty = 2 * t
+    >>> line("test_qty", "t")
+    'test_qty = 2.0 * t'
+
+    """
+    value = eval(q + '/(' + unit + ')')
+    return q + ' = ' + str(value) + ' * ' + unit
+
+test_qty = 2 * t
+assert(line("test_qty", "t") == "test_qty = 2.0 * t")
 
 print("""
 # This file automatically generated, DO NOT EDIT
 
 from natu.units import t, ha
-""")
-line("MongDuong1_straw_density1")
-line("MongDuong1_straw_density2")
-line("MongDuong1_straw_production")
-line("MongDuong1_average_straw_yield")
-line("NinhBinh_straw_density")
-line("NinhBinh_straw_production")
-line("NinhBinh_average_straw_yield")
+
+""",
+      line("MongDuong1_straw_density1", "t/ha"), '\n',
+      line("MongDuong1_straw_density2", "t/ha"), '\n',
+      line("MongDuong1_straw_production", "t"), '\n',
+      line("MongDuong1_average_straw_yield", "t/ha"), '\n',
+      line("NinhBinh_straw_density", "t/ha"), '\n',
+      line("NinhBinh_straw_production", "t"), '\n',
+      line("NinhBinh_average_straw_yield", "t/ha"), '\n',
+      sep=''
+      )
