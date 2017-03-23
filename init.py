@@ -56,6 +56,16 @@ def display_as(v, unit):
        Returns v
        Don't set display_unit directly in the code:
            it would break when use_quantities = False
+
+    >>> display_as(2 * hr, 's')
+    7200 s
+
+    >>> v = [48 * hr, 1 * y]
+    >>> v
+    [48 hr, 1 y]
+
+    >>> display_as(v, 'd')
+    [2 d, 365.25 d]
     """
     if config.use_quantities:
         if hasattr(v, '__iter__'):
