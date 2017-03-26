@@ -32,10 +32,11 @@ col8 = NinhBinh.coal_price
 col7.display_unit = 'USD/t'
 col8.display_unit = 'USD/t'
 
-col9 = bm_transportation_cost(MongDuong1) / biomass_required(MongDuong1)
-col10 = bm_transportation_cost(NinhBinh) / biomass_required(NinhBinh)
-col9.display_unit = 'USD/t'
-col10.display_unit = 'USD/t'
+#FIX ME: divided by zero when biomass ratio is 0.0
+#col9 = bm_transportation_cost(MongDuong1) / biomass_required(MongDuong1)
+#col10 = bm_transportation_cost(NinhBinh) / biomass_required(NinhBinh)
+#col9.display_unit = 'USD/t'
+#col10.display_unit = 'USD/t'
 
 col11 = collection_radius(MongDuong1)
 col12 = collection_radius(NinhBinh)
@@ -48,5 +49,5 @@ print(row.format('Straw required', col3, col4))
 print(row.format('Straw price', col5, col6))
 print(row.format('Coal price',  col7, col8))
 print(row.format('Electricity price',  col1, col2))
-print(row.format('Biomass transportation cost', col9, col10))
+#print(row.format('Biomass transportation cost', col9, col10))
 print(row.format('Collection radius', col11, col12))

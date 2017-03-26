@@ -12,7 +12,7 @@
 """
 
 import math
-from units import km, zero_km
+from units import km, zero_km, t, y, USD
 from natu.math import sqrt
 from parameters import MongDuong1, NinhBinh
 from strawdata import MongDuong1_straw_density1, MongDuong1_straw_density2
@@ -108,6 +108,7 @@ def transportation_activity(R, r, D, tau):
 
 # Use an intermediate function "transportation activity" in t km (reused to compute emissions)
 # Dig the 5 whys - the units should have prevented error on degree
+#FIX ME: biomass transportation activity of Mong Duong 1 should be 0 when biomass ratio = 0
 def bm_transportation_activity(plant):
     """
     Total straw transportation activity of each plant
@@ -132,9 +133,12 @@ def bm_transportation_cost(plant):
     """
     return bm_transportation_activity(plant) * transport_tariff
 
-
+# FUX ME: divided by zero when biomass ratio = 0
 def bm_unit_cost(plant):
-    return bm_transportation_cost(plant) / biomass_required(plant) + biomass_fix_cost
+    if biomass_required(plant) == 0 * t/y:
+        return 0 * USD/t
+    else:
+        return bm_transportation_cost(plant) / biomass_required(plant) + biomass_fix_cost
 
 if __name__ == "__main__":
     import doctest
