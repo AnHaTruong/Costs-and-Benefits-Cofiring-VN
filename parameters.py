@@ -1,4 +1,4 @@
-
+# coding: utf-8
 # Economic of co-firing in two power plants in Vietnam
 #
 # Plant parameters
@@ -14,7 +14,6 @@ from init import USD, VND, time_horizon
 from natu.units import MJ, kg, t, d, hr, km, MW, ha, kW, y, kWh
 from natu.numpy import full
 
-# If the module  strawdata.py  does not exist, run "strawdata-generator.py"
 from strawdata import MongDuong1_straw_density1, MongDuong1_straw_density2
 from strawdata import NinhBinh_straw_density, NinhBinh_straw_production
 from strawdata import MongDuong1_straw_production
@@ -117,6 +116,8 @@ specific_cost = pd.Series({'CO2': 1 * USD / t,
                            'NOx': 286 * USD / t
                            })
 
+#
+
 MongDuong1 = PowerPlant(name="Mong Duong 1",
                         capacity=1080 * MW,
                         capacity_factor=0.60,
@@ -158,6 +159,8 @@ MongDuong1Cofire = CofiringPlant(MongDuong1,
                                  boiler_efficiency_loss=boiler_efficiency_loss,
                                  supply_chain=MD_SupplyChain
                                  )
+
+#
 
 NinhBinh = PowerPlant(name="Ninh Binh",
                       capacity=100 * MW,

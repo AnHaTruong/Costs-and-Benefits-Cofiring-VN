@@ -15,12 +15,8 @@ diffs  = $(patsubst %.py,%.diff,$(tablepyfiles))
 figurespyfiles = $(wildcard figure*.py)
 figures = $(patsubst %.py,%.eps,$(figurespyfiles))
 
-
-allpyfiles  = $(wildcard *.py)
-nontable  = $(filter-out $(tablepyfiles),$(allpyfiles))
-nontablenonfigure  = $(filter-out $(figurespyfiles),$(nontable))
-tests = Investment.test init.test strawdata-generator.test
-
+doc_tests = Investment.doctest init.doctest strawdata-generator.doctest
+script_tests = test_zero_cofire.txt
 
 all: $(tables)
 
@@ -36,24 +32,23 @@ parameters.py: strawdata.py
 	@diff $^  > $@
 	@if [ -s $@ ]; then exit 1; fi;
 
-%.test: %.py
+%.doctest: %.py
 	$(PYTHON) -m doctest -v $< > $@
 
-.PHONY: test doctests regtests clean cleaner
+.PHONY: test reg_tests reg_tests_reset clean cleaner
 
-test: doctests regtests
+test: $(doc_tests) $(script_tests) reg_tests
 
-doctests: $(tests)
-
-regtests: $(diffs)
+reg_tests: $(diffs)
 	@cat $^
 
-regtests-reset: $(tables)
+reg_tests_reset: $(tables)
 	cp $^ tables.tocompare
 
 clean:
 	rm -f $(tables)
-	rm -f $(tests)
+	rm -f $(doc_tests)
+	rm -f $(script_tests)
 	rm -f $(diffs)
 
 cleaner: clean
