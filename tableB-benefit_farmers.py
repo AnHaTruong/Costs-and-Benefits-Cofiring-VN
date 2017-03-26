@@ -1,3 +1,4 @@
+# encoding: utf-8
 # Economic of co-firing in two power plants in Vietnam
 #
 # Jobs creation
@@ -21,7 +22,7 @@ row = '{:20}' + '{:23.6G}'
 def print_income(plant, cofireplant):
     col1 = bm_sell_revenue(cofireplant)
     col2 = farmer_income(cofireplant)
-    col3 = total_income_benefit(plant,cofireplant)
+    col3 = total_income_benefit(plant, cofireplant)
 
     print(row.format('biomass sell revenue', col1))
 
@@ -36,4 +37,4 @@ print_income(MongDuong1, MongDuong1Cofire)
 print('')
 print('total benefit from farmers extra income Ninh Binh')
 print('')
-print_income(MongDuong1, NinhBinhCofire)
+print_income(NinhBinh, NinhBinhCofire)

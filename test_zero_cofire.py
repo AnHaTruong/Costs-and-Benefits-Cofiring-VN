@@ -1,4 +1,4 @@
-# coding: utf-8
+# encoding: utf-8
 # Economic of co-firing in two power plants in Vietnam
 #
 # Testing the boundary case: biomass ratio 0%

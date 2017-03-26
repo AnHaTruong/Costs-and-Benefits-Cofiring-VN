@@ -12,8 +12,6 @@ Check emission calculation against CDM ACM0085 methodology
 
 Generate figures in EPS format (or SVG or PDF) and adjust the Makefile
 
-Make the pre-hook script really fail is tests fails
-
 Use decorator to set display_unit of results
 
 Simpler call parent constructor in CofiringPlant constructor

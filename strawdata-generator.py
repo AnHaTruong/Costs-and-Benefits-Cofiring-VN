@@ -1,4 +1,4 @@
-
+# encoding: utf-8
 # Economic of co-firing in two power plants in Vietnam
 #
 # Rice data processing
@@ -48,9 +48,9 @@ df['straw density'] = (df['straw yield'] *
 
 df['straw production'] = df['rice production (ton)'] * t * residue_to_product_ratio_straw
 
-MongDuong1_straw_density1 = df.loc['Quang Ninh', 'straw density'] # straw density of Quang Ninh province
-
-MongDuong1_straw_density2 = mean([df.loc['Bac Giang', 'straw density'], # straw density of adjacent provinces
+MongDuong1_straw_density1 = df.loc['Quang Ninh', 'straw density']
+# straw density of adjacent provinces
+MongDuong1_straw_density2 = mean([df.loc['Bac Giang', 'straw density'],
                                   df.loc['Hai Duong', 'straw density'],
                                   df.loc['Hai Phong', 'straw density']
                                   ])
@@ -93,12 +93,12 @@ print("""
 from natu.units import t, ha
 
 """,
-      line("MongDuong1_straw_density1", "t/ha"), '\n',
-      line("MongDuong1_straw_density2", "t/ha"), '\n',
+      line("MongDuong1_straw_density1", "t / ha"), '\n',
+      line("MongDuong1_straw_density2", "t / ha"), '\n',
       line("MongDuong1_straw_production", "t"), '\n',
-      line("MongDuong1_average_straw_yield", "t/ha"), '\n',
-      line("NinhBinh_straw_density", "t/ha"), '\n',
+      line("MongDuong1_average_straw_yield", "t / ha"), '\n',
+      line("NinhBinh_straw_density", "t / ha"), '\n',
       line("NinhBinh_straw_production", "t"), '\n',
-      line("NinhBinh_average_straw_yield", "t/ha"), '\n',
+      line("NinhBinh_average_straw_yield", "t / ha"), '\n',
       sep=''
       )

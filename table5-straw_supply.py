@@ -1,3 +1,13 @@
+# encoding: utf-8
+# Economic of co-firing in two power plants in Vietnam
+#
+#
+#
+# (c) Minh Ha-Duong, An Ha Truong   2016-2017
+#     minh.haduong@gmail.com
+#     Creative Commons Attribution-ShareAlike 4.0 International
+#
+#
 """ Print table 1 for Technical parameters of the plants"""
 
 from parameters import MongDuong1Cofire, NinhBinhCofire

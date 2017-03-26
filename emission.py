@@ -1,4 +1,4 @@
-
+# encoding: utf-8
 # Economic of co-firing in two power plants in Vietnam
 #
 #  Greenhouse gas emissions reduction assessment
