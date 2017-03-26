@@ -17,6 +17,7 @@
 #
 # pylint: disable=E402
 
+import subprocess
 
 from natu import config
 # config.use_quantities = False
@@ -49,6 +50,17 @@ v_zeros = np.zeros(time_horizon + 1, dtype=np.float64)
 v_ones = np.ones(time_horizon + 1, dtype=np.float64)
 v_after_invest = np.ones(time_horizon + 1, dtype=np.float64)
 v_after_invest[0] = 0
+
+
+try:
+    import strawdata
+except ImportError:
+    print("Calling   make strawdata.py")
+    subprocess.run(["make", "strawdata.py"])
+    try:
+        import strawdata
+    except ImportError:
+        print("*** IT DID NOT WORK ***")
 
 
 def display_as(v, unit):

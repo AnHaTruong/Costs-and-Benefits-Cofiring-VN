@@ -14,6 +14,7 @@ from init import USD, VND, time_horizon
 from natu.units import MJ, kg, t, d, hr, km, MW, ha, kW, y, kWh
 from natu.numpy import full
 
+# If the module  strawdata.py  does not exist, run "strawdata-generator.py"
 from strawdata import MongDuong1_straw_density1, MongDuong1_straw_density2
 from strawdata import NinhBinh_straw_density, NinhBinh_straw_production
 from strawdata import MongDuong1_straw_production
