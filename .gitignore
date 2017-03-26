@@ -3,6 +3,9 @@
 table*.txt
 table*.diff
 *.test
+*.doctest
+test*txt
+strawdata.py
 __pycache__/
 natu/__pycache__/
 natu/config/__pycache__/
