@@ -1,4 +1,6 @@
-﻿TODO
+TODO
+
+Design and code Figure 2 (emissions)
 
 Fix transport work calculations: it's proportional to   tkm / truck_capacity
 

@@ -24,7 +24,7 @@ from natu import config
 # config.use_quantities = False
 
 import natu.numpy as np
-from natu.units import hr, y
+from natu.units import hr
 from natu import units
 from natu.core import ScalarUnit
 
@@ -44,8 +44,7 @@ else:
 FTE = 1560 * hr
 units.FTE = FTE
 
-time_step = 1 * y
-time_horizon = 20
+time_horizon = 20   # years
 
 v_zeros = np.zeros(time_horizon + 1, dtype=np.float64)
 v_ones = np.ones(time_horizon + 1, dtype=np.float64)
@@ -73,6 +72,7 @@ def display_as(v, unit):
     >>> display_as(2 * hr, 's')
     7200 s
 
+    >>> from natu.units import y
     >>> v = [48 * hr, 1 * y]
     >>> v
     [48 hr, 1 y]

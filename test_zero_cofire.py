@@ -15,7 +15,7 @@ from PowerPlant import CofiringPlant
 MongDuong1NullCofiring = CofiringPlant(
     MongDuong1,
     0.0,
-    capital_cost=50 * USD / kW,
+    capital_cost=50 * USD / kW / y,
     fix_om_cost=32.24 * USD / kW / y,
     variable_om_cost=0.006 * USD / (kW * hr),
     biomass=straw,

@@ -12,7 +12,7 @@
 
 from natu.numpy import full, npv
 
-from init import time_horizon, time_step, v_after_invest, display_as, USD
+from init import time_horizon, v_after_invest, display_as, USD
 from Investment import Investment
 from Emitter import Fuel, Emitter
 
@@ -49,7 +49,7 @@ class PowerPlant(Investment):
         super().__init__(capital)
 
         self.power_generation = full(time_horizon + 1,
-                                     capacity * capacity_factor * time_step,
+                                     capacity * capacity_factor,
                                      dtype=object)
         display_as(self.power_generation, 'GWh')
 
@@ -88,7 +88,7 @@ class PowerPlant(Investment):
 
     def coal_om_cost(self):
         fixed_om_coal = full(time_horizon + 1,
-                             self.fix_om_coal * self.capacity * time_step,
+                             self.fix_om_coal * self.capacity,
                              dtype=object)
         variable_om_coal = self.power_generation * self.variable_om_coal
         cost = fixed_om_coal + variable_om_coal
@@ -207,9 +207,9 @@ class CofiringPlant(PowerPlant):
         # Fixed costs are proportional to capacity
         fixed_om_coal = (v_after_invest
                          * self.fix_om_coal
-                         * self.capacity * time_step
+                         * self.capacity
                          * (1 - self.biomass_ratio))
-        fixed_om_coal[0] = self.fix_om_coal * self.capacity * time_step
+        fixed_om_coal[0] = self.fix_om_coal * self.capacity
         # Variable costs proportional to generation after capacity factor
         variable_om_coal = self.power_generation * self.variable_om_coal * (1 - self.biomass_ratio)
         variable_om_coal[0] = self.power_generation[0] * self.variable_om_coal
@@ -220,7 +220,7 @@ class CofiringPlant(PowerPlant):
         # FIXME: the biomass ratio is in HEAT
         fixed_om_bm = (v_after_invest
                        * self.fix_om_cost
-                       * self.capacity * time_step * self.biomass_ratio)
+                       * self.capacity * self.biomass_ratio)
         var_om_bm = (v_after_invest
                      * self.power_generation
                      * self.variable_om_cost
