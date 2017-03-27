@@ -18,18 +18,21 @@ display_as(winder_rental_cost, 'USD/ha')
 
 
 def print_income(supply_chain):
-    row1 = supply_chain.farm_revenue_per_ha(straw.price)
-    row3 = supply_chain.farm_income_per_ha(winder_rental_cost, straw.price)
-    row4 = supply_chain.farm_area()[1]
-    row5 = supply_chain.farm_income(winder_rental_cost, straw.price)[1]
+    total = supply_chain.farm_income(winder_rental_cost, straw.price)[1]
+    area = supply_chain.farm_area()[1]
+    row1col1 = supply_chain.farm_revenue_per_ha(straw.price)
+    row1col2 = display_as(row1col1 * area, 'kUSD')
+    row2col1 = winder_rental_cost
+    row2col2 = display_as(row2col1 * area, 'kUSD')
+    row3col1 = supply_chain.farm_income_per_ha(winder_rental_cost, straw.price)
+    row3col2 = display_as(row3col1 * area, 'kUSD')
 
-    row = '{:25}' + '{:23.6G}'
-    print()
-    print(row.format('Revenue from straw sales', row1))
-    print(row.format('- Winder rental', winder_rental_cost))
-    print(row.format('= Net income', row3))
-    print(row.format('* Surface', row4))
-    print(row.format('= Total social benefit', row5))
+    row = '{:20}' + '{:10.0f}' + '{:10.0f}'
+    print(total)
+    print('{:27}{:15}{:4}{:5.0f}'.format('', 'Per ha', 'For', area))
+    print(row.format('Straw sales revenue', row1col1, row1col2))
+    print(row.format('- Winder rental', row2col1, row2col2))
+    print(row.format('= Net income', row3col1, row3col2))
     print()
 
 print('Extra net income for farmers around Mong Duong 1')

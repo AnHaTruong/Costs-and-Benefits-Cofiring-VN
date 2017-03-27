@@ -10,11 +10,12 @@
 # pylint: disable=E0611
 
 from copy import copy
+import numpy as np
+
 from init import isclose, v_after_invest, v_zeros, display_as, zero_to_NaN, USD
 
 from natu.units import t, km, ha
 from Emitter import Emitter
-
 
 
 class SupplyZone():
@@ -186,9 +187,11 @@ class SupplyChain():
         return display_as(area, 'ha')
 
     def farm_income(self, winder_rental_cost, straw_price):
-        """ Total benefit for the farmers from having extra income selling
-            rice straw to the plant for co-firing
-            """
         income = (self.farm_area()
                   * self.farm_income_per_ha(winder_rental_cost, straw_price))
         return display_as(income, 'kUSD')
+
+    def farm_npv(self, discount_rate, winder_rental_cost, straw_price):
+        income = self.farm_income(winder_rental_cost, straw_price)
+        value = np.npv(discount_rate, income)
+        return display_as(value, 'kUSD')

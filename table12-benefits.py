@@ -11,12 +11,15 @@
 """ Print table for the present value of benefit from co-firing added up
     in benefitaddup.py
 """
+from init import time_horizon
+from parameters import discount_rate
+from parameters import MongDuong1, MongDuong1Cofire, NinhBinh, NinhBinhCofire
+from parameters import winder_rental_cost, straw
 
 from benefitaddup import benefit_add_up, total_benefit_addup
 from farmerincome import total_income_benefit
 from emission import emission_reduction_benefit, total_health_benefit
-from parameters import MongDuong1, MongDuong1Cofire, NinhBinh, NinhBinhCofire
-from parameters import discount_rate, time_horizon
+
 from job import total_job_benefit, job_benefit_add_up
 
 print("Total benefit over", time_horizon, "years")
@@ -47,7 +50,9 @@ def print_benefit_add_up(plant, cofiringplant):
           )
     print(row2.format('Farmer income',
                       benefit_add_up(total_income_benefit, plant, cofiringplant),
-                      benefit_add_up(total_income_benefit, plant, cofiringplant)
+                      cofiringplant.straw_supply.farm_npv(discount_rate,
+                                                          winder_rental_cost,
+                                                          straw.price)
                       )
           )
     print(row2.format('Total',
