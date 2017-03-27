@@ -12,10 +12,9 @@
     in benefitaddup.py
 """
 
-from benefitaddup import benefit_add_up, total_benefit_addup
+from benefitaddup import benefit_add_up, total_benefit_addup, job_benefit_add_up
 from farmerincome import total_income_benefit
 from emission import emission_reduction_benefit, total_health_benefit
-from job import total_job_benefit
 from parameters import MongDuong1, MongDuong1Cofire, NinhBinh, NinhBinhCofire
 
 
@@ -32,7 +31,7 @@ def print_benefit_add_up(plant, cofiringplant):
                      )
           )
     print(row.format('Added up job benefit',
-                     benefit_add_up(total_job_benefit, plant, cofiringplant)
+                     job_benefit_add_up(plant, cofiringplant)
                      )
           )
     print(row.format('Added up farmer income benefit',

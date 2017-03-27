@@ -19,7 +19,7 @@ from parameters import wage_bm_collect, wage_operation_maintenance, wage_bm_load
 
 def bm_collection_work(cofiringplant):
     """Work time needed to collect straw for co-firing per year"""
-    time = cofiringplant.biomass_used[1] * work_hour_day / winder_haul
+    time = cofiringplant.biomass_used * work_hour_day / winder_haul
     return display_as(time, 'hr')
 
 
@@ -39,20 +39,20 @@ def transport_time(cofiringplant):
 
 
 def bm_loading_work(cofiringplant):  # Unloading work is included in om_work
-    time = cofiringplant.biomass_used[1] * truck_loading_time
+    time = cofiringplant.biomass_used * truck_loading_time
     return display_as(time, 'hr')
 
 
 def om_work(plant):
     """Work time needed for operation and maintenance for co-firing"""
-    time = plant.power_generation[0] * biomass_ratio * OM_hour_MWh
+    time = plant.power_generation * biomass_ratio * OM_hour_MWh
     return display_as(time, 'hr')
 
 
 def cofiring_work(plant, cofiringplant):
     """Total work time created from co-firing"""
     time = (bm_collection_work(cofiringplant) +
-            bm_transport_work(cofiringplant)[1] +
+            bm_transport_work(cofiringplant) +
             om_work(plant) +
             bm_loading_work(cofiringplant))
     return display_as(time, 'hr')
@@ -84,7 +84,7 @@ def benefit_om(plant):
 def total_job_benefit(plant, cofiringplant):
     """Total benefit from job creation from biomass co-firing"""
     return (benefit_bm_collection(cofiringplant)
-            + benefit_bm_transport(cofiringplant)[1]
+            + benefit_bm_transport(cofiringplant)
             + benefit_om(plant)
             + benefit_bm_loading(cofiringplant)
             )
