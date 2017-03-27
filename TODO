@@ -2,8 +2,6 @@ TODO
 
 Design and code Figure 2 (emissions)
 
-Fix transport work calculations: it's proportional to   tkm / truck_capacity
-
 Check work calculations: biomass_ratio is in heat, why use % capacity ?
 
 Benefits depends on time -> return a vector

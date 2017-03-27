@@ -16,10 +16,6 @@ from parameters import winder_haul, truck_velocity, work_hour_day, truck_loading
 from parameters import truck_load, OM_hour_MWh, biomass_ratio, wage_bm_transport
 from parameters import wage_bm_collect, wage_operation_maintenance, wage_bm_loading
 
-# Note to H: we are working with quantities not numbers
-# the results are a "work time" which is a "duration" not a "number of hours".
-# M.
-
 
 def bm_collection_work(cofiringplant):
     """Work time needed to collect straw for co-firing per year"""
@@ -27,14 +23,7 @@ def bm_collection_work(cofiringplant):
     return display_as(time, 'hr')
 
 
-# FIXME: Use tkm instead
 def bm_transport_work(cofiringplant):
-    """Work time needed to transport rice straw to the plant per year"""
-    time = number_of_truck_trips(cofiringplant) * transport_time(cofiringplant)
-    return display_as(time, 'hr')
-
-
-def bm_transport_work_new(cofiringplant):
     time = cofiringplant.straw_supply.transport_tkm() / truck_load / truck_velocity
     return display_as(time, 'hr')
 
@@ -44,8 +33,6 @@ def number_of_truck_trips(cofiringplant):
     return cofiringplant.biomass_used[1] / truck_load
 
 
-# FIXME: Trucks don't have to start from the border of the collection zone. Use tkm instead
-# FIXME: Trucks load/unload instantly
 def transport_time(cofiringplant):
     time = cofiringplant.straw_supply.collection_radius() * 2 / truck_velocity
     return display_as(time, 'hr')
@@ -64,14 +51,8 @@ def om_work(plant):
 
 def cofiring_work(plant, cofiringplant):
     """Total work time created from co-firing"""
-    time = bm_collection_work(cofiringplant) + bm_transport_work(cofiringplant) + om_work(plant)
-    return display_as(time, 'hr')
-
-
-def cofiring_work_new(plant, cofiringplant):
-    """Total work time created from co-firing"""
     time = (bm_collection_work(cofiringplant) +
-            bm_transport_work_new(cofiringplant)[1] +
+            bm_transport_work(cofiringplant)[1] +
             om_work(plant) +
             bm_loading_work(cofiringplant))
     return display_as(time, 'hr')
@@ -89,12 +70,6 @@ def benefit_bm_transport(cofiringplant):
     return display_as(amount, 'kUSD')
 
 
-def benefit_bm_transport_new(cofiringplant):
-    """Benefit from job creation from biomass transportation"""
-    amount = bm_transport_work_new(cofiringplant) * wage_bm_transport
-    return display_as(amount, 'kUSD')
-
-
 def benefit_bm_loading(cofiringplant):
     amount = bm_loading_work(cofiringplant) * wage_bm_loading
     return display_as(amount, 'kUSD')
@@ -109,19 +84,7 @@ def benefit_om(plant):
 def total_job_benefit(plant, cofiringplant):
     """Total benefit from job creation from biomass co-firing"""
     return (benefit_bm_collection(cofiringplant)
-            + benefit_bm_transport(cofiringplant)
-            + benefit_om(plant)
-            )
-
-
-def total_job_benefit_new(plant, cofiringplant):
-    """Total benefit from job creation from biomass co-firing"""
-    return (benefit_bm_collection(cofiringplant)
-            + benefit_bm_transport_new(cofiringplant)[1]
+            + benefit_bm_transport(cofiringplant)[1]
             + benefit_om(plant)
             + benefit_bm_loading(cofiringplant)
             )
-
-if __name__ == "__main__":
-    import doctest
-    doctest.testmod()
