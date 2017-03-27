@@ -235,6 +235,15 @@ class CofiringPlant(PowerPlant):
         cost = fixed_om_bm + var_om_bm
         return display_as(cost, 'kUSD')
 
+    def cofiring_work(self, OM_hour_MWh, work_hour_day, winder_haul,
+                      truck_load, truck_velocity, truck_loading_time):
+        """Total work time created from co-firing"""
+        time = (self.straw_supply.farm_work(work_hour_day, winder_haul)
+                + self.straw_supply.loading_work(truck_loading_time)
+                + self.straw_supply.transport_work(truck_load, truck_velocity)
+                + self.biomass_om_work(OM_hour_MWh))
+        return display_as(time, 'hr')
+
     def coal_saved_cost(self):
         cost = self.coal_saved * self.coal.price
         return display_as(cost, 'kUSD')

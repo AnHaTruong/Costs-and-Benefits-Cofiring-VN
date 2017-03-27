@@ -96,60 +96,31 @@ def total_job_benefit(plant, cofiringplant):
             + benefit_om(plant)
             + benefit_bm_loading(cofiringplant)
             )
+
+
 # Vectorized version
-
-
-def v_bm_collection_work(cofiringplant):
-    """Work time needed to collect straw for co-firing per year"""
-    time = cofiringplant.biomass_used * work_hour_day / winder_haul
-    return display_as(time, 'hr')
-
-
-def v_bm_transport_work(cofiringplant):
-    time = cofiringplant.straw_supply.transport_tkm() / truck_load / truck_velocity
-    return display_as(time, 'hr')
-
-
-def v_bm_loading_work(cofiringplant):  # Unloading work is included in om_work
-    time = cofiringplant.biomass_used * truck_loading_time
-    return display_as(time, 'hr')
-
-
-def v_om_work(plant):
-    """Work time needed for operation and maintenance for co-firing"""
-    time = plant.power_generation * biomass_ratio * OM_hour_MWh
-    return display_as(time, 'hr')
-
-
-def v_cofiring_work(plant, cofiringplant):
-    """Total work time created from co-firing"""
-    time = (v_bm_collection_work(cofiringplant) +
-            v_bm_transport_work(cofiringplant) +
-            v_om_work(plant) +
-            v_bm_loading_work(cofiringplant))
-    return display_as(time, 'hr')
-
 
 def v_benefit_bm_collection(cofiringplant):
     """Benefit from job creation from biomass collection"""
-    amount = v_bm_collection_work(cofiringplant) * wage_bm_collect
+    amount = cofiringplant.straw_supply.farm_work(work_hour_day, winder_haul) * wage_bm_collect
     return display_as(amount, 'kUSD')
 
 
 def v_benefit_bm_transport(cofiringplant):
     """Benefit from job creation from biomass transportation"""
-    amount = v_bm_transport_work(cofiringplant) * wage_bm_transport
+    amount = (cofiringplant.straw_supply.transport_work(truck_load, truck_velocity)
+              * wage_bm_transport)
     return display_as(amount, 'kUSD')
 
 
 def v_benefit_bm_loading(cofiringplant):
-    amount = v_bm_loading_work(cofiringplant) * wage_bm_loading
+    amount = cofiringplant.straw_supply.loading_work(truck_loading_time) * wage_bm_loading
     return display_as(amount, 'kUSD')
 
 
-def v_benefit_om(plant):
+def v_benefit_om(cofiringplant):
     """Benefit from job creation from co-firing operation and maintenance"""
-    amount = v_om_work(plant) * wage_operation_maintenance
+    amount = cofiringplant.biomass_om_work(OM_hour_MWh) * wage_operation_maintenance
     return display_as(amount, 'kUSD')
 
 
@@ -157,9 +128,10 @@ def v_total_job_benefit(plant, cofiringplant):
     """Total benefit from job creation from biomass co-firing"""
     return (v_benefit_bm_collection(cofiringplant)
             + v_benefit_bm_transport(cofiringplant)
-            + v_benefit_om(plant)
+            + v_benefit_om(cofiringplant)
             + v_benefit_bm_loading(cofiringplant)
             )
+
 
 # FIXME: benefit of year 0 should be zero
 def job_benefit_add_up(plant, cofiringplant):

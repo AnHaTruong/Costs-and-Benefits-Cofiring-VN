@@ -40,21 +40,23 @@ def boiler_efficiency_loss(biomass_ratio_mass):
     return 0.0044 * biomass_ratio_mass**2 + 0.0055 * biomass_ratio_mass
 
 straw_burn_rate = 0.9  # Percentage of straw burned infield after harvest
+
+winder_rental_cost = 40 * USD / ha   # per period
 winder_haul = 6.57 * t / d
 work_hour_day = 8 * hr / d
-truck_velocity = 45 * km / hr
-truck_load = 20 * t
 OM_hour_MWh = 0.12 * hr / MW / hr  # working hour for OM per MWh    # O&M of co-firing per MWh
 
+truck_velocity = 45 * km / hr
+truck_load = 20 * t
+truck_loading_time = 2.7 / 60 * hr / t  # (Ovaskainen & 2016 )
 transport_tariff = 2000 * VND / t / km  # vantaiduongviet.com
 tortuosity_factor = 1.5
+
 # wage per hour is calculated from base salary defined in governmental regulations
 wage_bm_collect = 1.11 * USD / hr
 wage_bm_transport = 1.11 * USD / hr
 wage_bm_loading = 1.11 * USD / hr
 wage_operation_maintenance = 1.67 * USD / hr
-winder_rental_cost = 40 * USD / ha   # per period
-truck_loading_time = 2.7 / 60 * hr / t  # (Ovaskainen & 2016 )
 
 coal_import_price = 73 * USD / t
 

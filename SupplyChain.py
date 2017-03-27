@@ -132,6 +132,10 @@ class SupplyChain():
             activity += zone.transport_tkm()
         return display_as(activity, 't * km')
 
+    def transport_work(self, truck_load, truck_velocity):
+        time = self.transport_tkm() / truck_load / truck_velocity
+        return display_as(time, 'hr')
+
     def transport_cost(self):
         cost = v_zeros * USD
         for zone in self.zones:
@@ -146,6 +150,10 @@ class SupplyChain():
     def transport_cost_per_t(self):
         cost_per_t = self.transport_cost() / zero_to_NaN(self.quantity())
         return display_as(cost_per_t, 'USD/t')
+
+    def loading_work(self, truck_loading_time):  # Unloading work is included in om_work
+        time = self.quantity() * truck_loading_time
+        return display_as(time, 'hr')
 
     def field_cost(self, price):
         cost = self.quantity() * price
@@ -173,6 +181,11 @@ class SupplyChain():
                         self.emission_factor
                         )
         return field.emissions()
+
+    def farm_work(self, work_hour_day, winder_haul):
+        """Work time needed to collect straw for co-firing per year"""
+        time = self.quantity() * work_hour_day / winder_haul
+        return display_as(time, 'hr')
 
     def farm_revenue_per_ha(self, straw_price):
         revenue = self.average_straw_yield * straw_price
