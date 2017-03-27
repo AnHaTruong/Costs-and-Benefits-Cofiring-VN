@@ -17,7 +17,7 @@ from farmerincome import total_income_benefit
 from emission import emission_reduction_benefit, total_health_benefit
 from parameters import MongDuong1, MongDuong1Cofire, NinhBinh, NinhBinhCofire
 from parameters import discount_rate, time_horizon
-from job import total_job_benefit
+from job import total_job_benefit, job_benefit_add_up
 
 print("Total benefit over", time_horizon, "years")
 print("Discounted at", discount_rate)
@@ -42,7 +42,7 @@ def print_benefit_add_up(plant, cofiringplant):
 
     print(row2.format('Jobs',
                       benefit_add_up(total_job_benefit, plant, cofiringplant),
-                      float('NaN')
+                      job_benefit_add_up(plant, cofiringplant)
                       )
           )
     print(row2.format('Farmer income',

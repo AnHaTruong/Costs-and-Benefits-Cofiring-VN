@@ -14,10 +14,10 @@
 from init import FTE, display_as
 from parameters import MongDuong1, NinhBinh, MongDuong1Cofire, NinhBinhCofire
 
-from job import bm_collection_work, bm_transport_work, benefit_bm_collection
-from job import number_of_truck_trips, transport_time, benefit_bm_transport
-from job import om_work, cofiring_work, benefit_om, total_job_benefit
-from job import benefit_bm_loading, bm_loading_work
+from job import v_bm_collection_work, v_bm_transport_work, v_benefit_bm_collection
+from job import number_of_truck_trips, transport_time, v_benefit_bm_transport
+from job import v_om_work, v_cofiring_work, v_benefit_om, v_total_job_benefit
+from job import v_benefit_bm_loading, v_bm_loading_work
 print('')
 
 cols = '{:25}{:12.1f}'
@@ -27,16 +27,16 @@ cols2 = '{:25}{:12.1f}{:12.1f}'
 def print_job(plant, cofiringplant):
     print('Benefit from job creation:', plant.name, '\n')
 
-    row1 = benefit_bm_collection(cofiringplant)
-    row2 = benefit_bm_transport(cofiringplant)[1]
-    row3 = benefit_om(plant)
-    row7 = bm_collection_work(cofiringplant)
-    row8 = bm_transport_work(cofiringplant)[1]
-    row9 = om_work(plant)
-    row10 = cofiring_work(plant, cofiringplant)
-    row4 = total_job_benefit(plant, cofiringplant)
-    row11 = bm_loading_work(cofiringplant)
-    row12 = benefit_bm_loading(cofiringplant)
+    row1 = v_benefit_bm_collection(cofiringplant)[1]
+    row2 = v_benefit_bm_transport(cofiringplant)[1]
+    row3 = v_benefit_om(plant)[1]
+    row7 = v_bm_collection_work(cofiringplant)[1]
+    row8 = v_bm_transport_work(cofiringplant)[1]
+    row9 = v_om_work(plant)[1]
+    row10 = v_cofiring_work(plant, cofiringplant)[1]
+    row4 = v_total_job_benefit(plant, cofiringplant)[1]
+    row11 = v_bm_loading_work(cofiringplant)[1]
+    row12 = v_benefit_bm_loading(cofiringplant)[1]
 
     display_as(row7, 'FTE')
     display_as(row8, 'FTE')
