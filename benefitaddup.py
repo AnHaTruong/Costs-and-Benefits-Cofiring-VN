@@ -42,5 +42,5 @@ def total_benefit_addup(plant, cofiringplant):
             + benefit_add_up(total_income_benefit, plant, cofiringplant)
             + benefit_add_up(emission_reduction_benefit, plant, cofiringplant)
             + benefit_add_up(total_job_benefit, plant, cofiringplant)
-      #      + job_benefit_add_up(plant, cofiringplant)
+            # + job_benefit_add_up(plant, cofiringplant)
             )
