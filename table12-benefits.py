@@ -16,11 +16,15 @@ from parameters import discount_rate
 from parameters import MongDuong1, MongDuong1Cofire, NinhBinh, NinhBinhCofire
 from parameters import winder_rental_cost, straw, specific_cost
 
+from parameters import winder_haul, truck_velocity, work_hour_day, truck_loading_time
+from parameters import truck_load, OM_hour_MWh, wage_bm_transport
+from parameters import wage_bm_collect, wage_operation_maintenance, wage_bm_loading
+
 from benefitaddup import benefit_add_up, total_benefit_addup
 from farmerincome import total_income_benefit
 from emission import emission_reduction_benefit, total_health_benefit
 
-from job import total_job_benefit, job_benefit_add_up
+from job import total_job_benefit
 
 print("Total benefit over", time_horizon, "years")
 print("Discounted at", discount_rate)
@@ -45,7 +49,17 @@ def print_benefit_add_up(plant, cofiringplant):
 
     print(row2.format('Jobs',
                       benefit_add_up(total_job_benefit, plant, cofiringplant),
-                      job_benefit_add_up(plant, cofiringplant)
+                      cofiringplant.wages_npv(discount_rate,
+                                              work_hour_day,
+                                              winder_haul,
+                                              wage_bm_collect,
+                                              truck_load,
+                                              truck_velocity,
+                                              wage_bm_transport,
+                                              truck_loading_time,
+                                              wage_bm_loading,
+                                              OM_hour_MWh,
+                                              wage_operation_maintenance)
                       )
           )
     print(row2.format('Farmer income',

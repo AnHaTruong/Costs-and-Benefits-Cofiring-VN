@@ -13,13 +13,13 @@
 
 from init import FTE, display_as
 from parameters import MongDuong1, NinhBinh, MongDuong1Cofire, NinhBinhCofire
-from parameters import winder_haul, work_hour_day, OM_hour_MWh
-from parameters import truck_load, truck_velocity, truck_loading_time
+from parameters import winder_haul, work_hour_day, wage_bm_collect
+from parameters import truck_load, truck_velocity, wage_bm_transport
+from parameters import truck_loading_time, wage_bm_loading
+from parameters import OM_hour_MWh, wage_operation_maintenance
 
-from job import v_benefit_bm_collection
-from job import number_of_truck_trips, transport_time, v_benefit_bm_transport
-from job import v_benefit_om, v_total_job_benefit
-from job import v_benefit_bm_loading
+from job import number_of_truck_trips, transport_time
+
 print('')
 
 cols = '{:25}{:12.1f}'
@@ -29,17 +29,28 @@ cols2 = '{:25}{:12.1f}{:12.1f}'
 def print_job(plant, cofiringplant):
     print('Benefit from job creation:', plant.name, '\n')
 
-    row1 = v_benefit_bm_collection(cofiringplant)[1]
-    row2 = v_benefit_bm_transport(cofiringplant)[1]
-    row3 = v_benefit_om(cofiringplant)[1]
+    row1 = cofiringplant.straw_supply.farm_wages(work_hour_day, winder_haul, wage_bm_collect)[1]
+    row2 = cofiringplant.straw_supply.transport_wages(truck_load,
+                                                      truck_velocity,
+                                                      wage_bm_transport)[1]
+    row3 = cofiringplant.biomass_om_wages(OM_hour_MWh, wage_operation_maintenance)[1]
     row7 = cofiringplant.straw_supply.farm_work(work_hour_day, winder_haul)[1]
     row8 = cofiringplant.straw_supply.transport_work(truck_load, truck_velocity)[1]
     row9 = cofiringplant.biomass_om_work(OM_hour_MWh)[1]
     row10 = cofiringplant.cofiring_work(OM_hour_MWh, work_hour_day, winder_haul,
                                         truck_load, truck_velocity, truck_loading_time)[1]
-    row4 = v_total_job_benefit(plant, cofiringplant)[1]
+    row4 = cofiringplant.cofiring_wages(work_hour_day,
+                                        winder_haul,
+                                        wage_bm_collect,
+                                        truck_load,
+                                        truck_velocity,
+                                        wage_bm_transport,
+                                        truck_loading_time,
+                                        wage_bm_loading,
+                                        OM_hour_MWh,
+                                        wage_operation_maintenance)[1]
     row11 = cofiringplant.straw_supply.loading_work(truck_loading_time)[1]
-    row12 = v_benefit_bm_loading(cofiringplant)[1]
+    row12 = cofiringplant.straw_supply.loading_wages(truck_loading_time, wage_bm_loading)[1]
 
     display_as(row7, 'FTE')
     display_as(row8, 'FTE')

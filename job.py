@@ -17,11 +17,10 @@ Approximation "Substitutes imported coal"
 We don't count the jobs destroyed in the coal mining sector.
 """
 # TODO: Put the global  OM_hour_MWh  in proper scope
-import natu.numpy as np
 from init import display_as
 
 from parameters import winder_haul, truck_velocity, work_hour_day, truck_loading_time
-from parameters import truck_load, OM_hour_MWh, biomass_ratio, wage_bm_transport, discount_rate
+from parameters import truck_load, OM_hour_MWh, biomass_ratio, wage_bm_transport
 from parameters import wage_bm_collect, wage_operation_maintenance, wage_bm_loading
 
 
@@ -95,46 +94,4 @@ def total_job_benefit(plant, cofiringplant):
             + benefit_bm_transport(cofiringplant)[1]
             + benefit_om(plant)
             + benefit_bm_loading(cofiringplant)
-            )
-
-
-# Vectorized version
-
-def v_benefit_bm_collection(cofiringplant):
-    """Benefit from job creation from biomass collection"""
-    amount = cofiringplant.straw_supply.farm_work(work_hour_day, winder_haul) * wage_bm_collect
-    return display_as(amount, 'kUSD')
-
-
-def v_benefit_bm_transport(cofiringplant):
-    """Benefit from job creation from biomass transportation"""
-    amount = (cofiringplant.straw_supply.transport_work(truck_load, truck_velocity)
-              * wage_bm_transport)
-    return display_as(amount, 'kUSD')
-
-
-def v_benefit_bm_loading(cofiringplant):
-    amount = cofiringplant.straw_supply.loading_work(truck_loading_time) * wage_bm_loading
-    return display_as(amount, 'kUSD')
-
-
-def v_benefit_om(cofiringplant):
-    """Benefit from job creation from co-firing operation and maintenance"""
-    amount = cofiringplant.biomass_om_work(OM_hour_MWh) * wage_operation_maintenance
-    return display_as(amount, 'kUSD')
-
-
-def v_total_job_benefit(plant, cofiringplant):
-    """Total benefit from job creation from biomass co-firing"""
-    return (v_benefit_bm_collection(cofiringplant)
-            + v_benefit_bm_transport(cofiringplant)
-            + v_benefit_om(cofiringplant)
-            + v_benefit_bm_loading(cofiringplant)
-            )
-
-
-# FIXME: benefit of year 0 should be zero
-def job_benefit_add_up(plant, cofiringplant):
-    return (np.npv(discount_rate, v_total_job_benefit(plant, cofiringplant))
-            - v_total_job_benefit(plant, cofiringplant)[0]
             )

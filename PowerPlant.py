@@ -223,6 +223,10 @@ class CofiringPlant(PowerPlant):
         time = self.power_generation * self.biomass_ratio * OM_hour_MWh
         return display_as(time, 'hr')
 
+    def biomass_om_wages(self, OM_hour_MWh, wage_operation_maintenance):
+        amount = self.biomass_om_work(OM_hour_MWh) * wage_operation_maintenance
+        return display_as(amount, 'kUSD')
+
     def biomass_om_cost(self):
         # FIXME: the biomass ratio is in HEAT
         fixed_om_bm = (v_after_invest
@@ -243,6 +247,52 @@ class CofiringPlant(PowerPlant):
                 + self.straw_supply.transport_work(truck_load, truck_velocity)
                 + self.biomass_om_work(OM_hour_MWh))
         return display_as(time, 'hr')
+
+    def cofiring_wages(self,
+                       work_hour_day,
+                       winder_haul,
+                       wage_bm_collect,
+                       truck_load,
+                       truck_velocity,
+                       wage_bm_transport,
+                       truck_loading_time,
+                       wage_bm_loading,
+                       OM_hour_MWh,
+                       wage_operation_maintenance):
+        """Total benefit from job creation from biomass co-firing"""
+        amount = (self.straw_supply.farm_wages(work_hour_day, winder_haul, wage_bm_collect)
+                  + self.straw_supply.transport_wages(truck_load,
+                                                      truck_velocity,
+                                                      wage_bm_transport)
+                  + self.straw_supply.loading_wages(truck_loading_time, wage_bm_loading)
+                  + self.biomass_om_wages(OM_hour_MWh, wage_operation_maintenance))
+        return display_as(amount, 'kUSD')
+
+    # FIXME: benefit of year 0 should be zero
+    def wages_npv(self,
+                  discount_rate,
+                  work_hour_day,
+                  winder_haul,
+                  wage_bm_collect,
+                  truck_load,
+                  truck_velocity,
+                  wage_bm_transport,
+                  truck_loading_time,
+                  wage_bm_loading,
+                  OM_hour_MWh,
+                  wage_operation_maintenance):
+        v = self.cofiring_wages(work_hour_day,
+                                winder_haul,
+                                wage_bm_collect,
+                                truck_load,
+                                truck_velocity,
+                                wage_bm_transport,
+                                truck_loading_time,
+                                wage_bm_loading,
+                                OM_hour_MWh,
+                                wage_operation_maintenance)
+        amount = npv(discount_rate, v) - v[0]
+        return display_as(amount, 'kUSD')
 
     def coal_saved_cost(self):
         cost = self.coal_saved * self.coal.price

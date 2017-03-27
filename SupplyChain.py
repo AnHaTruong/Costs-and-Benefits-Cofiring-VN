@@ -136,6 +136,10 @@ class SupplyChain():
         time = self.transport_tkm() / truck_load / truck_velocity
         return display_as(time, 'hr')
 
+    def transport_wages(self, truck_load, truck_velocity, wage_bm_transport):
+        amount = self.transport_work(truck_load, truck_velocity) * wage_bm_transport
+        return display_as(amount, 'kUSD')
+
     def transport_cost(self):
         cost = v_zeros * USD
         for zone in self.zones:
@@ -154,6 +158,10 @@ class SupplyChain():
     def loading_work(self, truck_loading_time):  # Unloading work is included in om_work
         time = self.quantity() * truck_loading_time
         return display_as(time, 'hr')
+
+    def loading_wages(self, truck_loading_time, wage_bm_loading):
+        amount = self.loading_work(truck_loading_time) * wage_bm_loading
+        return display_as(amount, 'kUSD')
 
     def field_cost(self, price):
         cost = self.quantity() * price
@@ -186,6 +194,11 @@ class SupplyChain():
         """Work time needed to collect straw for co-firing per year"""
         time = self.quantity() * work_hour_day / winder_haul
         return display_as(time, 'hr')
+
+    def farm_wages(self, work_hour_day, winder_haul, wage_bm_collect):
+        """Benefit from job creation from biomass collection"""
+        amount = self.farm_work(work_hour_day, winder_haul) * wage_bm_collect
+        return display_as(amount, 'kUSD')
 
     def farm_revenue_per_ha(self, straw_price):
         revenue = self.average_straw_yield * straw_price
