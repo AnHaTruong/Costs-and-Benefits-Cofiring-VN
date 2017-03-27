@@ -12,28 +12,9 @@
 
 from parameters import winder_rental_cost, straw
 
-
-def farmer_income(cofireplant):
-    """ Extra income per hectare of rice cultivation for farmer from selling rice
-        straw for co-firing after deducting the cost for renting straw winder
-    """
-    return bm_sell_revenue(cofireplant) - winder_rental_cost
-
-
-def bm_sell_revenue(cofireplant):
-    """ Revenue per hecta of rice cultivation for farmer from selling rice straw"""
-
-    return cofireplant.straw_supply.average_straw_yield * straw.price
-
-
-def cultivation_area(cofireplant):
-    """ Area of rice cultivation needed to supply enough straw for co-firing"""
-    return cofireplant.biomass_used[1] / cofireplant.straw_supply.average_straw_yield
-
-
-def total_income_benefit(plant, cofireplant):
+def total_income_benefit(plant, cofiringplant):
     """ Total benefit for the farmers from having extra income selling
         rice straw to the plant for co-firing
         The "plant" argument not used by here to keep regular with other _benefit functions
     """
-    return farmer_income(cofireplant) * cultivation_area(cofireplant)
+    return cofiringplant.straw_supply.farm_income(winder_rental_cost, straw.price)[1]

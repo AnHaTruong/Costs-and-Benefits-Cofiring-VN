@@ -10,31 +10,30 @@
 #
 """ Print the result of farmer extra income assessment from farmerincome.py"""
 
-from parameters import MongDuong1, MongDuong1Cofire, NinhBinh, NinhBinhCofire
+from init import display_as
 
-from farmerincome import farmer_income, bm_sell_revenue, total_income_benefit
+from parameters import MongDuong1Cofire, NinhBinhCofire
+from parameters import winder_rental_cost, straw
 
-print('')
+display_as(winder_rental_cost, 'USD/ha')
 
-row = '{:20}' + '{:23.6G}'
+def print_income(supply_chain):
+    row1 = supply_chain.farm_revenue_per_ha(straw.price)
+    row3 = supply_chain.farm_income_per_ha(winder_rental_cost, straw.price)
+    row4 = supply_chain.farm_area()[1]
+    row5 = supply_chain.farm_income(winder_rental_cost, straw.price)[1]
 
+    row = '{:25}' + '{:23.6G}'
+    print()
+    print(row.format('Revenue from straw sales', row1))
+    print(row.format('- Winder rental', winder_rental_cost))
+    print(row.format('= Net income', row3))
+    print(row.format('* Surface', row4))
+    print(row.format('= Total social benefit', row5))
+    print()
 
-def print_income(plant, cofireplant):
-    col1 = bm_sell_revenue(cofireplant)
-    col2 = farmer_income(cofireplant)
-    col3 = total_income_benefit(plant, cofireplant)
+print('Extra net income for farmers around Mong Duong 1')
+print_income(MongDuong1Cofire.straw_supply)
 
-    print(row.format('biomass sell revenue', col1))
-
-    print(row.format('farmer income per ha', col2))
-
-    print(row.format('total benefit', col3))
-
-print('total benefit from farmers extra income Mong Duong 1')
-print('')
-print_income(MongDuong1, MongDuong1Cofire)
-
-print('')
-print('total benefit from farmers extra income Ninh Binh')
-print('')
-print_income(NinhBinh, NinhBinhCofire)
+print('Extra net income for farmers around Ninh Binh')
+print_income(NinhBinhCofire.straw_supply)
