@@ -8,7 +8,15 @@
 # Creative Commons Attribution-ShareAlike 4.0 International
 #
 #
-"""Job creation assessment of a co-firing project"""
+"""Job creation assessment of a co-firing project
+
+Approximation "Small biomass ratio"
+We don't count the lower O&M work for the coal firing parts of the plant.
+
+Approximation "Substitutes imported coal"
+We don't count the jobs destroyed in the coal mining sector.
+"""
+# TODO: Put the global  OM_hour_MWh  in proper scope
 
 from init import display_as
 

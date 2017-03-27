@@ -216,6 +216,10 @@ class CofiringPlant(PowerPlant):
         cost = fixed_om_coal + variable_om_coal
         return display_as(cost, 'kUSD')
 
+    def biomass_om_work(self, OM_hour_MWh):
+        time = self.power_generation * self.biomass_ratio * OM_hour_MWh
+        return display_as(time, 'hr')
+
     def biomass_om_cost(self):
         # FIXME: the biomass ratio is in HEAT
         fixed_om_bm = (v_after_invest
