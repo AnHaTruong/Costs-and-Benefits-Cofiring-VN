@@ -190,5 +190,5 @@ class SupplyChain():
             rice straw to the plant for co-firing
             """
         income = (self.farm_area()
-                * self.farm_income_per_ha(winder_rental_cost, straw_price))
+                  * self.farm_income_per_ha(winder_rental_cost, straw_price))
         return display_as(income, 'kUSD')
