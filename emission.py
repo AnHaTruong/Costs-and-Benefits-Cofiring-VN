@@ -13,6 +13,7 @@
    Climate benefit and health benefit from GHG and air pollutant emission reduction
 """
 import pandas as pd
+import natu.numpy as np
 from init import display_as
 from parameters import specific_cost
 
@@ -37,8 +38,20 @@ def emission_reduction(plant, cofireplant):
 
 
 def emission_reduction_benefit(plant, cofireplant):
-    return emission_reduction(plant, cofireplant)['CO2']['Benefit']
+    return emission_reduction(plant, cofireplant)['CO2']['Benefit'][1]
+
+
+def CO2_npv(discount_rate, plant, cofireplant):
+    v = emission_reduction(plant, cofireplant)['CO2']['Benefit']
+    value = np.npv(discount_rate, v)
+    return display_as(value, 'kUSD')
 
 
 def total_health_benefit(plant, cofireplant):
-    return emission_reduction(plant, cofireplant).ix['Benefit'].drop('CO2').sum()
+    return emission_reduction(plant, cofireplant).ix['Benefit'].drop('CO2').sum()[1]
+
+
+def health_npv(discount_rate, plant, cofireplant):
+    v = emission_reduction(plant, cofireplant).ix['Benefit'].drop('CO2').sum()
+    value = np.npv(discount_rate, v)
+    return display_as(value, 'kUSD')
