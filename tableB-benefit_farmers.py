@@ -8,7 +8,6 @@
 # Creative Commons Attribution-ShareAlike 4.0 International
 #
 #
-""" Print the result of farmer extra income assessment from farmerincome.py"""
 
 from init import display_as
 
@@ -16,6 +15,7 @@ from parameters import MongDuong1Cofire, NinhBinhCofire
 from parameters import winder_rental_cost, straw
 
 display_as(winder_rental_cost, 'USD/ha')
+
 
 def print_income(supply_chain):
     row1 = supply_chain.farm_revenue_per_ha(straw.price)
