@@ -12,39 +12,51 @@
     in benefitaddup.py
 """
 
-from benefitaddup import benefit_add_up, total_benefit_addup, job_benefit_add_up
+from benefitaddup import benefit_add_up, total_benefit_addup
 from farmerincome import total_income_benefit
 from emission import emission_reduction_benefit, total_health_benefit
 from parameters import MongDuong1, MongDuong1Cofire, NinhBinh, NinhBinhCofire
+from parameters import discount_rate, time_horizon
+from job import total_job_benefit
 
-
-row = '{:35}' + '{:23.0f}'
+print("Total benefit over", time_horizon, "years")
+print("Discounted at", discount_rate)
+print("")
 
 
 def print_benefit_add_up(plant, cofiringplant):
-    print(row.format('Added up health benefit',
-                     benefit_add_up(total_health_benefit, plant, cofiringplant)
-                     )
+    print('')
+    print(cofiringplant.name)
+    print('-------------------')
+    row2 = '{:30}' + '{:20.0f}' + '{:20.0f}'
+    print(row2.format('Health',
+                      benefit_add_up(total_health_benefit, plant, cofiringplant),
+                      float('NaN')
+                      )
           )
-    print(row.format('Added up emission reduction benefit',
-                     benefit_add_up(emission_reduction_benefit, plant, cofiringplant)
-                     )
-          )
-    print(row.format('Added up job benefit',
-                     job_benefit_add_up(plant, cofiringplant)
-                     )
-          )
-    print(row.format('Added up farmer income benefit',
-                     benefit_add_up(total_income_benefit, plant, cofiringplant)
-                     )
-          )
-    print(row.format('Added up total benefit',
-                     total_benefit_addup(plant, cofiringplant)
-                     )
+    print(row2.format('Emission reduction',
+                      benefit_add_up(emission_reduction_benefit, plant, cofiringplant),
+                      float('NaN')
+                      )
           )
 
-print('Added up benefit Mong Duong1\n')
+    print(row2.format('Jobs',
+                      benefit_add_up(total_job_benefit, plant, cofiringplant),
+                      float('NaN')
+                      )
+
+          )
+    print(row2.format('Farmer income',
+                      benefit_add_up(total_income_benefit, plant, cofiringplant),
+                      benefit_add_up(total_income_benefit, plant, cofiringplant)
+                      )
+          )
+    print(row2.format('Total',
+                      total_benefit_addup(plant, cofiringplant),
+                      float('NaN')
+                      )
+          )
+
 print_benefit_add_up(MongDuong1, MongDuong1Cofire)
 
-print('\nAdded up benefit Ninh Binh\n')
 print_benefit_add_up(NinhBinh, NinhBinhCofire)

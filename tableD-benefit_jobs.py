@@ -27,16 +27,16 @@ cols2 = '{:25}{:12.1f}{:12.1f}'
 def print_job(plant, cofiringplant):
     print('Benefit from job creation:', plant.name, '\n')
 
-    row1 = benefit_bm_collection(cofiringplant)[1]
+    row1 = benefit_bm_collection(cofiringplant)
     row2 = benefit_bm_transport(cofiringplant)[1]
-    row3 = benefit_om(plant)[1]
-    row7 = bm_collection_work(cofiringplant)[1]
+    row3 = benefit_om(plant)
+    row7 = bm_collection_work(cofiringplant)
     row8 = bm_transport_work(cofiringplant)[1]
-    row9 = om_work(plant)[1]
-    row10 = cofiring_work(plant, cofiringplant)[1]
-    row4 = total_job_benefit(plant, cofiringplant)[1]
-    row11 = bm_loading_work(cofiringplant)[1]
-    row12 = benefit_bm_loading(cofiringplant)[1]
+    row9 = om_work(plant)
+    row10 = cofiring_work(plant, cofiringplant)
+    row4 = total_job_benefit(plant, cofiringplant)
+    row11 = bm_loading_work(cofiringplant)
+    row12 = benefit_bm_loading(cofiringplant)
 
     display_as(row7, 'FTE')
     display_as(row8, 'FTE')
