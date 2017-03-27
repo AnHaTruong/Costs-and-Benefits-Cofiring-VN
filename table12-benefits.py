@@ -44,7 +44,6 @@ def print_benefit_add_up(plant, cofiringplant):
                       benefit_add_up(total_job_benefit, plant, cofiringplant),
                       float('NaN')
                       )
-
           )
     print(row2.format('Farmer income',
                       benefit_add_up(total_income_benefit, plant, cofiringplant),
