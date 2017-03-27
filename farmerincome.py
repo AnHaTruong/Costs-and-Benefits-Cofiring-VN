@@ -12,7 +12,6 @@
 
 from parameters import winder_rental_cost, straw
 
-
 def total_income_benefit(plant, cofiringplant):
     """ Total benefit for the farmers from having extra income selling
         rice straw to the plant for co-firing

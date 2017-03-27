@@ -12,12 +12,12 @@
     in benefitaddup.py
 """
 
-from benefitaddup import benefit_add_up, total_benefit_addup, total_job_benefit
+from benefitaddup import benefit_add_up, total_benefit_addup
 from farmerincome import total_income_benefit
 from emission import emission_reduction_benefit, total_health_benefit
 from parameters import MongDuong1, MongDuong1Cofire, NinhBinh, NinhBinhCofire
 from parameters import discount_rate, time_horizon
-
+from job import total_job_benefit
 
 print("Total benefit over", time_horizon, "years")
 print("Discounted at", discount_rate)
@@ -45,7 +45,6 @@ def print_benefit_add_up(plant, cofiringplant):
                       float('NaN')
                       )
           )
-
     print(row2.format('Farmer income',
                       benefit_add_up(total_income_benefit, plant, cofiringplant),
                       benefit_add_up(total_income_benefit, plant, cofiringplant)

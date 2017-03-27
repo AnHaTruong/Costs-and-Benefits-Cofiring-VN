@@ -11,7 +11,6 @@
 """ Calculation of overall cost-benefit of co-firing added up for the same
     number of years as used for NPV calculation
 """
-import natu.numpy as np
 from init import time_horizon, display_as
 from parameters import discount_rate
 from farmerincome import total_income_benefit
@@ -28,12 +27,6 @@ def benefit_add_up(func, plant, cofiringplant):
     return display_as(value, 'kUSD')
 
 
-def job_benefit_add_up(plant, cofiringplant):
-    return (np.npv(discount_rate, total_job_benefit(plant, cofiringplant)) -
-            total_job_benefit(plant, cofiringplant)[0]
-            )
-
-
 def total_benefit_addup(plant, cofiringplant):
     """Total benefit of co-firing added up for the same number of year as used
        in NPV calculation discounted at same DiscountRate
@@ -42,5 +35,4 @@ def total_benefit_addup(plant, cofiringplant):
             + benefit_add_up(total_income_benefit, plant, cofiringplant)
             + benefit_add_up(emission_reduction_benefit, plant, cofiringplant)
             + benefit_add_up(total_job_benefit, plant, cofiringplant)
-            # + job_benefit_add_up(plant, cofiringplant)
             )
