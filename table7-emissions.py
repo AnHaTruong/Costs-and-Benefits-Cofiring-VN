@@ -10,7 +10,7 @@
 #
 
 from parameters import MongDuong1, NinhBinh, MongDuong1Cofire, NinhBinhCofire
-from emission import emission_reduction
+from parameters import specific_cost
 
 
 def table(emission_df):
@@ -36,7 +36,7 @@ def print_emission(plant, cofireplant):
     table(cofireplant.straw_supply.field_emission(cofireplant.biomass_used))
     print('-------')
     print(plant.name, 'EMISSION REDUCTION\n')
-    table(emission_reduction(plant, cofireplant).T)
+    table(cofireplant.emission_reduction(specific_cost).T)
 
 
 print_emission(MongDuong1, MongDuong1Cofire)

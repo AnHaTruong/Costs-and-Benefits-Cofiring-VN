@@ -10,6 +10,8 @@
 #
 # pylint: disable=E0611
 
+import pandas as pd
+
 from natu.numpy import full, npv
 
 from init import time_horizon, v_after_invest, display_as, USD
@@ -146,6 +148,7 @@ class CofiringPlant(PowerPlant):
                  supply_chain
                  ):
 
+        self.plant = plant
         self.biomass_ratio = biomass_ratio
         self.fix_om_cost = fix_om_cost
         self.variable_om_cost = variable_om_cost
@@ -235,6 +238,35 @@ class CofiringPlant(PowerPlant):
     def coal_saved_cost(self):
         cost = self.coal_saved * self.coal.price
         return display_as(cost, 'kUSD')
+
+    def emission_reduction(self, specific_cost):
+        plant_ER = (self.plant.stack.emissions()['Total']
+                    - self.stack.emissions()['Total'])
+        transport_ER = (self.plant.coal_transporter().emissions()['Total']
+                        - self.coal_transporter().emissions()['Total']
+                        - self.straw_supply.transport_emissions()['Total'])
+        field_ER = (self.straw_supply.field_emission(self.biomass_used[0])['Total']
+                    - self.straw_supply.field_emission(self.biomass_used)['Total'])
+        total_ER = plant_ER + transport_ER + field_ER
+        total_benefit = total_ER * specific_cost
+        for pollutant in total_benefit:
+            display_as(pollutant, 'kUSD')
+        list_of_series = [plant_ER, transport_ER, field_ER, total_ER, total_benefit]
+        row = ['Plant', 'Transport', 'Field', 'Total', 'Benefit']
+        ER_table = pd.DataFrame(list_of_series, index=row)
+        return ER_table
+
+    def CO2_npv(self, discount_rate, specific_cost):
+        df = self.emission_reduction(specific_cost)
+        v = df['CO2']['Benefit']
+        value = npv(discount_rate, v)
+        return display_as(value, 'kUSD')
+
+    def health_npv(self, discount_rate, specific_cost):
+        df = self.emission_reduction(specific_cost)
+        v = df.ix['Benefit'].drop('CO2').sum()
+        value = npv(discount_rate, v)
+        return display_as(value, 'kUSD')
 
     def tableC(self, feedin_tariff, discount_rate, tax_rate, depreciation_period):
         def printRowInt(label, quantity):
