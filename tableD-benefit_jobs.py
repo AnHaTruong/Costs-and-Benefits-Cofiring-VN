@@ -18,8 +18,6 @@ from parameters import truck_load, truck_velocity, wage_bm_transport
 from parameters import truck_loading_time, wage_bm_loading
 from parameters import OM_hour_MWh, wage_operation_maintenance
 
-from job import number_of_truck_trips, transport_time
-
 print('')
 
 cols = '{:25}{:12.1f}'
@@ -66,8 +64,11 @@ def print_job(plant, cofiringplant):
     print()
     print(cols.format('Area collected', cofiringplant.straw_supply.area()))
     print(cols.format('Collection radius', cofiringplant.straw_supply.collection_radius()))
-    print(cols.format('Truck trips: duration', transport_time(cofiringplant)))
-    print(cols.format('Truck trips: number', number_of_truck_trips(cofiringplant)))
+    print(cols.format('Truck trips: duration',
+                      cofiringplant.straw_supply.transport_time(truck_velocity)
+                      )
+          )
+    print(cols.format('Truck trips: number', cofiringplant.biomass_used[1] / truck_load))
     print()
 
 print_job(MongDuong1, MongDuong1Cofire)

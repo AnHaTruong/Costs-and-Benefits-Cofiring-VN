@@ -219,6 +219,8 @@ class CofiringPlant(PowerPlant):
         cost = fixed_om_coal + variable_om_coal
         return display_as(cost, 'kUSD')
 
+        # Approximation "Small biomass ratio"
+        # We don't count the lower O&M work for the coal firing parts of the plant.
     def biomass_om_work(self, OM_hour_MWh):
         time = self.power_generation * self.biomass_ratio * OM_hour_MWh
         return display_as(time, 'hr')

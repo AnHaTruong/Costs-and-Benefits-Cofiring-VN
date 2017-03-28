@@ -136,6 +136,10 @@ class SupplyChain():
         time = self.transport_tkm() / truck_load / truck_velocity
         return display_as(time, 'hr')
 
+    def transport_time(self, truck_velocity):
+        time = self.collection_radius() * 2 / truck_velocity
+        return display_as(time, 'hr')
+
     def transport_wages(self, truck_load, truck_velocity, wage_bm_transport):
         amount = self.transport_work(truck_load, truck_velocity) * wage_bm_transport
         return display_as(amount, 'kUSD')

@@ -1,5 +1,7 @@
 TODO
 
+Put the global  OM_hour_MWh  in proper scope
+
 Check work calculations: biomass_ratio is in heat, why use % capacity ?
 
 Check emission calculation against CDM ACM0085 methodology
@@ -7,6 +9,8 @@ Check emission calculation against CDM ACM0085 methodology
 Design and code Figure 2 (emissions)
 
 Generate figures in EPS format (or SVG or PDF) and adjust the Makefile
+
+Add job destroyed in coal mining sector
 
 Sensitivity analysis
 
