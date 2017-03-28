@@ -1,7 +1,5 @@
 TODO
 
-Use npv, get rid of benefitaddup
-
 Check work calculations: biomass_ratio is in heat, why use % capacity ?
 
 Check emission calculation against CDM ACM0085 methodology
