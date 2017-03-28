@@ -6,6 +6,17 @@ Check work calculations: biomass_ratio is in heat, why use % capacity ?
 
 Check emission calculation against CDM ACM0085 methodology
 
+Test profitability of harvest and transport:
+  revenue = wages + fuel expenses + capital expense + profit
+
+Review variable names
+
+Review all FIXMEs in code
+
+Review TODOs in code
+
+Add "release" target in Makefile
+
 Design and code Figure 2 (emissions)
 
 Generate figures in EPS format (or SVG or PDF) and adjust the Makefile
