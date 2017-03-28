@@ -118,8 +118,6 @@ specific_cost = pd.Series({'CO2': 1 * USD / t,
                            'NOx': 286 * USD / t
                            })
 
-#
-
 MongDuong1 = PowerPlant(name="Mong Duong 1",
                         capacity=1080 * MW * y,
                         capacity_factor=0.60,
@@ -161,8 +159,6 @@ MongDuong1Cofire = CofiringPlant(MongDuong1,
                                  boiler_efficiency_loss=boiler_efficiency_loss,
                                  supply_chain=MD_SupplyChain
                                  )
-
-#
 
 NinhBinh = PowerPlant(name="Ninh Binh",
                       capacity=100 * MW * y,

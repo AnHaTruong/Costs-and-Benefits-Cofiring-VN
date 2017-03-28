@@ -28,8 +28,8 @@ residue_to_product_ratio = pd.DataFrame({'Residue to product ratio straw':
                                          [residue_to_product_ratio_straw]})
 
 # Yield per period, that is per year
-df['straw yield'] = (df['Rice yield (ton/ha)'] * t / ha *
-                     residue_to_product_ratio['Residue to product ratio straw'].values)
+df['straw yield'] = (df['Rice yield (ton/ha)'] * t / ha
+                     * residue_to_product_ratio['Residue to product ratio straw'].values)
 
 # Calculate biomass available density from rice cultivation area density,
 # collection fraction and selling fraction of straw
@@ -40,10 +40,10 @@ selling_proportion = pd.DataFrame({'straw selling proportion': [straw_selling_pr
 df['rice planted density'] = df['Cultivation area (ha)'] * ha / (df['Total area (ha)'] * ha)
 
 # Calculate straw density of each provinces
-df['straw density'] = (df['straw yield'] *
-                       df['rice planted density'] *
-                       collection_fraction['straw collection fraction'].values *
-                       selling_proportion['straw selling proportion'].values
+df['straw density'] = (df['straw yield']
+                       * df['rice planted density']
+                       * collection_fraction['straw collection fraction'].values
+                       * selling_proportion['straw selling proportion'].values
                        )
 
 df['straw production'] = df['rice production (ton)'] * t * residue_to_product_ratio_straw

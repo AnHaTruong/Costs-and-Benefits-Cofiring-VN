@@ -37,15 +37,9 @@ def print_job(plant, cofiringplant):
     row9 = cofiringplant.biomass_om_work(OM_hour_MWh)[1]
     row10 = cofiringplant.cofiring_work(OM_hour_MWh, work_hour_day, winder_haul,
                                         truck_load, truck_velocity, truck_loading_time)[1]
-    row4 = cofiringplant.cofiring_wages(work_hour_day,
-                                        winder_haul,
-                                        wage_bm_collect,
-                                        truck_load,
-                                        truck_velocity,
-                                        wage_bm_transport,
-                                        truck_loading_time,
-                                        wage_bm_loading,
-                                        OM_hour_MWh,
+    row4 = cofiringplant.cofiring_wages(work_hour_day, winder_haul, wage_bm_collect, truck_load,
+                                        truck_velocity, wage_bm_transport, truck_loading_time,
+                                        wage_bm_loading, OM_hour_MWh,
                                         wage_operation_maintenance)[1]
     row11 = cofiringplant.straw_supply.loading_work(truck_loading_time)[1]
     row12 = cofiringplant.straw_supply.loading_wages(truck_loading_time, wage_bm_loading)[1]

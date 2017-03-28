@@ -30,14 +30,14 @@ class SupplyZone():
         self.tortuosity_factor = tortuosity_factor
 
     def __str__(self):
-        return ("Supply zone" +
-                "\n Shape: " + str(self.shape) +
-                "\n Straw density: " + str(self.straw_density) +
-                "\n quantity = " + str(self.quantity()) +
-                "\n Transport tariff: " + str(self.transport_tariff) +
-                "\n Tortuosity: " + str(self.tortuosity_factor) +
-                "\n Activity to transport all = " + str(self.transport_tkm()[1]) +
-                "\n Cost to transport all = " + str(self.transport_cost()[1])
+        return ("Supply zone"
+                + "\n Shape: " + str(self.shape)
+                + "\n Straw density: " + str(self.straw_density)
+                + "\n quantity = " + str(self.quantity())
+                + "\n Transport tariff: " + str(self.transport_tariff)
+                + "\n Tortuosity: " + str(self.tortuosity_factor)
+                + "\n Activity to transport all = " + str(self.transport_tkm()[1])
+                + "\n Cost to transport all = " + str(self.transport_cost()[1])
                 )
 
     def area(self):
@@ -188,8 +188,8 @@ class SupplyChain():
         return self.zones[-1].shape.outer_radius()
 
     def field_emission(self, biomass_used):
-        field = Emitter({'Straw': (v_after_invest * self.straw_production *
-                                   self.straw_burn_rate) - biomass_used},
+        field = Emitter({'Straw': (v_after_invest * self.straw_production
+                                   * self.straw_burn_rate) - biomass_used},
                         self.emission_factor
                         )
         return field.emissions()

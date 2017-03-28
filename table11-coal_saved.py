@@ -7,8 +7,8 @@
 #     Creative Commons Attribution-ShareAlike 4.0 International
 #
 #
-""" Quantity and value of coal saved by co-firing.
-"""
+""" Quantity and value of coal saved by co-firing."""
+
 from init import display_as
 from parameters import MongDuong1Cofire, NinhBinhCofire, coal_import_price
 

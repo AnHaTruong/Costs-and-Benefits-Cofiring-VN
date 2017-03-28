@@ -160,8 +160,8 @@ class CofiringPlant(PowerPlant):
                                       - boiler_efficiency_loss(biomass_ratio_mass))
         cofiring_boiler_efficiency[0] = plant.boiler_efficiency[0]
 
-        cofiring_plant_efficiency = (plant.plant_efficiency *
-                                     cofiring_boiler_efficiency / plant.boiler_efficiency)
+        cofiring_plant_efficiency = (plant.plant_efficiency
+                                     * cofiring_boiler_efficiency / plant.boiler_efficiency)
         cofiring_plant_efficiency[0] = plant.plant_efficiency[0]
 
         super().__init__(

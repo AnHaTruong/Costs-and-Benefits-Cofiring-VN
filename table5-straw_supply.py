@@ -12,9 +12,7 @@
 
 from parameters import MongDuong1Cofire, NinhBinhCofire
 
-print("""
-Table 5. Straw required and straw cost estimation
-""")
+print("\nTable 5. Straw required and straw cost estimation\n""")
 
 col3 = MongDuong1Cofire.biomass_used[1]
 col4 = NinhBinhCofire.biomass_used[1]
