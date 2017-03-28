@@ -9,12 +9,12 @@
 #
 from natu.units import hr, kW, y, kWh
 from init import USD, isclose
-from parameters import MongDuong1, straw, boiler_efficiency_loss, MD_SupplyChain
+from parameters import MongDuong1, straw, boiler_efficiency_loss, MD_SupplyChain, biomass_ratio
 from PowerPlant import CofiringPlant
 
 MongDuong1NullCofiring = CofiringPlant(
     MongDuong1,
-    0.0,
+    biomass_ratio * 0,
     capital_cost=50 * USD / kW / y,
     fix_om_cost=32.24 * USD / kW / y,
     variable_om_cost=0.006 * USD / (kW * hr),

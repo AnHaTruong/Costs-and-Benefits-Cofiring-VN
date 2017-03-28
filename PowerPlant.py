@@ -11,7 +11,6 @@
 # pylint: disable=E0611
 
 import pandas as pd
-
 from natu.numpy import full, npv
 
 from init import time_horizon, v_after_invest, display_as, USD
@@ -150,6 +149,7 @@ class CofiringPlant(PowerPlant):
 
         self.plant = plant
         self.biomass_ratio = biomass_ratio
+        self.capital_cost = capital_cost
         self.fix_om_cost = fix_om_cost
         self.variable_om_cost = variable_om_cost
         self.biomass = biomass
@@ -177,7 +177,7 @@ class CofiringPlant(PowerPlant):
             plant.emission_controls,
             plant.emission_factor,
             plant.coal,
-            capital_cost * plant.capacity * biomass_ratio)
+            capital_cost * plant.capacity * float(biomass_ratio[1]))
 
         self.biomass_heat = v_after_invest * self.gross_heat_input * biomass_ratio
         display_as(self.biomass_heat, 'TJ')
@@ -270,7 +270,6 @@ class CofiringPlant(PowerPlant):
                   + self.biomass_om_wages(OM_hour_MWh, wage_operation_maintenance))
         return display_as(amount, 'kUSD')
 
-    # FIXME: benefit of year 0 should be zero
     def wages_npv(self,
                   discount_rate,
                   work_hour_day,
@@ -293,7 +292,7 @@ class CofiringPlant(PowerPlant):
                                 wage_bm_loading,
                                 OM_hour_MWh,
                                 wage_operation_maintenance)
-        amount = npv(discount_rate, v) - v[0]
+        amount = npv(discount_rate, v)
         return display_as(amount, 'kUSD')
 
     def coal_saved_cost(self):

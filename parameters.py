@@ -10,7 +10,7 @@
 #
 import pandas as pd
 
-from init import USD, VND, time_horizon
+from init import USD, VND, time_horizon, v_after_invest
 from natu.units import MJ, kg, t, d, hr, km, MW, ha, kW, y, kWh
 from natu.numpy import full
 
@@ -32,7 +32,7 @@ depreciation_period = 10
 tax_rate = 0.25  # Corporate tax in Vietnam
 feedin_tarif = {'MD': 1239.17 * VND / kWh, 'NB': 1665.6 * VND / kWh}
 
-biomass_ratio = 0.05           # As percent of energy coming from biomass
+biomass_ratio = v_after_invest * 0.05           # As percent of energy coming from biomass
 
 
 def boiler_efficiency_loss(biomass_ratio_mass):
