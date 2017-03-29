@@ -2,16 +2,12 @@ TODO
 
 Put the global  OM_hour_MWh  in proper scope
 
-Check work calculations: biomass_ratio is in heat, why use % capacity ?
-
 Check emission calculation against CDM ACM0085 methodology
 
 Test profitability of harvest and transport:
   revenue = wages + fuel expenses + capital expense + profit
 
 Review variable names
-
-Review all FIXMEs in code
 
 Review TODOs in code
 

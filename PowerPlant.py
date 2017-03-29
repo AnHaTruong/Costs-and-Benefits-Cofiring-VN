@@ -230,7 +230,6 @@ class CofiringPlant(PowerPlant):
         return display_as(amount, 'kUSD')
 
     def biomass_om_cost(self):
-        # FIXME: the biomass ratio is in HEAT
         fixed_om_bm = (v_after_invest
                        * self.fix_om_cost
                        * self.capacity * self.biomass_ratio)
