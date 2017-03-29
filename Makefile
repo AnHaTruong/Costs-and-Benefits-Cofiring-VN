@@ -13,12 +13,12 @@ tables = $(patsubst %.py,%.txt,$(tablepyfiles))
 diffs  = $(patsubst %.py,%.diff,$(tablepyfiles))
 
 figurespyfiles = $(wildcard figure*.py)
-figures = $(patsubst %.py,%.eps,$(figurespyfiles))
+figures = $(patsubst %.py,%.pdf,$(figurespyfiles))
 
 doc_tests = Investment.doctest init.doctest strawdata-generator.doctest
 script_tests = test_zero_cofire.txt
 
-all: $(tables)
+all: $(tables) $(figures)
 
 %.py: %-generator.py
 	$(PYTHON) $< > $@
@@ -26,6 +26,9 @@ all: $(tables)
 parameters.py: strawdata.py
 
 %.txt: %.py parameters.py
+	$(PYTHON) $< > $@
+
+%.pdf: %.py
 	$(PYTHON) $< > $@
 
 %.diff: %.txt tables.tocompare/%.txt
@@ -47,6 +50,7 @@ reg_tests_reset: $(tables)
 
 clean:
 	rm -f $(tables)
+	rm -f $(figures)
 	rm -f $(doc_tests)
 	rm -f $(script_tests)
 	rm -f $(diffs)

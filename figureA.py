@@ -77,4 +77,4 @@ for lon, lat, size in zip(lons, lats, size):
 # for unit, lons, lats in zip(unit, lons, lats):
 #    plt.text(lats, lons, unit)
 
-plt.show()
+plt.savefig('figureA.pdf', format='pdf')

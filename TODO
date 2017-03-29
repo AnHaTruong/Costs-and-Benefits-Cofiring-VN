@@ -15,8 +15,6 @@ Add "release" target in Makefile
 
 Design and code Figure 2 (emissions)
 
-Generate figures in EPS format (or SVG or PDF) and adjust the Makefile
-
 Add job destroyed in coal mining sector
 
 Sensitivity analysis
