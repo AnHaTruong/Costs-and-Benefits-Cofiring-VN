@@ -11,7 +11,7 @@
 import pandas as pd
 
 from init import USD, VND, time_horizon, v_after_invest
-from natu.units import MJ, kg, t, d, hr, km, MW, ha, kW, y, kWh
+from natu.units import MJ, kg, t, d, hr, km, MW, ha, kW, y, kWh, MWh
 from natu.numpy import full
 
 from strawdata import MongDuong1_straw_density1, MongDuong1_straw_density2
@@ -44,7 +44,7 @@ straw_burn_rate = 0.9  # Percentage of straw burned infield after harvest
 winder_rental_cost = 40 * USD / ha   # per period
 winder_haul = 6.57 * t / d
 work_hour_day = 8 * hr / d
-OM_hour_MWh = 0.12 * hr / MW / hr  # working hour for OM per MWh    # O&M of co-firing per MWh
+OM_hour_MWh = 0.12 * hr / MWh  # working hour for OM per MWh    # O&M of co-firing per MWh
 
 truck_velocity = 45 * km / hr
 truck_load = 20 * t
@@ -154,7 +154,7 @@ MongDuong1Cofire = CofiringPlant(MongDuong1,
                                  biomass_ratio,
                                  capital_cost=50 * USD / kW / y,
                                  fix_om_cost=32.24 * USD / kW / y,
-                                 variable_om_cost=0.006 * USD / (kW * hr),
+                                 variable_om_cost=0.006 * USD / kWh,
                                  biomass=straw,
                                  boiler_efficiency_loss=boiler_efficiency_loss,
                                  supply_chain=MD_SupplyChain
@@ -190,7 +190,7 @@ NinhBinhCofire = CofiringPlant(NinhBinh,
                                biomass_ratio,
                                capital_cost=100 * USD / (kW * y),
                                fix_om_cost=32.24 * USD / kW / y,
-                               variable_om_cost=0.006 * USD / (kW * hr),
+                               variable_om_cost=0.006 * USD / kWh,
                                biomass=straw,
                                boiler_efficiency_loss=boiler_efficiency_loss,
                                supply_chain=NB_SupplyChain
