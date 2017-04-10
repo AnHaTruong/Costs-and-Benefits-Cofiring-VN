@@ -4,10 +4,6 @@ Put the global  OM_hour_MWh  in proper scope
 
 figure of provinces with collection zones
 
-air pollutant emission from transportation
-
-move figureA out of the model
-
 design a map that shows emission reductions
 
 Check the difference between cultivation area and collection area
@@ -18,8 +14,6 @@ Test profitability of harvest and transport:
   revenue = wages + fuel expenses + capital expense + profit
 
 Review variable names
-
-Review TODOs in code
 
 Add "release" target in Makefile
 

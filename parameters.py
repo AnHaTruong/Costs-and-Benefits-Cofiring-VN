@@ -11,7 +11,7 @@
 import pandas as pd
 
 from init import USD, VND, time_horizon, v_after_invest
-from natu.units import MJ, kg, t, d, hr, km, MW, ha, kW, y, kWh, MWh
+from natu.units import MJ, kg, t, d, hr, km, MW, ha, kW, y, kWh, MWh, g
 from natu.numpy import full
 
 from strawdata import MongDuong1_straw_density1, MongDuong1_straw_density2
@@ -82,30 +82,30 @@ straw = Fuel(name='Straw',
              )
 
 emission_factor = {
-    '6b_coal': {'CO2': 0.0966 * kg / MJ * MD_Coal.heat_value,
-                'SO2': 11.5 * kg / t,
-                'NOx': 18 * kg / t,
-                'PM10': 43.8 * kg / t
+    '6b_coal': {'CO2': 0.0966 * kg / MJ * MD_Coal.heat_value,  # IPCC 2006
+                'SO2': 11.5 * kg / t,  # Eastern Research Group 2011
+                'NOx': 18 * kg / t,    # Eastern Research Group 2011
+                'PM10': 43.8 * kg / t  # Eastern Research Group 2011
                 },
-    '4b_coal': {'CO2': 0.0966 * kg / MJ * NB_Coal.heat_value,
-                'SO2': 11.5 * kg / t,
-                'NOx': 18 * kg / t,
-                'PM10': 26.1 * kg / t
+    '4b_coal': {'CO2': 0.0966 * kg / MJ * NB_Coal.heat_value,  # IPCC 2006
+                'SO2': 11.5 * kg / t,  # Eastern Research Group 2011
+                'NOx': 18 * kg / t,    # Eastern Research Group 2011
+                'PM10': 26.1 * kg / t  # Eastern Research Group 2011
                 },
-    'Straw': {'CO2': 0.0858 * kg / MJ * straw.heat_value,
-              'SO2': 0.18 * kg / t,
-              'NOx': 2.28 * kg / t,
-              'PM10': 9.1 * kg / t
+    'Straw': {'CO2': 0.0858 * kg / MJ * straw.heat_value,  # (Shafie & 2013)
+              'SO2': 0.18 * kg / t,  # (Hoang & 2013)
+              'NOx': 2.28 * kg / t,  # (Hoang & 2013)
+              'PM10': 9.1 * kg / t   # (Hoang & 2013)
               },
     'Conveyor belt': {'CO2': 0.0 * kg / t / km,
                       'SO2': 0. * kg / t / km,
                       'NOx': 0. * kg / t / km,
                       'PM10': 0. * kg / t / km
                       },
-    'Road transport': {'CO2': 0.110 * kg / t / km,
-                       'SO2': 0. * kg / t / km,
-                       'NOx': 0. * kg / t / km,
-                       'PM10': 0. * kg / t / km
+    'Road transport': {'CO2': 0.110 * kg / t / km,  # (Binh & Tuan 2016)
+                       'SO2': 0.003 * g / truck_load / km,  # emission factor taken from
+                       'NOx': 2.68 * g / truck_load / km,  # naei.defra.gov.uk/data/ef-transport
+                       'PM10': 0.04 * g / truck_load / km  # data of 2014
                        },
     'Barge transport': {'CO2': 0.071 * kg / t / km,
                         'SO2': 0. * kg / t / km,
@@ -113,9 +113,9 @@ emission_factor = {
                         'PM10': 0. * kg / t / km}}
 
 specific_cost = pd.Series({'CO2': 1 * USD / t,
-                           'SO2': 3767 * USD / t,
-                           'PM10': 5883 * USD / t,
-                           'NOx': 286 * USD / t
+                           'SO2': 3767 * USD / t,   # Sakulniyomporn, Kubaha, and Chullabodhi 2011
+                           'PM10': 5883 * USD / t,  # Sakulniyomporn, Kubaha, and Chullabodhi 2011
+                           'NOx': 286 * USD / t     # Sakulniyomporn, Kubaha, and Chullabodhi 2011
                            })
 
 MongDuong1 = PowerPlant(name="Mong Duong 1",
