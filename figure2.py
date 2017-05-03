@@ -19,97 +19,78 @@ from parameters import MongDuong1, MongDuong1Cofire, NinhBinh, NinhBinhCofire
 from natu.units import t
 
 
-value1 = ([MongDuong1Cofire.straw_supply.field_emission(MongDuong1Cofire.biomass_used[0])['Total']['SO2'][1]/t,
-           MongDuong1Cofire.straw_supply.field_emission(MongDuong1Cofire.biomass_used)['Total']['SO2'][1]/t,
-           MongDuong1.stack.emissions()['Total']['SO2'][1] / t,
-           MongDuong1Cofire.stack.emissions()['Total']['SO2'][1] / t
-           ])
+def fig2(plant, cofiringplant):
+    CO2stack = np.array([plant.stack.emissions()['Total']['CO2'][1] / t,
+                         cofiringplant.stack.emissions()['Total']['CO2'][1] / t]
+                        )
+    CO2trans = np.array([plant.coal_transporter().emissions()['Total']['CO2'][1] / t,
+                         (cofiringplant.coal_transporter().emissions()['Total']['CO2'][1] / t
+                          + cofiringplant.straw_supply.transport_emissions()['Total']['CO2'][1] / t
+                          )
+                         ])
+    CO2field = np.array([cofiringplant.straw_supply.field_emission(cofiringplant.biomass_used[0])['Total']['CO2'][1]/t,
+                         cofiringplant.straw_supply.field_emission(cofiringplant.biomass_used[1])['Total']['CO2'][1]/t]
+                        )
 
+    polstack = np.array([plant.stack.emissions()['Total']['SO2'][1] / t,
+                         cofiringplant.stack.emissions()['Total']['SO2'][1] / t,
+                         plant.stack.emissions()['Total']['PM10'][1] / t,
+                         cofiringplant.stack.emissions()['Total']['PM10'][1] / t,
+                         plant.stack.emissions()['Total']['NOx'][1] / t,
+                         cofiringplant.stack.emissions()['Total']['NOx'][1] / t])
 
-value2 = ([NinhBinhCofire.straw_supply.field_emission(NinhBinhCofire.biomass_used[0])['Total']['SO2'][1]/t,
-           NinhBinhCofire.straw_supply.field_emission(NinhBinhCofire.biomass_used)['Total']['SO2'][1]/t,
-           NinhBinh.stack.emissions()['Total']['SO2'][1] / t,
-           NinhBinhCofire.stack.emissions()['Total']['SO2'][1] / t
-           ])
+    poltrans = np.array([plant.coal_transporter().emissions()['Total']['SO2'][1] / t,
+                         (cofiringplant.coal_transporter().emissions()['Total']['SO2'][1] / t
+                          + cofiringplant.straw_supply.transport_emissions()['Total']['SO2'][1] / t),
+                         plant.coal_transporter().emissions()['Total']['PM10'][1] / t,
+                         (cofiringplant.coal_transporter().emissions()['Total']['PM10'][1] / t
+                          + cofiringplant.straw_supply.transport_emissions()['Total']['PM10'][1] / t),
+                         plant.coal_transporter().emissions()['Total']['NOx'][1] / t,
+                         (cofiringplant.coal_transporter().emissions()['Total']['NOx'][1] / t
+                          + cofiringplant.straw_supply.transport_emissions()['Total']['NOx'][1] / t)]
+                          )
 
-value3 = ([MongDuong1Cofire.straw_supply.field_emission(MongDuong1Cofire.biomass_used[0])['Total']['PM10'][1]/t,
-           MongDuong1Cofire.straw_supply.field_emission(MongDuong1Cofire.biomass_used)['Total']['PM10'][1]/t,
-           MongDuong1.stack.emissions()['Total']['PM10'][1] / t,
-           MongDuong1Cofire.stack.emissions()['Total']['PM10'][1] / t
-           ])
+    polfield = np.array([cofiringplant.straw_supply.field_emission(cofiringplant.biomass_used[0])['Total']['SO2'][1]/t,
+                         cofiringplant.straw_supply.field_emission(cofiringplant.biomass_used[1])['Total']['SO2'][1]/t,
+                         cofiringplant.straw_supply.field_emission(cofiringplant.biomass_used[0])['Total']['PM10'][1]/t,
+                         cofiringplant.straw_supply.field_emission(cofiringplant.biomass_used[1])['Total']['PM10'][1]/t,
+                         cofiringplant.straw_supply.field_emission(cofiringplant.biomass_used[0])['Total']['NOx'][1]/t,
+                         cofiringplant.straw_supply.field_emission(cofiringplant.biomass_used[1])['Total']['NOx'][1]/t])
+    ind = np.arange(2)
+    width = 0.3
+    index = np.arange(6)
 
-value4 = ([NinhBinhCofire.straw_supply.field_emission(NinhBinhCofire.biomass_used[0])['Total']['PM10'][1]/t,
-           NinhBinhCofire.straw_supply.field_emission(NinhBinhCofire.biomass_used)['Total']['PM10'][1]/t,
-           NinhBinh.stack.emissions()['Total']['PM10'][1] / t,
-           NinhBinhCofire.stack.emissions()['Total']['PM10'][1] / t
-           ])
+    fig, ax1 = plt.subplots()
+    ax2 = ax1.twiny()
 
-value5 = ([MongDuong1Cofire.straw_supply.field_emission(MongDuong1Cofire.biomass_used[0])['Total']['NOx'][1]/t,
-           MongDuong1Cofire.straw_supply.field_emission(MongDuong1Cofire.biomass_used)['Total']['NOx'][1]/t,
-           MongDuong1.stack.emissions()['Total']['NOx'][1] / t,
-           MongDuong1Cofire.stack.emissions()['Total']['NOx'][1] / t
-           ])
+    ax1.barh(ind, CO2stack, width, color='r')
+    ax1.barh(ind, CO2trans, width, color='b', left=CO2stack)
+    ax1.barh(ind, CO2field, width, color='g', left=(CO2stack + CO2trans))
 
-value6 = ([NinhBinhCofire.straw_supply.field_emission(NinhBinhCofire.biomass_used[0])['Total']['NOx'][1]/t,
-           NinhBinhCofire.straw_supply.field_emission(NinhBinhCofire.biomass_used)['Total']['NOx'][1]/t,
-           NinhBinh.stack.emissions()['Total']['NOx'][1] / t,
-           NinhBinhCofire.stack.emissions()['Total']['NOx'][1] / t
-           ])
+    ax2.barh(index + 2, polstack, width, color='r')
+    ax2.barh(index + 2, poltrans, width, color='b', left=polstack)
+    ax2.barh(index + 2, polfield, width, color='g', left=(polstack + poltrans))
 
-with PdfPages('figure2.pdf') as pdf:
-    bw = 0.3
-    index = np.arange(4)
+    ax1.set_xlabel('CO2 emission (t/y)')
+    ax2.set_xlabel('Air pollutant Emission (t/y)')
 
-    plt.figure(1)
-    plt.title('SO2 emissions-Mong Duong 1')
-    plt.axis([0, 4, 0, 600])
-    plt.xticks(index, ['Field base', 'Field co-fire', 'Plant base', 'Plant co-fire'])
-    plt.ylabel('t/y')
-    plt.bar(index, value1, bw, color='b')
-    pdf.savefig()
-    plt.close()
+    plt.yticks(np.arange(8), ('CO2 Coal', 'CO2 Cofire',
+                              'SO2 Coal', 'SO2 Cofire',
+                              'PM10 Coal', 'PM10 Cofire',
+                              'NOx Coal', 'NOx Cofire'))
 
-    plt.figure(2)
-    plt.axis([0, 4, 0, 5000])
-    plt.title('SO2 emissions-Ninh Binh')
-    plt.ylabel('t/y')
-    plt.xticks(index, ['Field base', 'Field co-fire', 'Plant base', 'Plant co-fire'])
-    plt.bar(index, value2, bw, color='r')
-    pdf.savefig()
-    plt.close()
+    plt.show()
 
-    plt.figure(3)
-    plt.title('PM10 emissions-Mong Duong 1')
-    plt.axis([0, 4, 0, 17000])
-    plt.xticks(index, ['Field base', 'Field co-fire', 'Plant base', 'Plant co-fire'])
-    plt.ylabel('t/y')
-    plt.bar(index, value3, bw, color='b')
-    pdf.savefig()
-    plt.close()
+fig2(MongDuong1, MongDuong1Cofire)
+fig2(NinhBinh, NinhBinhCofire)
 
-    plt.figure(4)
-    plt.axis([0, 4, 0, 4000])
-    plt.title('PM10 emissions-Ninh Binh')
-    plt.ylabel('t/y')
-    plt.xticks(index, ['Field base', 'Field co-fire', 'Plant base', 'Plant co-fire'])
-    plt.bar(index, value4, bw, color='r')
-    pdf.savefig()
-    plt.close()
-
-    plt.figure(5)
-    plt.title('NOx emissions-Mong Duong 1')
-    plt.axis([0, 4, 0, 49000])
-    plt.xticks(index, ['Field base', 'Field co-fire', 'Plant base', 'Plant co-fire'])
-    plt.ylabel('t/y')
-    plt.bar(index, value5, bw, color='b')
-    pdf.savefig()
-    plt.close()
-
-    plt.figure(6)
-    plt.axis([0, 4, 0, 8000])
-    plt.title('NOx emissions-Ninh Binh')
-    plt.ylabel('t/y')
-    plt.xticks(index, ['Field base', 'Field co-fire', 'Plant base', 'Plant co-fire'])
-    plt.bar(index, value6, bw, color='r')
-    pdf.savefig()
-    plt.close()
+#with PdfPages('figure2.pdf') as pdf:
+#     plt.figure(1)    
+#     fig2(MongDuong1, MongDuong1Cofire)
+#     pdf.savefig()
+#     plt.close()
+#     
+#     plt.figure(2)
+#     fig2(NinhBinh, NinhBinhCofire)
+#     pdf.savefig()
+#     plt.close()
