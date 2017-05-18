@@ -24,6 +24,7 @@ from parameters import wage_bm_collect, wage_operation_maintenance, wage_bm_load
 
 
 def benefit_array(plant, cofiringplant, income_parameter):
+    MUSD = 10**6 * USD
     job_benefit = cofiringplant.wages_npv(discount_rate,
                                           work_hour_day,
                                           winder_haul,
@@ -34,7 +35,7 @@ def benefit_array(plant, cofiringplant, income_parameter):
                                           truck_loading_time,
                                           wage_bm_loading,
                                           OM_hour_MWh,
-                                          wage_operation_maintenance) / USD / 1000000
+                                          wage_operation_maintenance) / MUSD
     plant_benefit = (cofiringplant.net_present_value(income_parameter,
                                                      discount_rate,
                                                      tax_rate,
@@ -43,12 +44,12 @@ def benefit_array(plant, cofiringplant, income_parameter):
                                                discount_rate,
                                                tax_rate,
                                                depreciation_period)
-                     ) / USD / 1000000
+                     ) / MUSD
     farmer_benefit = cofiringplant.straw_supply.farm_npv(discount_rate,
                                                          winder_rental_cost,
-                                                         straw.price) / USD / 1000000
-    health_benefit = cofiringplant.health_npv(discount_rate, specific_cost) / USD / 1000000
-    climate_benefit = cofiringplant.CO2_npv(discount_rate, specific_cost) / USD / 1000000
+                                                         straw.price) / MUSD
+    health_benefit = cofiringplant.health_npv(discount_rate, specific_cost) / MUSD
+    climate_benefit = cofiringplant.CO2_npv(discount_rate, specific_cost) / MUSD
     return np.array([plant_benefit, farmer_benefit, job_benefit, health_benefit, climate_benefit])
 
 index = np.arange(5)
