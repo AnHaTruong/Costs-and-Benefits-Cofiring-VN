@@ -8,7 +8,7 @@
 #     Creative Commons Attribution-ShareAlike 4.0 International
 #
 #
-""" Draw Figure 2 SO2 emission reduction and its benefit to public health
+""" Draw Figure 2 CO2 and air pollutant emission
 """
 
 import matplotlib.pyplot as plt
@@ -65,8 +65,10 @@ def plot_emissions(plant, cofiringplant):
     ax2 = ax1.twiny()
 
     ax1.barh(ind, CO2stack, width, color='darkred', edgecolor='none', label='Plant emissions')
-    ax1.barh(ind, CO2trans, width, color='mistyrose', edgecolor='none', left=CO2stack, label='Transport emissions')
-    ax1.barh(ind, CO2field, width, color='salmon', edgecolor='none', left=(CO2stack + CO2trans), label='Field emissions')
+    ax1.barh(ind, CO2trans, width, color='mistyrose', edgecolor='none',
+             left=CO2stack, label='Transport emissions')
+    ax1.barh(ind, CO2field, width, color='salmon', edgecolor='none',
+             left=(CO2stack + CO2trans), label='Field emissions')
 
     ax2.barh(index, polstack, width, color='darkred', edgecolor='none')
     ax2.barh(index, poltrans, width, color='mistyrose', edgecolor='none', left=polstack)
@@ -75,24 +77,37 @@ def plot_emissions(plant, cofiringplant):
     ax1.set_xlabel('CO2 emission (kt/y)')
     ax2.set_xlabel('Air pollutant Emission (kt/y)')
 
-    plt.yticks(np.concatenate((ind, index), axis=0), ('CO2 Coal', 'CO2 Cofire',
-                                                      'SO2 Coal', 'SO2 Cofire',
-                                                      'PM10 Coal', 'PM10 Cofire',
-                                                      'NOx Coal', 'NOx Cofire')
+    plt.yticks(np.concatenate((ind, index), axis=0), ('CO2 Baseline', 'CO2 Cofire',
+                                                      'SO2 Baseline', 'SO2 Cofire',
+                                                      'PM10 Baseline', 'PM10 Cofire',
+                                                      'NOx Baseline', 'NOx Cofire')
                )
-    ax1.legend(bbox_to_anchor=(0.98, 0.8), prop={'size':9})
+    ax1.legend(bbox_to_anchor=(0.98, 0.8), prop={'size': 9})
 
-with PdfPages('figure2.pdf') as pdf:
-    plt.figure(1)
-    plot_emissions(MongDuong1, MongDuong1Cofire)
-    plt.text(63, 5.8, 'Emission from Mong Duong 1', horizontalalignment='center',
-             rotation='vertical', fontsize=14)
-    pdf.savefig()
-    plt.close()
+#with PdfPages('figure2.pdf') as pdf:
+#    plt.figure(1)
+#    plot_emissions(MongDuong1, MongDuong1Cofire)
+#    plt.text(63, 5.8, 'Emission from Mong Duong 1', horizontalalignment='center',
+#             rotation='vertical', fontsize=14)
+#    pdf.savefig()
+#    plt.close()
+#
+#    plt.figure(2)
+#    plot_emissions(NinhBinh, NinhBinhCofire)
+#    plt.text(9.5, 5.3, 'Emission from Ninh Binh', horizontalalignment='center',
+#             rotation='vertical', fontsize=14)
+#    pdf.savefig()
+#    plt.close()
 
-    plt.figure(2)
-    plot_emissions(NinhBinh, NinhBinhCofire)
-    plt.text(9.5, 5.3, 'Emission from Ninh Binh', horizontalalignment='center',
-             rotation='vertical', fontsize=14)
-    pdf.savefig()
-    plt.close()
+
+plot_emissions(MongDuong1, MongDuong1Cofire)
+plt.text(63, 5.8, 'Emission from Mong Duong 1', horizontalalignment='center',
+         rotation='vertical', fontsize=14)
+plt.tight_layout()
+plt.savefig('MD1emission.png')
+plot_emissions(NinhBinh, NinhBinhCofire)
+plt.text(9.5, 5.3, 'Emission from Ninh Binh', horizontalalignment='center',
+         rotation='vertical', fontsize=14)
+plt.tight_layout()
+plt.savefig('NBemission.png')
+
