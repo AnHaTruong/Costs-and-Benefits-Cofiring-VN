@@ -34,36 +34,36 @@ def benefit_array(plant, cofiringplant, income_parameter):
                                           truck_loading_time,
                                           wage_bm_loading,
                                           OM_hour_MWh,
-                                          wage_operation_maintenance)/USD/1000000
+                                          wage_operation_maintenance) / USD / 1000000
     plant_benefit = (cofiringplant.net_present_value(income_parameter,
                                                      discount_rate,
                                                      tax_rate,
                                                      depreciation_period)
                      - plant.net_present_value(income_parameter,
-                                              discount_rate,
-                                              tax_rate,
-                                              depreciation_period)
-                     )/USD/1000000
+                                               discount_rate,
+                                               tax_rate,
+                                               depreciation_period)
+                     ) / USD / 1000000
     farmer_benefit = cofiringplant.straw_supply.farm_npv(discount_rate,
                                                          winder_rental_cost,
-                                                         straw.price)/USD/1000000
-    health_benefit = cofiringplant.health_npv(discount_rate, specific_cost)/USD/1000000
-    climate_benefit = cofiringplant.CO2_npv(discount_rate, specific_cost)/USD/1000000
+                                                         straw.price) / USD / 1000000
+    health_benefit = cofiringplant.health_npv(discount_rate, specific_cost) / USD / 1000000
+    climate_benefit = cofiringplant.CO2_npv(discount_rate, specific_cost) / USD / 1000000
     return np.array([plant_benefit, farmer_benefit, job_benefit, health_benefit, climate_benefit])
 
 index = np.arange(5)
 width = 0.4
-plt.figure(figsize=(10,5))
-MD = plt.barh(index, benefit_array(MongDuong1, MongDuong1Cofire, feedin_tarif['MD']), width,
-              color='navy', edgecolor='none', label='Monng Duong 1')
+plt.figure(figsize=(10, 5))
 NB = plt.barh(index + width, benefit_array(NinhBinh, NinhBinhCofire, feedin_tarif['NB']), width,
               color='#ff4500', edgecolor='none', label='Ninh Binh')
+MD = plt.barh(index, benefit_array(MongDuong1, MongDuong1Cofire, feedin_tarif['MD']), width,
+              color='navy', edgecolor='none', label='Mong Duong 1')
 plt.xlabel('Cumulative benefit over 20 years (M$)')
-plt.yticks(index+0.5, ('Plant onwer (net profit)',
-                       'Farmer\n(sell straw)',
-                       'Workers\n(harvest, transport, O&M)',
-                       'Local society\n(Air quality)',
-                       'Global society\n(GHG mitigation)'))
+plt.yticks(index + 0.5, ('Plant owner\n(net profit)',
+                         'Farmer\n(sell straw)',
+                         'Workers\n(harvest, transport, O&M)',
+                         'Local society\n(air quality)',
+                         'Global society\n(GHG mitigation)'))
 plt.legend(bbox_to_anchor=(0.98, 1.0), prop={'size': 10})
 plt.tight_layout()
 
