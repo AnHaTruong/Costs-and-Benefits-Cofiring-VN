@@ -88,7 +88,8 @@ def plot_emissions(plant, cofiringplant):
                                                       'PM10 Baseline', 'PM10 Cofire',
                                                       'NOx Baseline', 'NOx Cofire')
                )
-    ax1.legend(bbox_to_anchor=(0.98, 0.8), prop={'size': 9})
+    ax1.legend(bbox_to_anchor=(0.98, 0.8), prop={'size': 9}, title=plant.name + ' Emissions',
+               frameon=False)
 
 #with PdfPages('figure2.pdf') as pdf:
 #    plt.figure(1)
@@ -107,12 +108,8 @@ def plot_emissions(plant, cofiringplant):
 
 
 plot_emissions(MongDuong1, MongDuong1Cofire)
-plt.text(63, 5.8, 'Emission from Mong Duong 1', horizontalalignment='center',
-         rotation='vertical', fontsize=14)
 plt.tight_layout()
 plt.savefig('MD1emission.png')
 plot_emissions(NinhBinh, NinhBinhCofire)
-plt.text(9.5, 5.3, 'Emission from Ninh Binh', horizontalalignment='center',
-         rotation='vertical', fontsize=14)
 plt.tight_layout()
 plt.savefig('NBemission.png')

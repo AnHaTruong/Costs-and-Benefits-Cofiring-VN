@@ -65,7 +65,7 @@ plt.yticks(index + 0.5, ('Plant owner\n(net profit)',
                          'Workers\n(harvest, transport, O&M)',
                          'Local society\n(air quality)',
                          'Global society\n(GHG mitigation)'))
-plt.legend(bbox_to_anchor=(0.98, 1.0), prop={'size': 10})
+plt.legend(bbox_to_anchor=(0.98, 0.4), prop={'size': 12}, frameon=False)
 plt.tight_layout()
 
 plt.savefig("Figure3.png")
