@@ -25,13 +25,13 @@ def plot_emissions(plant, cofiringplant):
     CO2stack = np.array([plant.stack.emissions().at['CO2', 'Total'][1],
                          cofiringplant.stack.emissions().at['CO2', 'Total'][1]
                          ]) / Mt
-    
+
     CO2trans = np.array([plant.coal_transporter().emissions().at['CO2', 'Total'][1],
                          (cofiringplant.coal_transporter().emissions().at['CO2', 'Total'][1]
                           + cofiringplant.straw_supply.transport_emissions().at['CO2', 'Total'][1]
                           )
                          ]) / Mt
-    
+
     CO2field = np.array([cofiringplant.straw_supply.field_emission(cofiringplant.biomass_used[0]).at['CO2', 'Total'][1],
                          cofiringplant.straw_supply.field_emission(cofiringplant.biomass_used[1]).at['CO2', 'Total'][1]]
                         ) / Mt
@@ -88,28 +88,15 @@ def plot_emissions(plant, cofiringplant):
                                                       'PM10 Baseline', 'PM10 Cofire',
                                                       'NOx Baseline', 'NOx Cofire')
                )
-    ax1.legend(bbox_to_anchor=(0.98, 0.8), prop={'size': 9}, title=plant.name + ' Emissions',
+    ax1.tick_params(axis='y', length=0)
+    ax2.tick_params(axis='y', length=0)
+    ax1.legend(bbox_to_anchor=(0.98, 0.8),
+               prop={'size': 9},
+               title=plant.name + ' Emissions',
                frameon=False)
-
-#with PdfPages('figure2.pdf') as pdf:
-#    plt.figure(1)
-#    plot_emissions(MongDuong1, MongDuong1Cofire)
-#    plt.text(63, 5.8, 'Emission from Mong Duong 1', horizontalalignment='center',
-#             rotation='vertical', fontsize=14)
-#    pdf.savefig()
-#    plt.close()
-#
-#    plt.figure(2)
-#    plot_emissions(NinhBinh, NinhBinhCofire)
-#    plt.text(9.5, 5.3, 'Emission from Ninh Binh', horizontalalignment='center',
-#             rotation='vertical', fontsize=14)
-#    pdf.savefig()
-#    plt.close()
-
+    fig.tight_layout()
 
 plot_emissions(MongDuong1, MongDuong1Cofire)
-plt.tight_layout()
 plt.savefig('MD1emission.png')
 plot_emissions(NinhBinh, NinhBinhCofire)
-plt.tight_layout()
 plt.savefig('NBemission.png')
