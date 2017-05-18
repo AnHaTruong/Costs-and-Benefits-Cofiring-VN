@@ -20,42 +20,44 @@ from natu.units import t
 
 
 def plot_emissions(plant, cofiringplant):
-    CO2stack = np.array([plant.stack.emissions()['Total']['CO2'][1] / t,
-                         cofiringplant.stack.emissions()['Total']['CO2'][1] / t
-                         ]) / 1000
-    CO2trans = np.array([plant.coal_transporter().emissions()['Total']['CO2'][1] / t,
-                         (cofiringplant.coal_transporter().emissions()['Total']['CO2'][1] / t
-                          + cofiringplant.straw_supply.transport_emissions()['Total']['CO2'][1] / t
+    kt = 1000 * t
+    Mt = 1000000 * t
+    CO2stack = np.array([plant.stack.emissions()['Total']['CO2'][1] / Mt,
+                         cofiringplant.stack.emissions()['Total']['CO2'][1] / Mt
+                         ])
+    CO2trans = np.array([plant.coal_transporter().emissions()['Total']['CO2'][1] / Mt,
+                         (cofiringplant.coal_transporter().emissions()['Total']['CO2'][1] / Mt
+                          + cofiringplant.straw_supply.transport_emissions()['Total']['CO2'][1] / Mt
                           )
-                         ])/1000
-    CO2field = np.array([cofiringplant.straw_supply.field_emission(cofiringplant.biomass_used[0])['Total']['CO2'][1]/t,
-                         cofiringplant.straw_supply.field_emission(cofiringplant.biomass_used[1])['Total']['CO2'][1]/t]
-                        )/1000
+                         ])
+    CO2field = np.array([cofiringplant.straw_supply.field_emission(cofiringplant.biomass_used[0])['Total']['CO2'][1]/Mt,
+                         cofiringplant.straw_supply.field_emission(cofiringplant.biomass_used[1])['Total']['CO2'][1]/Mt]
+                        )
 
-    polstack = np.array([plant.stack.emissions()['Total']['SO2'][1] / t,
-                         cofiringplant.stack.emissions()['Total']['SO2'][1] / t,
-                         plant.stack.emissions()['Total']['PM10'][1] / t,
-                         cofiringplant.stack.emissions()['Total']['PM10'][1] / t,
-                         plant.stack.emissions()['Total']['NOx'][1] / t,
-                         cofiringplant.stack.emissions()['Total']['NOx'][1] / t]) / 1000
+    polstack = np.array([plant.stack.emissions()['Total']['SO2'][1] / kt,
+                         cofiringplant.stack.emissions()['Total']['SO2'][1] / kt,
+                         plant.stack.emissions()['Total']['PM10'][1] / kt,
+                         cofiringplant.stack.emissions()['Total']['PM10'][1] / kt,
+                         plant.stack.emissions()['Total']['NOx'][1] / kt,
+                         cofiringplant.stack.emissions()['Total']['NOx'][1] / kt])
 
-    poltrans = np.array([plant.coal_transporter().emissions()['Total']['SO2'][1] / t,
-                         (cofiringplant.coal_transporter().emissions()['Total']['SO2'][1] / t
-                          + cofiringplant.straw_supply.transport_emissions()['Total']['SO2'][1] / t),
-                         plant.coal_transporter().emissions()['Total']['PM10'][1] / t,
-                         (cofiringplant.coal_transporter().emissions()['Total']['PM10'][1] / t
-                          + cofiringplant.straw_supply.transport_emissions()['Total']['PM10'][1] / t),
-                         plant.coal_transporter().emissions()['Total']['NOx'][1] / t,
-                         (cofiringplant.coal_transporter().emissions()['Total']['NOx'][1] / t
-                          + cofiringplant.straw_supply.transport_emissions()['Total']['NOx'][1] / t)]
-                          ) / 1000
+    poltrans = np.array([plant.coal_transporter().emissions()['Total']['SO2'][1] / kt,
+                         (cofiringplant.coal_transporter().emissions()['Total']['SO2'][1] / kt
+                          + cofiringplant.straw_supply.transport_emissions()['Total']['SO2'][1] / kt),
+                         plant.coal_transporter().emissions()['Total']['PM10'][1] / kt,
+                         (cofiringplant.coal_transporter().emissions()['Total']['PM10'][1] / kt
+                          + cofiringplant.straw_supply.transport_emissions()['Total']['PM10'][1] / kt),
+                         plant.coal_transporter().emissions()['Total']['NOx'][1] / kt,
+                         (cofiringplant.coal_transporter().emissions()['Total']['NOx'][1] / kt
+                          + cofiringplant.straw_supply.transport_emissions()['Total']['NOx'][1] / kt)]
+                          )
 
-    polfield = np.array([cofiringplant.straw_supply.field_emission(cofiringplant.biomass_used[0])['Total']['SO2'][1]/t,
-                         cofiringplant.straw_supply.field_emission(cofiringplant.biomass_used[1])['Total']['SO2'][1]/t,
-                         cofiringplant.straw_supply.field_emission(cofiringplant.biomass_used[0])['Total']['PM10'][1]/t,
-                         cofiringplant.straw_supply.field_emission(cofiringplant.biomass_used[1])['Total']['PM10'][1]/t,
-                         cofiringplant.straw_supply.field_emission(cofiringplant.biomass_used[0])['Total']['NOx'][1]/t,
-                         cofiringplant.straw_supply.field_emission(cofiringplant.biomass_used[1])['Total']['NOx'][1]/t])/1000
+    polfield = np.array([cofiringplant.straw_supply.field_emission(cofiringplant.biomass_used[0])['Total']['SO2'][1]/kt,
+                         cofiringplant.straw_supply.field_emission(cofiringplant.biomass_used[1])['Total']['SO2'][1]/kt,
+                         cofiringplant.straw_supply.field_emission(cofiringplant.biomass_used[0])['Total']['PM10'][1]/kt,
+                         cofiringplant.straw_supply.field_emission(cofiringplant.biomass_used[1])['Total']['PM10'][1]/kt,
+                         cofiringplant.straw_supply.field_emission(cofiringplant.biomass_used[0])['Total']['NOx'][1]/kt,
+                         cofiringplant.straw_supply.field_emission(cofiringplant.biomass_used[1])['Total']['NOx'][1]/kt])
 
     ind = [0, 0.5]
     width = 0.48
@@ -74,7 +76,7 @@ def plot_emissions(plant, cofiringplant):
     ax2.barh(index, poltrans, width, color='mistyrose', edgecolor='none', left=polstack)
     ax2.barh(index, polfield, width, color='salmon', edgecolor='none', left=(polstack + poltrans))
 
-    ax1.set_xlabel('CO2 emission (kt/y)')
+    ax1.set_xlabel('CO2 emission (Mt/y)')
     ax2.set_xlabel('Air pollutant Emission (kt/y)')
 
     plt.yticks(np.concatenate((ind, index), axis=0), ('CO2 Baseline', 'CO2 Cofire',
@@ -110,4 +112,3 @@ plt.text(9.5, 5.3, 'Emission from Ninh Binh', horizontalalignment='center',
          rotation='vertical', fontsize=14)
 plt.tight_layout()
 plt.savefig('NBemission.png')
-

@@ -13,7 +13,7 @@ tables = $(patsubst %.py,%.txt,$(tablepyfiles))
 diffs  = $(patsubst %.py,%.diff,$(tablepyfiles))
 
 figurespyfiles = $(wildcard figure*.py)
-figures = $(patsubst %.py,%.pdf,$(figurespyfiles))
+figures = $(patsubst %.py,%.png,$(figurespyfiles))
 
 doc_tests = Investment.doctest init.doctest strawdata-generator.doctest
 script_tests = test_zero_cofire.txt
@@ -28,7 +28,7 @@ parameters.py: strawdata.py
 %.txt: %.py parameters.py
 	$(PYTHON) $< > $@
 
-%.pdf: %.py
+%.png: %.py
 	$(PYTHON) $< > $@
 
 %.diff: %.txt tables.tocompare/%.txt
