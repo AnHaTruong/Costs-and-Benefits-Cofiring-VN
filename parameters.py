@@ -57,6 +57,7 @@ wage_bm_collect = 1.11 * USD / hr
 wage_bm_transport = 1.11 * USD / hr
 wage_bm_loading = 1.11 * USD / hr
 wage_operation_maintenance = 1.67 * USD / hr
+barge_fuel_consumption = 8 * g / t / km  # Van Dingenen & 2016
 
 coal_import_price = 73 * USD / t
 
@@ -107,10 +108,10 @@ emission_factor = {
                        'NOx': 2.68 * g / truck_load / km,  # naei.defra.gov.uk/data/ef-transport
                        'PM10': 0.04 * g / truck_load / km  # data of 2014
                        },
-    'Barge transport': {'CO2': 0.071 * kg / t / km,
-                        'SO2': 0. * kg / t / km,
-                        'NOx': 0. * kg / t / km,
-                        'PM10': 0. * kg / t / km}}
+    'Barge transport': {'CO2': 0.071 * kg / t / km,  # (Binh & Tuan 2016)
+                        'SO2': 2 * g / kg * barge_fuel_consumption,  # Van Dingenen & 2016
+                        'NOx': 50.75 * g / kg * barge_fuel_consumption,   # Van Dingenen & 2016
+                        'PM10': 3.19 * g / kg * barge_fuel_consumption}}  # Van Dingenen & 2016
 
 specific_cost = pd.Series({'CO2': 1 * USD / t,
                            'SO2': 3767 * USD / t,   # Sakulniyomporn, Kubaha, and Chullabodhi 2011

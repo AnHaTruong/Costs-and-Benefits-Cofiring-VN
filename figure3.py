@@ -68,4 +68,4 @@ plt.yticks(index + 0.5, ('Plant owner\n(net profit)',
 plt.legend(bbox_to_anchor=(0.98, 0.4), prop={'size': 12}, frameon=False)
 plt.tight_layout()
 
-plt.savefig("Figure3.png")
+plt.savefig("figure3.png")
