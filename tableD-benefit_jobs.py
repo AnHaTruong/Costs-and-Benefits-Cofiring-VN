@@ -16,7 +16,7 @@ from parameters import MongDuong1, NinhBinh, MongDuong1Cofire, NinhBinhCofire
 from parameters import winder_haul, work_hour_day, wage_bm_collect
 from parameters import truck_load, truck_velocity, wage_bm_transport
 from parameters import truck_loading_time, wage_bm_loading
-from parameters import OM_hour_MWh, wage_operation_maintenance
+from parameters import OM_hour_MWh, wage_operation_maintenance, mining_productivity_underground
 
 print('')
 
@@ -65,8 +65,18 @@ def print_job(plant, cofiringplant):
     print(cols.format('Truck trips: number', cofiringplant.biomass_used[1] / truck_load))
     print()
 
-print_job(MongDuong1, MongDuong1Cofire)
 
+def print_job_lost(plant, cofiringplant):
+    print('Mining job lost from co-firing at', plant.name, '\n')
+    row = cofiringplant.coal_work_lost(mining_productivity_underground)[1]
+    display_as(row, 'FTE')
+    print(cols.format('Job lost', row))
+    print(cols.format('Coal saved', cofiringplant.coal_saved[1]))
+
+print_job(MongDuong1, MongDuong1Cofire)
+print_job_lost(MongDuong1, MongDuong1Cofire)
+print('')
 print_job(NinhBinh, NinhBinhCofire)
+print_job_lost(NinhBinh, NinhBinhCofire)
 
 print('Note: 1 FTE =', FTE)
