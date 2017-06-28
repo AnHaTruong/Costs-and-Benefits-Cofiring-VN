@@ -1,17 +1,19 @@
 TODO
 
-Put the global  OM_hour_MWh  in proper scope
+Add "release" target in Makefile
+
+Test profitability of harvest and transport for the farmer:
+  revenue = wages + fuel expenses + capital expense + profit
+
+TODO, LATER
 
 figure of provinces with collection zones
 
 Check emission calculation against CDM ACM0085 methodology
 
-Test profitability of harvest and transport:
-  revenue = wages + fuel expenses + capital expense + profit
+Put the global  OM_hour_MWh  in proper scope
 
 Review variable names
-
-Add "release" target in Makefile
 
 Sensitivity analysis
 
