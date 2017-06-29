@@ -297,7 +297,7 @@ class CofiringPlant(PowerPlant):
     def coal_saved_cost(self):
         cost = self.coal_saved * self.coal.price
         return display_as(cost, 'kUSD')
-    
+
     def coal_work_lost(self, mining_productivity):
         time = self.coal_saved / mining_productivity
         return time
