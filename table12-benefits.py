@@ -52,10 +52,19 @@ def print_benefit_add_up(plant, cofiringplant):
                                               wage_operation_maintenance)
                       )
           )
+
     print(row2.format('Farmer income',
                       cofiringplant.straw_supply.farm_npv(discount_rate,
-                                                          winder_rental_cost,
-                                                          straw.price)
+                                                          straw.price,
+                                                          work_hour_day,
+                                                          winder_haul,
+                                                          wage_bm_collect,
+                                                          truck_loading_time,
+                                                          wage_bm_loading,
+                                                          truck_load,
+                                                          truck_velocity,
+                                                          wage_bm_transport,
+                                                          winder_rental_cost)
                       )
           )
 

@@ -2,9 +2,6 @@ TODO
 
 Add "release" target in Makefile
 
-Test profitability of harvest and transport for the farmer:
-  revenue = wages + fuel expenses + capital expense + profit
-
 TODO, LATER
 
 figure of provinces with collection zones

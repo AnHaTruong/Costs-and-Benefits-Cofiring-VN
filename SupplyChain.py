@@ -204,24 +204,49 @@ class SupplyChain():
         amount = self.farm_work(work_hour_day, winder_haul) * wage_bm_collect
         return display_as(amount, 'kUSD')
 
-    def farm_revenue_per_ha(self, straw_price):
-        revenue = self.average_straw_yield * straw_price
-        return display_as(revenue, 'USD/ha')
-
-    def farm_income_per_ha(self, winder_rental_cost, straw_price):
-        income = self.farm_revenue_per_ha(straw_price) - winder_rental_cost
-        return display_as(income, 'USD/ha')
-
     def farm_area(self):
         area = self.quantity() / self.average_straw_yield
         return display_as(area, 'ha')
 
-    def farm_income(self, winder_rental_cost, straw_price):
-        income = (self.farm_area()
-                  * self.farm_income_per_ha(winder_rental_cost, straw_price))
-        return display_as(income, 'kUSD')
+    def farm_profit(self,
+                    price,
+                    work_hour_day,
+                    winder_haul,
+                    wage_bm_collect,
+                    truck_loading_time,
+                    wage_bm_loading,
+                    truck_load,
+                    truck_velocity,
+                    wage_bm_transport,
+                    winder_rental_cost):
+        profit = (self.cost(price)
+                  - self.farm_wages(work_hour_day, winder_haul, wage_bm_collect)
+                  - self.loading_wages(truck_loading_time, wage_bm_loading)
+                  - self.transport_wages(truck_load, truck_velocity, wage_bm_transport)
+                  - winder_rental_cost * self.farm_area()[1])
+        return display_as(profit, 'kUSD')
 
-    def farm_npv(self, discount_rate, winder_rental_cost, straw_price):
-        income = self.farm_income(winder_rental_cost, straw_price)
+    def farm_npv(self,
+                 discount_rate,
+                 price,
+                 work_hour_day,
+                 winder_haul,
+                 wage_bm_collect,
+                 truck_loading_time,
+                 wage_bm_loading,
+                 truck_load,
+                 truck_velocity,
+                 wage_bm_transport,
+                 winder_rental_cost):
+        income = self.farm_profit(price,
+                                  work_hour_day,
+                                  winder_haul,
+                                  wage_bm_collect,
+                                  truck_loading_time,
+                                  wage_bm_loading,
+                                  truck_load,
+                                  truck_velocity,
+                                  wage_bm_transport,
+                                  winder_rental_cost)
         value = np.npv(discount_rate, income)
         return display_as(value, 'kUSD')
