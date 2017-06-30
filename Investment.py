@@ -31,7 +31,7 @@ class Investment:
     def __init__(self, capital=0 * USD):
         self.capital = display_as(capital, 'kUSD')
 
-    def income(self, income_parameter):
+    def income(self, *args):
         return display_as(v_zeros * USD, 'kUSD')
 
     def investment(self):
@@ -43,7 +43,7 @@ class Investment:
         return display_as(v_zeros * USD, 'kUSD')
 
     def amortization(self, depreciation_period):
-        assert type(depreciation_period) is int, "Depreciation period not an integer"
+        assert isinstance(depreciation_period, int), "Depreciation period not an integer"
         assert 0 < depreciation_period < time_horizon - 1, "Depreciation not in {1..timehorizon-2}"
         v_cost = v_zeros.copy() * USD
         for year in range(1, depreciation_period + 1):
