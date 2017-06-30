@@ -221,12 +221,12 @@ class CofiringPlant(PowerPlant):
 
         # Approximation "Small biomass ratio"
         # We don't count the lower O&M work for the coal firing parts of the plant.
-    def biomass_om_work(self, OM_economics):
-        time = self.power_generation * self.biomass_ratio * OM_economics['OM_hour_MWh']
+    def biomass_om_work(self, OM_hour_MWh):
+        time = self.power_generation * self.biomass_ratio * OM_hour_MWh
         return display_as(time, 'hr')
 
-    def biomass_om_wages(self, OM_economics):
-        amount = self.biomass_om_work(OM_economics) * OM_economics['wage_operation_maintenance']
+    def biomass_om_wages(self, OM_hour_MWh, wage_operation_maintenance):
+        amount = self.biomass_om_work(OM_hour_MWh) * wage_operation_maintenance
         return display_as(amount, 'kUSD')
 
     def biomass_om_cost(self):
@@ -240,25 +240,58 @@ class CofiringPlant(PowerPlant):
         cost = fixed_om_bm + var_om_bm
         return display_as(cost, 'kUSD')
 
-    def cofiring_work(self, collect_economics, truck_economics, OM_economics):
+    def cofiring_work(self, OM_hour_MWh, work_hour_day, winder_haul,
+                      truck_load, truck_velocity, truck_loading_time):
         """Total work time created from co-firing"""
-        time = (self.straw_supply.farm_work(collect_economics)
-                + self.straw_supply.loading_work(truck_economics)
-                + self.straw_supply.transport_work(truck_economics)
-                + self.biomass_om_work(OM_economics))
+        time = (self.straw_supply.farm_work(work_hour_day, winder_haul)
+                + self.straw_supply.loading_work(truck_loading_time)
+                + self.straw_supply.transport_work(truck_load, truck_velocity)
+                + self.biomass_om_work(OM_hour_MWh))
         return display_as(time, 'hr')
 
-    def cofiring_wages(self, collect_economics, truck_economics, OM_economics):
+    def cofiring_wages(self,
+                       work_hour_day,
+                       winder_haul,
+                       wage_bm_collect,
+                       truck_load,
+                       truck_velocity,
+                       wage_bm_transport,
+                       truck_loading_time,
+                       wage_bm_loading,
+                       OM_hour_MWh,
+                       wage_operation_maintenance):
         """Total benefit from job creation from biomass co-firing"""
-        amount = (self.straw_supply.farm_wages(collect_economics)
-                  + self.straw_supply.loading_wages(truck_economics)
-                  + self.straw_supply.transport_wages(truck_economics)
-                  + self.biomass_om_wages(OM_economics))
+        amount = (self.straw_supply.farm_wages(work_hour_day, winder_haul, wage_bm_collect)
+                  + self.straw_supply.transport_wages(truck_load,
+                                                      truck_velocity,
+                                                      wage_bm_transport)
+                  + self.straw_supply.loading_wages(truck_loading_time, wage_bm_loading)
+                  + self.biomass_om_wages(OM_hour_MWh, wage_operation_maintenance))
         return display_as(amount, 'kUSD')
 
-    def wages_npv(self, discount_rate, collect_economics, truck_economics, OM_economics):
-        wages = self.cofiring_wages(collect_economics, truck_economics, OM_economics)
-        amount = npv(discount_rate, wages)
+    def wages_npv(self,
+                  discount_rate,
+                  work_hour_day,
+                  winder_haul,
+                  wage_bm_collect,
+                  truck_load,
+                  truck_velocity,
+                  wage_bm_transport,
+                  truck_loading_time,
+                  wage_bm_loading,
+                  OM_hour_MWh,
+                  wage_operation_maintenance):
+        v = self.cofiring_wages(work_hour_day,
+                                winder_haul,
+                                wage_bm_collect,
+                                truck_load,
+                                truck_velocity,
+                                wage_bm_transport,
+                                truck_loading_time,
+                                wage_bm_loading,
+                                OM_hour_MWh,
+                                wage_operation_maintenance)
+        amount = npv(discount_rate, v)
         return display_as(amount, 'kUSD')
 
     def coal_saved_cost(self):

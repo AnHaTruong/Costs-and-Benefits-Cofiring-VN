@@ -132,17 +132,16 @@ class SupplyChain():
             activity += zone.transport_tkm()
         return display_as(activity, 't * km')
 
-    def transport_work(self, truck_economics):
-        tkm_per_hr = truck_economics['truck_load'] * truck_economics['truck_velocity']
-        time = self.transport_tkm() / tkm_per_hr
+    def transport_work(self, truck_load, truck_velocity):
+        time = self.transport_tkm() / truck_load / truck_velocity
         return display_as(time, 'hr')
 
-    def transport_time(self, truck_economics):
-        time = self.collection_radius() * 2 / truck_economics['truck_velocity']
+    def transport_time(self, truck_velocity):
+        time = self.collection_radius() * 2 / truck_velocity
         return display_as(time, 'hr')
 
-    def transport_wages(self, truck_economics):
-        amount = self.transport_work(truck_economics) * truck_economics['wage_bm_transport']
+    def transport_wages(self, truck_load, truck_velocity, wage_bm_transport):
+        amount = self.transport_work(truck_load, truck_velocity) * wage_bm_transport
         return display_as(amount, 'kUSD')
 
     def transport_cost(self):
@@ -160,12 +159,12 @@ class SupplyChain():
         cost_per_t = self.transport_cost() / zero_to_NaN(self.quantity())
         return display_as(cost_per_t, 'USD/t')
 
-    def loading_work(self, truck_economics):  # Unloading work is included in om_work
-        time = self.quantity() * truck_economics['truck_loading_time']
+    def loading_work(self, truck_loading_time):  # Unloading work is included in om_work
+        time = self.quantity() * truck_loading_time
         return display_as(time, 'hr')
 
-    def loading_wages(self, truck_economics):
-        amount = self.loading_work(truck_economics) * truck_economics['wage_bm_loading']
+    def loading_wages(self, truck_loading_time, wage_bm_loading):
+        amount = self.loading_work(truck_loading_time) * wage_bm_loading
         return display_as(amount, 'kUSD')
 
     def field_cost(self, price):
@@ -195,15 +194,14 @@ class SupplyChain():
                         )
         return field.emissions()
 
-    def farm_work(self, collect_economics):
+    def farm_work(self, work_hour_day, winder_haul):
         """Work time needed to collect straw for co-firing per year"""
-        hr_per_t = collect_economics['work_hour_day'] / collect_economics['winder_haul']
-        time = self.quantity() * hr_per_t
+        time = self.quantity() * work_hour_day / winder_haul
         return display_as(time, 'hr')
 
-    def farm_wages(self, collect_economics):
+    def farm_wages(self, work_hour_day, winder_haul, wage_bm_collect):
         """Benefit from job creation from biomass collection"""
-        amount = self.farm_work(collect_economics) * collect_economics['wage_bm_collect']
+        amount = self.farm_work(work_hour_day, winder_haul) * wage_bm_collect
         return display_as(amount, 'kUSD')
 
     def farm_revenue_per_ha(self, straw_price):
@@ -218,15 +216,12 @@ class SupplyChain():
         area = self.quantity() / self.average_straw_yield
         return display_as(area, 'ha')
 
-    def farm_profit(self, price, collect_economics, truck_economics):
-        profit = (self.cost(price)
-                  - self.farm_wages(collect_economics)
-                  - self.loading_wages(truck_economics)
-                  - self.transport_wages(truck_economics)
-                  - collect_economics['winder_rental_cost'] * self.farm_area()[1])
-        return display_as(profit, 'kUSD')
+    def farm_income(self, winder_rental_cost, straw_price):
+        income = (self.farm_area()
+                  * self.farm_income_per_ha(winder_rental_cost, straw_price))
+        return display_as(income, 'kUSD')
 
-    def farm_npv(self, discount_rate, price, collect_economics, truck_economics):
-        income = self.farm_profit(price, collect_economics, truck_economics)
+    def farm_npv(self, discount_rate, winder_rental_cost, straw_price):
+        income = self.farm_income(winder_rental_cost, straw_price)
         value = np.npv(discount_rate, income)
         return display_as(value, 'kUSD')
