@@ -8,6 +8,11 @@
 # Creative Commons Attribution-ShareAlike 4.0 International
 #
 #
+"""Input parameters of the model
+
+All numeric values should be defined in this module.
+"""
+
 import pandas as pd
 
 from init import USD, VND, time_horizon, v_after_invest
@@ -25,8 +30,6 @@ from Shape import Semi_Annulus, Disk
 from SupplyChain import SupplyChain, SupplyZone
 
 
-"""Input parameters of the model"""
-
 discount_rate = 0.087771
 depreciation_period = 10
 tax_rate = 0.25  # Corporate tax in Vietnam
@@ -38,6 +41,7 @@ biomass_ratio = v_after_invest * 0.05           # As percent of energy coming fr
 def boiler_efficiency_loss(biomass_ratio_mass):
     """Boiler efficiency loss due to cofiring, according to Tillman 2000"""
     return 0.0044 * biomass_ratio_mass**2 + 0.0055 * biomass_ratio_mass
+
 
 straw_burn_rate = 0.9  # Percentage of straw burned infield after harvest
 
