@@ -65,6 +65,8 @@ class SupplyZone():
         return self
 
 
+# TODO: This class has too many methods.
+#       The chain should be broken in two links, the farm and the transportation
 class SupplyChain():
     """A collection of supply zones
     - The supply chain does not vary with time
