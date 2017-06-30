@@ -16,26 +16,15 @@ import numpy as np
 from init import USD
 from parameters import discount_rate, tax_rate, depreciation_period, feedin_tarif
 from parameters import MongDuong1, MongDuong1Cofire, NinhBinh, NinhBinhCofire
-from parameters import winder_rental_cost, straw, specific_cost
+from parameters import straw, specific_cost
 
-from parameters import winder_haul, truck_velocity, work_hour_day, truck_loading_time
-from parameters import truck_load, OM_hour_MWh, wage_bm_transport
-from parameters import wage_bm_collect, wage_operation_maintenance, wage_bm_loading
+from parameters import collect_economics, truck_economics, OM_economics
 
 
 def benefit_array(plant, cofiringplant, income_parameter):
     MUSD = 10**6 * USD
-    job_benefit = cofiringplant.wages_npv(discount_rate,
-                                          work_hour_day,
-                                          winder_haul,
-                                          wage_bm_collect,
-                                          truck_load,
-                                          truck_velocity,
-                                          wage_bm_transport,
-                                          truck_loading_time,
-                                          wage_bm_loading,
-                                          OM_hour_MWh,
-                                          wage_operation_maintenance) / MUSD
+    job_benefit = cofiringplant.wages_npv(discount_rate, collect_economics, truck_economics,
+                                          OM_economics) / MUSD
     plant_benefit = (cofiringplant.net_present_value(income_parameter,
                                                      discount_rate,
                                                      tax_rate,
@@ -46,11 +35,13 @@ def benefit_array(plant, cofiringplant, income_parameter):
                                                depreciation_period)
                      ) / MUSD
     farmer_benefit = cofiringplant.straw_supply.farm_npv(discount_rate,
-                                                         winder_rental_cost,
-                                                         straw.price) / MUSD
+                                                         straw.price,
+                                                         collect_economics,
+                                                         truck_economics) / MUSD
     health_benefit = cofiringplant.health_npv(discount_rate, specific_cost) / MUSD
     climate_benefit = cofiringplant.CO2_npv(discount_rate, specific_cost) / MUSD
     return np.array([plant_benefit, farmer_benefit, job_benefit, health_benefit, climate_benefit])
+
 
 index = np.arange(5)
 width = 0.4

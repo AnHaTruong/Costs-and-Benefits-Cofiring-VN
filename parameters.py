@@ -45,22 +45,25 @@ def boiler_efficiency_loss(biomass_ratio_mass):
 
 straw_burn_rate = 0.9  # Percentage of straw burned infield after harvest
 
-winder_rental_cost = 40 * USD / ha   # per period
-winder_haul = 6.57 * t / d
-work_hour_day = 8 * hr / d
-OM_hour_MWh = 0.12 * hr / MWh  # working hour for OM per MWh    # O&M of co-firing per MWh
+# hourly wage calculated from base salary defined in governmental regulations
 
-truck_velocity = 45 * km / hr
-truck_load = 20 * t
-truck_loading_time = 2.7 / 60 * hr / t  # (Ovaskainen & 2016 )
+collect_economics = {'winder_rental_cost': 40 * USD / ha,   # per period
+                     'winder_haul': 6.57 * t / d,
+                     'work_hour_day': 8 * hr / d,
+                     'wage_bm_collect': 1.11 * USD / hr}
+
+truck_economics = {'truck_loading_time': 2.7 / 60 * hr / t,  # (Ovaskainen & 2016 )
+                   'wage_bm_loading': 1.11 * USD / hr,
+                   'truck_load': 20 * t,
+                   'truck_velocity': 45 * km / hr,
+                   'wage_bm_transport': 1.11 * USD / hr}
+
+OM_economics = {'OM_hour_MWh': 0.12 * hr / MWh,  # FIXME: No unit in variables names
+                'wage_operation_maintenance': 1.67 * USD / hr}
+
 transport_tariff = 2000 * VND / t / km  # vantaiduongviet.com
 tortuosity_factor = 1.5
 
-# wage per hour is calculated from base salary defined in governmental regulations
-wage_bm_collect = 1.11 * USD / hr
-wage_bm_transport = 1.11 * USD / hr
-wage_bm_loading = 1.11 * USD / hr
-wage_operation_maintenance = 1.67 * USD / hr
 barge_fuel_consumption = 8 * g / t / km  # Van Dingenen & 2016
 mining_productivity_surface = 8.04 * t / hr  # www.eia.g
 mining_productivity_underground = 2.5 * t / hr  # ww.eia.gov
@@ -108,10 +111,11 @@ emission_factor = {
                       'NOx': 0. * kg / t / km,
                       'PM10': 0. * kg / t / km
                       },
+    # Local pollutants emission factors (2014) from http://naei.defra.gov.uk/data/ef-transport
     'Road transport': {'CO2': 0.110 * kg / t / km,  # (Binh & Tuan 2016)
-                       'SO2': 0.003 * g / truck_load / km,  # emission factor taken from
-                       'NOx': 2.68 * g / truck_load / km,  # naei.defra.gov.uk/data/ef-transport
-                       'PM10': 0.04 * g / truck_load / km  # data of 2014
+                       'SO2': 0.003 * g / truck_economics['truck_load'] / km,
+                       'NOx': 2.68 * g / truck_economics['truck_load'] / km,
+                       'PM10': 0.04 * g / truck_economics['truck_load'] / km
                        },
     'Barge transport': {'CO2': 0.071 * kg / t / km,  # (Binh & Tuan 2016)
                         'SO2': 2 * g / kg * barge_fuel_consumption,  # Van Dingenen & 2016
