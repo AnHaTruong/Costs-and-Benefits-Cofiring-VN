@@ -13,10 +13,8 @@
 
 from init import FTE, display_as
 from parameters import MongDuong1, NinhBinh, MongDuong1Cofire, NinhBinhCofire
-from parameters import winder_haul, work_hour_day, wage_bm_collect
-from parameters import truck_load, truck_velocity, wage_bm_transport
-from parameters import truck_loading_time, wage_bm_loading
-from parameters import OM_hour_MWh, wage_operation_maintenance, mining_productivity_underground
+from parameters import collect_economics, truck_economics, OM_economics
+from parameters import mining_productivity_underground
 
 print('')
 
@@ -27,22 +25,16 @@ cols2 = '{:25}{:12.1f}{:12.1f}'
 def print_job(plant, cofiringplant):
     print('Benefit from job creation:', plant.name, '\n')
 
-    row1 = cofiringplant.straw_supply.farm_wages(work_hour_day, winder_haul, wage_bm_collect)[1]
-    row2 = cofiringplant.straw_supply.transport_wages(truck_load,
-                                                      truck_velocity,
-                                                      wage_bm_transport)[1]
-    row3 = cofiringplant.biomass_om_wages(OM_hour_MWh, wage_operation_maintenance)[1]
-    row7 = cofiringplant.straw_supply.farm_work(work_hour_day, winder_haul)[1]
-    row8 = cofiringplant.straw_supply.transport_work(truck_load, truck_velocity)[1]
-    row9 = cofiringplant.biomass_om_work(OM_hour_MWh)[1]
-    row10 = cofiringplant.cofiring_work(OM_hour_MWh, work_hour_day, winder_haul,
-                                        truck_load, truck_velocity, truck_loading_time)[1]
-    row4 = cofiringplant.cofiring_wages(work_hour_day, winder_haul, wage_bm_collect, truck_load,
-                                        truck_velocity, wage_bm_transport, truck_loading_time,
-                                        wage_bm_loading, OM_hour_MWh,
-                                        wage_operation_maintenance)[1]
-    row11 = cofiringplant.straw_supply.loading_work(truck_loading_time)[1]
-    row12 = cofiringplant.straw_supply.loading_wages(truck_loading_time, wage_bm_loading)[1]
+    row1 = cofiringplant.straw_supply.farm_wages(collect_economics)[1]
+    row2 = cofiringplant.straw_supply.transport_wages(truck_economics)[1]
+    row3 = cofiringplant.biomass_om_wages(OM_economics)[1]
+    row7 = cofiringplant.straw_supply.farm_work(collect_economics)[1]
+    row8 = cofiringplant.straw_supply.transport_work(truck_economics)[1]
+    row9 = cofiringplant.biomass_om_work(OM_economics)[1]
+    row10 = cofiringplant.cofiring_work(collect_economics, truck_economics, OM_economics)[1]
+    row4 = cofiringplant.cofiring_wages(collect_economics, truck_economics, OM_economics)[1]
+    row11 = cofiringplant.straw_supply.loading_work(truck_economics)[1]
+    row12 = cofiringplant.straw_supply.loading_wages(truck_economics)[1]
 
     display_as(row7, 'FTE')
     display_as(row8, 'FTE')
@@ -59,10 +51,11 @@ def print_job(plant, cofiringplant):
     print(cols.format('Area collected', cofiringplant.straw_supply.area()))
     print(cols.format('Collection radius', cofiringplant.straw_supply.collection_radius()))
     print(cols.format('Truck trips: duration',
-                      cofiringplant.straw_supply.transport_time(truck_velocity)
+                      cofiringplant.straw_supply.transport_time(truck_economics)
                       )
           )
-    print(cols.format('Truck trips: number', cofiringplant.biomass_used[1] / truck_load))
+    truck_trips = cofiringplant.biomass_used[1] / truck_economics['truck_load']
+    print(cols.format('Truck trips: number', truck_trips))
     print()
 
 
@@ -72,6 +65,7 @@ def print_job_lost(plant, cofiringplant):
     display_as(row, 'FTE')
     print(cols.format('Job lost', row))
     print(cols.format('Coal saved', cofiringplant.coal_saved[1]))
+
 
 print_job(MongDuong1, MongDuong1Cofire)
 print_job_lost(MongDuong1, MongDuong1Cofire)
