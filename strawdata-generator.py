@@ -70,35 +70,34 @@ NinhBinh_straw_production = df.loc['Ninh Binh', 'straw production']
 NinhBinh_average_straw_yield = df.loc['Ninh Binh', 'straw yield']
 
 
-def line(q, unit):
+def line(q):
     """Returns the Python expression defining the value of quantity  q
     this expression is string litteral, to be saved for later evaluation
     can be imported by another file
     in base 10, as many significant digits as Python wants to print
 
     >>> test_qty = 2 * t
-    >>> line("test_qty", "t")
-    'test_qty = 2.0 * t'
+    >>> line("test_qty")
+    'test_qty = 2 * t'
 
+    I consider it a bug in  natu  that repr(q) omits the  *  between number and unit
+    The  # nosec  comment disables bandit warning about using eval
     """
-    value = eval(q + '/(' + unit + ')')
-    return q + ' = ' + str(value) + ' * ' + unit
+    valid_repr = repr(eval(q)).replace(' ', ' * ', 1)  # nosec
+    return q + ' = ' + valid_repr
 
-test_qty = 2 * t
-assert(line("test_qty", "t") == "test_qty = 2.0 * t")
 
 print("""
 # This file automatically generated, DO NOT EDIT
 
 from natu.units import t, ha
-
 """,
-      line("MongDuong1_straw_density1", "t / ha"), '\n',
-      line("MongDuong1_straw_density2", "t / ha"), '\n',
-      line("MongDuong1_straw_production", "t"), '\n',
-      line("MongDuong1_average_straw_yield", "t / ha"), '\n',
-      line("NinhBinh_straw_density", "t / ha"), '\n',
-      line("NinhBinh_straw_production", "t"), '\n',
-      line("NinhBinh_average_straw_yield", "t / ha"), '\n',
-      sep=''
+      line("MongDuong1_straw_density1"),
+      line("MongDuong1_straw_density2"),
+      line("MongDuong1_straw_production"),
+      line("MongDuong1_average_straw_yield"),
+      line("NinhBinh_straw_density"),
+      line("NinhBinh_straw_production"),
+      line("NinhBinh_average_straw_yield"),
+      sep='\n'
       )
