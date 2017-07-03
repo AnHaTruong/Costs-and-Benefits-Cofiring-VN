@@ -8,20 +8,15 @@
 # Creative Commons Attribution-ShareAlike 4.0 International
 """ Common init file for all modules in the directory
 
-
-It is in the manual, but worth reminding:
 This file should be imported before any "import natu ..."
 otherwise use_quantities does not work
 
+It is in the manual, but worth reminding:
 Units thread into arrays from the right but not from the left
   np.array([1, 2]) * m  -->  array([1 m, 2 m], dtype=object)
   m * np.array([1, 2])   --> [1  2] m
  So when multiplying a vector by a quantity, put the vector left
 """
-
-# pylint: disable=E402
-
-import subprocess
 
 from natu import config
 # config.use_quantities = False
@@ -53,18 +48,6 @@ v_zeros = np.zeros(time_horizon + 1, dtype=np.float64)
 v_ones = np.ones(time_horizon + 1, dtype=np.float64)
 v_after_invest = np.ones(time_horizon + 1, dtype=np.float64)
 v_after_invest[0] = 0
-
-
-# This belongs to the Makefile.
-try:
-    import strawdata
-except ImportError:
-    print("Calling   make strawdata.py")
-    subprocess.run(["make", "strawdata.py"])
-    try:
-        import strawdata
-    except ImportError:
-        print("*** IT DID NOT WORK ***")
 
 
 def display_as(v, unit):
