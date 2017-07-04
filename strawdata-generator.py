@@ -14,12 +14,12 @@ We assume that within a province, the straw production is uniform
 
 import pandas as pd
 from natu.units import ha, t
-from natu.numpy import mean
 from natu.math import fsum
 
 # Leinonen and Nguyen 2013 : 50% of straw is collected and 79% of collected straw is sold
 market_fraction = 0.5 * 0.79
 
+# Reference ???
 residue_to_product_ratio = 1.0
 
 df = pd.read_excel('Data/Rice_production_2014_GSO.xlsx', index_col=0)
@@ -59,21 +59,14 @@ MongDuong1_average_straw_yield = fsum([df.loc[province, 'straw yield'] * size[pr
                                        for province in all_provinces]) / sum(size.values())
 
 
-def line(q):
-    """Returns the Python expression defining the value of quantity  q
-    this expression is string litteral, to be saved for later evaluation
-    can be imported by another file
-    in base 10, as many significant digits as Python wants to print
+def line(quantity_name: str) -> str:
+    """Returns a Python expression setting the value of quantity  q
 
-    >>> test_qty = 2 * t
-    >>> line("test_qty")
-    'test_qty = 2 * t'
-
-    I consider it a bug in  natu  that repr(q) omits the  *  between number and unit
+    By default  natu  omits the  *  between number and unit in repr(q). Bad !
     The  # nosec  comment disables bandit warning about using eval
     """
-    valid_repr = repr(eval(q)).replace(' ', ' * ', 1)  # nosec
-    return q + ' = ' + valid_repr
+    valid_repr = repr(eval(quantity_name)).replace(' ', ' * ', 1)  # nosec
+    return quantity_name + ' = ' + valid_repr
 
 
 print("""
