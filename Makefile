@@ -15,7 +15,7 @@ diffs  = $(patsubst %.py,%.diff,$(tablepyfiles))
 figurespyfiles = $(wildcard figure*.py)
 figures = $(patsubst %.py,%.png,$(figurespyfiles)) MD1emission.png  NBemission.png
 
-doc_tests = Investment.doctest init.doctest strawdata-generator.doctest
+doc_tests = Investment.doctest init.doctest
 script_tests = test_zero_cofire.txt
 
 all: $(tables) $(figures)

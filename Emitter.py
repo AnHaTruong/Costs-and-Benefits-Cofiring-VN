@@ -64,8 +64,10 @@ Total  [0.0, 1003.86, 1003.86]  [0.0, 2.28, 2.28]  [0.0, 9.1, 9.1]  [0.0, 0.18, 
     def __init__(self,
                  quantities,   # A dictionary of (fuel: emissions_time_series)
                  emission_factor,
-                 controls={'CO2': 0, 'SO2': 0, 'NOx': 0, 'PM10': 0}):
+                 controls=None):
         # assert all(isinstance(v, np.ndarray) for v in quantities.values())
+        if controls is None:
+            controls = {'CO2': 0, 'SO2': 0, 'NOx': 0, 'PM10': 0}
         self.quantities = quantities
         self.controled_emission_factor = pd.Series({
             fuel: pd.Series(emission_factor[fuel]) * (1 - pd.Series(controls))
