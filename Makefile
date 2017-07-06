@@ -38,7 +38,24 @@ parameters.py: strawdata.py
 %.doctest: %.py
 	$(PYTHON) -m doctest -v $< > $@
 
-.PHONY: test reg_tests reg_tests_reset clean cleaner
+.precious: strawdata.py
+
+.PHONY: test reg_tests reg_tests_reset clean cleaner archive
+
+distName:=CofiringEconomics-$(shell date --iso-8601)
+dirs=$(distName) $(distName)/data $(distName)/data/VNM_adm_shp $(distName)/tables.tocompare $(distName)/natu
+
+archive:
+	-@rm -rf $(distName) 2>/dev/null
+	mkdir $(dirs)
+	cp Makefile $(distName)
+	cp README $(distName)
+	cp *py $(distName)
+	cp -r tables.tocompare $(distName)
+	cp -r Data $(distName)
+	cp -r natu $(distName)
+	zip -r $(distName).zip $(distName)
+	rm -rf $(distName)
 
 test: $(doc_tests) $(script_tests) reg_tests
 
