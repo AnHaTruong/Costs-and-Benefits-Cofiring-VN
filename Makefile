@@ -13,7 +13,7 @@ tables = $(patsubst %.py,%.txt,$(tablepyfiles))
 diffs  = $(patsubst %.py,%.diff,$(tablepyfiles))
 
 figurespyfiles = $(wildcard figure*.py)
-figures = $(patsubst %.py,%.png,$(figurespyfiles))
+figures = $(patsubst %.py,%.png,$(figurespyfiles)) MD1emission.png  NBemission.png
 
 doc_tests = Investment.doctest init.doctest strawdata-generator.doctest
 script_tests = test_zero_cofire.txt
@@ -31,6 +31,9 @@ parameters.py: strawdata.py
 %.png: %.py
 	$(PYTHON) $< > $@
 
+MD1emission.png  NBemission.png: figure2.py
+	$(PYTHON) $< > $@
+
 %.diff: %.txt tables.tocompare/%.txt
 	@diff $^  > $@
 	@if [ -s $@ ]; then exit 1; fi;
@@ -38,7 +41,24 @@ parameters.py: strawdata.py
 %.doctest: %.py
 	$(PYTHON) -m doctest -v $< > $@
 
-.PHONY: test reg_tests reg_tests_reset clean cleaner
+.precious: strawdata.py
+
+.PHONY: test reg_tests reg_tests_reset clean cleaner archive
+
+distName:=CofiringEconomics-$(shell date --iso-8601)
+dirs=$(distName) $(distName)/data $(distName)/data/VNM_adm_shp $(distName)/tables.tocompare $(distName)/natu
+
+archive:
+	-@rm -rf $(distName) 2>/dev/null
+	mkdir $(dirs)
+	cp Makefile $(distName)
+	cp README $(distName)
+	cp *py $(distName)
+	cp -r tables.tocompare $(distName)
+	cp -r Data $(distName)
+	cp -r natu $(distName)
+	zip -r $(distName).zip $(distName)
+	rm -rf $(distName)
 
 test: $(doc_tests) $(script_tests) reg_tests
 
