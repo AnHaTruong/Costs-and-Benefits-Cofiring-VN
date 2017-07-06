@@ -10,7 +10,7 @@
 
 git stash -q --keep-index
 make cleaner
-make test
+make test -j5
 RESULT=$?
 git stash pop -q
 exit $RESULT
