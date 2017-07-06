@@ -8,19 +8,21 @@
 #     Creative Commons Attribution-ShareAlike 4.0 International
 #
 #
-""" Draw Figure 2 CO2 and air pollutant emission
+""" Plots the air pollutants emissions and CO2 emissions figure
 """
 
 import matplotlib.pyplot as plt
 import numpy as np
 
 from parameters import MongDuong1, MongDuong1Cofire, NinhBinh, NinhBinhCofire
-from natu.units import t
+from natu.units import t   # pylint: disable=E0611
 
 
-def plot_emissions(plant, cofiringplant):
+def plot_emissions(plant, cofiringplant, axes):
+    """Plots the air pollutants emissions and CO2 emissions figure for one site"""
     kt = 1000 * t
     Mt = 1000000 * t
+
     CO2stack = np.array([plant.stack.emissions().at['CO2', 'Total'][1],
                          cofiringplant.stack.emissions().at['CO2', 'Total'][1]
                          ]) / Mt
@@ -71,7 +73,7 @@ def plot_emissions(plant, cofiringplant):
     width = 0.48
     index = [2, 2.5, 3.5, 4, 5, 5.5]
 
-    fig, ax1 = plt.subplots()
+    ax1 = axes
     ax2 = ax1.twiny()
 
     ax1.barh(ind, CO2stack, width, color='darkred', edgecolor='none', label='Plant emissions')
@@ -98,10 +100,11 @@ def plot_emissions(plant, cofiringplant):
                prop={'size': 9},
                title=plant.name + ' Emissions',
                frameon=False)
-    fig.tight_layout()
 
 
-plot_emissions(MongDuong1, MongDuong1Cofire)
-plt.savefig('MD1emission.png')
-plot_emissions(NinhBinh, NinhBinhCofire)
-plt.savefig('NBemission.png')
+FIGURE, AXESS = plt.subplots(nrows=1, ncols=2, figsize=[12, 6])
+plot_emissions(MongDuong1, MongDuong1Cofire, AXESS[0])
+plot_emissions(NinhBinh, NinhBinhCofire, AXESS[1])
+FIGURE.tight_layout()
+
+plt.savefig('figure2.png')
