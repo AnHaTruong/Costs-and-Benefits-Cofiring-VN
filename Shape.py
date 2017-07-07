@@ -11,7 +11,11 @@ from natu.math import sqrt, pi
 from natu.units import m
 
 
-class Shape:
+class Shape:    # pylint: disable=too-few-public-methods
+    """Abstract base class for a geometric shape.
+
+    Let's keep it simple, since all fits in one file:
+    Child classes should define init, str, area, first_moment_of_area and shrink"""
     pass
 
 
