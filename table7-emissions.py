@@ -24,7 +24,7 @@ def print_emission(plant, cofireplant):
     print('Emission from coal supply')
     table(plant.coal_transporter().emissions())
     print('Emission from open field burning')
-    table(cofireplant.straw_supply.field_emission(cofireplant.biomass_used[0]))
+    table(cofireplant.straw_supply.field_emission(cofireplant.biomass_used * 0))
     print(plant.name, 'COFIRING EMISSION')
     print('Emission from power plant')
     table(cofireplant.stack.emissions())
@@ -40,6 +40,6 @@ def print_emission(plant, cofireplant):
 
 
 print_emission(MongDuong1, MongDuong1Cofire)
-print('==================\n')
+print("==================\n")
 
 print_emission(NinhBinh, NinhBinhCofire)

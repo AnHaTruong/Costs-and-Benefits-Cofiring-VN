@@ -33,8 +33,8 @@ def plot_emissions(plant, cofiringplant, axes):
                           )
                          ]) / Mt
 
-    field_emis_before = cofiringplant.straw_supply.field_emission(cofiringplant.biomass_used[0])
-    field_emis_after = cofiringplant.straw_supply.field_emission(cofiringplant.biomass_used[1])
+    field_emis_before = cofiringplant.straw_supply.field_emission(cofiringplant.biomass_used * 0)
+    field_emis_after = cofiringplant.straw_supply.field_emission(cofiringplant.biomass_used)
     CO2field = np.array([field_emis_before.at['CO2', 'Total'][1],
                          field_emis_after.at['CO2', 'Total'][1]]
                         ) / Mt

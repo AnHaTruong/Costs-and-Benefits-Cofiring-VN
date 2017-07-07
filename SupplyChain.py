@@ -191,8 +191,8 @@ class SupplyChain():
         return self.zones[-1].shape.outer_radius()
 
     def field_emission(self, biomass_used):
-        field = Emitter({'Straw': (v_after_invest * self.straw_production
-                                   * self.straw_burn_rate) - biomass_used},
+        field = Emitter({'Straw': (v_after_invest * self.straw_production * self.straw_burn_rate
+                                   - biomass_used)},
                         self.emission_factor
                         )
         return field.emissions()

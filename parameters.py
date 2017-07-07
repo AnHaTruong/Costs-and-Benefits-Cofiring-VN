@@ -35,14 +35,6 @@ depreciation_period = 10
 tax_rate = 0.25  # Corporate tax in Vietnam
 feedin_tarif = {'MD': 1239.17 * VND / kWh, 'NB': 1665.6 * VND / kWh}
 
-biomass_ratio = v_after_invest * 0.05           # As percent of energy coming from biomass
-
-
-def boiler_efficiency_loss(biomass_ratio_mass):
-    """Boiler efficiency loss due to cofiring, according to Tillman 2000"""
-    return 0.0044 * biomass_ratio_mass**2 + 0.0055 * biomass_ratio_mass
-
-
 straw_burn_rate = 0.9  # Percentage of straw burned infield after harvest
 
 # hourly wage calculated from base salary defined in governmental regulations
@@ -161,15 +153,30 @@ MD_SupplyChain = SupplyChain(zones=[MDSupplyZone1, MDSupplyZone2],
                              average_straw_yield=MongDuong1_average_straw_yield,
                              emission_factor=emission_factor)
 
-MongDuong1Cofire = CofiringPlant(MongDuong1,
-                                 biomass_ratio,
-                                 capital_cost=50 * USD / kW / y,
-                                 fix_om_cost=32.24 * USD / kW / y,
-                                 variable_om_cost=0.006 * USD / kWh,
-                                 biomass=straw,
-                                 boiler_efficiency_loss=boiler_efficiency_loss,
-                                 supply_chain=MD_SupplyChain
-                                 )
+Cofire_Tech = namedtuple('Cofire_Tech', ['biomass_ratio_energy',
+                                         'capital_cost',
+                                         'fix_om_cost',
+                                         'variable_om_cost',
+                                         'biomass',
+                                         'boiler_efficiency_loss'])
+
+
+def boiler_efficiency_loss_function_T2000(biomass_ratio_mass):
+    """Boiler efficiency loss due to cofiring, according to Tillman 2000"""
+    return 0.0044 * biomass_ratio_mass**2 + 0.0055 * biomass_ratio_mass
+
+
+cofire_MD1 = Cofire_Tech(biomass_ratio_energy=v_after_invest * 0.05,
+                         capital_cost=50 * USD / kW / y,
+                         fix_om_cost=32.24 * USD / kW / y,
+                         variable_om_cost=0.006 * USD / kWh,
+                         biomass=straw,
+                         boiler_efficiency_loss=boiler_efficiency_loss_function_T2000
+                         )
+
+cofire_NB = cofire_MD1._replace(capital_cost=100 * USD / kW / y)
+
+MongDuong1Cofire = CofiringPlant(MongDuong1, cofire_MD1, supply_chain=MD_SupplyChain)
 
 NinhBinh = PowerPlant(name="Ninh Binh",
                       capacity=100 * MW * y,
@@ -197,12 +204,4 @@ NB_SupplyChain = SupplyChain(zones=[NBSupplyZone],
                              average_straw_yield=NinhBinh_average_straw_yield,
                              emission_factor=emission_factor)
 
-NinhBinhCofire = CofiringPlant(NinhBinh,
-                               biomass_ratio,
-                               capital_cost=100 * USD / (kW * y),
-                               fix_om_cost=32.24 * USD / kW / y,
-                               variable_om_cost=0.006 * USD / kWh,
-                               biomass=straw,
-                               boiler_efficiency_loss=boiler_efficiency_loss,
-                               supply_chain=NB_SupplyChain
-                               )
+NinhBinhCofire = CofiringPlant(NinhBinh, cofire_NB, supply_chain=NB_SupplyChain)
