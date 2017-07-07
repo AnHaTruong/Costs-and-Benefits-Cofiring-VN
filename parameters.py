@@ -58,7 +58,7 @@ truck_economics = {'truck_loading_time': 2.7 / 60 * hr / t,  # (Ovaskainen & 201
                    'truck_velocity': 45 * km / hr,
                    'wage_bm_transport': 1.11 * USD / hr}
 
-OM_economics = {'OM_hour_MWh': 0.12 * hr / MWh,  # working hour for OM per MWh    # O&M of co-firing per MWh
+OM_economics = {'OM_hour_MWh': 0.12 * hr / MWh,  # working hour for OM per MWh
                 'wage_operation_maintenance': 1.67 * USD / hr}
 
 transport_tariff = 2000 * VND / t / km  # vantaiduongviet.com

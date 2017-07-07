@@ -64,7 +64,7 @@ class PowerPlant(Investment):
                              self.emission_factor,
                              self.emission_controls)
 
-    def income(self, feedin_tariff):
+    def income(self, feedin_tariff):                       # pylint: disable=arguments-differ
         revenue = self.power_generation * feedin_tariff
         return display_as(revenue, 'kUSD')
 

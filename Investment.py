@@ -31,15 +31,17 @@ class Investment:
     def __init__(self, capital=0 * USD):
         self.capital = display_as(capital, 'kUSD')
 
-    def income(self, *args):
-        return display_as(v_zeros * USD, 'kUSD')
-
     def investment(self):
         """Multi year investment coded but not tested"""
         v_invest = 1 - v_after_invest
         return display_as(v_invest * self.capital / sum(v_invest), 'kUSD')
 
-    def operating_expenses(self):
+    @staticmethod
+    def income(income_parameter):
+        return display_as(v_zeros * USD, 'kUSD')
+
+    @staticmethod
+    def operating_expenses():
         return display_as(v_zeros * USD, 'kUSD')
 
     def amortization(self, depreciation_period):
