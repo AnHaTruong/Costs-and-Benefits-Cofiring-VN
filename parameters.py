@@ -14,6 +14,7 @@ All numeric values should be defined in this module.
 """
 
 import pandas as pd
+from collections import namedtuple
 
 from init import USD, VND, time_horizon, v_after_invest
 from natu.units import MJ, kg, t, d, hr, km, MW, ha, kW, y, kWh, MWh, g
@@ -24,7 +25,6 @@ from strawdata import NinhBinh_straw_density, NinhBinh_straw_production
 from strawdata import MongDuong1_straw_production
 from strawdata import MongDuong1_average_straw_yield, NinhBinh_average_straw_yield
 
-from Emitter import Fuel
 from PowerPlant import PowerPlant, CofiringPlant
 from Shape import Semi_Annulus, Disk
 from SupplyChain import SupplyChain, SupplyZone
@@ -68,6 +68,8 @@ barge_fuel_consumption = 8 * g / t / km  # Van Dingenen & 2016
 mining_productivity_surface = 8.04 * t / hr  # www.eia.g
 mining_productivity_underground = 2.5 * t / hr  # ww.eia.gov
 coal_import_price = 73 * USD / t
+
+Fuel = namedtuple('Fuel', 'name, heat_value, price, transport_distance, transport_mean')
 
 MD_Coal = Fuel(name="6b_coal",
                heat_value=19.43468 * MJ / kg,

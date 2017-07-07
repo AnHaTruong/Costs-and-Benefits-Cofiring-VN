@@ -15,7 +15,7 @@ from natu.numpy import full, npv
 
 from init import time_horizon, v_after_invest, display_as, USD
 from Investment import Investment
-from Emitter import Fuel, Emitter
+from Emitter import Emitter
 
 
 class PowerPlant(Investment):
@@ -32,7 +32,7 @@ class PowerPlant(Investment):
                  variable_om_coal,
                  emission_controls,
                  emission_factor,
-                 coal: Fuel,
+                 coal,
                  capital=0 * USD
                  ):
         self.name = name
@@ -142,7 +142,7 @@ class CofiringPlant(PowerPlant):
                  capital_cost,
                  fix_om_cost,
                  variable_om_cost,
-                 biomass: Fuel,
+                 biomass,
                  boiler_efficiency_loss,
                  supply_chain
                  ):
