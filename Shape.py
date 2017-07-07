@@ -74,10 +74,7 @@ class Semi_Annulus(Annulus):
         super().__init__(r, R)
 
     def __str__(self):
-        return ("Semiannulus with inner radius " + str(self.r)
-                + ", outer radius " + str(self.R)
-                + ", area " + str(self.area())
-                )
+        return "Semiannulus. Half of the " + super().__str__()
 
     def area(self):
         return super().area() / 2
