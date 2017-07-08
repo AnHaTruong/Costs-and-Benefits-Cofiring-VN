@@ -14,7 +14,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from init import USD
-from parameters import discount_rate, tax_rate, depreciation_period, feedin_tarif
+from parameters import discount_rate, tax_rate, depreciation_period, feedin_tariff
 from parameters import MongDuong1, MongDuong1Cofire, NinhBinh, NinhBinhCofire
 from parameters import straw, specific_cost
 
@@ -46,9 +46,9 @@ def benefit_array(plant, cofiringplant, income_parameter):
 index = np.arange(5)
 width = 0.4
 plt.figure(figsize=(10, 5))
-NB = plt.barh(index + width, benefit_array(NinhBinh, NinhBinhCofire, feedin_tarif['NB']), width,
+NB = plt.barh(index + width, benefit_array(NinhBinh, NinhBinhCofire, feedin_tariff['NB']), width,
               color='#ff4500', edgecolor='none', label='Ninh Binh')
-MD = plt.barh(index, benefit_array(MongDuong1, MongDuong1Cofire, feedin_tarif['MD']), width,
+MD = plt.barh(index, benefit_array(MongDuong1, MongDuong1Cofire, feedin_tariff['MD']), width,
               color='navy', edgecolor='none', label='Mong Duong 1')
 plt.xlabel('Cumulative benefit over 20 years (M$)')
 plt.yticks(index + 0.5, ('Plant owner\n(net profit)',
