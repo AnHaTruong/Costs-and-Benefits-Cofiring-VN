@@ -33,7 +33,7 @@ from SupplyChain import SupplyChain, SupplyZone
 discount_rate = 0.087771
 depreciation_period = 10
 tax_rate = 0.25  # Corporate tax in Vietnam
-feedin_tarif = {'MD': 1239.17 * VND / kWh, 'NB': 1665.6 * VND / kWh}
+feedin_tariff = {'MD': 1239.17 * VND / kWh, 'NB': 1665.6 * VND / kWh}
 
 straw_burn_rate = 0.9  # Percentage of straw burned infield after harvest
 

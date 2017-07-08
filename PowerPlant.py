@@ -108,31 +108,6 @@ class PowerPlant(Investment):
         # Fixme: once TableC is no regression, use /MWh for integer
         return display_as(result, 'USD/kWh')
 
-    def table_LCOE(self, feedin_tariff, discount_rate, tax_rate, depreciation_period):
-        def printRowInt(label, quantity):
-            print('{:30}{:8.0f}'.format(label, quantity))
-
-        def printRowFloat(label, value):
-            print('{:30}{:8.4f}'.format(label, value))
-
-        def printRowNPV(label, vector):
-            printRowInt(label, npv(discount_rate, vector))
-
-        print("Levelized cost of electricity -", self.name, "\n")
-        printRowInt("Investment", self.capital)
-        printRowNPV("Fuel cost", self.fuel_cost())
-        printRowNPV("O&M cost", self.operation_maintenance_cost())
-        printRowNPV("Tax", self.income_tax(feedin_tariff, tax_rate, depreciation_period))
-        printRowNPV("Sum of costs", self.cash_out(feedin_tariff,
-                                                  tax_rate,
-                                                  depreciation_period))
-        printRowNPV("Electricity produced", self.power_generation)
-        printRowFloat("LCOE", self.lcoe(feedin_tariff,
-                                        discount_rate,
-                                        tax_rate,
-                                        depreciation_period))
-        print('')
-
 
 class CofiringPlant(PowerPlant):
 
@@ -282,7 +257,7 @@ class CofiringPlant(PowerPlant):
 
     def CO2_npv(self, discount_rate, specific_cost):
         df = self.emission_reduction(specific_cost)
-        v = df['CO2']['Benefit']
+        v = df['CO2']['Benefit']  # FIXME: use .loc
         value = npv(discount_rate, v)
         return display_as(value, 'kUSD')
 
@@ -291,35 +266,3 @@ class CofiringPlant(PowerPlant):
         v = df.ix['Benefit'].drop('CO2').sum()
         value = npv(discount_rate, v)
         return display_as(value, 'kUSD')
-
-    def tableC(self, feedin_tariff, discount_rate, tax_rate, depreciation_period):
-        def printRowInt(label, quantity):
-            print('{:30}{:8.0f}'.format(label, quantity))
-
-        def printRowFloat(label, value):
-            print('{:30}{:8.4f}'.format(label, value))
-
-        def printRowNPV(label, vector):
-            printRowInt(label, npv(discount_rate, vector))
-
-        print("Levelized cost of electricity - ", self.name, "\n")
-        printRowInt("Investment", self.capital)
-        printRowNPV("Fuel cost", self.fuel_cost())
-        printRowNPV("  Coal", self.coal_cost())
-        printRowNPV("  Biomass", self.straw_supply.cost(self.biomass.price))
-        printRowNPV("    transportation", self.straw_supply.transport_cost())
-        printRowNPV("    straw at field", self.straw_supply.field_cost(self.biomass.price))
-        printRowNPV("O&M cost", self.operation_maintenance_cost())
-        printRowNPV("  coal", self.coal_om_cost())
-        printRowNPV("  biomass", self.biomass_om_cost())
-        printRowNPV("Tax", self.income_tax(feedin_tariff,
-                                           tax_rate,
-                                           depreciation_period))
-        printRowNPV("Sum of costs", self.cash_out(feedin_tariff,
-                                                  tax_rate,
-                                                  depreciation_period))
-        printRowNPV("Electricity produced", self.power_generation)
-        printRowFloat("LCOE", self.lcoe(feedin_tariff,
-                                        discount_rate,
-                                        tax_rate,
-                                        depreciation_period))
