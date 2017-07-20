@@ -43,17 +43,20 @@ straw_burn_rate = 0.9  # Percentage of straw burned infield after harvest
 collect_economics = {'winder_rental_cost': 40 * USD / ha,   # per period
                      'winder_haul': 6.57 * t / d,
                      'work_hour_day': 8 * hr / d,
-                     'wage_bm_collect': 1.11 * USD / hr}
+                     'wage_bm_collect': 1.11 * USD / hr
+                     }
 
 truck_economics = {'truck_loading_time': 2.7 / 60 * hr / t,  # (Ovaskainen & 2016 )
                    'wage_bm_loading': 1.11 * USD / hr,
                    'truck_load': 20 * t,
                    'truck_velocity': 45 * km / hr,
-                   'wage_bm_transport': 1.11 * USD / hr}
+                   'wage_bm_transport': 1.11 * USD / hr,
+                   'transport_tariff': 2000 * VND / t / km}  # vantaiduongviet.com
 
 OM_economics = {'OM_hour_MWh': 0.12 * hr / MWh,  # working hour for OM per MWh
                 'wage_operation_maintenance': 1.67 * USD / hr}
 
+#TODO: Delete this global
 transport_tariff = 2000 * VND / t / km  # vantaiduongviet.com
 tortuosity_factor = 1.5
 

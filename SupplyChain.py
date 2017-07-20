@@ -17,6 +17,9 @@ from init import isclose, v_after_invest, v_zeros, display_as, zero_to_NaN, USD
 from natu.units import t, km, ha
 from Emitter import Emitter
 
+# TODO: The straw_production should be recomputed when shrink
+#  --> Make it proportional to the area using a straw_production_density
+#  straw_density is confusing. Is it only the collected fraction ?
 
 class SupplyZone:
     def __init__(self,
@@ -56,20 +59,15 @@ class SupplyZone:
                     )
         return display_as(activity, 't * km')
 
-    def transport_cost(self):
-        cost = self.transport_tkm() * self.transport_tariff
-        return display_as(cost, 'kUSD')
-
     def shrink(self, factor):
         self.shape = self.shape.shrink(factor)
         return self
 
 
-# TODO: This class has too many methods.
-#       The chain should be broken in two links, the farm and the transportation
 class SupplyChain:
     """A collection of supply zones
-    - The supply chain does not vary with time
+
+    Not vectorized, the supply chain does not vary with time
     """
     def __init__(self,
                  zones,
@@ -134,93 +132,13 @@ class SupplyChain:
             activity += zone.transport_tkm()
         return display_as(activity, 't * km')
 
-    def transport_work(self, truck_economics):
-        tkm_per_hr = truck_economics['truck_load'] * truck_economics['truck_velocity']
-        time = self.transport_tkm() / tkm_per_hr
-        return display_as(time, 'hr')
-
-    def transport_time(self, truck_economics):
-        time = self.collection_radius() * 2 / truck_economics['truck_velocity']
-        return display_as(time, 'hr')
-
-    def transport_wages(self, truck_economics):
-        amount = self.transport_work(truck_economics) * truck_economics['wage_bm_transport']
-        return display_as(amount, 'kUSD')
-
-    def transport_cost(self):
-        cost = v_zeros * USD
-        for zone in self.zones:
-            cost += zone.transport_cost()
-        return display_as(cost, 'kUSD')
-
-    def transport_emissions(self):
-        trucks = Emitter({'Road transport': self.transport_tkm()},
-                         self.emission_factor)
-        return trucks.emissions()
-
-    def transport_cost_per_t(self):
-        cost_per_t = self.transport_cost() / zero_to_NaN(self.quantity())
-        return display_as(cost_per_t, 'USD/t')
-
-    def loading_work(self, truck_economics):  # Unloading work is included in om_work
-        time = self.quantity() * truck_economics['truck_loading_time']
-        return display_as(time, 'hr')
-
-    def loading_wages(self, truck_economics):
-        amount = self.loading_work(truck_economics) * truck_economics['wage_bm_loading']
-        return display_as(amount, 'kUSD')
-
-    def field_cost(self, price):
-        cost = self.quantity() * price
-        return display_as(cost, 'kUSD')
-
-    def cost(self, price):
-        cost = self.field_cost(price) + self.transport_cost()
-        return display_as(cost, 'kUSD')
-
-    def cost_per_t(self, price):
-        """Including transport cost"""
-        cost_per_t = self.cost(price) / zero_to_NaN(self.quantity())
-        return display_as(cost_per_t, 'USD/t')
-
-    def cost_per_GJ(self, price, heat_value):
-        cost = self.cost_per_t(price) / heat_value
-        return display_as(cost, 'USD / GJ')
-
     def collection_radius(self):
         return self.zones[-1].shape.outer_radius()
-
-    def field_emission(self, biomass_used):
-        field = Emitter({'Straw': (v_after_invest * self.straw_production * self.straw_burn_rate
-                                   - biomass_used)},
-                        self.emission_factor
-                        )
-        return field.emissions()
-
-    def farm_work(self, collect_economics):
-        """Work time needed to collect straw for co-firing per year"""
-        hr_per_t = collect_economics['work_hour_day'] / collect_economics['winder_haul']
-        time = self.quantity() * hr_per_t
-        return display_as(time, 'hr')
-
-    def farm_wages(self, collect_economics):
-        """Benefit from job creation from biomass collection"""
-        amount = self.farm_work(collect_economics) * collect_economics['wage_bm_collect']
-        return display_as(amount, 'kUSD')
 
     def farm_area(self):
         area = self.quantity() / self.average_straw_yield
         return display_as(area, 'ha')
 
-    def farm_profit(self, price, collect_economics, truck_economics):
-        profit = (self.cost(price)
-                  - self.farm_wages(collect_economics)
-                  - self.loading_wages(truck_economics)
-                  - self.transport_wages(truck_economics)
-                  - collect_economics['winder_rental_cost'] * self.farm_area()[1])
-        return display_as(profit, 'kUSD')
-
-    def farm_npv(self, discount_rate, price, collect_economics, truck_economics):
-        income = self.farm_profit(price, collect_economics, truck_economics)
-        value = np.npv(discount_rate, income)
-        return display_as(value, 'kUSD')
+    def burnable(self):
+        mass = self.straw_production * self.straw_burn_rate
+        return display_as(mass, 't')
