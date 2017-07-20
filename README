@@ -19,3 +19,15 @@ Use a simple Python console instead.
 
 install the pre-commit script to always run the tests before commit
 ln pre-commit .git/hooks/
+
+
+Quality programming goals
+1. Zero code duplicates using codacy 
+2. Zero issues regarding PEP8 compliance using  codacy  (with reasonable number of tests enabled)
+
+Four kinds of testing:
+0. Self testing with  assert  statements
+1. Unit testing with  doctests  comments in the code
+2. Function testing with ad hoc python scripts
+3. Regression testing with the  Makefile
+4. System testing (TODO): by reproducing previously published results using their cost numbers

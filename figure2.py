@@ -102,6 +102,7 @@ def plot_emissions(plant, cofiringplant, axes):
                frameon=False)
 
 
+# noinspection PyTypeChecker
 FIGURE, AXESS = plt.subplots(nrows=1, ncols=2, figsize=[12, 6])
 plot_emissions(MongDuong1, MongDuong1Cofire, AXESS[0])
 plot_emissions(NinhBinh, NinhBinhCofire, AXESS[1])

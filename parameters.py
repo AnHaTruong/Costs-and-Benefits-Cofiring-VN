@@ -13,8 +13,9 @@
 All numeric values should be defined in this module.
 """
 
-import pandas as pd
 from collections import namedtuple
+
+import pandas as pd
 
 from init import USD, VND, time_horizon, v_after_invest
 from natu.units import MJ, kg, t, d, hr, km, MW, ha, kW, y, kWh, MWh, g

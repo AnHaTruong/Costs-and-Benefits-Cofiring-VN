@@ -18,7 +18,7 @@ from natu.units import t, km, ha
 from Emitter import Emitter
 
 
-class SupplyZone():
+class SupplyZone:
     def __init__(self,
                  shape,
                  straw_density,
@@ -67,7 +67,7 @@ class SupplyZone():
 
 # TODO: This class has too many methods.
 #       The chain should be broken in two links, the farm and the transportation
-class SupplyChain():
+class SupplyChain:
     """A collection of supply zones
     - The supply chain does not vary with time
     """

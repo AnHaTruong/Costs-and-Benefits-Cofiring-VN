@@ -45,7 +45,7 @@ Y = np.empty([param_values.shape[0]])
 
 
 def model(X):
-    return (MongDuong1.net_present_value(X[0], X[1], int(X[2])) / USD)
+    return MongDuong1.net_present_value(X[0], X[1], int(X[2])) / USD
 
 for i, X in enumerate(param_values):
     Y[i] = model(X)
