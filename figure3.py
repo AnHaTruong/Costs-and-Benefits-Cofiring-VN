@@ -31,6 +31,7 @@ def benefit_array(system, income_parameter):
                                                       tax_rate,
                                                       depreciation_period)
                      ) / MUSD
+    # FIXME: Was probably net of transporter.labor_cost in old version
     farmer_benefit = system.farmer.npv(discount_rate) / MUSD
     health_benefit = system.health_npv(discount_rate, specific_cost) / MUSD
     climate_benefit = system.CO2_npv(discount_rate, specific_cost) / MUSD
