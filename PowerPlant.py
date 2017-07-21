@@ -164,7 +164,17 @@ class CofiringPlant(PowerPlant):
                              self.emission_factor,
                              self.emission_controls)
 
-        self.straw_cost = None
+        self._straw_cost = None
+
+    @property
+    def straw_cost(self):
+        if self._straw_cost is None:
+            raise AttributeError('Using  CofiringPlant.straw_cost  value before it is set')
+        return self._straw_cost
+
+    @straw_cost.setter
+    def straw_cost(self, value):
+        self._straw_cost = value
 
     def fuel_cost(self):
         cost = self.coal_cost() + self.straw_cost
