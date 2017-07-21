@@ -14,14 +14,16 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-from parameters import MongDuong1, MongDuong1Cofire, NinhBinh, NinhBinhCofire
+from parameters import MongDuong1System, NinhBinhSystem
 from natu.units import t   # pylint: disable=E0611
 
 
-def plot_emissions(plant, cofiringplant, axes):
+def plot_emissions(system, axes):
     """Plots the air pollutants emissions and CO2 emissions figure for one site"""
     kt = 1000 * t
     Mt = 1000000 * t
+    cofiringplant = system.cofiring_plant
+    plant = system.plant
 
     CO2stack = np.array([plant.stack.emissions().at['CO2', 'Total'][1],
                          cofiringplant.stack.emissions().at['CO2', 'Total'][1]
@@ -29,12 +31,12 @@ def plot_emissions(plant, cofiringplant, axes):
 
     CO2trans = np.array([plant.coal_transporter().emissions().at['CO2', 'Total'][1],
                          (cofiringplant.coal_transporter().emissions().at['CO2', 'Total'][1]
-                          + cofiringplant.straw_supply.transport_emissions().at['CO2', 'Total'][1]
+                          + system.transporter.emissions().at['CO2', 'Total'][1]
                           )
                          ]) / Mt
 
-    field_emis_before = cofiringplant.straw_supply.field_emission(cofiringplant.biomass_used * 0)
-    field_emis_after = cofiringplant.straw_supply.field_emission(cofiringplant.biomass_used)
+    field_emis_before = system.farmer.emissions_exante
+    field_emis_after = system.farmer.emissions()
     CO2field = np.array([field_emis_before.at['CO2', 'Total'][1],
                          field_emis_after.at['CO2', 'Total'][1]]
                         ) / Mt
@@ -49,7 +51,7 @@ def plot_emissions(plant, cofiringplant, axes):
 
     coal_transport_emis_before = plant.coal_transporter().emissions()
     coal_transport_emis_after = cofiringplant.coal_transporter().emissions()
-    straw_transport_emis = cofiringplant.straw_supply.transport_emissions()
+    straw_transport_emis = system.transporter.emissions()
     poltrans = np.array([coal_transport_emis_before.at['SO2', 'Total'][1],
                          (coal_transport_emis_after.at['SO2', 'Total'][1]
                           + straw_transport_emis.at['SO2', 'Total'][1]),
@@ -104,8 +106,8 @@ def plot_emissions(plant, cofiringplant, axes):
 
 # noinspection PyTypeChecker
 FIGURE, AXESS = plt.subplots(nrows=1, ncols=2, figsize=[12, 6])
-plot_emissions(MongDuong1, MongDuong1Cofire, AXESS[0])
-plot_emissions(NinhBinh, NinhBinhCofire, AXESS[1])
+plot_emissions(MongDuong1System, AXESS[0])
+plot_emissions(NinhBinhSystem, AXESS[1])
 FIGURE.tight_layout()
 
 plt.savefig('figure2.png')
