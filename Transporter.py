@@ -28,6 +28,7 @@ class Transporter(Emitter):
         super().__init__({'Road transport': self.activity_level}, emission_factor)
 
         self.quantity = supply_chain.quantity()
+        self.collection_radius = supply_chain.collection_radius()
 
         self.truck_load = truck_economics['truck_load']
         self.truck_velocity = truck_economics['truck_velocity']
@@ -35,6 +36,9 @@ class Transporter(Emitter):
         self.transport_tariff = truck_economics['transport_tariff']
         self.truck_loading_time = truck_economics['truck_loading_time']
         self.wage_bm_loading = truck_economics['wage_bm_loading']
+
+        self.truck_trips = self.quantity / self.truck_load
+
 
     # TODO: Remove and call directly parent' class method
     def transport_tkm(self):
@@ -74,8 +78,8 @@ class Transporter(Emitter):
         assert income > self.loading_wages() + self.driving_wages()
         return display_as(income, 'kUSD')
 
-    def transport_time(self):
-        time = self.collection_radius() * 2 / self.truck_velocity
+    def max_roundtrip_time(self):
+        time = self.collection_radius * 2 / self.truck_velocity
         return display_as(time, 'hr')
 
     def transport_cost_per_t(self):
