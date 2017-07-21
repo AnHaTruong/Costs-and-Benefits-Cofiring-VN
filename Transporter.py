@@ -7,8 +7,9 @@
 #
 """Transporter: """
 
+from natu.numpy import errstate
 
-from init import display_as, zero_to_NaN
+from init import display_as
 
 from Emitter import Emitter
 
@@ -38,7 +39,6 @@ class Transporter(Emitter):
         self.wage_bm_loading = truck_economics['wage_bm_loading']
 
         self.truck_trips = self.quantity / self.truck_load
-
 
     # TODO: Remove and call directly parent' class method
     def transport_tkm(self):
@@ -75,13 +75,9 @@ class Transporter(Emitter):
     def income(self):
         income = self.activity_level * self.transport_tariff
         # Operational margin positive, before paying for the truck (capital)
-        assert income > self.loading_wages() + self.driving_wages()
+#        assert income > self.loading_wages() + self.driving_wages()
         return display_as(income, 'kUSD')
 
     def max_roundtrip_time(self):
         time = self.collection_radius * 2 / self.truck_velocity
         return display_as(time, 'hr')
-
-    def transport_cost_per_t(self):
-        cost_per_t = self.transport_cost() / zero_to_NaN(self.quantity)
-        return display_as(cost_per_t, 'USD/t')

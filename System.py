@@ -8,9 +8,9 @@
 #
 
 import pandas as pd
-from natu.numpy import npv
+from natu.numpy import npv, errstate
 
-from init import display_as, zero_to_NaN
+from init import display_as
 from PowerPlant import CofiringPlant
 from Farmer import Farmer
 from Transporter import Transporter
@@ -36,23 +36,24 @@ class System:
 
         self.transporter = Transporter(self.supply_chain, emission_factor, truck_economics)
 
-        # Farmer sells the straw to the plant
+        # Farmer sells the straw delivered to the plant gate
         self.contract_value = self.farmer.straw_value() + self.supply_chain.transport_cost()
         self.cofiring_plant.straw_cost = self.contract_value
         self.farmer.income = self.contract_value
 
-    def sourcing_cost(self):
-        cost = self.farmer.income() + self.transport.income()
-        return display_as(cost, 'kUSD')
-
     def sourcing_cost_per_t(self):
-        """Including transport cost"""
-        cost_per_t = self.sourcing_cost() / zero_to_NaN(self.biomass_used)
+        with errstate(divide='ignore', invalid='ignore'):
+            cost_per_t = self.contract_value / self.biomass_used
         return display_as(cost_per_t, 'USD/t')
 
     def sourcing_cost_per_GJ(self, heat_value):
         cost = self.sourcing_cost_per_t() / heat_value
         return display_as(cost, 'USD / GJ')
+
+    def transport_cost_per_t(self):
+        with errstate(divide='ignore', invalid='ignore'):
+            cost_per_t = self.transporter.income() / self.biomass_used
+        return display_as(cost_per_t, 'USD/t')
 
     def labor(self):
         """Total work time created from co-firing"""
