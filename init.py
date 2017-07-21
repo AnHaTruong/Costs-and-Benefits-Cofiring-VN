@@ -87,13 +87,3 @@ def isclose(a, b, rel_tol=1e-09, abs_tol=0.0):
     """
     return abs(a - b) <= max(rel_tol * max(abs(a), abs(b)), abs_tol)
 
-
-def zero_to_NaN(vector):
-    """This zero_to_Nan function:
-    returns a copy of the vector (it's not modified in place), and
-    keeps the unit along
-
-    >>> zero_to_NaN([0, 1, 0 * hr, 'a'])
-    [nan, 1, nan hr, 'a']
-    """
-    return [element if element else element * float('nan') for element in vector]
