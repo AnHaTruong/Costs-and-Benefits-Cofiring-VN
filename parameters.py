@@ -29,7 +29,7 @@ from strawdata import MongDuong1_average_straw_yield, NinhBinh_average_straw_yie
 from PowerPlant import PowerPlant, CofiringPlant
 from Shape import Semi_Annulus, Disk
 from SupplyChain import SupplyChain, SupplyZone
-
+from System import System
 
 discount_rate = 0.087771
 depreciation_period = 10
@@ -43,17 +43,20 @@ straw_burn_rate = 0.9  # Percentage of straw burned infield after harvest
 collect_economics = {'winder_rental_cost': 40 * USD / ha,   # per period
                      'winder_haul': 6.57 * t / d,
                      'work_hour_day': 8 * hr / d,
-                     'wage_bm_collect': 1.11 * USD / hr}
+                     'wage_bm_collect': 1.11 * USD / hr
+                     }
 
 truck_economics = {'truck_loading_time': 2.7 / 60 * hr / t,  # (Ovaskainen & 2016 )
                    'wage_bm_loading': 1.11 * USD / hr,
                    'truck_load': 20 * t,
                    'truck_velocity': 45 * km / hr,
-                   'wage_bm_transport': 1.11 * USD / hr}
+                   'wage_bm_transport': 1.11 * USD / hr,
+                   'transport_tariff': 2000 * VND / t / km}  # vantaiduongviet.com
 
 OM_economics = {'OM_hour_MWh': 0.12 * hr / MWh,  # working hour for OM per MWh
                 'wage_operation_maintenance': 1.67 * USD / hr}
 
+#TODO: Delete this global
 transport_tariff = 2000 * VND / t / km  # vantaiduongviet.com
 tortuosity_factor = 1.5
 
@@ -177,7 +180,10 @@ cofire_MD1 = Cofire_Tech(biomass_ratio_energy=v_after_invest * 0.05,
 
 cofire_NB = cofire_MD1._replace(capital_cost=100 * USD / kW / y)
 
-MongDuong1Cofire = CofiringPlant(MongDuong1, cofire_MD1, supply_chain=MD_SupplyChain)
+MongDuong1Cofire = CofiringPlant(MongDuong1, cofire_MD1, straw.price)
+
+MongDuong1System = System(MongDuong1, cofire_MD1, MD_SupplyChain,
+                          straw.price, emission_factor, collect_economics, truck_economics)
 
 NinhBinh = PowerPlant(name="Ninh Binh",
                       capacity=100 * MW * y,
@@ -205,4 +211,7 @@ NB_SupplyChain = SupplyChain(zones=[NBSupplyZone],
                              average_straw_yield=NinhBinh_average_straw_yield,
                              emission_factor=emission_factor)
 
-NinhBinhCofire = CofiringPlant(NinhBinh, cofire_NB, supply_chain=NB_SupplyChain)
+NinhBinhCofire = CofiringPlant(NinhBinh, cofire_NB, straw.price)
+
+NinhBinhSystem = System(NinhBinh, cofire_NB, NB_SupplyChain,
+                        straw.price, emission_factor, collect_economics, truck_economics)
