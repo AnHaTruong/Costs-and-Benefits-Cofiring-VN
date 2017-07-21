@@ -10,6 +10,7 @@
 #
 # pylint: disable=E0611
 
+import pandas as pd
 from natu.numpy import full, npv
 
 from init import time_horizon, v_after_invest, display_as, USD
@@ -110,7 +111,7 @@ class PowerPlant(Investment):
 
 class CofiringPlant(PowerPlant):
 
-    def __init__(self, plant: PowerPlant, cofire_tech, straw_price):
+    def __init__(self, plant: PowerPlant, cofire_tech, supply_chain):
 
         self.plant = plant
         self.biomass_ratio_energy = cofire_tech.biomass_ratio_energy
@@ -157,15 +158,15 @@ class CofiringPlant(PowerPlant):
         self.coal_used = (self.gross_heat_input - self.biomass_heat) / self.coal.heat_value
         display_as(self.coal_used, 't')
 
+        self.straw_supply = supply_chain.fit(self.biomass_used[1])
+
         self.stack = Emitter({self.coal.name: self.coal_used,
                               self.biomass.name: self.biomass_used},
                              self.emission_factor,
                              self.emission_controls)
 
-        self.straw_cost = None
-
     def fuel_cost(self):
-        cost = self.coal_cost() + self.straw_cost
+        cost = self.coal_cost() + self.straw_supply.cost(self.biomass.price)
         return display_as(cost, 'kUSD')
 
     def operation_maintenance_cost(self):
@@ -208,6 +209,27 @@ class CofiringPlant(PowerPlant):
         cost = fixed_om_bm + var_om_bm
         return display_as(cost, 'kUSD')
 
+    def cofiring_work(self, collect_economics, truck_economics, OM_economics):
+        """Total work time created from co-firing"""
+        time = (self.straw_supply.farm_work(collect_economics)
+                + self.straw_supply.loading_work(truck_economics)
+                + self.straw_supply.transport_work(truck_economics)
+                + self.biomass_om_work(OM_economics))
+        return display_as(time, 'hr')
+
+    def cofiring_wages(self, collect_economics, truck_economics, OM_economics):
+        """Total benefit from job creation from biomass co-firing"""
+        amount = (self.straw_supply.farm_wages(collect_economics)
+                  + self.straw_supply.loading_wages(truck_economics)
+                  + self.straw_supply.transport_wages(truck_economics)
+                  + self.biomass_om_wages(OM_economics))
+        return display_as(amount, 'kUSD')
+
+    def wages_npv(self, discount_rate, collect_economics, truck_economics, OM_economics):
+        wages = self.cofiring_wages(collect_economics, truck_economics, OM_economics)
+        amount = npv(discount_rate, wages)
+        return display_as(amount, 'kUSD')
+
     def coal_saved_cost(self):
         cost = self.coal_saved * self.coal.price
         return display_as(cost, 'kUSD')
@@ -215,3 +237,32 @@ class CofiringPlant(PowerPlant):
     def coal_work_lost(self, mining_productivity):
         time = self.coal_saved / mining_productivity
         return time
+
+    def emission_reduction(self, specific_cost):
+        plant_ER = (self.plant.stack.emissions()['Total']
+                    - self.stack.emissions()['Total'])
+        transport_ER = (self.plant.coal_transporter().emissions()['Total']
+                        - self.coal_transporter().emissions()['Total']
+                        - self.straw_supply.transport_emissions()['Total'])
+        field_ER = (self.straw_supply.field_emission(self.biomass_used * 0)['Total']
+                    - self.straw_supply.field_emission(self.biomass_used)['Total'])
+        total_ER = plant_ER + transport_ER + field_ER
+        total_benefit = total_ER * specific_cost
+        for pollutant in total_benefit:
+            display_as(pollutant, 'kUSD')
+        list_of_series = [plant_ER, transport_ER, field_ER, total_ER, total_benefit]
+        row = ['Plant', 'Transport', 'Field', 'Total', 'Benefit']
+        ER_table = pd.DataFrame(list_of_series, index=row)
+        return ER_table
+
+    def CO2_npv(self, discount_rate, specific_cost):
+        df = self.emission_reduction(specific_cost)
+        v = df['CO2']['Benefit']  # FIXME: use .loc
+        value = npv(discount_rate, v)
+        return display_as(value, 'kUSD')
+
+    def health_npv(self, discount_rate, specific_cost):
+        df = self.emission_reduction(specific_cost)
+        v = df.ix['Benefit'].drop('CO2').sum()
+        value = npv(discount_rate, v)
+        return display_as(value, 'kUSD')

@@ -11,14 +11,12 @@
 """Compares the LCOE with and without cofiring"""
 from natu.numpy import npv
 
-from parameters import MongDuong1System, NinhBinhSystem
+from parameters import MongDuong1, MongDuong1Cofire, NinhBinh, NinhBinhCofire
 from parameters import discount_rate, tax_rate, depreciation_period, feedin_tariff
-
 from PowerPlant import CofiringPlant
 
 
-# TODO: Row compares plant and cofiring_plant
-def tableC(plant, tariff, supply_chain=None, farmer=None):
+def tableC(plant, tariff):
     def printRowInt(label, quantity):
         print('{:30}{:8.0f}'.format(label, quantity))
 
@@ -33,10 +31,9 @@ def tableC(plant, tariff, supply_chain=None, farmer=None):
     printRowNPV("Fuel cost", plant.fuel_cost())
     if isinstance(plant, CofiringPlant):
         printRowNPV("  Coal", plant.coal_cost())
-        # Assuming the rent sharing goes to farmer, see also Table B
-        printRowNPV("  Biomass", plant.straw_cost)
-        printRowNPV("    transportation", supply_chain.transport_cost())
-        printRowNPV("    straw at field", farmer.straw_value())
+        printRowNPV("  Biomass", plant.straw_supply.cost(plant.biomass.price))
+        printRowNPV("    transportation", plant.straw_supply.transport_cost())
+        printRowNPV("    straw at field", plant.straw_supply.field_cost(plant.biomass.price))
     printRowNPV("O&M cost", plant.operation_maintenance_cost())
     if isinstance(plant, CofiringPlant):
         printRowNPV("  coal", plant.coal_om_cost())
@@ -54,14 +51,12 @@ def tableC(plant, tariff, supply_chain=None, farmer=None):
                                      depreciation_period))
 
 
-tableC(MongDuong1System.cofiring_plant.plant, feedin_tariff['MD'])
+tableC(MongDuong1, feedin_tariff['MD'])
 print('')
-tableC(MongDuong1System.cofiring_plant, feedin_tariff['MD'],
-       MongDuong1System.supply_chain, MongDuong1System.farmer)
+tableC(MongDuong1Cofire, feedin_tariff['MD'])
 
 print('')
 
-tableC(NinhBinhSystem.cofiring_plant.plant, feedin_tariff['NB'])
+tableC(NinhBinh, feedin_tariff['NB'])
 print('')
-tableC(NinhBinhSystem.cofiring_plant, feedin_tariff['NB'],
-       NinhBinhSystem.supply_chain, NinhBinhSystem.farmer)
+tableC(NinhBinhCofire, feedin_tariff['NB'])
