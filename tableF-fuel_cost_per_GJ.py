@@ -11,7 +11,7 @@
 
 from init import display_as
 
-from parameters import MongDuong1Cofire, NinhBinhCofire
+from parameters import MongDuong1System, NinhBinhSystem
 from parameters import MD_Coal, NB_Coal, straw
 
 
@@ -26,5 +26,5 @@ print("Cost of heat        MongDuong1          NinhBinh")
 print("Coal               ", cost_per_GJ(MD_Coal), "    ", cost_per_GJ(NB_Coal))
 print("Biomass in field   ", cost_per_GJ(straw), "    ", cost_per_GJ(straw))
 print("Biomass plant gate ",
-      MongDuong1Cofire.straw_supply.cost_per_GJ(straw.price, straw.heat_value)[1],
-      "    ", NinhBinhCofire.straw_supply.cost_per_GJ(straw.price, straw.heat_value)[1])
+      MongDuong1System.sourcing_cost_per_GJ(straw.heat_value)[1],
+      "    ", NinhBinhSystem.sourcing_cost_per_GJ(straw.heat_value)[1])
