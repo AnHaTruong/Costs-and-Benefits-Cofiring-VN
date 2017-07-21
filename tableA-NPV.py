@@ -11,7 +11,7 @@
 """ Details the net present value calculations """
 
 from init import time_horizon
-from parameters import MongDuong1, NinhBinh, MongDuong1Cofire, NinhBinhCofire
+from parameters import MongDuong1System, NinhBinhSystem
 from parameters import feedin_tariff, discount_rate, depreciation_period, tax_rate
 
 print('')
@@ -22,13 +22,17 @@ print('Depreciation', depreciation_period, 'years')
 
 print('')
 print('FIT', feedin_tariff['MD'])
-MongDuong1.pretty_table(feedin_tariff['MD'], discount_rate, tax_rate, depreciation_period)
+MongDuong1System.plant.pretty_table(feedin_tariff['MD'],
+                                    discount_rate, tax_rate, depreciation_period)
 
-MongDuong1Cofire.pretty_table(feedin_tariff['MD'], discount_rate, tax_rate, depreciation_period)
+MongDuong1System.cofiring_plant.pretty_table(feedin_tariff['MD'],
+                                             discount_rate, tax_rate, depreciation_period)
 
 print('')
 
 print('FIT', feedin_tariff['NB'])
-NinhBinh.pretty_table(feedin_tariff['NB'], discount_rate, tax_rate, depreciation_period)
+NinhBinhSystem.plant.pretty_table(feedin_tariff['NB'],
+                                  discount_rate, tax_rate, depreciation_period)
 
-NinhBinhCofire.pretty_table(feedin_tariff['NB'], discount_rate, tax_rate, depreciation_period)
+NinhBinhSystem.cofiring_plant.pretty_table(feedin_tariff['NB'],
+                                           discount_rate, tax_rate, depreciation_period)
