@@ -144,10 +144,6 @@ class SupplyChain:
     def collection_radius(self):
         return self.zones[-1].shape.outer_radius()
 
-    def farm_area(self):
-        area = self.quantity() / self.average_straw_yield
-        return display_as(area, 'ha')
-
     def burnable(self):
         mass = self.straw_production * self.straw_burn_rate
         return display_as(mass, 't')

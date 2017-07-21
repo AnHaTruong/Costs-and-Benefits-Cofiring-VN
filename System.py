@@ -35,6 +35,11 @@ class System:
 
         self.transporter = Transporter(self.supply_chain, emission_factor, truck_economics)
 
+        # Farmer sells the straw to the plant
+        self.contract_value = self.farmer.straw_value() + self.supply_chain.transport_cost()
+        self.cofiring_plant.straw_cost = self.contract_value
+        self.farmer.income = self.contract_value
+
     def sourcing_cost(self):
         cost = self.farmer.income() + self.transport.income()
         return display_as(cost, 'kUSD')

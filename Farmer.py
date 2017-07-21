@@ -27,7 +27,9 @@ class Farmer(Emitter):
         self.work_hour_day = collect_economics['work_hour_day']
         self.wage_bm_collect = collect_economics['wage_bm_collect']
         self.straw_price = straw_price
-        self.capital_cost = self.winder_rental_cost * supply_chain.farm_area()[1]
+        self.farm_area = self.quantity / supply_chain.average_straw_yield
+        self.capital_cost = self.winder_rental_cost * self.farm_area[1]
+        self.income = None
 
     def labor(self):
         """Work time needed to collect straw for co-firing per year"""
@@ -39,12 +41,12 @@ class Farmer(Emitter):
         amount = self.labor() * self.wage_bm_collect
         return display_as(amount, 'kUSD')
 
-    def income(self):
-        income = self.quantity * self.straw_price
-        return display_as(income, 'kUSD')
+    def straw_value(self):
+        value = self.quantity * self.straw_price
+        return display_as(value, 'kUSD')
 
     def profit(self):
-        profit = self.income() - self.labor_cost() - self.capital_cost
+        profit = self.income - self.labor_cost() - self.capital_cost
         return display_as(profit, 'kUSD')
 
     def npv(self, discount_rate):
