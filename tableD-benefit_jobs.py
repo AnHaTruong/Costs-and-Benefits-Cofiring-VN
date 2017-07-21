@@ -9,11 +9,13 @@
 #
 #
 """ Print table D for job created from co-firing in job.py
+
+TODO: renam the cells variables
 """
 
 from init import FTE, display_as
-from parameters import MongDuong1, NinhBinh, MongDuong1Cofire, NinhBinhCofire
-from parameters import collect_economics, truck_economics, OM_economics
+
+from parameters import MongDuong1System, NinhBinhSystem
 from parameters import mining_productivity_underground
 
 print('')
@@ -22,19 +24,19 @@ cols = '{:25}{:12.1f}'
 cols2 = '{:25}{:12.1f}{:12.1f}'
 
 
-def print_job(plant, cofiringplant):
-    print('Benefit from job creation:', plant.name, '\n')
+def print_job(system):
+    print('Benefit from job creation:', system.plant.name, '\n')
 
-    row1 = cofiringplant.straw_supply.farm_wages(collect_economics)[1]
-    row2 = cofiringplant.straw_supply.transport_wages(truck_economics)[1]
-    row3 = cofiringplant.biomass_om_wages(OM_economics)[1]
-    row7 = cofiringplant.straw_supply.farm_work(collect_economics)[1]
-    row8 = cofiringplant.straw_supply.transport_work(truck_economics)[1]
-    row9 = cofiringplant.biomass_om_work(OM_economics)[1]
-    row10 = cofiringplant.cofiring_work(collect_economics, truck_economics, OM_economics)[1]
-    row4 = cofiringplant.cofiring_wages(collect_economics, truck_economics, OM_economics)[1]
-    row11 = cofiringplant.straw_supply.loading_work(truck_economics)[1]
-    row12 = cofiringplant.straw_supply.loading_wages(truck_economics)[1]
+    row7 = system.farmer.labor()[1]
+    row1 = system.farmer.labor_cost()[1]
+    row8 = system.transporter.driving_work()[1]
+    row2 = system.transporter.driving_wages()[1]
+    row11 = system.transporter.loading_work()[1]
+    row12 = system.transporter.loading_wages()[1]
+    row9 = system.cofiring_plant.biomass_om_work()[1]
+    row3 = system.cofiring_plant.biomass_om_wages()[1]
+    row10 = system.labor()[1]
+    row4 = system.wages()[1]
 
     display_as(row7, 'FTE')
     display_as(row8, 'FTE')
@@ -48,29 +50,26 @@ def print_job(plant, cofiringplant):
     print(cols2.format('O&M', row9, row3))
     print(cols2.format('Total', row10, row4))
     print()
-    print(cols.format('Area collected', cofiringplant.straw_supply.area()))
-    print(cols.format('Collection radius', cofiringplant.straw_supply.collection_radius()))
-    print(cols.format('Truck trips: duration',
-                      cofiringplant.straw_supply.transport_time(truck_economics)
-                      )
-          )
-    truck_trips = cofiringplant.biomass_used[1] / truck_economics['truck_load']
-    print(cols.format('Truck trips: number', truck_trips))
+    print(cols.format('Area collected', system.supply_chain.area()))
+    print(cols.format('Collection radius', system.supply_chain.collection_radius()))
+    #FIXME: legend suggest it is average one way trip, we mean maximal roundtrip duration
+    print(cols.format('Truck trips: duration', system.transporter.max_roundtrip_time()))
+    print(cols.format('Truck trips: number', system.transporter.truck_trips[1]))
     print()
 
 
-def print_job_lost(plant, cofiringplant):
-    print('Mining job lost from co-firing at', plant.name, '\n')
-    row = cofiringplant.coal_work_lost(mining_productivity_underground)[1]
+def print_job_lost(system):
+    print('Mining job lost from co-firing at', system.plant.name, '\n')
+    row = system.cofiring_plant.coal_work_lost(mining_productivity_underground)[1]
     display_as(row, 'FTE')
     print(cols.format('Job lost', row))
-    print(cols.format('Coal saved', cofiringplant.coal_saved[1]))
+    print(cols.format('Coal saved', system.cofiring_plant.coal_saved[1]))
 
 
-print_job(MongDuong1, MongDuong1Cofire)
-print_job_lost(MongDuong1, MongDuong1Cofire)
+print_job(MongDuong1System)
+print_job_lost(MongDuong1System)
 print('')
-print_job(NinhBinh, NinhBinhCofire)
-print_job_lost(NinhBinh, NinhBinhCofire)
+print_job(NinhBinhSystem)
+print_job_lost(NinhBinhSystem)
 
 print('Note: 1 FTE =', FTE)
