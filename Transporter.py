@@ -27,7 +27,7 @@ class Transporter(Emitter):
         self.activity_level = supply_chain.transport_tkm()
         super().__init__({'Road transport': self.activity_level}, emission_factor)
 
-        self.quantity = self.supply_chain.quantity()
+        self.quantity = supply_chain.quantity()
 
         self.truck_load = truck_economics['truck_load']
         self.truck_velocity = truck_economics['truck_velocity']

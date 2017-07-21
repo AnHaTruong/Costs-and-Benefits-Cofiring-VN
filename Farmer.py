@@ -20,7 +20,7 @@ class Farmer(Emitter):
                  collect_economics,
                  straw_price):
         self.quantity = supply_chain.quantity()
-        field_burned = v_after_invest * supply_chain.burnable - self.quantity  # TODO: Verify
+        field_burned = v_after_invest * supply_chain.burnable() - self.quantity  # TODO: Verify
         super().__init__({'Straw': field_burned}, emission_factor)
         self.winder_haul = collect_economics['winder_haul']
         self.winder_rental_cost = collect_economics['winder_rental_cost']
@@ -36,7 +36,7 @@ class Farmer(Emitter):
 
     def labor_cost(self):
         """Benefit from job creation from biomass collection"""
-        amount = self.labor * self.wage_bm_collect
+        amount = self.labor() * self.wage_bm_collect
         return display_as(amount, 'kUSD')
 
     def income(self):
@@ -44,7 +44,7 @@ class Farmer(Emitter):
         return display_as(income, 'kUSD')
 
     def profit(self):
-        profit = self.income() - self.labor_cost() - self.capital_cost()
+        profit = self.income() - self.labor_cost() - self.capital_cost
         return display_as(profit, 'kUSD')
 
     def npv(self, discount_rate):

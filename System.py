@@ -20,13 +20,11 @@ from Transporter import Transporter
 #       There are two prices.
 
 
-class CofiringSystem:
+class System:
     """
     """
-    def __init__(self, plant, cofire_tech, straw_price,
-                 supply_chain, emission_factor,
-                 collect_economics,
-                 truck_economics):
+    def __init__(self, plant, cofire_tech, supply_chain,
+                 straw_price, emission_factor, collect_economics, truck_economics):
         self.cofiring_plant = CofiringPlant(plant, cofire_tech, straw_price)
 
         self.biomass_used = self.cofiring_plant.biomass_used
@@ -34,8 +32,6 @@ class CofiringSystem:
         self.supply_chain = supply_chain.fit(self.biomass_used[1])
 
         self.farmer = Farmer(self.supply_chain, emission_factor, collect_economics, straw_price)
-
-        assert self.farmer.income == self.cofiring_plant.straw_cost
 
         self.transporter = Transporter(self.supply_chain, emission_factor, truck_economics)
 
