@@ -10,16 +10,15 @@
 # pylint: disable=E0611
 
 from copy import copy
-import numpy as np
 
-from init import isclose, v_after_invest, v_zeros, display_as, zero_to_NaN, USD
+from init import isclose, v_after_invest, v_zeros, display_as, USD
 
 from natu.units import t, km, ha
-from Emitter import Emitter
 
 # TODO: The straw_production should be recomputed when shrink
 #  --> Make it proportional to the area using a straw_production_density
 #  straw_density is confusing. Is it only the collected fraction ?
+
 
 class SupplyZone:
     def __init__(self,
@@ -58,6 +57,10 @@ class SupplyZone:
                     * self.tortuosity_factor
                     )
         return display_as(activity, 't * km')
+
+    def transport_cost(self):
+        cost = self.transport_tkm() * self.transport_tariff
+        return display_as(cost, 'kUSD')
 
     def shrink(self, factor):
         self.shape = self.shape.shrink(factor)
@@ -131,6 +134,12 @@ class SupplyChain:
         for zone in self.zones:
             activity += zone.transport_tkm()
         return display_as(activity, 't * km')
+
+    def transport_cost(self):
+        cost = v_zeros * USD
+        for zone in self.zones:
+            cost += zone.transport_cost()
+        return display_as(cost, 'kUSD')
 
     def collection_radius(self):
         return self.zones[-1].shape.outer_radius()

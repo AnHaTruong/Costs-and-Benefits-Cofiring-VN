@@ -9,21 +9,24 @@
 
 from init import display_as
 
-from parameters import MongDuong1Cofire, NinhBinhCofire
-from parameters import straw, collect_economics, truck_economics
+from parameters import MongDuong1System, NinhBinhSystem, collect_economics
 
 display_as(collect_economics['winder_rental_cost'], 'USD/ha')
 
 
-def print_income(supply_chain):
-    area = supply_chain.farm_area()[1]
-    revenue = supply_chain.cost(straw.price)[1]
-    winder_cost = collect_economics['winder_rental_cost'] * area
-    collect_cost = supply_chain.farm_wages(collect_economics)[1]
-    loading_cost = supply_chain.loading_wages(truck_economics)[1]
-    transport_cost = supply_chain.transport_wages(truck_economics)[1]
+def print_farmer_income(system):
+    """This table assumes that farmers are paid for transport.
+    FIXME: truck rental and fuel costs
+    FIXME: separate the bills for fieldside straw and transportation
+    """
+    area = system.supply_chain.farm_area()[1]
+    revenue = system.farmer.income()[1] + system.supply_chain.transport_cost()[1]
+    winder_cost = system.farmer.winder_rental_cost * area
+    collect_cost = system.farmer.labor_cost()[1]
+    loading_cost = system.transporter.loading_wages()[1]
+    transport_cost = system.transporter.driving_wages()[1]
 
-    total = supply_chain.farm_profit(straw.price, collect_economics, truck_economics)[1]
+    total = revenue - winder_cost - collect_cost - loading_cost - transport_cost
 
     row = '{:20}' + '{:10.2f}' + '{:10.0f}'
     print(total)
@@ -39,7 +42,7 @@ def print_income(supply_chain):
 
 
 print('Extra net income for supply chain around Mong Duong 1')
-print_income(MongDuong1Cofire.straw_supply)
+print_farmer_income(MongDuong1System)
 
 print('Extra net income for supply chain around Ninh Binh')
-print_income(NinhBinhCofire.straw_supply)
+print_farmer_income(NinhBinhSystem)
