@@ -12,7 +12,7 @@ from Emitter import Emitter
 
 
 class Farmer(Emitter):
-    """
+    """Farmer class represents the collective of farmers who produce and sell straw
     """
     def __init__(self,
                  supply_chain,
@@ -20,28 +20,30 @@ class Farmer(Emitter):
                  collect_economics,
                  straw_price):
         self.quantity = supply_chain.quantity()
+        self.collect_economics = collect_economics
+        self.straw_price = straw_price
+        self.farm_area = self.quantity / supply_chain.average_straw_yield
+        self.capital_cost = self.collect_economics['winder_rental_cost'] * self.farm_area[1]
+
+        # TODO: Member  emissions_exante  does not really belong to the Farmer class
         field_burned_exante = v_ones * supply_chain.burnable()
         self.emissions_exante = Emitter({'Straw': field_burned_exante},
                                         emission_factor).emissions()
-        field_burned = v_after_invest * supply_chain.burnable() - self.quantity  # TODO: Verify
-        super().__init__({'Straw': field_burned}, emission_factor)
-        self.winder_haul = collect_economics['winder_haul']
-        self.winder_rental_cost = collect_economics['winder_rental_cost']
-        self.work_hour_day = collect_economics['work_hour_day']
-        self.wage_bm_collect = collect_economics['wage_bm_collect']
-        self.straw_price = straw_price
-        self.farm_area = self.quantity / supply_chain.average_straw_yield
-        self.capital_cost = self.winder_rental_cost * self.farm_area[1]
+        field_burned = v_after_invest * supply_chain.burnable() - self.quantity
+        Emitter.__init__(self, {'Straw': field_burned}, emission_factor)
+
         self.income = None
 
     def labor(self):
         """Work time needed to collect straw for co-firing per year"""
-        time = self.quantity * self.work_hour_day / self.winder_haul
+        time = (self.quantity
+                * self. collect_economics['work_hour_day']
+                / self.collect_economics['winder_haul'])
         return display_as(time, 'hr')
 
     def labor_cost(self):
         """Benefit from job creation from biomass collection"""
-        amount = self.labor() * self.wage_bm_collect
+        amount = self.labor() * self.collect_economics['wage_bm_collect']
         return display_as(amount, 'kUSD')
 
     def straw_value(self):

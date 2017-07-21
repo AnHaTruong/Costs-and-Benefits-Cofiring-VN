@@ -75,16 +75,16 @@ class Annulus(Shape):
 
 class Semi_Annulus(Annulus):
     def __init__(self, r, R):
-        super().__init__(r, R)
+        Annulus.__init__(self, r, R)
 
     def __str__(self):
-        return "Semiannulus. Half of the " + super().__str__()
+        return "Semiannulus. Half of the " + Annulus.__str__(self)
 
     def area(self):
-        return super().area() / 2
+        return Annulus.area(self) / 2
 
     def first_moment_of_area(self):
-        return super().first_moment_of_area() / 2
+        return Annulus.first_moment_of_area(self) / 2
 
     def shrink(self, factor):
         """Returns a new Semiannulus, with same inner radius and total area scaled by factor"""

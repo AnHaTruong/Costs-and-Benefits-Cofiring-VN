@@ -181,7 +181,7 @@ cofire_MD1 = Cofire_Tech(biomass_ratio_energy=v_after_invest * 0.05,
 
 cofire_NB = cofire_MD1._replace(capital_cost=100 * USD / kW / y)
 
-MongDuong1Cofire = CofiringPlant(MongDuong1, cofire_MD1, straw.price)
+MongDuong1Cofire = CofiringPlant(MongDuong1, cofire_MD1)
 
 MongDuong1System = System(MongDuong1, cofire_MD1, MD_SupplyChain,
                           straw.price, emission_factor, collect_economics, truck_economics)
@@ -212,7 +212,7 @@ NB_SupplyChain = SupplyChain(zones=[NBSupplyZone],
                              average_straw_yield=NinhBinh_average_straw_yield,
                              emission_factor=emission_factor)
 
-NinhBinhCofire = CofiringPlant(NinhBinh, cofire_NB, straw.price)
+NinhBinhCofire = CofiringPlant(NinhBinh, cofire_NB)
 
 NinhBinhSystem = System(NinhBinh, cofire_NB, NB_SupplyChain,
                         straw.price, emission_factor, collect_economics, truck_economics)

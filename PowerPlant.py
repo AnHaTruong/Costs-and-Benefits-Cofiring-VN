@@ -17,6 +17,7 @@ from Investment import Investment
 from Emitter import Emitter
 
 
+#TODO: PowerPlant should BE an Emitter, not HAVE one
 class PowerPlant(Investment):
     """ A coal power plant, without co-firing"""
     def __init__(self,
@@ -34,6 +35,7 @@ class PowerPlant(Investment):
                  coal,
                  capital=0 * USD
                  ):
+        Investment.__init__(self, capital)
         self.name = name
         self.capacity = capacity
         self.capacity_factor = capacity_factor
@@ -46,7 +48,6 @@ class PowerPlant(Investment):
         self.emission_controls = emission_controls
         self.emission_factor = emission_factor
         self.coal = coal
-        super().__init__(capital)
 
         self.power_generation = full(time_horizon + 1,
                                      capacity * capacity_factor,
@@ -110,7 +111,7 @@ class PowerPlant(Investment):
 
 class CofiringPlant(PowerPlant):
 
-    def __init__(self, plant: PowerPlant, cofire_tech, straw_price):
+    def __init__(self, plant: PowerPlant, cofire_tech):
 
         self.plant = plant
         self.biomass_ratio_energy = cofire_tech.biomass_ratio_energy
@@ -132,20 +133,22 @@ class CofiringPlant(PowerPlant):
                                      * cofiring_boiler_efficiency / plant.boiler_efficiency)
         cofiring_plant_efficiency[0] = plant.plant_efficiency[0]
 
-        super().__init__(
-            plant.name + " Cofire",
-            plant.capacity,
-            plant.capacity_factor,
-            plant.commissioning,
-            plant.boiler_technology,
-            cofiring_plant_efficiency,
-            cofiring_boiler_efficiency,
-            plant.fix_om_coal,
-            plant.variable_om_coal,
-            plant.emission_controls,
-            plant.emission_factor,
-            plant.coal,
-            cofire_tech.capital_cost * plant.capacity * float(cofire_tech.biomass_ratio_energy[1]))
+        PowerPlant.__init__(self,
+                            plant.name + " Cofire",
+                            plant.capacity,
+                            plant.capacity_factor,
+                            plant.commissioning,
+                            plant.boiler_technology,
+                            cofiring_plant_efficiency,
+                            cofiring_boiler_efficiency,
+                            plant.fix_om_coal,
+                            plant.variable_om_coal,
+                            plant.emission_controls,
+                            plant.emission_factor,
+                            plant.coal,
+                            (cofire_tech.capital_cost
+                             * plant.capacity
+                             * float(cofire_tech.biomass_ratio_energy[1])))
 
         self.biomass_heat = v_after_invest * self.gross_heat_input * self.biomass_ratio_energy
         display_as(self.biomass_heat, 'TJ')

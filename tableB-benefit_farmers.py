@@ -21,7 +21,7 @@ def print_farmer_income(system):
     """
     area = system.farmer.farm_area[1]
     revenue = system.farmer.income[1]
-    winder_cost = system.farmer.winder_rental_cost * area
+    winder_cost = system.farmer.capital_cost
     collect_cost = system.farmer.labor_cost()[1]
     loading_cost = system.transporter.loading_wages()[1]
     transport_cost = system.transporter.driving_wages()[1]
@@ -32,7 +32,8 @@ def print_farmer_income(system):
     print(total)
     print('{:27}{:15}{:4}{:5.0f}'.format('', 'Per ha', 'For', area))
     print(row.format('Straw sales revenue', display_as(revenue / area, 'USD/ha'), revenue))
-    print(row.format('- Winder rental', winder_cost / area, display_as(winder_cost, 'kUSD')))
+    print(row.format('- Winder rental', display_as(winder_cost / area, 'USD/ha'),
+                     display_as(winder_cost, 'kUSD')))
     print(row.format('- Collection work', display_as(collect_cost / area, 'USD/ha'), collect_cost))
     print(row.format('- Loading work', display_as(loading_cost / area, 'USD/ha'), loading_cost))
     print(row.format('- Transport work', display_as(transport_cost / area, 'USD/ha'),

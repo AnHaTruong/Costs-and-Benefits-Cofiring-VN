@@ -26,7 +26,7 @@ class System:
     def __init__(self, plant, cofire_tech, supply_chain,
                  straw_price, emission_factor, collect_economics, truck_economics):
         self.plant = plant
-        self.cofiring_plant = CofiringPlant(plant, cofire_tech, straw_price)
+        self.cofiring_plant = CofiringPlant(plant, cofire_tech)
 
         self.biomass_used = self.cofiring_plant.biomass_used
 
