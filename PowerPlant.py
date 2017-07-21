@@ -10,7 +10,6 @@
 #
 # pylint: disable=E0611
 
-import pandas as pd
 from natu.numpy import full, npv
 
 from init import time_horizon, v_after_invest, display_as, USD
@@ -163,7 +162,7 @@ class CofiringPlant(PowerPlant):
                              self.emission_factor,
                              self.emission_controls)
 
-        self.straw_cost = self.biomass_used * straw_price
+        self.straw_cost = None
 
     def fuel_cost(self):
         cost = self.coal_cost() + self.straw_cost
