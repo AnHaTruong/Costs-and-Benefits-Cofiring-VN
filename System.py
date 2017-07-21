@@ -25,6 +25,7 @@ class System:
     """
     def __init__(self, plant, cofire_tech, supply_chain,
                  straw_price, emission_factor, collect_economics, truck_economics):
+        self.plant = plant
         self.cofiring_plant = CofiringPlant(plant, cofire_tech, straw_price)
 
         self.biomass_used = self.cofiring_plant.biomass_used
@@ -73,12 +74,12 @@ class System:
 
     def emission_reduction(self, specific_cost):
         plant_ER = (self.plant.stack.emissions()['Total']
-                    - self.stack.emissions()['Total'])
+                    - self.cofiring_plant.stack.emissions()['Total'])
         transport_ER = (self.plant.coal_transporter().emissions()['Total']
-                        - self.coal_transporter().emissions()['Total']
-                        - self.straw_supply.transport_emissions()['Total'])
-        field_ER = (self.straw_supply.field_emission(self.biomass_used * 0)['Total']
-                    - self.straw_supply.field_emission(self.biomass_used)['Total'])
+                        - self.cofiring_plant.coal_transporter().emissions()['Total']
+                        - self.transporter.emissions()['Total'])
+        field_ER = (self.farmer.emissions_exante['Total']
+                    - self.farmer.emissions()['Total'])
         total_ER = plant_ER + transport_ER + field_ER
         total_benefit = total_ER * specific_cost
         for pollutant in total_benefit:
