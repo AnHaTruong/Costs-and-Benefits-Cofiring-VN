@@ -63,7 +63,7 @@ class System:
 
     def wages(self):
         """Total benefit from job creation from biomass co-firing"""
-        amount = (self.farmer.labor_costs()
+        amount = (self.farmer.labor_cost()
                   + self.transporter.labor_cost()
                   + self.cofiring_plant.biomass_om_wages())
         return display_as(amount, 'kUSD')

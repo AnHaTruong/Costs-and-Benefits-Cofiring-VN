@@ -118,6 +118,8 @@ class CofiringPlant(PowerPlant):
         self.fix_om_cost = cofire_tech.fix_om_cost
         self.variable_om_cost = cofire_tech.variable_om_cost
         self.biomass = cofire_tech.biomass
+        self.OM_hour_MWh = cofire_tech.OM_hour_MWh
+        self.wage_operation_maintenance = cofire_tech.wage_operation_maintenance
 
         biomass_ratio_mass = (cofire_tech.biomass_ratio_energy
                               * plant.coal.heat_value / self.biomass.heat_value)
@@ -189,12 +191,12 @@ class CofiringPlant(PowerPlant):
 
         # Approximation "Small biomass ratio"
         # We don't count the lower O&M work for the coal firing parts of the plant.
-    def biomass_om_work(self, OM_economics):
-        time = self.power_generation * self.biomass_ratio_energy * OM_economics['OM_hour_MWh']
+    def biomass_om_work(self):
+        time = self.power_generation * self.biomass_ratio_energy * self.OM_hour_MWh
         return display_as(time, 'hr')
 
-    def biomass_om_wages(self, OM_economics):
-        amount = self.biomass_om_work(OM_economics) * OM_economics['wage_operation_maintenance']
+    def biomass_om_wages(self):
+        amount = self.biomass_om_work() * self.wage_operation_maintenance
         return display_as(amount, 'kUSD')
 
     def biomass_om_cost(self):

@@ -53,9 +53,6 @@ truck_economics = {'truck_loading_time': 2.7 / 60 * hr / t,  # (Ovaskainen & 201
                    'wage_bm_transport': 1.11 * USD / hr,
                    'transport_tariff': 2000 * VND / t / km}  # vantaiduongviet.com
 
-OM_economics = {'OM_hour_MWh': 0.12 * hr / MWh,  # working hour for OM per MWh
-                'wage_operation_maintenance': 1.67 * USD / hr}
-
 #TODO: Delete this global
 transport_tariff = 2000 * VND / t / km  # vantaiduongviet.com
 tortuosity_factor = 1.5
@@ -162,7 +159,9 @@ Cofire_Tech = namedtuple('Cofire_Tech', ['biomass_ratio_energy',
                                          'fix_om_cost',
                                          'variable_om_cost',
                                          'biomass',
-                                         'boiler_efficiency_loss'])
+                                         'boiler_efficiency_loss',
+                                         'OM_hour_MWh',
+                                         'wage_operation_maintenance'])
 
 
 def boiler_efficiency_loss_function_T2000(biomass_ratio_mass):
@@ -175,7 +174,9 @@ cofire_MD1 = Cofire_Tech(biomass_ratio_energy=v_after_invest * 0.05,
                          fix_om_cost=32.24 * USD / kW / y,
                          variable_om_cost=0.006 * USD / kWh,
                          biomass=straw,
-                         boiler_efficiency_loss=boiler_efficiency_loss_function_T2000
+                         boiler_efficiency_loss=boiler_efficiency_loss_function_T2000,
+                         OM_hour_MWh=0.12 * hr / MWh,  # working hour for OM per MWh
+                         wage_operation_maintenance=1.67 * USD / hr
                          )
 
 cofire_NB = cofire_MD1._replace(capital_cost=100 * USD / kW / y)
