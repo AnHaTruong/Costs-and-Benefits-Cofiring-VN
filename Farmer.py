@@ -7,7 +7,7 @@
 #
 import numpy as np
 
-from init import v_after_invest, display_as
+from init import v_after_invest, v_ones, display_as
 from Emitter import Emitter
 
 
@@ -20,6 +20,9 @@ class Farmer(Emitter):
                  collect_economics,
                  straw_price):
         self.quantity = supply_chain.quantity()
+        field_burned_exante = v_ones * supply_chain.burnable()
+        self.emissions_exante = Emitter({'Straw': field_burned_exante},
+                                        emission_factor).emissions()
         field_burned = v_after_invest * supply_chain.burnable() - self.quantity  # TODO: Verify
         super().__init__({'Straw': field_burned}, emission_factor)
         self.winder_haul = collect_economics['winder_haul']
