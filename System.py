@@ -46,7 +46,7 @@ class System:
         display_as(self.transport_cost, "kUSD")
 
         self.cofiring_plant.biomass_cost = self.biomass_value + self.transport_cost
-        self.farmer.income = self.biomass_value + self.transport_cost
+        self.farmer.revenue = self.biomass_value + self.transport_cost
 
     def transport_cost_per_t(self):
         with errstate(divide='ignore', invalid='ignore'):

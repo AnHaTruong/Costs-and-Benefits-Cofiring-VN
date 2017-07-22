@@ -20,7 +20,7 @@ def print_farmer_income(system):
     FIXME: separate the bills for fieldside straw and transportation
     """
     area = system.farmer.farm_area[1]
-    revenue = system.farmer.income[1]
+    revenue = system.farmer.revenue[1]
     winder_cost = system.farmer.capital_cost
     collect_cost = system.farmer.labor_cost()[1]
     loading_cost = system.transporter.loading_wages()[1]

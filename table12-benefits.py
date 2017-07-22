@@ -31,7 +31,7 @@ def print_benefit_add_up(system):
     print(row2.format('Jobs', system.wages_npv(discount_rate)))
     # FIXME: This is neither farmer income nor farmer profit
     transport_wages = np.npv(discount_rate, system.transporter.labor_cost())
-    print(row2.format('Farmer income', system.farmer.npv(discount_rate) - transport_wages))
+    print(row2.format('Farmer income', system.farmer.gross_npv(discount_rate) - transport_wages))
 
 
 print_benefit_add_up(MongDuong1System)

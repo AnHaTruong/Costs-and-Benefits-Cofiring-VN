@@ -30,17 +30,17 @@ class Farmer(Emitter):
         field_burned = field_burned_exante - v_after_invest * self.quantity
         Emitter.__init__(self, {'Straw': field_burned}, emission_factor)
 
-        self._income = None
+        self._revenue = None
 
     @property
-    def income(self):
-        if self._income is None:
-            raise AttributeError('Accessing  Farmer.income  value before it is set')
-        return display_as(self._income, 'kUSD')
+    def revenue(self):
+        if self._revenue is None:
+            raise AttributeError('Accessing  Farmer.revenue  value before it is set')
+        return display_as(self._revenue, 'kUSD')
 
-    @income.setter
-    def income(self, value):
-        self._income = value
+    @revenue.setter
+    def revenue(self, value):
+        self._revenue = value
 
     def labor(self):
         """Work time needed to collect straw for co-firing per year"""
@@ -54,10 +54,11 @@ class Farmer(Emitter):
         amount = self.labor() * self.collect_economics['wage_bm_collect']
         return display_as(amount, 'kUSD')
 
-    def profit(self):
-        profit = self.income - self.labor_cost() - self.capital_cost
-        return display_as(profit, 'kUSD')
+    def gross_income(self):
+        """Income, before shipping expenses"""
+        value = self.revenue - self.labor_cost() - self.capital_cost
+        return display_as(value, 'kUSD')
 
-    def npv(self, discount_rate):
-        value = np.npv(discount_rate, self.profit())
+    def gross_npv(self, discount_rate):
+        value = np.npv(discount_rate, self.gross_income())
         return display_as(value, 'kUSD')
