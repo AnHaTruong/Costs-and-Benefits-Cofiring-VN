@@ -26,5 +26,5 @@ print("Cost of heat        MongDuong1          NinhBinh")
 print("Coal               ", cost_per_GJ(MD_Coal), "    ", cost_per_GJ(NB_Coal))
 print("Biomass in field   ", cost_per_GJ(straw), "    ", cost_per_GJ(straw))
 print("Biomass plant gate ",
-      MongDuong1System.cofiring_plant.sourcing_cost_per_GJ()[1],
-      "    ", NinhBinhSystem.cofiring_plant.sourcing_cost_per_GJ()[1])
+      MongDuong1System.cofiring_plant.biomass_cost_per_GJ()[1],
+      "    ", NinhBinhSystem.cofiring_plant.biomass_cost_per_GJ()[1])

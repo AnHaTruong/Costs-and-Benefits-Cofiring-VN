@@ -167,29 +167,29 @@ class CofiringPlant(PowerPlant):
                              self.emission_factor,
                              self.emission_controls)
 
-        self._straw_cost = None
+        self._biomass_cost = None
 
     @property
-    def straw_cost(self):
-        if self._straw_cost is None:
-            raise AttributeError('Using  CofiringPlant.straw_cost  value before it is set')
-        return display_as(self._straw_cost, 'kUSD')
+    def biomass_cost(self):
+        if self._biomass_cost is None:
+            raise AttributeError('Using  CofiringPlant.biomass_cost  value before it is set')
+        return display_as(self._biomass_cost, 'kUSD')
 
-    @straw_cost.setter
-    def straw_cost(self, value):
-        self._straw_cost = value
+    @biomass_cost.setter
+    def biomass_cost(self, value):
+        self._biomass_cost = value
 
-    def sourcing_cost_per_t(self):
+    def biomass_cost_per_t(self):
         with errstate(divide='ignore', invalid='ignore'):
-            cost_per_t = self.straw_cost / self.biomass_used
+            cost_per_t = self.biomass_cost / self.biomass_used
         return display_as(cost_per_t, 'USD/t')
 
-    def sourcing_cost_per_GJ(self):
-        cost = self.sourcing_cost_per_t() / self.biomass.heat_value
+    def biomass_cost_per_GJ(self):
+        cost = self.biomass_cost_per_t() / self.biomass.heat_value
         return display_as(cost, 'USD / GJ')
 
     def fuel_cost(self):
-        cost = self.coal_cost() + self.straw_cost
+        cost = self.coal_cost() + self.biomass_cost
         return display_as(cost, 'kUSD')
 
     def operation_maintenance_cost(self):

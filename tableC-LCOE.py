@@ -34,7 +34,7 @@ def tableC(plant, tariff, supply_chain=None, farmer=None):
     if isinstance(plant, CofiringPlant):
         printRowNPV("  Coal", plant.coal_cost())
         # Assuming the rent sharing goes to farmer, see also Table B
-        printRowNPV("  Biomass", plant.straw_cost)
+        printRowNPV("  Biomass", plant.biomass_cost)
         printRowNPV("    transportation", supply_chain.transport_cost())
         printRowNPV("    straw at field", farmer.income - supply_chain.transport_cost())
     printRowNPV("O&M cost", plant.operation_maintenance_cost())

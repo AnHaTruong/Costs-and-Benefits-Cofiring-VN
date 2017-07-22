@@ -17,11 +17,9 @@ class Farmer(Emitter):
     def __init__(self,
                  supply_chain,
                  emission_factor,
-                 collect_economics,
-                 straw_price):
+                 collect_economics):
         self.quantity = supply_chain.quantity()
         self.collect_economics = collect_economics
-        self.straw_price = straw_price
         self.farm_area = self.quantity / supply_chain.average_straw_yield
         self.capital_cost = self.collect_economics['winder_rental_cost'] * self.farm_area[1]
 

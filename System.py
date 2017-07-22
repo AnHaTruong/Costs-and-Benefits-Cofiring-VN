@@ -24,7 +24,7 @@ class System:
     """
     """
     def __init__(self, plant, cofire_tech, supply_chain,
-                 straw_price, emission_factor, collect_economics, truck_economics):
+                 biomass_price, emission_factor, collect_economics, truck_economics):
         self.plant = plant
         self.cofiring_plant = CofiringPlant(plant, cofire_tech)
 
@@ -32,15 +32,14 @@ class System:
 
         self.supply_chain = supply_chain.fit(self.biomass_used[1])
 
-        self.farmer = Farmer(self.supply_chain, emission_factor, collect_economics, straw_price)
+        self.farmer = Farmer(self.supply_chain, emission_factor, collect_economics)
 
         self.transporter = Transporter(self.supply_chain, emission_factor, truck_economics)
 
-        # Farmer sells the straw delivered to the plant gate
-        self.straw_value = self.biomass_used * straw_price
+        self.biomass_value = self.biomass_used * biomass_price
         self.delivery = self.supply_chain.transport_cost()
-        self.cofiring_plant.straw_cost = self.straw_value + self.delivery
-        self.farmer.income = self.straw_value + self.delivery
+        self.cofiring_plant.biomass_cost = self.biomass_value + self.delivery
+        self.farmer.income = self.biomass_value + self.delivery
 
     def transport_cost_per_t(self):
         with errstate(divide='ignore', invalid='ignore'):
