@@ -66,7 +66,6 @@ class System:
         amount = npv(discount_rate, self.wages())
         return display_as(amount, 'kUSD')
 
-    # TODO: Keep this method quantities only, leave economic valuation to CO2_npv and health_npv.
     def emission_reduction(self, external_cost):
         plant_ER = (self.plant.stack.emissions()['Total']
                     - self.cofiring_plant.stack.emissions()['Total'])
@@ -76,7 +75,6 @@ class System:
         field_ER = (self.farmer.emissions_exante['Total']
                     - self.farmer.emissions()['Total'])
         total_ER = plant_ER + transport_ER + field_ER
-        # Over the model time horizon, non discounted... better drop it
         total_benefit = total_ER * external_cost
         for pollutant in total_benefit:
             display_as(pollutant, 'kUSD')

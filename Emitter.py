@@ -10,6 +10,7 @@
 import pandas as pd
 
 
+# pylint: disable=too-few-public-methods
 class Emitter:
     """A system which emits pollutants.
 

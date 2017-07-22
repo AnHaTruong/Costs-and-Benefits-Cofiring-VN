@@ -18,6 +18,7 @@ from parameters import MongDuong1System, NinhBinhSystem
 from natu.units import t   # pylint: disable=E0611
 
 
+# pylint: disable=too-many-locals
 def plot_emissions(system, axes):
     """Plots the air pollutants emissions and CO2 emissions figure for one site"""
     kt = 1000 * t
