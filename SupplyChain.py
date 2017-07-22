@@ -11,7 +11,7 @@
 
 from copy import copy
 
-from init import isclose, v_after_invest, v_zeros, display_as, USD
+from init import isclose, v_after_invest, v_zeros, display_as
 
 from natu.units import t, km, ha
 

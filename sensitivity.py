@@ -43,8 +43,9 @@ param_values = saltelli.sample(problem, 100, calc_second_order=True)
 Y = np.empty([param_values.shape[0]])
 
 
-def model(X):
-    return MongDuong1.net_present_value(X[0], X[1], int(X[2])) / USD
+def model(args):
+    return MongDuong1.net_present_value(args[0], args[1], int(args[2])) / USD
+
 
 for i, X in enumerate(param_values):
     Y[i] = model(X)

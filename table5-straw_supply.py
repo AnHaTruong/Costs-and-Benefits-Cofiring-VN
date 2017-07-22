@@ -15,8 +15,8 @@ from parameters import MongDuong1System, NinhBinhSystem
 
 print("\nTable 5. Straw required and straw cost estimation\n")
 
-col3 = MongDuong1System.biomass_used[1]
-col4 = NinhBinhSystem.biomass_used[1]
+col3 = MongDuong1System.cofiring_plant.biomass_used[1]
+col4 = NinhBinhSystem.cofiring_plant.biomass_used[1]
 
 col5 = MongDuong1System.cofiring_plant.biomass_cost_per_t()[1]
 col6 = NinhBinhSystem.cofiring_plant.biomass_cost_per_t()[1]
