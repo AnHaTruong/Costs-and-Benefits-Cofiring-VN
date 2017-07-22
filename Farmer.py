@@ -32,7 +32,17 @@ class Farmer(Emitter):
         field_burned = field_burned_exante - v_after_invest * self.quantity
         Emitter.__init__(self, {'Straw': field_burned}, emission_factor)
 
-        self.income = None
+        self._income = None
+
+    @property
+    def income(self):
+        if self._income is None:
+            raise AttributeError('Accessing  Farmer.income  value before it is set')
+        return display_as(self._income, 'kUSD')
+
+    @income.setter
+    def income(self, value):
+        self._income = value
 
     def labor(self):
         """Work time needed to collect straw for co-firing per year"""
@@ -45,10 +55,6 @@ class Farmer(Emitter):
         """Benefit from job creation from biomass collection"""
         amount = self.labor() * self.collect_economics['wage_bm_collect']
         return display_as(amount, 'kUSD')
-
-    def straw_value(self):
-        value = self.quantity * self.straw_price
-        return display_as(value, 'kUSD')
 
     def profit(self):
         profit = self.income - self.labor_cost() - self.capital_cost

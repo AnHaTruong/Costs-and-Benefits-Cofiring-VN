@@ -24,8 +24,8 @@ col6 = NinhBinhSystem.sourcing_cost_per_t()[1]
 col9 = MongDuong1System.transport_cost_per_t()[1]
 col10 = NinhBinhSystem.transport_cost_per_t()[1]
 
-assert isclose(col5 - col9, MongDuong1System.farmer.straw_value()[1] / col3)
-assert isclose(col6 - col10, NinhBinhSystem.farmer.straw_value()[1] / col4)
+assert isclose(col5 - col9, MongDuong1System.straw_value[1] / col3)
+assert isclose(col6 - col10, NinhBinhSystem.straw_value[1] / col4)
 
 print('{:24}{:>24}{:>24}'.format('Parameter', 'Mong Duong 1', 'Ninh Binh'))
 print('{:24} {:>19.0f}{:>22.0f}'.format('Straw required', col3, col4))

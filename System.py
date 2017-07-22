@@ -37,13 +37,14 @@ class System:
         self.transporter = Transporter(self.supply_chain, emission_factor, truck_economics)
 
         # Farmer sells the straw delivered to the plant gate
-        self.contract_value = self.farmer.straw_value() + self.supply_chain.transport_cost()
-        self.cofiring_plant.straw_cost = self.contract_value
-        self.farmer.income = self.contract_value
+        self.straw_value = self.biomass_used * straw_price
+        self.delivery = self.supply_chain.transport_cost()
+        self.cofiring_plant.straw_cost = self.straw_value + self.delivery
+        self.farmer.income = self.straw_value + self.delivery
 
     def sourcing_cost_per_t(self):
         with errstate(divide='ignore', invalid='ignore'):
-            cost_per_t = self.contract_value / self.biomass_used
+            cost_per_t = self.cofiring_plant.straw_cost / self.biomass_used
         return display_as(cost_per_t, 'USD/t')
 
     def sourcing_cost_per_GJ(self, heat_value):

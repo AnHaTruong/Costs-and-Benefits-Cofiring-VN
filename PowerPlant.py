@@ -173,7 +173,7 @@ class CofiringPlant(PowerPlant):
     def straw_cost(self):
         if self._straw_cost is None:
             raise AttributeError('Using  CofiringPlant.straw_cost  value before it is set')
-        return self._straw_cost
+        return display_as(self._straw_cost, 'kUSD')
 
     @straw_cost.setter
     def straw_cost(self, value):
