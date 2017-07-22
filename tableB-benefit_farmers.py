@@ -24,9 +24,9 @@ def print_farmer_income(system):
     winder_cost = system.farmer.capital_cost
     collect_cost = system.farmer.labor_cost()[1]
     loading_cost = system.transporter.loading_wages()[1]
-    transport_cost = system.transporter.driving_wages()[1]
+    driving_cost = system.transporter.driving_wages()[1]
 
-    total = revenue - winder_cost - collect_cost - loading_cost - transport_cost
+    total = revenue - winder_cost - collect_cost - loading_cost - driving_cost
 
     row = '{:20}' + '{:10.2f}' + '{:10.0f}'
     print(total)
@@ -36,8 +36,7 @@ def print_farmer_income(system):
                      display_as(winder_cost, 'kUSD')))
     print(row.format('- Collection work', display_as(collect_cost / area, 'USD/ha'), collect_cost))
     print(row.format('- Loading work', display_as(loading_cost / area, 'USD/ha'), loading_cost))
-    print(row.format('- Transport work', display_as(transport_cost / area, 'USD/ha'),
-                     transport_cost))
+    print(row.format('- Driving work', display_as(driving_cost / area, 'USD/ha'), driving_cost))
     print(row.format('= Net income', display_as(total / area, 'USD/ha'), total))
     print()
 

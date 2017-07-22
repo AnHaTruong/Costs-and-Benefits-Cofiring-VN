@@ -24,11 +24,9 @@ class SupplyZone:
     def __init__(self,
                  shape,
                  straw_density,
-                 transport_tariff,
                  tortuosity_factor):
         self.shape = shape
         self.straw_density = display_as(straw_density, 't/km2')
-        self.transport_tariff = display_as(transport_tariff, 'USD/(t*km)')
         self.tortuosity_factor = tortuosity_factor
 
     def __str__(self):
@@ -36,10 +34,8 @@ class SupplyZone:
                 + "\n Shape: " + str(self.shape)
                 + "\n Straw density: " + str(self.straw_density)
                 + "\n quantity = " + str(self.quantity())
-                + "\n Transport tariff: " + str(self.transport_tariff)
                 + "\n Tortuosity: " + str(self.tortuosity_factor)
                 + "\n Activity to transport all = " + str(self.transport_tkm()[1])
-                + "\n Cost to transport all = " + str(self.transport_cost()[1])
                 )
 
     def area(self):
@@ -57,10 +53,6 @@ class SupplyZone:
                     * self.tortuosity_factor
                     )
         return display_as(activity, 't * km')
-
-    def transport_cost(self):
-        cost = self.transport_tkm() * self.transport_tariff
-        return display_as(cost, 'kUSD')
 
     def shrink(self, factor):
         self.shape = self.shape.shrink(factor)
@@ -111,7 +103,6 @@ class SupplyChain:
     def __str__(self):
         s = "Supply chain\n"
         s += "quantity = " + str(self.quantity()) + "\n"
-        s += "Cost to transport all = " + str(self.transport_cost()[1]) + "\n"
         s += "Collection_radius = " + str(self.collection_radius()) + "\n"
         for zone in self.zones:
             s += str(zone) + "\n"
@@ -134,12 +125,6 @@ class SupplyChain:
         for zone in self.zones:
             activity += zone.transport_tkm()
         return display_as(activity, 't * km')
-
-    def transport_cost(self):
-        cost = v_zeros * USD
-        for zone in self.zones:
-            cost += zone.transport_cost()
-        return display_as(cost, 'kUSD')
 
     def collection_radius(self):
         return self.zones[-1].shape.outer_radius()

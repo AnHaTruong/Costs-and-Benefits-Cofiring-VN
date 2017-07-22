@@ -18,7 +18,7 @@ from PowerPlant import CofiringPlant
 
 
 # TODO: Row compares plant and cofiring_plant
-def tableC(plant, tariff, supply_chain=None, farmer=None):
+def tableC(plant, tariff, system=None):
     def printRowInt(label, quantity):
         print('{:30}{:8.0f}'.format(label, quantity))
 
@@ -35,8 +35,8 @@ def tableC(plant, tariff, supply_chain=None, farmer=None):
         printRowNPV("  Coal", plant.coal_cost())
         # Assuming the rent sharing goes to farmer, see also Table B
         printRowNPV("  Biomass", plant.biomass_cost)
-        printRowNPV("    transportation", supply_chain.transport_cost())
-        printRowNPV("    straw at field", farmer.income - supply_chain.transport_cost())
+        printRowNPV("    transportation", system.transport_cost)
+        printRowNPV("    straw at field", system.biomass_value)
     printRowNPV("O&M cost", plant.operation_maintenance_cost())
     if isinstance(plant, CofiringPlant):
         printRowNPV("  coal", plant.coal_om_cost())
@@ -56,12 +56,10 @@ def tableC(plant, tariff, supply_chain=None, farmer=None):
 
 tableC(MongDuong1System.cofiring_plant.plant, feedin_tariff['MD'])
 print('')
-tableC(MongDuong1System.cofiring_plant, feedin_tariff['MD'],
-       MongDuong1System.supply_chain, MongDuong1System.farmer)
+tableC(MongDuong1System.cofiring_plant, feedin_tariff['MD'], MongDuong1System)
 
 print('')
 
 tableC(NinhBinhSystem.cofiring_plant.plant, feedin_tariff['NB'])
 print('')
-tableC(NinhBinhSystem.cofiring_plant, feedin_tariff['NB'],
-       NinhBinhSystem.supply_chain, NinhBinhSystem.farmer)
+tableC(NinhBinhSystem.cofiring_plant, feedin_tariff['NB'], NinhBinhSystem)

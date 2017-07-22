@@ -40,13 +40,17 @@ class System:
         self.transporter = Transporter(self.supply_chain, emission_factor, truck_economics)
 
         self.biomass_value = self.biomass_used * biomass_price
-        self.delivery = self.supply_chain.transport_cost()
-        self.cofiring_plant.biomass_cost = self.biomass_value + self.delivery
-        self.farmer.income = self.biomass_value + self.delivery
+        display_as(self.biomass_value, "kUSD")
+
+        self.transport_cost = self.transporter.activity_level * truck_economics["transport_tariff"]
+        display_as(self.transport_cost, "kUSD")
+
+        self.cofiring_plant.biomass_cost = self.biomass_value + self.transport_cost
+        self.farmer.income = self.biomass_value + self.transport_cost
 
     def transport_cost_per_t(self):
         with errstate(divide='ignore', invalid='ignore'):
-            cost_per_t = self.transporter.income() / self.biomass_used
+            cost_per_t = self.transport_cost / self.biomass_used
         return display_as(cost_per_t, 'USD/t')
 
     def labor(self):

@@ -140,13 +140,11 @@ MongDuong1 = PowerPlant(name="Mong Duong 1",
 
 MDSupplyZone1 = SupplyZone(shape=Semi_Annulus(0 * km, 50 * km),
                            straw_density=MongDuong1_straw_density1,
-                           transport_tariff=truck_economics["transport_tariff"],
                            tortuosity_factor=1.5
                            )
 
 MDSupplyZone2 = SupplyZone(shape=Semi_Annulus(50 * km, 100 * km),
                            straw_density=MongDuong1_straw_density2,
-                           transport_tariff=truck_economics["transport_tariff"],
                            tortuosity_factor=1.5
                            )
 
@@ -201,7 +199,6 @@ NinhBinh = PowerPlant(name="Ninh Binh",
 
 NBSupplyZone = SupplyZone(shape=Disk(50 * km),
                           straw_density=NinhBinh_straw_density,
-                          transport_tariff=truck_economics["transport_tariff"],
                           tortuosity_factor=1.5
                           )
 

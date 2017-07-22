@@ -57,12 +57,6 @@ class Transporter(Emitter):
         amount = self.loading_wages() + self.driving_wages()
         return display_as(amount, 'kUSD')
 
-    def income(self):
-        income = self.activity_level * self.truck_economics['transport_tariff']
-        # Operational margin positive, before paying for the truck (capital)
-#        assert income > self.loading_wages() + self.driving_wages()
-        return display_as(income, 'kUSD')
-
     def max_roundtrip_time(self):
         time = self.collection_radius * 2 / self.truck_economics['truck_velocity']
         return display_as(time, 'hr')
