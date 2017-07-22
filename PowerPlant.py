@@ -10,7 +10,7 @@
 #
 # pylint: disable=E0611
 
-from natu.numpy import full, npv
+from natu.numpy import full, npv, errstate
 
 from init import time_horizon, v_after_invest, display_as, USD
 from Investment import Investment
@@ -178,6 +178,15 @@ class CofiringPlant(PowerPlant):
     @straw_cost.setter
     def straw_cost(self, value):
         self._straw_cost = value
+
+    def sourcing_cost_per_t(self):
+        with errstate(divide='ignore', invalid='ignore'):
+            cost_per_t = self.straw_cost / self.biomass_used
+        return display_as(cost_per_t, 'USD/t')
+
+    def sourcing_cost_per_GJ(self):
+        cost = self.sourcing_cost_per_t() / self.biomass.heat_value
+        return display_as(cost, 'USD / GJ')
 
     def fuel_cost(self):
         cost = self.coal_cost() + self.straw_cost

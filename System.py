@@ -42,15 +42,6 @@ class System:
         self.cofiring_plant.straw_cost = self.straw_value + self.delivery
         self.farmer.income = self.straw_value + self.delivery
 
-    def sourcing_cost_per_t(self):
-        with errstate(divide='ignore', invalid='ignore'):
-            cost_per_t = self.cofiring_plant.straw_cost / self.biomass_used
-        return display_as(cost_per_t, 'USD/t')
-
-    def sourcing_cost_per_GJ(self, heat_value):
-        cost = self.sourcing_cost_per_t() / heat_value
-        return display_as(cost, 'USD / GJ')
-
     def transport_cost_per_t(self):
         with errstate(divide='ignore', invalid='ignore'):
             cost_per_t = self.transporter.income() / self.biomass_used
