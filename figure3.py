@@ -15,40 +15,35 @@ import matplotlib.pyplot as plt
 import numpy as np
 from init import USD
 from parameters import discount_rate, tax_rate, depreciation_period, feedin_tariff
-from parameters import MongDuong1, MongDuong1Cofire, NinhBinh, NinhBinhCofire
-from parameters import straw, specific_cost
-
-from parameters import collect_economics, truck_economics, OM_economics
+from parameters import MongDuong1System, NinhBinhSystem
+from parameters import external_cost
 
 
-def benefit_array(plant, cofiringplant, income_parameter):
+def benefit_array(system, income_parameter):
     MUSD = 10**6 * USD
-    job_benefit = cofiringplant.wages_npv(discount_rate, collect_economics, truck_economics,
-                                          OM_economics) / MUSD
-    plant_benefit = (cofiringplant.net_present_value(income_parameter,
-                                                     discount_rate,
-                                                     tax_rate,
-                                                     depreciation_period)
-                     - plant.net_present_value(income_parameter,
-                                               discount_rate,
-                                               tax_rate,
-                                               depreciation_period)
+    job_benefit = system.wages_npv(discount_rate) / MUSD
+    plant_benefit = (system.cofiring_plant.net_present_value(income_parameter,
+                                                             discount_rate,
+                                                             tax_rate,
+                                                             depreciation_period)
+                     - system.plant.net_present_value(income_parameter,
+                                                      discount_rate,
+                                                      tax_rate,
+                                                      depreciation_period)
                      ) / MUSD
-    farmer_benefit = cofiringplant.straw_supply.farm_npv(discount_rate,
-                                                         straw.price,
-                                                         collect_economics,
-                                                         truck_economics) / MUSD
-    health_benefit = cofiringplant.health_npv(discount_rate, specific_cost) / MUSD
-    climate_benefit = cofiringplant.CO2_npv(discount_rate, specific_cost) / MUSD
+    # FIXME: Was probably net of transporter.labor_cost in old version
+    farmer_benefit = system.farmer.npv(discount_rate) / MUSD
+    health_benefit = system.health_npv(discount_rate, external_cost) / MUSD
+    climate_benefit = system.CO2_npv(discount_rate, external_cost) / MUSD
     return np.array([plant_benefit, farmer_benefit, job_benefit, health_benefit, climate_benefit])
 
 
 index = np.arange(5)
 width = 0.4
 plt.figure(figsize=(10, 5))
-NB = plt.barh(index + width, benefit_array(NinhBinh, NinhBinhCofire, feedin_tariff['NB']), width,
+NB = plt.barh(index + width, benefit_array(NinhBinhSystem, feedin_tariff['NB']), width,
               color='#ff4500', edgecolor='none', label='Ninh Binh')
-MD = plt.barh(index, benefit_array(MongDuong1, MongDuong1Cofire, feedin_tariff['MD']), width,
+MD = plt.barh(index, benefit_array(MongDuong1System, feedin_tariff['MD']), width,
               color='navy', edgecolor='none', label='Mong Duong 1')
 plt.xlabel('Cumulative benefit over 20 years (M$)')
 plt.yticks(index + 0.5, ('Plant owner\n(net profit)',

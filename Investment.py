@@ -38,6 +38,7 @@ class Investment:
 
     @staticmethod
     def income(income_parameter):
+        del income_parameter   # Abstract function
         return display_as(v_zeros * USD, 'kUSD')
 
     @staticmethod

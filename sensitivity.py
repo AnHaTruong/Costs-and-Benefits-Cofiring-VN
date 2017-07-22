@@ -17,7 +17,6 @@ config.use_quantities = False
 
 from init import time_horizon, USD, np
 from parameters import MongDuong1
-# from parameters import MongDuong1, MongDuong1Cofire, NinhBinh, NinhBinhCofire
 
 # Only run interactively, for now
 try:

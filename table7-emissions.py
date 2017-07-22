@@ -8,38 +8,42 @@
 #     Creative Commons Attribution-ShareAlike 4.0 International
 #
 #
+"""This table shows the Annual emissions, without and with cofiring"""
 
-from parameters import MongDuong1, NinhBinh, MongDuong1Cofire, NinhBinhCofire
-from parameters import specific_cost
+from parameters import MongDuong1System, NinhBinhSystem
+from parameters import external_cost
 
 
 def table(emission_df):
     print(emission_df.applymap(lambda v: v[1]).T, '\n')
 
 
-def print_emission(plant, cofireplant):
+def print_emission(system):
+    #TODO: use the emissions before/after invest instead of comparing the two plants
+    cofireplant = system.cofiring_plant
+    plant = cofireplant.plant
     print(plant.name, 'BASELINE EMISSION')
     print('Emission from power plant')
     table(plant.stack.emissions())
     print('Emission from coal supply')
     table(plant.coal_transporter().emissions())
     print('Emission from open field burning')
-    table(cofireplant.straw_supply.field_emission(cofireplant.biomass_used * 0))
+    table(system.farmer.emissions_exante)
     print(plant.name, 'COFIRING EMISSION')
     print('Emission from power plant')
     table(cofireplant.stack.emissions())
     print('Emission from coal supply')
     table(cofireplant.coal_transporter().emissions())
     print('Emission from straw supply')
-    table(cofireplant.straw_supply.transport_emissions())
+    table(system.transporter.emissions())
     print('Emission from open field burning')
-    table(cofireplant.straw_supply.field_emission(cofireplant.biomass_used))
+    table(system.farmer.emissions())
     print('-------')
     print(plant.name, 'EMISSION REDUCTION\n')
-    table(cofireplant.emission_reduction(specific_cost).T)
+    table(system.emission_reduction(external_cost).T)
 
 
-print_emission(MongDuong1, MongDuong1Cofire)
+print_emission(MongDuong1System)
 print("==================\n")
 
-print_emission(NinhBinh, NinhBinhCofire)
+print_emission(NinhBinhSystem)

@@ -11,45 +11,29 @@
 """ Print table for the present value of benefit from co-firing added up"""
 
 from init import time_horizon
-from parameters import discount_rate
-from parameters import MongDuong1, MongDuong1Cofire, NinhBinh, NinhBinhCofire
-from parameters import straw, specific_cost
-from parameters import collect_economics, truck_economics, OM_economics
+from parameters import discount_rate, external_cost
+from parameters import MongDuong1System, NinhBinhSystem
+import natu.numpy as np
+
 
 print("Total benefit over", time_horizon, "years")
 print("Discounted at", discount_rate)
 print("")
 
 
-def print_benefit_add_up(plant, cofiringplant):
+def print_benefit_add_up(system):
     print('')
-    print(cofiringplant.name)
+    print(system.cofiring_plant.name)
     print('-------------------')
     row2 = '{:30}' + '{:20.0f}'
-    print(row2.format('Health',
-                      cofiringplant.health_npv(discount_rate, specific_cost)
-                      )
-          )
-    print(row2.format('Emission reduction',
-                      cofiringplant.CO2_npv(discount_rate, specific_cost)
-                      )
-          )
-
-    print(row2.format('Jobs',
-                      cofiringplant.wages_npv(discount_rate, collect_economics, truck_economics,
-                                              OM_economics)
-                      )
-          )
-
-    print(row2.format('Farmer income',
-                      cofiringplant.straw_supply.farm_npv(discount_rate,
-                                                          straw.price,
-                                                          collect_economics,
-                                                          truck_economics)
-                      )
-          )
+    print(row2.format('Health', system.health_npv(discount_rate, external_cost)))
+    print(row2.format('Emission reduction', system.CO2_npv(discount_rate, external_cost)))
+    print(row2.format('Jobs', system.wages_npv(discount_rate)))
+    # FIXME: This is neither farmer income nor farmer profit
+    transport_wages = np.npv(discount_rate, system.transporter.labor_cost())
+    print(row2.format('Farmer income', system.farmer.npv(discount_rate) - transport_wages))
 
 
-print_benefit_add_up(MongDuong1, MongDuong1Cofire)
+print_benefit_add_up(MongDuong1System)
 
-print_benefit_add_up(NinhBinh, NinhBinhCofire)
+print_benefit_add_up(NinhBinhSystem)
