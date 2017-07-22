@@ -8,6 +8,7 @@
 #     Creative Commons Attribution-ShareAlike 4.0 International
 #
 #
+"""This table shows the Annual emissions, without and with cofiring"""
 
 from parameters import MongDuong1System, NinhBinhSystem
 from parameters import external_cost

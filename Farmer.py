@@ -25,11 +25,11 @@ class Farmer(Emitter):
         self.farm_area = self.quantity / supply_chain.average_straw_yield
         self.capital_cost = self.collect_economics['winder_rental_cost'] * self.farm_area[1]
 
-        # TODO: Member  emissions_exante  does not really belong to the Farmer class
         field_burned_exante = v_ones * supply_chain.burnable()
         self.emissions_exante = Emitter({'Straw': field_burned_exante},
                                         emission_factor).emissions()
-        field_burned = v_after_invest * supply_chain.burnable() - self.quantity
+
+        field_burned = field_burned_exante - v_after_invest * self.quantity
         Emitter.__init__(self, {'Straw': field_burned}, emission_factor)
 
         self.income = None

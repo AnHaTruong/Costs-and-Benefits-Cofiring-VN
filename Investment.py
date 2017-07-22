@@ -37,7 +37,8 @@ class Investment:
         return display_as(v_invest * self.capital / sum(v_invest), 'kUSD')
 
     @staticmethod
-    def income():
+    def income(income_parameter):
+        del income_parameter   # Abstract function
         return display_as(v_zeros * USD, 'kUSD')
 
     @staticmethod
