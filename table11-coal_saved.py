@@ -10,20 +10,21 @@
 """ Quantity and value of coal saved by co-firing."""
 
 from init import display_as
-from parameters import MongDuong1Cofire, NinhBinhCofire, coal_import_price
+from parameters import MongDuong1System, NinhBinhSystem, coal_import_price
 
 
-def print_coal_saved(plant):
-    col1 = plant.coal_saved[1]
+def print_coal_saved(system):
+    col1 = system.cofiring_plant.coal_saved[1]
     col2 = display_as(col1 * coal_import_price, 'kUSD')
 
     row = '{:35}{:23.0f}'
-    print('Coal saved at', plant.name)
+    print('Coal saved at', system.cofiring_plant.name)
     print(row.format('Amount of coal saved from co-firing', col1))
     print(row.format('Maximum benefit for trade balance', col2))
 
-print_coal_saved(MongDuong1Cofire)
+
+print_coal_saved(MongDuong1System)
 
 print('')
 
-print_coal_saved(NinhBinhCofire)
+print_coal_saved(NinhBinhSystem)

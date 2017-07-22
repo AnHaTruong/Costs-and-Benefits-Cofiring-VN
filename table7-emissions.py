@@ -10,7 +10,7 @@
 #
 
 from parameters import MongDuong1System, NinhBinhSystem
-from parameters import specific_cost
+from parameters import external_cost
 
 
 def table(emission_df):
@@ -39,7 +39,7 @@ def print_emission(system):
     table(system.farmer.emissions())
     print('-------')
     print(plant.name, 'EMISSION REDUCTION\n')
-    table(system.emission_reduction(specific_cost).T)
+    table(system.emission_reduction(external_cost).T)
 
 
 print_emission(MongDuong1System)

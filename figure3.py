@@ -16,7 +16,7 @@ import numpy as np
 from init import USD
 from parameters import discount_rate, tax_rate, depreciation_period, feedin_tariff
 from parameters import MongDuong1System, NinhBinhSystem
-from parameters import specific_cost
+from parameters import external_cost
 
 
 def benefit_array(system, income_parameter):
@@ -33,8 +33,8 @@ def benefit_array(system, income_parameter):
                      ) / MUSD
     # FIXME: Was probably net of transporter.labor_cost in old version
     farmer_benefit = system.farmer.npv(discount_rate) / MUSD
-    health_benefit = system.health_npv(discount_rate, specific_cost) / MUSD
-    climate_benefit = system.CO2_npv(discount_rate, specific_cost) / MUSD
+    health_benefit = system.health_npv(discount_rate, external_cost) / MUSD
+    climate_benefit = system.CO2_npv(discount_rate, external_cost) / MUSD
     return np.array([plant_benefit, farmer_benefit, job_benefit, health_benefit, climate_benefit])
 
 

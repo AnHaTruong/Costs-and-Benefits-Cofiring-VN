@@ -73,7 +73,7 @@ class System:
         amount = npv(discount_rate, self.wages())
         return display_as(amount, 'kUSD')
 
-    def emission_reduction(self, specific_cost):
+    def emission_reduction(self, external_cost):
         plant_ER = (self.plant.stack.emissions()['Total']
                     - self.cofiring_plant.stack.emissions()['Total'])
         transport_ER = (self.plant.coal_transporter().emissions()['Total']
@@ -82,7 +82,7 @@ class System:
         field_ER = (self.farmer.emissions_exante['Total']
                     - self.farmer.emissions()['Total'])
         total_ER = plant_ER + transport_ER + field_ER
-        total_benefit = total_ER * specific_cost
+        total_benefit = total_ER * external_cost
         for pollutant in total_benefit:
             display_as(pollutant, 'kUSD')
         list_of_series = [plant_ER, transport_ER, field_ER, total_ER, total_benefit]
@@ -90,14 +90,14 @@ class System:
         ER_table = pd.DataFrame(list_of_series, index=row)
         return ER_table
 
-    def CO2_npv(self, discount_rate, specific_cost):
-        df = self.emission_reduction(specific_cost)
+    def CO2_npv(self, discount_rate, external_cost):
+        df = self.emission_reduction(external_cost)
         v = df['CO2']['Benefit']  # FIXME: use .loc
         value = npv(discount_rate, v)
         return display_as(value, 'kUSD')
 
-    def health_npv(self, discount_rate, specific_cost):
-        df = self.emission_reduction(specific_cost)
+    def health_npv(self, discount_rate, external_cost):
+        df = self.emission_reduction(external_cost)
         v = df.ix['Benefit'].drop('CO2').sum()
         value = npv(discount_rate, v)
         return display_as(value, 'kUSD')

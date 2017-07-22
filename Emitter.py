@@ -5,7 +5,7 @@
 # minh.haduong@gmail.com
 # Creative Commons Attribution-ShareAlike 4.0 International
 #
-"""Emitter: this object represents a system which emits pollutants."""
+"""Emitter: this class represents a system which emits pollutants."""
 
 import pandas as pd
 
@@ -35,10 +35,10 @@ Total  [0.0, 1003.86, 1003.86]  [0.0, 2.28, 2.28]  [0.0, 9.1, 9.1]  [0.0, 0.18, 
 
        Real example:
 
-       from parameters import emission_factor, MongDuong1Cofire
+       from parameters import emission_factor, MongDuong1System
 
-       MD_stack = Emitter({'6b_coal': MongDuong1Cofire.coal_used,
-                           'Straw': MongDuong1Cofire.biomass_used
+       MD_stack = Emitter({'6b_coal': MongDuong1System.cofiring_plant.coal_used,
+                           'Straw': MongDuong1System.cofiring_plant.biomass_used
                            },
                           emission_factor,
                           {'CO2': 0.0, 'SO2': 0.982, 'NOx': 0.0, 'PM10': 0.996}
