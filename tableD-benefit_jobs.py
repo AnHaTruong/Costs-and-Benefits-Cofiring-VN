@@ -52,9 +52,8 @@ def print_job(system):
     print()
     print(cols.format('Area collected', system.supply_chain.area()))
     print(cols.format('Collection radius', system.supply_chain.collection_radius()))
-    #FIXME: legend suggest it is average one way trip, we mean maximal roundtrip duration
-    print(cols.format('Truck trips: duration', system.transporter.max_roundtrip_time()))
-    print(cols.format('Truck trips: number', system.transporter.truck_trips[1]))
+    print(cols.format('Maximum transport time', system.transporter.max_trip_time()))
+    print(cols.format('Number of truck trips', system.transporter.truck_trips[1]))
     print()
 
 

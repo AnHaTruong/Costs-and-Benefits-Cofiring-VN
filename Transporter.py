@@ -57,6 +57,6 @@ class Transporter(Emitter):
         amount = self.loading_wages() + self.driving_wages()
         return display_as(amount, 'kUSD')
 
-    def max_roundtrip_time(self):
-        time = self.collection_radius * 2 / self.truck_economics['truck_velocity']
+    def max_trip_time(self):
+        time = self.collection_radius / self.truck_economics['truck_velocity']
         return display_as(time, 'hr')
