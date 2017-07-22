@@ -21,7 +21,10 @@ from Transporter import Transporter
 
 
 class System:
-    """
+    """The model
+
+    Has a plant, cofiring plant, supply_chain, transporter, farmer
+    Do the financial transaction
     """
     def __init__(self, plant, cofire_tech, supply_chain,
                  biomass_price, emission_factor, collect_economics, truck_economics):
@@ -85,12 +88,12 @@ class System:
 
     def CO2_npv(self, discount_rate, external_cost):
         df = self.emission_reduction(external_cost)
-        v = df['CO2']['Benefit']  # FIXME: use .loc
+        v = df.loc['Benefit', 'CO2']
         value = npv(discount_rate, v)
         return display_as(value, 'kUSD')
 
     def health_npv(self, discount_rate, external_cost):
         df = self.emission_reduction(external_cost)
-        v = df.ix['Benefit'].drop('CO2').sum()
+        v = df.loc['Benefit'].drop('CO2').sum()
         value = npv(discount_rate, v)
         return display_as(value, 'kUSD')
