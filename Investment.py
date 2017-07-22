@@ -30,6 +30,7 @@ class Investment:
     """
     def __init__(self, capital=0 * USD):
         self.capital = display_as(capital, 'kUSD')
+        self.name = None
 
     def investment(self):
         """Multi year investment coded but not tested"""

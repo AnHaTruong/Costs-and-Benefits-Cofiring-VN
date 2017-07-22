@@ -15,8 +15,8 @@ from SALib.analyze import sobol
 from natu import config
 config.use_quantities = False
 
-from init import time_horizon, USD, np
-from parameters import MongDuong1
+from init import time_horizon, USD, np    # pylint: disable=wrong-import-position
+from parameters import MongDuong1         # pylint: disable=wrong-import-position
 
 # Only run interactively, for now
 try:
