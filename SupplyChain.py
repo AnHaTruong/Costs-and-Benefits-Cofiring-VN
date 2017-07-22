@@ -68,13 +68,11 @@ class SupplyChain:
                  zones,
                  straw_production,
                  straw_burn_rate,
-                 average_straw_yield,
-                 emission_factor):
+                 average_straw_yield):
         self.zones = zones
         self.straw_production = straw_production
         self.straw_burn_rate = straw_burn_rate
         self.average_straw_yield = average_straw_yield
-        self.emission_factor = emission_factor
 
     def fit(self, target_quantity):
         """Returns a copy of the supply chain
@@ -86,8 +84,7 @@ class SupplyChain:
         collected = SupplyChain([copy(self.zones[0])],
                                 straw_production=self.straw_production,
                                 straw_burn_rate=self.straw_burn_rate,
-                                average_straw_yield=self.average_straw_yield,
-                                emission_factor=self.emission_factor)
+                                average_straw_yield=self.average_straw_yield)
         while collected.quantity()[1] < target_quantity:
             i += 1
             collected.zones.append(copy(self.zones[i]))

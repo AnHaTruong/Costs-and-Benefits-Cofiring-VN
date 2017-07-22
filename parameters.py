@@ -151,8 +151,7 @@ MDSupplyZone2 = SupplyZone(shape=Semi_Annulus(50 * km, 100 * km),
 MD_SupplyChain = SupplyChain(zones=[MDSupplyZone1, MDSupplyZone2],
                              straw_production=MongDuong1_straw_production,
                              straw_burn_rate=0.9,
-                             average_straw_yield=MongDuong1_average_straw_yield,
-                             emission_factor=emission_factor)
+                             average_straw_yield=MongDuong1_average_straw_yield)
 
 Cofire_Tech = namedtuple('Cofire_Tech', ['biomass_ratio_energy',
                                          'capital_cost',
@@ -205,8 +204,7 @@ NBSupplyZone = SupplyZone(shape=Disk(50 * km),
 NB_SupplyChain = SupplyChain(zones=[NBSupplyZone],
                              straw_production=NinhBinh_straw_production,
                              straw_burn_rate=0.9,
-                             average_straw_yield=NinhBinh_average_straw_yield,
-                             emission_factor=emission_factor)
+                             average_straw_yield=NinhBinh_average_straw_yield)
 
 cofire_NB = cofire_MD1._replace(capital_cost=100 * USD / kW / y)
 
