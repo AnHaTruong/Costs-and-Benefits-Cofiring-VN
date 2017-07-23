@@ -20,7 +20,7 @@ def tableC(system, tariff):
         print('{:30}{:8.0f}{:20.0f}'.format(label, a, b))
 
     def printRowFloat(label, x, y):
-        print('{:30}{:8.4f}{:20.4f}'.format(label, x, y))
+        print('{:30}{:8.1f}{:20.1f}'.format(label, x, y))
 
     def printRowNPV(label, v, w):
         printRowInt(label, npv(discount_rate, v), npv(discount_rate, w))

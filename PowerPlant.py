@@ -44,8 +44,6 @@ class PowerPlant(Investment, Emitter):
         self.boiler_efficiency = boiler_efficiency
         self.fix_om_coal = fix_om_coal
         self.variable_om_coal = variable_om_coal
-#        self.emission_control = emission_control
-#        self.emission_factor = emission_factor
         self.coal = coal
 
         self.power_generation = full(time_horizon + 1,
@@ -63,9 +61,6 @@ class PowerPlant(Investment, Emitter):
                          {self.coal.name: self.coal_used},
                          emission_factor,
                          emission_control)
-#        self.stack = Emitter({self.coal.name: self.coal_used},
-#                             self.emission_factor,
-#                             self.emission_control)
 
     def revenue(self, feedin_tariff):                       # pylint: disable=arguments-differ
         revenue = self.power_generation * feedin_tariff
@@ -108,8 +103,7 @@ class PowerPlant(Investment, Emitter):
                                                   tax_rate,
                                                   depreciation_period))
         result = total_life_cycle_cost / total_lifetime_power_production
-        # Fixme: once TableC is no regression, use /MWh for integer
-        return display_as(result, 'USD/kWh')
+        return display_as(result, 'USD/MWh')
 
 
 class CofiringPlant(PowerPlant):
