@@ -14,20 +14,18 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from init import USD
-from parameters import discount_rate, tax_rate, depreciation_period, feedin_tariff
+from parameters import discount_rate, tax_rate, depreciation_period
 from parameters import MongDuong1System, NinhBinhSystem
 from parameters import external_cost
 
 
-def benefit_array(system, income_parameter):
+def benefit_array(system):
     MUSD = 10**6 * USD
     job_benefit = system.wages_npv(discount_rate) / MUSD
-    plant_benefit = (system.cofiring_plant.net_present_value(income_parameter,
-                                                             discount_rate,
+    plant_benefit = (system.cofiring_plant.net_present_value(discount_rate,
                                                              tax_rate,
                                                              depreciation_period)
-                     - system.plant.net_present_value(income_parameter,
-                                                      discount_rate,
+                     - system.plant.net_present_value(discount_rate,
                                                       tax_rate,
                                                       depreciation_period)
                      ) / MUSD
@@ -40,9 +38,9 @@ def benefit_array(system, income_parameter):
 index = np.arange(5)
 width = 0.4
 plt.figure(figsize=(10, 5))
-NB = plt.barh(index + width, benefit_array(NinhBinhSystem, feedin_tariff['NB']), width,
+NB = plt.barh(index + width, benefit_array(NinhBinhSystem), width,
               color='#ff4500', edgecolor='none', label='Ninh Binh')
-MD = plt.barh(index, benefit_array(MongDuong1System, feedin_tariff['MD']), width,
+MD = plt.barh(index, benefit_array(MongDuong1System), width,
               color='navy', edgecolor='none', label='Mong Duong 1')
 plt.xlabel('Cumulative benefit over 20 years (M$)')
 plt.yticks(index + 0.5, ('Plant owner\n(net profit)',

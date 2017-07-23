@@ -34,7 +34,7 @@ from System import System
 discount_rate = 0.087771
 depreciation_period = 10
 tax_rate = 0.25               # Corporate tax in Vietnam
-feedin_tariff = {'MD': 1239.17 * VND / kWh,
+feedin_tariff = {'MD1': 1239.17 * VND / kWh,
                  'NB': 1665.6 * VND / kWh}
 
 # hourly wage calculated from base salary defined in governmental regulations
@@ -178,7 +178,7 @@ cofire_MD1 = Cofire_Tech(biomass_ratio_energy=v_after_invest * 0.05,
                          wage_operation_maintenance=1.67 * USD / hr
                          )
 
-MongDuong1System = System(MongDuong1, cofire_MD1, MD_SupplyChain,
+MongDuong1System = System(MongDuong1, cofire_MD1, feedin_tariff["MD1"], MD_SupplyChain,
                           straw.price, emission_factor, collect_economics, truck_economics)
 
 
@@ -208,5 +208,5 @@ NB_SupplyChain = SupplyChain(zones=[NBSupplyZone],
 
 cofire_NB = cofire_MD1._replace(capital_cost=100 * USD / kW / y)
 
-NinhBinhSystem = System(NinhBinh, cofire_NB, NB_SupplyChain,
+NinhBinhSystem = System(NinhBinh, cofire_NB, feedin_tariff["NB"], NB_SupplyChain,
                         straw.price, emission_factor, collect_economics, truck_economics)

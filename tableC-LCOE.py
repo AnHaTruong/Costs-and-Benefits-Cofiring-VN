@@ -12,10 +12,10 @@
 from natu.numpy import npv
 
 from parameters import MongDuong1System, NinhBinhSystem
-from parameters import discount_rate, tax_rate, depreciation_period, feedin_tariff
+from parameters import discount_rate, tax_rate, depreciation_period
 
 
-def tableC(system, tariff):
+def tableC(system):
     def printRowInt(label, a, b):
         print('{:30}{:8.0f}{:20.0f}'.format(label, a, b))
 
@@ -42,21 +42,21 @@ def tableC(system, tariff):
     printRowNPV("  coal", system.plant.coal_om_cost(), system.cofiring_plant.coal_om_cost())
     printRowNPV_na("  biomass", system.cofiring_plant.biomass_om_cost())
     printRowNPV("Tax",
-                system.plant.income_tax(tariff, tax_rate, depreciation_period),
-                system.cofiring_plant.income_tax(tariff, tax_rate, depreciation_period))
+                system.plant.income_tax(tax_rate, depreciation_period),
+                system.cofiring_plant.income_tax(tax_rate, depreciation_period))
     printRowNPV("Sum of costs",
-                system.plant.cash_out(tariff, tax_rate, depreciation_period),
-                system.cofiring_plant.cash_out(tariff, tax_rate, depreciation_period))
+                system.plant.cash_out(tax_rate, depreciation_period),
+                system.cofiring_plant.cash_out(tax_rate, depreciation_period))
     printRowNPV("Electricity produced",
                 system.plant.power_generation,
                 system.cofiring_plant.power_generation)
     printRowFloat("Levelized cost of electricity",
-                  system.plant.lcoe(tariff, discount_rate, tax_rate, depreciation_period),
-                  system.cofiring_plant.lcoe(tariff, discount_rate, tax_rate, depreciation_period))
+                  system.plant.lcoe(discount_rate, tax_rate, depreciation_period),
+                  system.cofiring_plant.lcoe(discount_rate, tax_rate, depreciation_period))
 
 
-tableC(MongDuong1System, feedin_tariff['MD'])
+tableC(MongDuong1System)
 
 print('')
 
-tableC(NinhBinhSystem, feedin_tariff['NB'])
+tableC(NinhBinhSystem)

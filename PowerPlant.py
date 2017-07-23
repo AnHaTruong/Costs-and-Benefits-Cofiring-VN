@@ -62,10 +62,6 @@ class PowerPlant(Investment, Emitter):
                          emission_factor,
                          emission_control)
 
-    def revenue(self, feedin_tariff):                       # pylint: disable=arguments-differ
-        revenue = self.power_generation * feedin_tariff
-        return display_as(revenue, 'kUSD')
-
     def operating_expenses(self):
         cost = self.fuel_cost() + self.operation_maintenance_cost()
         return display_as(cost, 'kUSD')
@@ -96,12 +92,10 @@ class PowerPlant(Investment, Emitter):
     def operation_maintenance_cost(self):
         return display_as(self.coal_om_cost(), 'kUSD')
 
-    def lcoe(self, feedin_tariff, discount_rate, tax_rate, depreciation_period):
+    def lcoe(self, discount_rate, tax_rate, depreciation_period):
         total_lifetime_power_production = npv(discount_rate, self.power_generation)
         total_life_cycle_cost = npv(discount_rate,
-                                    self.cash_out(feedin_tariff,
-                                                  tax_rate,
-                                                  depreciation_period))
+                                    self.cash_out(tax_rate, depreciation_period))
         result = total_life_cycle_cost / total_lifetime_power_production
         return display_as(result, 'USD/MWh')
 
@@ -159,6 +153,7 @@ class CofiringPlant(PowerPlant):
         self.coal_used = (self.gross_heat_input - self.biomass_heat) / self.coal.heat_value
         display_as(self.coal_used, 't')
 
+        # pylint: disable=non-parent-init-called
         Emitter.__init__(self,
                          {self.coal.name: self.coal_used,
                           self.biomass.name: self.biomass_used},

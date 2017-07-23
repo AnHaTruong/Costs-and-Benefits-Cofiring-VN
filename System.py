@@ -26,13 +26,18 @@ class System:
     Has a plant, cofiring plant, supply_chain, transporter, farmer
     Do the financial transaction
     """
-    def __init__(self, plant, cofire_tech, supply_chain,
-                 biomass_price, emission_factor, collect_economics, truck_economics):
+    def __init__(self, plant, cofire_tech, feedin_tariff,
+                 supply_chain, biomass_price, emission_factor, collect_economics, truck_economics):
         self.plant = plant
         self.cofiring_plant = CofiringPlant(plant, cofire_tech)
         self.supply_chain = supply_chain.fit(self.cofiring_plant.biomass_used[1])
         self.farmer = Farmer(self.supply_chain, emission_factor, collect_economics)
         self.transporter = Transporter(self.supply_chain, emission_factor, truck_economics)
+
+        electricity_sales = plant.power_generation * feedin_tariff
+        display_as(electricity_sales, 'kUSD')
+        self.plant.revenue = electricity_sales
+        self.cofiring_plant.revenue = electricity_sales
 
         self.biomass_value = self.cofiring_plant.biomass_used * biomass_price
         display_as(self.biomass_value, "kUSD")
