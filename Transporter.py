@@ -7,12 +7,13 @@
 #
 """Transporter: """
 
-from init import display_as
+from init import display_as, USD
 
 from Emitter import Emitter
+from Investment import Investment
 
 
-class Transporter(Emitter):
+class Transporter(Investment, Emitter):
     """Represents the collective of transporters
 
     quantity: total mass being transported
@@ -23,6 +24,7 @@ class Transporter(Emitter):
     """
     def __init__(self, supply_chain, emission_factor, truck_economics):
 
+        Investment.__init__(self)
         self.activity_level = supply_chain.transport_tkm()
         Emitter.__init__(self, {'Road transport': self.activity_level}, emission_factor)
 
@@ -55,6 +57,18 @@ class Transporter(Emitter):
 
     def labor_cost(self):
         amount = self.loading_wages() + self.driving_wages()
+        return display_as(amount, 'kUSD')
+
+    def fuel_cost(self):
+        amount = 0 * USD
+        return display_as(amount, 'kUSD')
+
+    def capital_cost(self):
+        amount = 0 * USD
+        return display_as(amount, 'kUSD')
+
+    def operating_expenses(self):
+        amount = self.labor_cost() + self.fuel_cost() + self.capital_cost()
         return display_as(amount, 'kUSD')
 
     def max_trip_time(self):

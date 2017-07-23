@@ -6,7 +6,7 @@
 # Creative Commons Attribution-ShareAlike 4.0 International
 #
 
-from init import v_after_invest, v_ones, display_as
+from init import v_after_invest, v_ones, display_as, USD, hr
 from Emitter import Emitter
 from Investment import Investment
 
@@ -14,14 +14,11 @@ from Investment import Investment
 class Farmer(Investment, Emitter):
     """Farmer class represents the collective of farmers who produce and sell straw
     """
-    def __init__(self,
-                 supply_chain,
-                 emission_factor,
-                 collect_economics):
+    def __init__(self, supply_chain, emission_factor, collect_economics):
         self.quantity = supply_chain.quantity()
         self.collect_economics = collect_economics
         self.farm_area = self.quantity / supply_chain.average_straw_yield
-        self.capital_cost = self.collect_economics['winder_rental_cost'] * self.farm_area[1]
+        self.capital_cost = self.farm_area * self.collect_economics['winder_rental_cost']
 
         field_burned_exante = v_ones * supply_chain.burnable()
         self.emissions_exante = Emitter({'Straw': field_burned_exante},
@@ -34,9 +31,8 @@ class Farmer(Investment, Emitter):
 
     def labor(self):
         """Work time needed to collect straw for co-firing per year"""
-        time = (self.quantity
-                * self. collect_economics['work_hour_day']
-                / self.collect_economics['winder_haul'])
+        t_per_hr = self.collect_economics['winder_haul'] / self.collect_economics['work_hour_day']
+        time = self.quantity / t_per_hr
         return display_as(time, 'hr')
 
     def labor_cost(self):
@@ -44,6 +40,11 @@ class Farmer(Investment, Emitter):
         amount = self.labor() * self.collect_economics['wage_bm_collect']
         return display_as(amount, 'kUSD')
 
+    def fuel_cost(self):
+        hourly_fuel_cost = 0 * USD / hr
+        amount = self.labor() * hourly_fuel_cost
+        return display_as(amount, 'kUSD')
+
     def operating_expenses(self):
-        expenses = self.labor_cost() + self.capital_cost
+        expenses = self.labor_cost() + self.capital_cost + self.fuel_cost()
         return display_as(expenses, 'kUSD')

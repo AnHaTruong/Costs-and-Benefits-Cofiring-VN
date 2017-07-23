@@ -9,40 +9,49 @@
 
 from init import display_as
 
-from parameters import MongDuong1System, NinhBinhSystem, collect_economics
-
-display_as(collect_economics['winder_rental_cost'], 'USD/ha')
+from parameters import MongDuong1System, NinhBinhSystem
 
 
 def print_farmer_income(system):
-    """This table assumes that farmers are paid for transport.
-    FIXME: truck rental and fuel costs
-    FIXME: separate the bills for fieldside straw and transportation
+    """This table prints farmers and transport revenue / expenses.
     """
+    print("Balance sheets of biomass supply sector players")
+    print(system.plant.name)
+
     area = system.farmer.farm_area[1]
     revenue = system.farmer.revenue[1]
-    winder_cost = system.farmer.capital_cost
+    winder_cost = system.farmer.capital_cost[1]
+    fuel_cost = system.farmer.fuel_cost()[1]
     collect_cost = system.farmer.labor_cost()[1]
+    total = revenue - winder_cost - collect_cost - fuel_cost
+
+    print('                                      over', area)
+    print('                            Total         Per ha')
+    row = '{:20}' + '{:10.0f}' + '{:10.2f}'
+    print(row.format('Straw revenue', revenue, display_as(revenue / area, 'USD/ha')))
+    print(row.format('- Winder rental',
+                     display_as(winder_cost, 'kUSD'),
+                     display_as(winder_cost / area, 'USD/ha')))
+    print(row.format('- Winder fuel', fuel_cost, display_as(fuel_cost / area, 'USD/ha')))
+    print(row.format('- Collection work', collect_cost, display_as(collect_cost / area, 'USD/ha')))
+    print(row.format('= Net income', total, display_as(total / area, 'USD/ha')))
+
+    print()
+    revenue = system.transporter.revenue[1]
     loading_cost = system.transporter.loading_wages()[1]
     driving_cost = system.transporter.driving_wages()[1]
-
-    total = revenue - winder_cost - collect_cost - loading_cost - driving_cost
-
-    row = '{:20}' + '{:10.2f}' + '{:10.0f}'
-    print(total)
-    print('{:27}{:15}{:4}{:5.0f}'.format('', 'Per ha', 'For', area))
-    print(row.format('Straw sales revenue', display_as(revenue / area, 'USD/ha'), revenue))
-    print(row.format('- Winder rental', display_as(winder_cost / area, 'USD/ha'),
-                     display_as(winder_cost, 'kUSD')))
-    print(row.format('- Collection work', display_as(collect_cost / area, 'USD/ha'), collect_cost))
-    print(row.format('- Loading work', display_as(loading_cost / area, 'USD/ha'), loading_cost))
-    print(row.format('- Driving work', display_as(driving_cost / area, 'USD/ha'), driving_cost))
-    print(row.format('= Net income', display_as(total / area, 'USD/ha'), total))
+    fuel_cost = system.transporter.fuel_cost()
+    capital_cost = system.transporter.capital_cost()
+    total = revenue - loading_cost - driving_cost
+    row = '{:20}' + '{:10.0f}'
+    print(row.format('Transport revenue', revenue))
+    print(row.format('- Handling work', loading_cost))
+    print(row.format('- Driving work', driving_cost))
+    print(row.format('- Truck fuel', fuel_cost))
+    print(row.format('- Truck rental', capital_cost))
+    print(row.format('= Net income', total))
     print()
 
 
-print('Extra net income for supply chain around Mong Duong 1')
 print_farmer_income(MongDuong1System)
-
-print('Extra net income for supply chain around Ninh Binh')
 print_farmer_income(NinhBinhSystem)

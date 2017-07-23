@@ -1,13 +1,12 @@
 # encoding: utf-8
 # Economic of co-firing in two power plants in Vietnam
 #
-# A biomass supply chain
-#
 # (c) Minh Ha-Duong, An Ha Truong 2016
 # minh.haduong@gmail.com
 # Creative Commons Attribution-ShareAlike 4.0 International
 #
 # pylint: disable=E0611
+"""The biomass supply chain, meaning a list of zones produing biomass"""
 
 from copy import copy
 
@@ -15,9 +14,6 @@ from init import isclose, v_after_invest, v_zeros, display_as
 
 from natu.units import t, km, ha
 
-# TODO: The straw_production should be recomputed when shrink
-#  --> Make it proportional to the area using a straw_production_density
-#  straw_density is confusing. Is it only the collected fraction ?
 
 
 class SupplyZone:

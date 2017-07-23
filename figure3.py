@@ -29,13 +29,15 @@ def benefit_array(system):
                                                       tax_rate,
                                                       depreciation_period)
                      ) / MUSD
+    transporter_benefit = system.transporter.net_present_value(discount_rate) / MUSD
     farmer_benefit = system.farmer.net_present_value(discount_rate) / MUSD
     health_benefit = system.health_npv(discount_rate, external_cost) / MUSD
     climate_benefit = system.CO2_npv(discount_rate, external_cost) / MUSD
-    return np.array([plant_benefit, farmer_benefit, job_benefit, health_benefit, climate_benefit])
+    return np.array([plant_benefit, transporter_benefit, farmer_benefit,
+                     job_benefit, health_benefit, climate_benefit])
 
 
-index = np.arange(5)
+index = np.arange(6)
 width = 0.4
 plt.figure(figsize=(10, 5))
 NB = plt.barh(index + width, benefit_array(NinhBinhSystem), width,
@@ -44,6 +46,7 @@ MD = plt.barh(index, benefit_array(MongDuong1System), width,
               color='navy', edgecolor='none', label='Mong Duong 1')
 plt.xlabel('Cumulative benefit over 20 years (M$)')
 plt.yticks(index + 0.5, ('Plant owner\n(net profit)',
+                         'Trader\n(transport straw)',
                          'Farmer\n(sell straw)',
                          'Workers\n(harvest, transport, O&M)',
                          'Local society\n(air quality)',

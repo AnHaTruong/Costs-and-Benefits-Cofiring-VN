@@ -15,16 +15,12 @@ from PowerPlant import CofiringPlant
 from Farmer import Farmer
 from Transporter import Transporter
 
-#FIXME: The transport cost is not accounted.
-#TODO:  The transporter is a trader. He buys the straw from the farmers, transport it and resell.
-#       There are two prices.
-
 
 class System:
-    """The model
+    """The cofiring sector and its market
 
     Has a plant, cofiring plant, supply_chain, transporter, farmer
-    Do the financial transaction
+    The cofiring plant pays the farmer for biomass and the transporter for transport
     """
     def __init__(self, plant, cofire_tech, feedin_tariff,
                  supply_chain, biomass_price, emission_factor, collect_economics, truck_economics):
@@ -46,7 +42,8 @@ class System:
         display_as(self.transport_cost, "kUSD")
 
         self.cofiring_plant.biomass_cost = self.biomass_value + self.transport_cost
-        self.farmer.revenue = self.biomass_value + self.transport_cost
+        self.farmer.revenue = self.biomass_value
+        self.transporter.revenue = self.transport_cost
 
     def transport_cost_per_t(self):
         with errstate(divide='ignore', invalid='ignore'):

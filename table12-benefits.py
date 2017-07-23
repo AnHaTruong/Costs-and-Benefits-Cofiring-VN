@@ -13,7 +13,6 @@
 from init import time_horizon
 from parameters import discount_rate, external_cost
 from parameters import MongDuong1System, NinhBinhSystem
-import natu.numpy as np
 
 
 print("Total benefit over", time_horizon, "years")
@@ -28,11 +27,11 @@ def print_benefit_add_up(system):
     row2 = '{:30}' + '{:20.0f}'
     print(row2.format('Health', system.health_npv(discount_rate, external_cost)))
     print(row2.format('Emission reduction', system.CO2_npv(discount_rate, external_cost)))
-    print(row2.format('Jobs', system.wages_npv(discount_rate)))
-    # FIXME: This is neither farmer income nor farmer profit
-    transport_wages = np.npv(discount_rate, system.transporter.labor_cost())
-    print(row2.format('Farmer income',
-                      system.farmer.net_present_value(discount_rate) - transport_wages))
+    print(row2.format('Wages', system.wages_npv(discount_rate)))
+    print(row2.format('Farmer earnings before tax',
+                      system.farmer.net_present_value(discount_rate)))
+    print(row2.format('Trader earnings before tax',
+                      system.transporter.net_present_value(discount_rate)))
 
 
 print_benefit_add_up(MongDuong1System)

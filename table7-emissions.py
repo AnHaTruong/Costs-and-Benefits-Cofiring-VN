@@ -19,7 +19,6 @@ def table(emission_df):
 
 
 def print_emission(system):
-    #TODO: use the emissions before/after invest instead of comparing the two plants
     cofireplant = system.cofiring_plant
     plant = cofireplant.plant
     print(plant.name, 'BASELINE EMISSION')
@@ -44,6 +43,7 @@ def print_emission(system):
 
 
 print_emission(MongDuong1System)
+
 print("==================\n")
 
 print_emission(NinhBinhSystem)
