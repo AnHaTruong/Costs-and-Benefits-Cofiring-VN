@@ -29,7 +29,7 @@ def benefit_array(system):
                                                       tax_rate,
                                                       depreciation_period)
                      ) / MUSD
-    farmer_benefit = system.farmer.gross_npv(discount_rate) / MUSD
+    farmer_benefit = system.farmer.net_present_value(discount_rate) / MUSD
     health_benefit = system.health_npv(discount_rate, external_cost) / MUSD
     climate_benefit = system.CO2_npv(discount_rate, external_cost) / MUSD
     return np.array([plant_benefit, farmer_benefit, job_benefit, health_benefit, climate_benefit])

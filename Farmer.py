@@ -5,13 +5,13 @@
 # minh.haduong@gmail.com
 # Creative Commons Attribution-ShareAlike 4.0 International
 #
-import numpy as np
 
 from init import v_after_invest, v_ones, display_as
 from Emitter import Emitter
+from Investment import Investment
 
 
-class Farmer(Emitter):
+class Farmer(Investment, Emitter):
     """Farmer class represents the collective of farmers who produce and sell straw
     """
     def __init__(self,
@@ -30,17 +30,7 @@ class Farmer(Emitter):
         field_burned = field_burned_exante - v_after_invest * self.quantity
         Emitter.__init__(self, {'Straw': field_burned}, emission_factor)
 
-        self._revenue = None
-
-    @property
-    def revenue(self):
-        if self._revenue is None:
-            raise AttributeError('Accessing  Farmer.revenue  value before it is set')
-        return display_as(self._revenue, 'kUSD')
-
-    @revenue.setter
-    def revenue(self, value):
-        self._revenue = value
+        Investment.__init__(self)
 
     def labor(self):
         """Work time needed to collect straw for co-firing per year"""
@@ -54,11 +44,6 @@ class Farmer(Emitter):
         amount = self.labor() * self.collect_economics['wage_bm_collect']
         return display_as(amount, 'kUSD')
 
-    def gross_income(self):
-        """Income, before shipping expenses"""
-        value = self.revenue - self.labor_cost() - self.capital_cost
-        return display_as(value, 'kUSD')
-
-    def gross_npv(self, discount_rate):
-        value = np.npv(discount_rate, self.gross_income())
-        return display_as(value, 'kUSD')
+    def operating_expenses(self):
+        expenses = self.labor_cost() + self.capital_cost
+        return display_as(expenses, 'kUSD')

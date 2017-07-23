@@ -93,7 +93,7 @@ class Investment:
                 - self.cash_out(tax_rate, depreciation_period))
         return display_as(flow, 'kUSD')
 
-    def net_present_value(self, discount_rate, tax_rate, depreciation_period):
+    def net_present_value(self, discount_rate, tax_rate=0, depreciation_period=1):
         assert 0 <= discount_rate < 1, "Discount rate not in [0, 1["
         value = np.npv(discount_rate,
                        self.net_cash_flow(tax_rate, depreciation_period))
