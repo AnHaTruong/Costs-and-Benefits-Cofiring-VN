@@ -42,8 +42,7 @@ feedin_tariff = {'MD1': 1239.17 * VND / kWh,
 collect_economics = {'winder_rental_cost': 40 * USD / ha,   # per period
                      'winder_haul': 6.57 * t / d,
                      'work_hour_day': 8 * hr / d,
-                     'wage_bm_collect': 1.11 * USD / hr
-                     }
+                     'wage_bm_collect': 1.11 * USD / hr}
 
 truck_economics = {'truck_loading_time': 2.7 / 60 * hr / t,  # (Ovaskainen & 2016 )
                    'wage_bm_loading': 1.11 * USD / hr,
@@ -63,53 +62,45 @@ MD_Coal = Fuel(name="6b_coal",
                heat_value=19.43468 * MJ / kg,
                price=1131400 * VND / t,
                transport_distance=0 * km,
-               transport_mean='Conveyor belt'
-               )
+               transport_mean='Conveyor belt')
 
 NB_Coal = Fuel(name="4b_coal",
                heat_value=21.5476 * MJ / kg,
                price=1825730 * VND / t,  # Includes transport
                transport_distance=200 * km,
-               transport_mean='Barge transport'
-               )
+               transport_mean='Barge transport')
 
 straw = Fuel(name='Straw',
              heat_value=11.7 * MJ / kg,
              price=37.26 * USD / t,
              transport_distance='Endogenous',
-             transport_mean='Road transport'
-             )
+             transport_mean='Road transport')
 
 emission_factor = {
     '6b_coal': {'CO2': 0.0966 * kg / MJ * MD_Coal.heat_value,  # IPCC 2006
                 # Eastern Research Group (2011)
                 'SO2': 11.5 * kg / t,
                 'NOx': 18 * kg / t,
-                'PM10': 43.8 * kg / t
-                },
+                'PM10': 43.8 * kg / t},
     '4b_coal': {'CO2': 0.0966 * kg / MJ * NB_Coal.heat_value,  # IPCC 2006
                 # Eastern Research Group (2011)
                 'SO2': 11.5 * kg / t,
                 'NOx': 18 * kg / t,
-                'PM10': 26.1 * kg / t
-                },
+                'PM10': 26.1 * kg / t},
     'Straw': {'CO2': 0.0858 * kg / MJ * straw.heat_value,  # (Shafie & 2013)
               # (Hoang & 2013)
               'SO2': 0.18 * kg / t,
               'NOx': 2.28 * kg / t,
-              'PM10': 9.1 * kg / t
-              },
+              'PM10': 9.1 * kg / t},
     'Conveyor belt': {'CO2': 0.0 * kg / t / km,
                       'SO2': 0. * kg / t / km,
                       'NOx': 0. * kg / t / km,
-                      'PM10': 0. * kg / t / km
-                      },
+                      'PM10': 0. * kg / t / km},
     'Road transport': {'CO2': 0.110 * kg / t / km,  # Binh & Tuan (2016)
                        # http://naei.defra.gov.uk/data/ef-transport, year 2014
                        'SO2': 0.003 * g / truck_economics['truck_load'] / km,
                        'NOx': 2.68 * g / truck_economics['truck_load'] / km,
-                       'PM10': 0.04 * g / truck_economics['truck_load'] / km
-                       },
+                       'PM10': 0.04 * g / truck_economics['truck_load'] / km},
     'Barge transport': {'CO2': 0.071 * kg / t / km,  # Binh & Tuan (2016)
                         # Van Dingenen et al. (2016)
                         'SO2': 2 * g / kg * barge_fuel_consumption,
@@ -120,8 +111,7 @@ external_cost = pd.Series({'CO2': 1 * USD / t,
                            # Sakulniyomporn, Kubaha, and Chullabodhi (2011)
                            'SO2': 3767 * USD / t,
                            'PM10': 5883 * USD / t,
-                           'NOx': 286 * USD / t
-                           })
+                           'NOx': 286 * USD / t})
 
 
 MongDuong1 = PowerPlant(name="Mong Duong 1",
@@ -135,18 +125,15 @@ MongDuong1 = PowerPlant(name="Mong Duong 1",
                         variable_om_coal=0.0048 * USD / kWh,
                         emission_factor=emission_factor,
                         emission_control={'CO2': 0.0, 'SO2': 0.982, 'NOx': 0.0, 'PM10': 0.996},
-                        coal=MD_Coal
-                        )
+                        coal=MD_Coal)
 
 MDSupplyZone1 = SupplyZone(shape=Semi_Annulus(0 * km, 50 * km),
                            straw_density=MongDuong1_straw_density1,
-                           tortuosity_factor=1.5
-                           )
+                           tortuosity_factor=1.5)
 
 MDSupplyZone2 = SupplyZone(shape=Semi_Annulus(50 * km, 100 * km),
                            straw_density=MongDuong1_straw_density2,
-                           tortuosity_factor=1.5
-                           )
+                           tortuosity_factor=1.5)
 
 MD_SupplyChain = SupplyChain(zones=[MDSupplyZone1, MDSupplyZone2],
                              straw_production=MongDuong1_straw_production,
@@ -175,8 +162,7 @@ cofire_MD1 = Cofire_Tech(biomass_ratio_energy=v_after_invest * 0.05,
                          biomass=straw,
                          boiler_efficiency_loss=boiler_efficiency_loss_function_T2000,
                          OM_hour_MWh=0.12 * hr / MWh,  # working hour for OM per MWh
-                         wage_operation_maintenance=1.67 * USD / hr
-                         )
+                         wage_operation_maintenance=1.67 * USD / hr)
 
 MongDuong1System = System(MongDuong1, cofire_MD1, feedin_tariff["MD1"], MD_SupplyChain,
                           straw.price, emission_factor, collect_economics, truck_economics)
@@ -193,13 +179,11 @@ NinhBinh = PowerPlant(name="Ninh Binh",
                       variable_om_coal=0.0048 * USD / kWh,
                       emission_factor=emission_factor,
                       emission_control={'CO2': 0.0, 'SO2': 0.0, 'NOx': 0.0, 'PM10': 0.992},
-                      coal=NB_Coal
-                      )
+                      coal=NB_Coal)
 
 NBSupplyZone = SupplyZone(shape=Disk(50 * km),
                           straw_density=NinhBinh_straw_density,
-                          tortuosity_factor=1.5
-                          )
+                          tortuosity_factor=1.5)
 
 NB_SupplyChain = SupplyChain(zones=[NBSupplyZone],
                              straw_production=NinhBinh_straw_production,
