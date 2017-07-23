@@ -19,7 +19,7 @@ class Emitter:
            the reduction is end-of-pipe, common to all activities
        Emissions are proportional to an activity level,
            for example a quantity of fuel burned, or a distance traveled by a given mode
-       Activity level can be a scalar or an array representing a time series
+       Polymorphic signature: activity level can be a scalar or an array representing a time series
 
        The emission_factor table is a dictionary of dictionaries:
            emission_factor[activity][pollutant]
@@ -38,32 +38,33 @@ Total  [0.0, 1003.86, 1003.86]  [0.0, 2.28, 2.28]  [0.0, 9.1, 9.1]  [0.0, 0.18, 
 
        from parameters import emission_factor, MongDuong1System
 
-       MD_stack = Emitter({'6b_coal': MongDuong1System.cofiring_plant.coal_used,
-                           'Straw': MongDuong1System.cofiring_plant.biomass_used
-                           },
-                          emission_factor,
-                          {'CO2': 0.0, 'SO2': 0.982, 'NOx': 0.0, 'PM10': 0.996}
-                          )
+       emitter = Emitter({'6b_coal': MongDuong1System.cofiring_plant.coal_used,
+                          'Straw': MongDuong1System.cofiring_plant.biomass_used
+                          },
+                         emission_factor,
+                         {'CO2': 0.0, 'SO2': 0.982, 'NOx': 0.0, 'PM10': 0.996}
+                         )
 
-       print(MD_stack, "\n")
-       print(MD_stack.emissions()['Total'], "\n")
-       print(MD_stack.emissions()['Total']['CO2'], "\n")
+       print(emitter, "\n")
+       print(emitter.emissions()['Total'], "\n")
+       print(emitter.emissions()['Total']['CO2'], "\n")
        """
     def __init__(self,
-                 activities_levels,   # A dictionary of {activity: level, ...}
+                 activity_level,   # A dictionary of {activity: level, ...}
                  emission_factor,
-                 controls=None):
+                 emission_control=None):
+        assert set(activity_level.keys()).issubset(emission_factor.keys())
+        self.levels = activity_level
+        self.activities = activity_level.keys()
+        self.emission_factor = emission_factor
+        self.emission_control = emission_control
 
-        assert set(activities_levels.keys()).issubset(emission_factor.keys())
-        self.levels = activities_levels
-        self.activities = activities_levels.keys()
+        self.pollutants = emission_factor[list(activity_level)[0]].keys()
 
-        self.pollutants = emission_factor[list(activities_levels)[0]].keys()
-
-        if controls is None:
-            controls = {'CO2': 0, 'SO2': 0, 'NOx': 0, 'PM10': 0}
+        if emission_control is None:
+            emission_control = {'CO2': 0, 'SO2': 0, 'NOx': 0, 'PM10': 0}
         self.controled_emission_factor = pd.Series({
-            activity: pd.Series(emission_factor[activity]) * (1 - pd.Series(controls))
+            activity: pd.Series(emission_factor[activity]) * (1 - pd.Series(emission_control))
             for activity in emission_factor})
 
     def __str__(self):

@@ -133,8 +133,8 @@ MongDuong1 = PowerPlant(name="Mong Duong 1",
                         boiler_efficiency=full(time_horizon + 1, 87.03 / 100),
                         fix_om_coal=29.31 * USD / kW / y,
                         variable_om_coal=0.0048 * USD / kWh,
-                        emission_controls={'CO2': 0.0, 'SO2': 0.982, 'NOx': 0.0, 'PM10': 0.996},
                         emission_factor=emission_factor,
+                        emission_control={'CO2': 0.0, 'SO2': 0.982, 'NOx': 0.0, 'PM10': 0.996},
                         coal=MD_Coal
                         )
 
@@ -191,8 +191,8 @@ NinhBinh = PowerPlant(name="Ninh Binh",
                       boiler_efficiency=full(time_horizon + 1, 81.61 / 100),
                       fix_om_coal=29.31 * USD / kW / y,
                       variable_om_coal=0.0048 * USD / kWh,
-                      emission_controls={'CO2': 0.0, 'SO2': 0.0, 'NOx': 0.0, 'PM10': 0.992},
                       emission_factor=emission_factor,
+                      emission_control={'CO2': 0.0, 'SO2': 0.0, 'NOx': 0.0, 'PM10': 0.992},
                       coal=NB_Coal
                       )
 

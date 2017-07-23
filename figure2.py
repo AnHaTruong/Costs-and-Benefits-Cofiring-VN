@@ -26,8 +26,8 @@ def plot_emissions(system, axes):
     cofiringplant = system.cofiring_plant
     plant = system.plant
 
-    CO2stack = np.array([plant.stack.emissions().at['CO2', 'Total'][1],
-                         cofiringplant.stack.emissions().at['CO2', 'Total'][1]
+    CO2stack = np.array([plant.emissions().at['CO2', 'Total'][1],
+                         cofiringplant.emissions().at['CO2', 'Total'][1]
                          ]) / Mt
 
     CO2trans = np.array([plant.coal_transporter().emissions().at['CO2', 'Total'][1],
@@ -42,12 +42,12 @@ def plot_emissions(system, axes):
                          field_emis_after.at['CO2', 'Total'][1]]
                         ) / Mt
 
-    polstack = np.array([plant.stack.emissions().at['SO2', 'Total'][1],
-                         cofiringplant.stack.emissions().at['SO2', 'Total'][1],
-                         plant.stack.emissions().at['PM10', 'Total'][1],
-                         cofiringplant.stack.emissions().at['PM10', 'Total'][1],
-                         plant.stack.emissions().at['NOx', 'Total'][1],
-                         cofiringplant.stack.emissions().at['NOx', 'Total'][1]
+    polstack = np.array([plant.emissions().at['SO2', 'Total'][1],
+                         cofiringplant.emissions().at['SO2', 'Total'][1],
+                         plant.emissions().at['PM10', 'Total'][1],
+                         cofiringplant.emissions().at['PM10', 'Total'][1],
+                         plant.emissions().at['NOx', 'Total'][1],
+                         cofiringplant.emissions().at['NOx', 'Total'][1]
                          ]) / kt
 
     coal_transport_emis_before = plant.coal_transporter().emissions()

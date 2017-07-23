@@ -67,8 +67,8 @@ class System:
         return display_as(amount, 'kUSD')
 
     def emission_reduction(self, external_cost):
-        plant_ER = (self.plant.stack.emissions()['Total']
-                    - self.cofiring_plant.stack.emissions()['Total'])
+        plant_ER = (self.plant.emissions()['Total']
+                    - self.cofiring_plant.emissions()['Total'])
         transport_ER = (self.plant.coal_transporter().emissions()['Total']
                         - self.cofiring_plant.coal_transporter().emissions()['Total']
                         - self.transporter.emissions()['Total'])

@@ -17,8 +17,7 @@ from Investment import Investment
 from Emitter import Emitter
 
 
-#TODO: PowerPlant should BE an Emitter, not HAVE one
-class PowerPlant(Investment):
+class PowerPlant(Investment, Emitter):
     """ A coal power plant, without co-firing"""
     def __init__(self,
                  name: str,
@@ -30,8 +29,8 @@ class PowerPlant(Investment):
                  boiler_efficiency,
                  fix_om_coal,
                  variable_om_coal,
-                 emission_controls,
                  emission_factor,
+                 emission_control,
                  coal,
                  capital=0 * USD
                  ):
@@ -45,8 +44,8 @@ class PowerPlant(Investment):
         self.boiler_efficiency = boiler_efficiency
         self.fix_om_coal = fix_om_coal
         self.variable_om_coal = variable_om_coal
-        self.emission_controls = emission_controls
-        self.emission_factor = emission_factor
+#        self.emission_control = emission_control
+#        self.emission_factor = emission_factor
         self.coal = coal
 
         self.power_generation = full(time_horizon + 1,
@@ -60,11 +59,15 @@ class PowerPlant(Investment):
         self.coal_used = self.gross_heat_input / coal.heat_value
         display_as(self.coal_used, 't')
 
-        self.stack = Emitter({self.coal.name: self.coal_used},
-                             self.emission_factor,
-                             self.emission_controls)
+        Emitter.__init__(self,
+                         {self.coal.name: self.coal_used},
+                         emission_factor,
+                         emission_control)
+#        self.stack = Emitter({self.coal.name: self.coal_used},
+#                             self.emission_factor,
+#                             self.emission_control)
 
-    def income(self, feedin_tariff):                       # pylint: disable=arguments-differ
+    def revenue(self, feedin_tariff):                       # pylint: disable=arguments-differ
         revenue = self.power_generation * feedin_tariff
         return display_as(revenue, 'kUSD')
 
@@ -143,8 +146,8 @@ class CofiringPlant(PowerPlant):
                             cofiring_boiler_efficiency,
                             plant.fix_om_coal,
                             plant.variable_om_coal,
-                            plant.emission_controls,
                             plant.emission_factor,
+                            plant.emission_control,
                             plant.coal,
                             (cofire_tech.capital_cost
                              * plant.capacity
@@ -162,10 +165,11 @@ class CofiringPlant(PowerPlant):
         self.coal_used = (self.gross_heat_input - self.biomass_heat) / self.coal.heat_value
         display_as(self.coal_used, 't')
 
-        self.stack = Emitter({self.coal.name: self.coal_used,
-                              self.biomass.name: self.biomass_used},
-                             self.emission_factor,
-                             self.emission_controls)
+        Emitter.__init__(self,
+                         {self.coal.name: self.coal_used,
+                          self.biomass.name: self.biomass_used},
+                         plant.emission_factor,
+                         plant.emission_control)
 
         self._biomass_cost = None
 
