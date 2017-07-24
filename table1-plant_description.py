@@ -11,7 +11,10 @@
 """ Print table 1 for Technical parameters of the plants"""
 from natu.units import y
 
-from parameters import MongDuong1, NinhBinh
+from parameters import MongDuong1System, NinhBinhSystem
+
+MongDuong1 = MongDuong1System.plant
+NinhBinh = NinhBinhSystem.plant
 
 print('\nTable 1. Technical parameters\n')
 

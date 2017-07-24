@@ -11,7 +11,7 @@ import pandas as pd
 from natu.numpy import npv
 
 from init import display_as, safe_divide
-from PowerPlant import CofiringPlant
+from PowerPlant import PowerPlant, CofiringPlant
 from Farmer import Farmer
 from Transporter import Transporter
 
@@ -22,15 +22,16 @@ class System:
     Has a plant, cofiring plant, supply_chain, transporter, farmer
     The cofiring plant pays the farmer for biomass and the transporter for transport
     """
-    def __init__(self, plant, cofire_tech, supply_chain, price,
+    def __init__(self, plant_name, plant_parameter, cofire_tech, supply_chain, price,
                  emission_factor, farm_parameter, transport_parameter):
-        self.plant = plant
-        self.cofiring_plant = CofiringPlant(plant, cofire_tech)
+
+        self.plant = PowerPlant(plant_name, plant_parameter, price.coal)
+        self.cofiring_plant = CofiringPlant(self.plant, cofire_tech)
         self.supply_chain = supply_chain.fit(self.cofiring_plant.biomass_used[1])
         self.farmer = Farmer(self.supply_chain, emission_factor, farm_parameter)
         self.transporter = Transporter(self.supply_chain, emission_factor, transport_parameter)
 
-        electricity_sales = plant.power_generation * price.electricity
+        electricity_sales = self.plant.power_generation * price.electricity
         display_as(electricity_sales, 'kUSD')
         self.plant.revenue = electricity_sales
         self.cofiring_plant.revenue = electricity_sales

@@ -8,14 +8,14 @@
 # Creative Commons Attribution-ShareAlike 4.0 International
 #
 from init import isclose, v_zeros
-from parameters import MongDuong1, cofire_MD1, straw, MD_SupplyChain, price_MD
+from parameters import plant_parameter_MD1, cofire_MD1, SupplyChain_MD1, price_MD1
 from parameters import emission_factor, farm_parameter, transport_parameter
 from System import System
 
-MongDuong1NullCofiringSystem = System(MongDuong1,
+MongDuong1NullCofiringSystem = System("Mong Duong 1", plant_parameter_MD1,
                                       cofire_MD1._replace(biomass_ratio_energy=v_zeros),
-                                      MD_SupplyChain,
-                                      price_MD,
+                                      SupplyChain_MD1,
+                                      price_MD1,
                                       emission_factor,
                                       farm_parameter,
                                       transport_parameter)

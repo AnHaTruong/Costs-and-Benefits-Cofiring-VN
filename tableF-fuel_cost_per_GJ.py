@@ -12,7 +12,7 @@
 from init import display_as
 
 from parameters import MongDuong1System, NinhBinhSystem
-from parameters import MD_Coal, NB_Coal, straw, price_MD, price_NB
+from parameters import MD_Coal, NB_Coal, straw, price_MD1, price_NB
 
 
 def cost_per_GJ(price, fuel):
@@ -24,10 +24,10 @@ def cost_per_GJ(price, fuel):
 
 print("Cost of heat        MongDuong1          NinhBinh")
 print("Coal               ",
-      cost_per_GJ(price_MD.coal, MD_Coal), "    ",
+      cost_per_GJ(price_MD1.coal, MD_Coal), "    ",
       cost_per_GJ(price_NB.coal, NB_Coal))
 print("Biomass in field   ",
-      cost_per_GJ(price_MD.biomass, straw), "    ",
+      cost_per_GJ(price_MD1.biomass, straw), "    ",
       cost_per_GJ(price_NB.biomass, straw))
 print("Biomass plant gate ",
       MongDuong1System.cofiring_plant.biomass_cost_per_GJ()[1],

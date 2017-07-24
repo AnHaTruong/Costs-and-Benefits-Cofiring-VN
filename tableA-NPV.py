@@ -12,7 +12,7 @@
 
 from init import time_horizon
 from parameters import MongDuong1System, NinhBinhSystem
-from parameters import price_MD, price_NB, discount_rate, depreciation_period, tax_rate
+from parameters import price_MD1, price_NB, discount_rate, depreciation_period, tax_rate
 
 print('')
 
@@ -21,7 +21,7 @@ print('Discount Rate', discount_rate)
 print('Depreciation', depreciation_period, 'years')
 
 print('')
-print('FIT', price_MD.electricity)
+print('FIT', price_MD1.electricity)
 MongDuong1System.plant.pretty_table(discount_rate, tax_rate, depreciation_period)
 
 MongDuong1System.cofiring_plant.pretty_table(discount_rate, tax_rate, depreciation_period)
