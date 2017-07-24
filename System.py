@@ -8,9 +8,9 @@
 #
 
 import pandas as pd
-from natu.numpy import npv, errstate
+from natu.numpy import npv
 
-from init import display_as
+from init import display_as, safe_divide
 from PowerPlant import CofiringPlant
 from Farmer import Farmer
 from Transporter import Transporter
@@ -46,9 +46,7 @@ class System:
         self.transporter.revenue = self.transport_cost
 
     def transport_cost_per_t(self):
-        with errstate(divide='ignore', invalid='ignore'):
-            cost_per_t = self.transport_cost / self.cofiring_plant.biomass_used
-        return display_as(cost_per_t, 'USD/t')
+        return safe_divide(self.transport_cost, self.cofiring_plant.biomass_used)
 
     def labor(self):
         """Total work time created from co-firing"""

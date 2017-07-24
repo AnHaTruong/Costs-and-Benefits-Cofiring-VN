@@ -114,18 +114,33 @@ external_cost = pd.Series({'CO2': 1 * USD / t,
                            'NOx': 286 * USD / t})
 
 
-MongDuong1 = PowerPlant(name="Mong Duong 1",
-                        capacity=1080 * MW * y,
-                        capacity_factor=0.60,
-                        commissioning=2015,
-                        boiler_technology='CFB',
-                        plant_efficiency=full(time_horizon + 1, 38.84 / 100),
-                        boiler_efficiency=full(time_horizon + 1, 87.03 / 100),
-                        fix_om_coal=29.31 * USD / kW / y,
-                        variable_om_coal=0.0048 * USD / kWh,
-                        emission_factor=emission_factor,
-                        emission_control={'CO2': 0.0, 'SO2': 0.982, 'NOx': 0.0, 'PM10': 0.996},
-                        coal=MD_Coal)
+Plant_Parameter = namedtuple("Plant_Parameter", ['capacity',
+                                                 'capacity_factor',
+                                                 'commissioning',
+                                                 'boiler_technology',
+                                                 'boiler_efficiency',
+                                                 'plant_efficiency',
+                                                 'fix_om_coal',
+                                                 'variable_om_coal',
+                                                 'emission_factor',
+                                                 'emission_control',
+                                                 'coal'])
+
+MongDuong1_parameter = Plant_Parameter(capacity=1080 * MW * y,
+                                       capacity_factor=0.60,
+                                       commissioning=2015,
+                                       boiler_technology='CFB',
+                                       boiler_efficiency=full(time_horizon + 1, 87.03 / 100),
+                                       plant_efficiency=full(time_horizon + 1, 38.84 / 100),
+                                       fix_om_coal=29.31 * USD / kW / y,
+                                       variable_om_coal=0.0048 * USD / kWh,
+                                       emission_factor=emission_factor,
+                                       emission_control={'CO2': 0.0,
+                                                         'SO2': 0.982, 'NOx': 0.0, 'PM10': 0.996},
+                                       coal=MD_Coal)
+
+
+MongDuong1 = PowerPlant("Mong Duong 1", MongDuong1_parameter)
 
 MDSupplyZone1 = SupplyZone(shape=Semi_Annulus(0 * km, 50 * km),
                            straw_density=MongDuong1_straw_density1,
@@ -167,19 +182,20 @@ cofire_MD1 = Cofire_Tech(biomass_ratio_energy=v_after_invest * 0.05,
 MongDuong1System = System(MongDuong1, cofire_MD1, feedin_tariff["MD1"], MD_SupplyChain,
                           straw.price, emission_factor, collect_economics, truck_economics)
 
+NinhBinh_parameter = Plant_Parameter(capacity=100 * MW * y,
+                                     capacity_factor=0.64,
+                                     commissioning=1974,
+                                     boiler_technology='PC',
+                                     boiler_efficiency=full(time_horizon + 1, 81.61 / 100),
+                                     plant_efficiency=full(time_horizon + 1, 21.77 / 100),
+                                     fix_om_coal=29.31 * USD / kW / y,
+                                     variable_om_coal=0.0048 * USD / kWh,
+                                     emission_factor=emission_factor,
+                                     emission_control={'CO2': 0.0,
+                                                       'SO2': 0.0, 'NOx': 0.0, 'PM10': 0.992},
+                                     coal=NB_Coal)
 
-NinhBinh = PowerPlant(name="Ninh Binh",
-                      capacity=100 * MW * y,
-                      capacity_factor=0.64,
-                      commissioning=1974,
-                      boiler_technology='PC',
-                      plant_efficiency=full(time_horizon + 1, 21.77 / 100),
-                      boiler_efficiency=full(time_horizon + 1, 81.61 / 100),
-                      fix_om_coal=29.31 * USD / kW / y,
-                      variable_om_coal=0.0048 * USD / kWh,
-                      emission_factor=emission_factor,
-                      emission_control={'CO2': 0.0, 'SO2': 0.0, 'NOx': 0.0, 'PM10': 0.992},
-                      coal=NB_Coal)
+NinhBinh = PowerPlant("Ninh Binh", NinhBinh_parameter)
 
 NBSupplyZone = SupplyZone(shape=Disk(50 * km),
                           straw_density=NinhBinh_straw_density,

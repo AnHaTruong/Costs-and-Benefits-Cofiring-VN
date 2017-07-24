@@ -32,15 +32,15 @@ class Investment:
         set it as an expense to another object.
 
     >>> from init import v_zeros
-    >>> i = Investment(1000*USD)
+    >>> i = Investment("test", 1000*USD)
     >>> i.revenue = v_zeros * USD
     >>> i.net_present_value(0, 0, 10)
     -1 kUSD
 
     """
-    def __init__(self, capital=0 * USD):
+    def __init__(self, name=None, capital=0 * USD):
         self.capital = display_as(capital, 'kUSD')
-        self.name = None
+        self.name = name
         self._revenue = None
 
     @property

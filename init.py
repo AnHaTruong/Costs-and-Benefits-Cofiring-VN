@@ -22,7 +22,7 @@ from natu import config
 # config.use_quantities = False
 
 import natu.numpy as np
-from natu.units import hr
+from natu.units import hr, t
 from natu import units
 from natu.core import ScalarUnit
 
@@ -86,3 +86,13 @@ def isclose(a, b, rel_tol=1e-09, abs_tol=0.0):
     True
     """
     return abs(a - b) <= max(rel_tol * max(abs(a), abs(b)), abs_tol)
+
+
+def safe_divide(cost, mass):
+    result = cost.copy()
+    for i, m in enumerate(mass):
+        if m == 0 * t:
+            result[i] = display_as(float('NaN') * USD / t, 'USD/t')
+        else:
+            result[i] /= m
+    return display_as(result, 'USD/t')
