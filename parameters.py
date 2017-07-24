@@ -30,24 +30,19 @@ from Shape import Semi_Annulus, Disk
 from SupplyChain import SupplyChain, SupplyZone
 from System import System
 
+
 discount_rate = 0.087771
 depreciation_period = 10
 tax_rate = 0.25               # Corporate tax in Vietnam
 
-Price = namedtuple('Price', 'biomass, transport, coal, electricity')
+external_cost = pd.Series({'CO2': 1 * USD / t,
+                           # Sakulniyomporn, Kubaha, and Chullabodhi (2011)
+                           'SO2': 3767 * USD / t,
+                           'PM10': 5883 * USD / t,
+                           'NOx': 286 * USD / t})
 
-price_MD1 = Price(biomass=37.26 * USD / t,
-                  transport=2000 * VND / t / km,
-                  coal=1131400 * VND / t,
-                  electricity=1239.17 * VND / kWh)
-
-price_NB = Price(biomass=37.26 * USD / t,
-                 transport=2000 * VND / t / km,
-                 coal=1825730 * VND / t,   # Includes transport
-                 electricity=1665.6 * VND / kWh)
 
 # hourly wage calculated from base salary defined in governmental regulations
-
 farm_parameter = {'winder_rental_cost': 40 * USD / ha,   # per period
                   'winder_haul': 6.57 * t / d,
                   'work_hour_day': 8 * hr / d,
@@ -59,10 +54,13 @@ transport_parameter = {'truck_loading_time': 2.7 / 60 * hr / t,  # (Ovaskainen &
                        'truck_velocity': 45 * km / hr,
                        'wage_bm_transport': 1.11 * USD / hr}  # vantaiduongviet.com
 
+
+# TODO :  deal rigorously with these globals
 barge_fuel_consumption = 8 * g / t / km  # Van Dingenen & 2016
 mining_productivity_surface = 8.04 * t / hr  # www.eia.g
 mining_productivity_underground = 2.5 * t / hr  # ww.eia.gov
 coal_import_price = 73 * USD / t
+
 
 Fuel = namedtuple('Fuel', 'name, heat_value, transport_distance, transport_mean')
 
@@ -80,6 +78,7 @@ straw = Fuel(name='Straw',
              heat_value=11.7 * MJ / kg,
              transport_distance='Endogenous',
              transport_mean='Road transport')
+
 
 emission_factor = {
     '6b_coal': {'CO2': 0.0966 * kg / MJ * coal_6b.heat_value,  # IPCC 2006
@@ -111,12 +110,6 @@ emission_factor = {
                         'SO2': 2 * g / kg * barge_fuel_consumption,
                         'NOx': 50.75 * g / kg * barge_fuel_consumption,
                         'PM10': 3.19 * g / kg * barge_fuel_consumption}}
-
-external_cost = pd.Series({'CO2': 1 * USD / t,
-                           # Sakulniyomporn, Kubaha, and Chullabodhi (2011)
-                           'SO2': 3767 * USD / t,
-                           'PM10': 5883 * USD / t,
-                           'NOx': 286 * USD / t})
 
 
 Plant_Parameter = namedtuple("Plant_Parameter", ['name',
@@ -159,14 +152,14 @@ SupplyChain_MD1 = SupplyChain(zones=[MDSupplyZone1, MDSupplyZone2],
                               straw_burn_rate=0.9,
                               average_straw_yield=MongDuong1_average_straw_yield)
 
-Cofire_Tech = namedtuple('Cofire_Tech', ['biomass_ratio_energy',
-                                         'capital_cost',
-                                         'fix_om_cost',
-                                         'variable_om_cost',
-                                         'biomass',
-                                         'boiler_efficiency_loss',
-                                         'OM_hour_MWh',
-                                         'wage_operation_maintenance'])
+Cofiring_Parameter = namedtuple('Cofiring_Parameter', ['biomass_ratio_energy',
+                                                       'capital_cost',
+                                                       'fix_om_cost',
+                                                       'variable_om_cost',
+                                                       'biomass',
+                                                       'boiler_efficiency_loss',
+                                                       'OM_hour_MWh',
+                                                       'wage_operation_maintenance'])
 
 
 def boiler_efficiency_loss_function_T2000(biomass_ratio_mass):
@@ -174,17 +167,25 @@ def boiler_efficiency_loss_function_T2000(biomass_ratio_mass):
     return 0.0044 * biomass_ratio_mass**2 + 0.0055 * biomass_ratio_mass
 
 
-cofire_MD1 = Cofire_Tech(biomass_ratio_energy=v_after_invest * 0.05,
-                         capital_cost=50 * USD / kW / y,
-                         fix_om_cost=32.24 * USD / kW / y,
-                         variable_om_cost=0.006 * USD / kWh,
-                         biomass=straw,
-                         boiler_efficiency_loss=boiler_efficiency_loss_function_T2000,
-                         OM_hour_MWh=0.12 * hr / MWh,  # working hour for OM per MWh
-                         wage_operation_maintenance=1.67 * USD / hr)
+cofire_MD1 = Cofiring_Parameter(biomass_ratio_energy=v_after_invest * 0.05,
+                                capital_cost=50 * USD / kW / y,
+                                fix_om_cost=32.24 * USD / kW / y,
+                                variable_om_cost=0.006 * USD / kWh,
+                                biomass=straw,
+                                boiler_efficiency_loss=boiler_efficiency_loss_function_T2000,
+                                OM_hour_MWh=0.12 * hr / MWh,  # working hour for OM per MWh
+                                wage_operation_maintenance=1.67 * USD / hr)
 
-MongDuong1System = System(plant_parameter_MD1, cofire_MD1, SupplyChain_MD1,
-                          price_MD1, emission_factor, farm_parameter, transport_parameter)
+Price = namedtuple('Price', 'biomass, transport, coal, electricity')
+
+price_MD1 = Price(biomass=37.26 * USD / t,
+                  transport=2000 * VND / t / km,
+                  coal=1131400 * VND / t,
+                  electricity=1239.17 * VND / kWh)
+
+MongDuong1System = System(plant_parameter_MD1, cofire_MD1, SupplyChain_MD1, price_MD1,
+                          emission_factor, farm_parameter, transport_parameter)
+
 
 plant_parameter_NB = Plant_Parameter(name='Ninh Binh',
                                      capacity=100 * MW * y,
@@ -211,5 +212,8 @@ SupplyChain_NB = SupplyChain(zones=[SupplyZone_NB],
 
 cofire_NB = cofire_MD1._replace(capital_cost=100 * USD / kW / y)
 
-NinhBinhSystem = System(plant_parameter_NB, cofire_NB, SupplyChain_NB,
-                        price_NB, emission_factor, farm_parameter, transport_parameter)
+price_NB = price_MD1._replace(coal=1825730 * VND / t,   # Includes transport
+                              electricity=1665.6 * VND / kWh)
+
+NinhBinhSystem = System(plant_parameter_NB, cofire_NB, SupplyChain_NB, price_NB,
+                        emission_factor, farm_parameter, transport_parameter)
