@@ -38,6 +38,9 @@ parameters.py: strawdata.py
 %.doctest: %.py
 	$(PYTHON) -m doctest -v $< > $@
 
+classes.dot packages.dot:
+	pyreverse3 *py
+
 .precious: strawdata.py
 
 .PHONY: test reg_tests reg_tests_reset clean cleaner archive
@@ -76,3 +79,5 @@ cleaner: clean
 	find . -type f -name '*.pyc' -delete
 	rm -f strawdata.py
 	rm -rf __pycache__
+	rm -rf classes.dot packages.dot
+

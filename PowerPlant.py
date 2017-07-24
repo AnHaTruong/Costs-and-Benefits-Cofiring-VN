@@ -86,28 +86,28 @@ class PowerPlant(Investment, Emitter):
 
 class CofiringPlant(PowerPlant):
 
-    def __init__(self, plant_parameter, coal_price, cofire_tech):
+    def __init__(self, plant_parameter, coal_price, cofire_parameter):
 
-        self.biomass_ratio_energy = cofire_tech.biomass_ratio_energy
-        self.capital_cost = cofire_tech.capital_cost
-        self.fix_om_cost = cofire_tech.fix_om_cost
-        self.variable_om_cost = cofire_tech.variable_om_cost
-        self.biomass = cofire_tech.biomass
-        self.OM_hour_MWh = cofire_tech.OM_hour_MWh
-        self.wage_operation_maintenance = cofire_tech.wage_operation_maintenance
+        self.biomass_ratio_energy = cofire_parameter.biomass_ratio_energy
+        self.capital_cost = cofire_parameter.capital_cost
+        self.fix_om_cost = cofire_parameter.fix_om_cost
+        self.variable_om_cost = cofire_parameter.variable_om_cost
+        self.biomass = cofire_parameter.biomass
+        self.OM_hour_MWh = cofire_parameter.OM_hour_MWh
+        self.wage_operation_maintenance = cofire_parameter.wage_operation_maintenance
 
-        biomass_ratio_mass = (cofire_tech.biomass_ratio_energy
+        biomass_ratio_mass = (cofire_parameter.biomass_ratio_energy
                               * plant_parameter.coal.heat_value / self.biomass.heat_value)
 
         cofiring_boiler_efficiency = (plant_parameter.boiler_efficiency
-                                      - cofire_tech.boiler_efficiency_loss(biomass_ratio_mass))
+                                      - cofire_parameter.boiler_efficiency_loss(biomass_ratio_mass))
         cofiring_boiler_efficiency[0] = plant_parameter.boiler_efficiency[0]
 
         derating = cofiring_boiler_efficiency / plant_parameter.boiler_efficiency
 
-        investment_cost = (cofire_tech.capital_cost
+        investment_cost = (cofire_parameter.capital_cost
                            * plant_parameter.capacity
-                           * float(cofire_tech.biomass_ratio_energy[1]))
+                           * float(cofire_parameter.biomass_ratio_energy[1]))
 
         PowerPlant.__init__(self,
                             plant_parameter,

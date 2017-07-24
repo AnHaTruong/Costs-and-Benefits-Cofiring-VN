@@ -22,11 +22,11 @@ class System:
     Has a plant, cofiring plant, supply_chain, transporter, farmer
     The cofiring plant pays the farmer for biomass and the transporter for transport
     """
-    def __init__(self, plant_parameter, cofire_tech, supply_chain, price,
+    def __init__(self, plant_parameter, cofire_parameter, supply_chain, price,
                  emission_factor, farm_parameter, transport_parameter):
 
         self.plant = PowerPlant(plant_parameter, price.coal)
-        self.cofiring_plant = CofiringPlant(plant_parameter, price.coal, cofire_tech)
+        self.cofiring_plant = CofiringPlant(plant_parameter, price.coal, cofire_parameter)
         self.supply_chain = supply_chain.fit(self.cofiring_plant.biomass_used[1])
         self.farmer = Farmer(self.supply_chain, emission_factor, farm_parameter)
         self.transporter = Transporter(self.supply_chain, emission_factor, transport_parameter)
@@ -68,21 +68,22 @@ class System:
         return display_as(amount, 'kUSD')
 
     def emission_reduction(self, external_cost):
-        plant_ER = (self.plant.emissions()['Total']
-                    - self.cofiring_plant.emissions()['Total'])
-        transport_ER = (self.plant.coal_transporter().emissions()['Total']
-                        - self.cofiring_plant.coal_transporter().emissions()['Total']
-                        - self.transporter.emissions()['Total'])
-        field_ER = (self.farmer.emissions_exante['Total']
-                    - self.farmer.emissions()['Total'])
-        total_ER = plant_ER + transport_ER + field_ER
-        total_benefit = total_ER * external_cost
+        plant_reduction = (self.plant.emissions()['Total']
+                           - self.cofiring_plant.emissions()['Total'])
+        transport_reduction = (self.plant.coal_transporter().emissions()['Total']
+                               - self.cofiring_plant.coal_transporter().emissions()['Total']
+                               - self.transporter.emissions()['Total'])
+        field_reduction = (self.farmer.emissions_exante['Total']
+                           - self.farmer.emissions()['Total'])
+        total_reduction = plant_reduction + transport_reduction + field_reduction
+        total_benefit = total_reduction * external_cost
         for pollutant in total_benefit:
             display_as(pollutant, 'kUSD')
-        list_of_series = [plant_ER, transport_ER, field_ER, total_ER, total_benefit]
+        list_of_series = [plant_reduction, transport_reduction, field_reduction,
+                          total_reduction, total_benefit]
         row = ['Plant', 'Transport', 'Field', 'Total', 'Benefit']
-        ER_table = pd.DataFrame(list_of_series, index=row)
-        return ER_table
+        reduction = pd.DataFrame(list_of_series, index=row)
+        return reduction
 
     def CO2_npv(self, discount_rate, external_cost):
         df = self.emission_reduction(external_cost)

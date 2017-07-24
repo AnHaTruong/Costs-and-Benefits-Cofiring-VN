@@ -7,6 +7,8 @@ table*.diff
 *.doctest
 test*txt
 strawdata.py
+classes.dot
+packages.dot
 contrib/
 __pycache__/
 natu/__pycache__/
