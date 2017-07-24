@@ -86,9 +86,8 @@ class PowerPlant(Investment, Emitter):
 
 class CofiringPlant(PowerPlant):
 
-    def __init__(self, plant: PowerPlant, cofire_tech):
+    def __init__(self, plant_parameter, coal_price, cofire_tech):
 
-        self.plant = plant
         self.biomass_ratio_energy = cofire_tech.biomass_ratio_energy
         self.capital_cost = cofire_tech.capital_cost
         self.fix_om_cost = cofire_tech.fix_om_cost
@@ -98,25 +97,25 @@ class CofiringPlant(PowerPlant):
         self.wage_operation_maintenance = cofire_tech.wage_operation_maintenance
 
         biomass_ratio_mass = (cofire_tech.biomass_ratio_energy
-                              * plant.parameter.coal.heat_value / self.biomass.heat_value)
+                              * plant_parameter.coal.heat_value / self.biomass.heat_value)
 
-        cofiring_boiler_efficiency = (plant.parameter.boiler_efficiency
+        cofiring_boiler_efficiency = (plant_parameter.boiler_efficiency
                                       - cofire_tech.boiler_efficiency_loss(biomass_ratio_mass))
-        cofiring_boiler_efficiency[0] = plant.parameter.boiler_efficiency[0]
+        cofiring_boiler_efficiency[0] = plant_parameter.boiler_efficiency[0]
 
-        derating = cofiring_boiler_efficiency / plant.parameter.boiler_efficiency
+        derating = cofiring_boiler_efficiency / plant_parameter.boiler_efficiency
 
         investment_cost = (cofire_tech.capital_cost
-                           * plant.parameter.capacity
+                           * plant_parameter.capacity
                            * float(cofire_tech.biomass_ratio_energy[1]))
 
         PowerPlant.__init__(self,
-                            plant.parameter,
-                            plant.coal_price,
+                            plant_parameter,
+                            coal_price,
                             derating,
                             investment_cost)
 
-        self.name = plant.name + ' Cofire'
+        self.name = plant_parameter.name + ' Cofire'
 
         self.biomass_heat = v_after_invest * self.gross_heat_input * self.biomass_ratio_energy
         display_as(self.biomass_heat, 'TJ')
@@ -124,7 +123,7 @@ class CofiringPlant(PowerPlant):
         self.biomass_used = self.biomass_heat / self.biomass.heat_value
         display_as(self.biomass_used, 't')
 
-        self.coal_saved = self.biomass_heat / plant.parameter.coal.heat_value
+        self.coal_saved = self.biomass_heat / plant_parameter.coal.heat_value
         display_as(self.coal_saved, 't')
 
         self.coal_used = ((self.gross_heat_input - self.biomass_heat)
@@ -135,8 +134,8 @@ class CofiringPlant(PowerPlant):
         Emitter.__init__(self,
                          {self.parameter.coal.name: self.coal_used,
                           self.biomass.name: self.biomass_used},
-                         plant.emission_factor,
-                         plant.emission_control)
+                         plant_parameter.emission_factor,
+                         plant_parameter.emission_control)
 
         self._biomass_cost = None
 

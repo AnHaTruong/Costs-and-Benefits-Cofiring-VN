@@ -20,19 +20,17 @@ MongDuong1NullCofiringSystem = System(plant_parameter_MD1,
                                       farm_parameter,
                                       transport_parameter)
 
-MongDuong1NullCofiring = MongDuong1NullCofiringSystem.cofiring_plant
-
-npvA = MongDuong1NullCofiring.plant.net_present_value(0.08, 0.2, 10)
-npvB = MongDuong1NullCofiring.net_present_value(0.08, 0.2, 10)
+npvA = MongDuong1NullCofiringSystem.plant.net_present_value(0.08, 0.2, 10)
+npvB = MongDuong1NullCofiringSystem.cofiring_plant.net_present_value(0.08, 0.2, 10)
 
 #print("No cofiring NPV:", npvA)
 #print("Cofiring 0% NPV:", npvB)
 
 assert isclose(npvA, npvB)
 
-lcoeA = MongDuong1NullCofiring.plant.lcoe(0.08, 0.2, 10)
+lcoeA = MongDuong1NullCofiringSystem.plant.lcoe(0.08, 0.2, 10)
 
-lcoeB = MongDuong1NullCofiring.lcoe(0.08, 0.2, 10)
+lcoeB = MongDuong1NullCofiringSystem.cofiring_plant.lcoe(0.08, 0.2, 10)
 
 #print("No cofiring LCOE:", lcoeA)
 #print("Cofiring 0% LCOE:", lcoeB)

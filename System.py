@@ -26,7 +26,7 @@ class System:
                  emission_factor, farm_parameter, transport_parameter):
 
         self.plant = PowerPlant(plant_parameter, price.coal)
-        self.cofiring_plant = CofiringPlant(self.plant, cofire_tech)
+        self.cofiring_plant = CofiringPlant(plant_parameter, price.coal, cofire_tech)
         self.supply_chain = supply_chain.fit(self.cofiring_plant.biomass_used[1])
         self.farmer = Farmer(self.supply_chain, emission_factor, farm_parameter)
         self.transporter = Transporter(self.supply_chain, emission_factor, transport_parameter)

@@ -20,7 +20,7 @@ def table(emission_df):
 
 def print_emission(system):
     cofireplant = system.cofiring_plant
-    plant = cofireplant.plant
+    plant = system.plant
     print(plant.name, 'BASELINE EMISSION')
     print('Emission from power plant')
     table(plant.emissions())

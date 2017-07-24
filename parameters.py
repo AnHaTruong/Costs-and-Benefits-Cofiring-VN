@@ -55,7 +55,6 @@ transport_parameter = {'truck_loading_time': 2.7 / 60 * hr / t,  # (Ovaskainen &
                        'wage_bm_transport': 1.11 * USD / hr}  # vantaiduongviet.com
 
 
-# TODO :  deal rigorously with these globals
 barge_fuel_consumption = 8 * g / t / km  # Van Dingenen & 2016
 mining_productivity_surface = 8.04 * t / hr  # www.eia.g
 mining_productivity_underground = 2.5 * t / hr  # ww.eia.gov
