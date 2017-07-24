@@ -14,11 +14,11 @@ from Investment import Investment
 class Farmer(Investment, Emitter):
     """Farmer class represents the collective of farmers who produce and sell straw
     """
-    def __init__(self, supply_chain, emission_factor, collect_economics):
+    def __init__(self, supply_chain, emission_factor, farmer_parameter):
         self.quantity = supply_chain.quantity()
-        self.collect_economics = collect_economics
+        self.parameter = farmer_parameter
         self.farm_area = self.quantity / supply_chain.average_straw_yield
-        self.capital_cost = self.farm_area * self.collect_economics['winder_rental_cost']
+        self.capital_cost = self.farm_area * self.parameter['winder_rental_cost']
 
         field_burned_exante = v_ones * supply_chain.burnable()
         self.emissions_exante = Emitter({'Straw': field_burned_exante},
@@ -31,13 +31,13 @@ class Farmer(Investment, Emitter):
 
     def labor(self):
         """Work time needed to collect straw for co-firing per year"""
-        t_per_hr = self.collect_economics['winder_haul'] / self.collect_economics['work_hour_day']
+        t_per_hr = self.parameter['winder_haul'] / self.parameter['work_hour_day']
         time = self.quantity / t_per_hr
         return display_as(time, 'hr')
 
     def labor_cost(self):
         """Benefit from job creation from biomass collection"""
-        amount = self.labor() * self.collect_economics['wage_bm_collect']
+        amount = self.labor() * self.parameter['wage_bm_collect']
         return display_as(amount, 'kUSD')
 
     def fuel_cost(self):

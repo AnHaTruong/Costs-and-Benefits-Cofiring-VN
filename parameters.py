@@ -39,17 +39,17 @@ feedin_tariff = {'MD1': 1239.17 * VND / kWh,
 
 # hourly wage calculated from base salary defined in governmental regulations
 
-collect_economics = {'winder_rental_cost': 40 * USD / ha,   # per period
-                     'winder_haul': 6.57 * t / d,
-                     'work_hour_day': 8 * hr / d,
-                     'wage_bm_collect': 1.11 * USD / hr}
+farm_parameter = {'winder_rental_cost': 40 * USD / ha,   # per period
+                  'winder_haul': 6.57 * t / d,
+                  'work_hour_day': 8 * hr / d,
+                  'wage_bm_collect': 1.11 * USD / hr}
 
-truck_economics = {'truck_loading_time': 2.7 / 60 * hr / t,  # (Ovaskainen & 2016 )
-                   'wage_bm_loading': 1.11 * USD / hr,
-                   'truck_load': 20 * t,
-                   'truck_velocity': 45 * km / hr,
-                   'wage_bm_transport': 1.11 * USD / hr,
-                   'transport_tariff': 2000 * VND / t / km}  # vantaiduongviet.com
+transport_parameter = {'truck_loading_time': 2.7 / 60 * hr / t,  # (Ovaskainen & 2016 )
+                       'wage_bm_loading': 1.11 * USD / hr,
+                       'truck_load': 20 * t,
+                       'truck_velocity': 45 * km / hr,
+                       'wage_bm_transport': 1.11 * USD / hr,
+                       'transport_tariff': 2000 * VND / t / km}  # vantaiduongviet.com
 
 barge_fuel_consumption = 8 * g / t / km  # Van Dingenen & 2016
 mining_productivity_surface = 8.04 * t / hr  # www.eia.g
@@ -98,9 +98,9 @@ emission_factor = {
                       'PM10': 0. * kg / t / km},
     'Road transport': {'CO2': 0.110 * kg / t / km,  # Binh & Tuan (2016)
                        # http://naei.defra.gov.uk/data/ef-transport, year 2014
-                       'SO2': 0.003 * g / truck_economics['truck_load'] / km,
-                       'NOx': 2.68 * g / truck_economics['truck_load'] / km,
-                       'PM10': 0.04 * g / truck_economics['truck_load'] / km},
+                       'SO2': 0.003 * g / transport_parameter['truck_load'] / km,
+                       'NOx': 2.68 * g / transport_parameter['truck_load'] / km,
+                       'PM10': 0.04 * g / transport_parameter['truck_load'] / km},
     'Barge transport': {'CO2': 0.071 * kg / t / km,  # Binh & Tuan (2016)
                         # Van Dingenen et al. (2016)
                         'SO2': 2 * g / kg * barge_fuel_consumption,
@@ -180,7 +180,7 @@ cofire_MD1 = Cofire_Tech(biomass_ratio_energy=v_after_invest * 0.05,
                          wage_operation_maintenance=1.67 * USD / hr)
 
 MongDuong1System = System(MongDuong1, cofire_MD1, feedin_tariff["MD1"], MD_SupplyChain,
-                          straw.price, emission_factor, collect_economics, truck_economics)
+                          straw.price, emission_factor, farm_parameter, transport_parameter)
 
 NinhBinh_parameter = Plant_Parameter(capacity=100 * MW * y,
                                      capacity_factor=0.64,
@@ -209,4 +209,4 @@ NB_SupplyChain = SupplyChain(zones=[NBSupplyZone],
 cofire_NB = cofire_MD1._replace(capital_cost=100 * USD / kW / y)
 
 NinhBinhSystem = System(NinhBinh, cofire_NB, feedin_tariff["NB"], NB_SupplyChain,
-                        straw.price, emission_factor, collect_economics, truck_economics)
+                        straw.price, emission_factor, farm_parameter, transport_parameter)

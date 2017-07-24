@@ -22,7 +22,7 @@ class Transporter(Investment, Emitter):
     loading_work and loading_wages proportional to the quantity
     driving_work and driving_wages proportional to the activity level
     """
-    def __init__(self, supply_chain, emission_factor, truck_economics):
+    def __init__(self, supply_chain, emission_factor, transport_parameter):
 
         Investment.__init__(self)
         self.activity_level = supply_chain.transport_tkm()
@@ -31,16 +31,16 @@ class Transporter(Investment, Emitter):
         self.quantity = supply_chain.quantity()
         self.collection_radius = supply_chain.collection_radius()
 
-        self.truck_economics = truck_economics
-        self.truck_load = truck_economics['truck_load']
+        self.parameter = transport_parameter
+        self.truck_load = self.parameter['truck_load']
         self.truck_trips = self.quantity / self.truck_load
 
     def loading_work(self):  # Unloading work is included in om_work
-        time = self.quantity * self.truck_economics['truck_loading_time']
+        time = self.quantity * self.parameter['truck_loading_time']
         return display_as(time, 'hr')
 
     def driving_work(self):
-        time = self.activity_level / self.truck_load / self.truck_economics['truck_velocity']
+        time = self.activity_level / self.truck_load / self.parameter['truck_velocity']
         return display_as(time, 'hr')
 
     def labor(self):
@@ -48,11 +48,11 @@ class Transporter(Investment, Emitter):
         return display_as(time, 'hr')
 
     def loading_wages(self):
-        amount = self.loading_work() * self.truck_economics['wage_bm_loading']
+        amount = self.loading_work() * self.parameter['wage_bm_loading']
         return display_as(amount, 'kUSD')
 
     def driving_wages(self):
-        amount = self.driving_work() * self.truck_economics['wage_bm_transport']
+        amount = self.driving_work() * self.parameter['wage_bm_transport']
         return display_as(amount, 'kUSD')
 
     def labor_cost(self):
@@ -72,5 +72,5 @@ class Transporter(Investment, Emitter):
         return display_as(amount, 'kUSD')
 
     def max_trip_time(self):
-        time = self.collection_radius / self.truck_economics['truck_velocity']
+        time = self.collection_radius / self.parameter['truck_velocity']
         return display_as(time, 'hr')

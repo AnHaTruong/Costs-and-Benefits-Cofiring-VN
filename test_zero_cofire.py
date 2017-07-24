@@ -9,7 +9,7 @@
 #
 from init import isclose, v_zeros
 from parameters import MongDuong1, cofire_MD1, straw, MD_SupplyChain, feedin_tariff
-from parameters import emission_factor, collect_economics, truck_economics
+from parameters import emission_factor, farm_parameter, transport_parameter
 from System import System
 
 MongDuong1NullCofiringSystem = System(MongDuong1,
@@ -18,8 +18,8 @@ MongDuong1NullCofiringSystem = System(MongDuong1,
                                       MD_SupplyChain,
                                       straw.price,
                                       emission_factor,
-                                      collect_economics,
-                                      truck_economics)
+                                      farm_parameter,
+                                      transport_parameter)
 
 MongDuong1NullCofiring = MongDuong1NullCofiringSystem.cofiring_plant
 

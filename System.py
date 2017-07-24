@@ -23,12 +23,12 @@ class System:
     The cofiring plant pays the farmer for biomass and the transporter for transport
     """
     def __init__(self, plant, cofire_tech, feedin_tariff,
-                 supply_chain, biomass_price, emission_factor, collect_economics, truck_economics):
+                 supply_chain, biomass_price, emission_factor, farm_parameter, transport_parameter):
         self.plant = plant
         self.cofiring_plant = CofiringPlant(plant, cofire_tech)
         self.supply_chain = supply_chain.fit(self.cofiring_plant.biomass_used[1])
-        self.farmer = Farmer(self.supply_chain, emission_factor, collect_economics)
-        self.transporter = Transporter(self.supply_chain, emission_factor, truck_economics)
+        self.farmer = Farmer(self.supply_chain, emission_factor, farm_parameter)
+        self.transporter = Transporter(self.supply_chain, emission_factor, transport_parameter)
 
         electricity_sales = plant.power_generation * feedin_tariff
         display_as(electricity_sales, 'kUSD')
@@ -38,7 +38,7 @@ class System:
         self.biomass_value = self.cofiring_plant.biomass_used * biomass_price
         display_as(self.biomass_value, "kUSD")
 
-        self.transport_cost = self.transporter.activity_level * truck_economics["transport_tariff"]
+        self.transport_cost = self.transporter.activity_level * transport_parameter["transport_tariff"]
         display_as(self.transport_cost, "kUSD")
 
         self.cofiring_plant.biomass_cost = self.biomass_value + self.transport_cost
