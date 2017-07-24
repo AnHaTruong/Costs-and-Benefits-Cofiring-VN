@@ -66,12 +66,12 @@ coal_import_price = 73 * USD / t
 
 Fuel = namedtuple('Fuel', 'name, heat_value, transport_distance, transport_mean')
 
-MD_Coal = Fuel(name="6b_coal",
+coal_6b = Fuel(name="6b_coal",
                heat_value=19.43468 * MJ / kg,
                transport_distance=0 * km,
                transport_mean='Conveyor belt')
 
-NB_Coal = Fuel(name="4b_coal",
+coal_4b = Fuel(name="4b_coal",
                heat_value=21.5476 * MJ / kg,
                transport_distance=200 * km,
                transport_mean='Barge transport')
@@ -82,12 +82,12 @@ straw = Fuel(name='Straw',
              transport_mean='Road transport')
 
 emission_factor = {
-    '6b_coal': {'CO2': 0.0966 * kg / MJ * MD_Coal.heat_value,  # IPCC 2006
+    '6b_coal': {'CO2': 0.0966 * kg / MJ * coal_6b.heat_value,  # IPCC 2006
                 # Eastern Research Group (2011)
                 'SO2': 11.5 * kg / t,
                 'NOx': 18 * kg / t,
                 'PM10': 43.8 * kg / t},
-    '4b_coal': {'CO2': 0.0966 * kg / MJ * NB_Coal.heat_value,  # IPCC 2006
+    '4b_coal': {'CO2': 0.0966 * kg / MJ * coal_4b.heat_value,  # IPCC 2006
                 # Eastern Research Group (2011)
                 'SO2': 11.5 * kg / t,
                 'NOx': 18 * kg / t,
@@ -142,7 +142,7 @@ plant_parameter_MD1 = Plant_Parameter(capacity=1080 * MW * y,
                                       emission_factor=emission_factor,
                                       emission_control={'CO2': 0.0,
                                                         'SO2': 0.982, 'NOx': 0.0, 'PM10': 0.996},
-                                      coal=MD_Coal)
+                                      coal=coal_6b)
 
 MDSupplyZone1 = SupplyZone(shape=Semi_Annulus(0 * km, 50 * km),
                            straw_density=MongDuong1_straw_density1,
@@ -195,7 +195,7 @@ plant_parameter_NB = Plant_Parameter(capacity=100 * MW * y,
                                      emission_factor=emission_factor,
                                      emission_control={'CO2': 0.0,
                                                        'SO2': 0.0, 'NOx': 0.0, 'PM10': 0.992},
-                                     coal=NB_Coal)
+                                     coal=coal_4b)
 
 SupplyZone_NB = SupplyZone(shape=Disk(50 * km),
                            straw_density=NinhBinh_straw_density,
