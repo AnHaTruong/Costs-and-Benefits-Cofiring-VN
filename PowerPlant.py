@@ -20,17 +20,15 @@ from Emitter import Emitter
 class PowerPlant(Investment, Emitter):
     """ A coal power plant, without co-firing"""
     def __init__(self,
-                 name,
                  parameter,
                  coal_price,
                  derating=v_ones,
                  capital=0 * USD):
-        Investment.__init__(self, name, capital)
+        Investment.__init__(self, parameter.name, capital)
         self.parameter = parameter
-        self.plant_efficiency = parameter.plant_efficiency * derating
-
-        self.coal = parameter.coal
         self.coal_price = coal_price
+
+        self.plant_efficiency = parameter.plant_efficiency * derating
 
         self.power_generation = full(time_horizon + 1,
                                      parameter.capacity * parameter.capacity_factor,
@@ -40,11 +38,11 @@ class PowerPlant(Investment, Emitter):
         self.gross_heat_input = self.power_generation / self.plant_efficiency
         display_as(self.gross_heat_input, 'TJ')
 
-        self.coal_used = self.gross_heat_input / self.coal.heat_value
+        self.coal_used = self.gross_heat_input / parameter.coal.heat_value
         display_as(self.coal_used, 't')
 
         Emitter.__init__(self,
-                         {self.coal.name: self.coal_used},
+                         {parameter.coal.name: self.coal_used},
                          parameter.emission_factor,
                          parameter.emission_control)
 
@@ -57,10 +55,10 @@ class PowerPlant(Investment, Emitter):
         return display_as(cost, 'kUSD')
 
     def coal_transport_tkm(self):
-        return self.coal_used * 2 * self.coal.transport_distance   # Return trip inputed
+        return self.coal_used * 2 * self.parameter.coal.transport_distance   # Return trip inputed
 
     def coal_transporter(self):
-        return Emitter({self.coal.transport_mean: self.coal_transport_tkm()},
+        return Emitter({self.parameter.coal.transport_mean: self.coal_transport_tkm()},
                        self.emission_factor
                        )
 
@@ -100,7 +98,7 @@ class CofiringPlant(PowerPlant):
         self.wage_operation_maintenance = cofire_tech.wage_operation_maintenance
 
         biomass_ratio_mass = (cofire_tech.biomass_ratio_energy
-                              * plant.coal.heat_value / self.biomass.heat_value)
+                              * plant.parameter.coal.heat_value / self.biomass.heat_value)
 
         cofiring_boiler_efficiency = (plant.parameter.boiler_efficiency
                                       - cofire_tech.boiler_efficiency_loss(biomass_ratio_mass))
@@ -113,11 +111,12 @@ class CofiringPlant(PowerPlant):
                            * float(cofire_tech.biomass_ratio_energy[1]))
 
         PowerPlant.__init__(self,
-                            plant.name + ' Cofire',
                             plant.parameter,
                             plant.coal_price,
                             derating,
                             investment_cost)
+
+        self.name = plant.name + ' Cofire'
 
         self.biomass_heat = v_after_invest * self.gross_heat_input * self.biomass_ratio_energy
         display_as(self.biomass_heat, 'TJ')
@@ -125,15 +124,16 @@ class CofiringPlant(PowerPlant):
         self.biomass_used = self.biomass_heat / self.biomass.heat_value
         display_as(self.biomass_used, 't')
 
-        self.coal_saved = self.biomass_heat / plant.coal.heat_value
+        self.coal_saved = self.biomass_heat / plant.parameter.coal.heat_value
         display_as(self.coal_saved, 't')
 
-        self.coal_used = (self.gross_heat_input - self.biomass_heat) / self.coal.heat_value
+        self.coal_used = ((self.gross_heat_input - self.biomass_heat)
+                          / self.parameter.coal.heat_value)
         display_as(self.coal_used, 't')
 
         # pylint: disable=non-parent-init-called
         Emitter.__init__(self,
-                         {self.coal.name: self.coal_used,
+                         {self.parameter.coal.name: self.coal_used,
                           self.biomass.name: self.biomass_used},
                          plant.emission_factor,
                          plant.emission_control)
@@ -199,10 +199,6 @@ class CofiringPlant(PowerPlant):
                      * self.variable_om_cost
                      * self.biomass_ratio_energy)
         cost = fixed_om_bm + var_om_bm
-        return display_as(cost, 'kUSD')
-
-    def coal_saved_cost(self):
-        cost = self.coal_saved * self.coal.price
         return display_as(cost, 'kUSD')
 
     def coal_work_lost(self, mining_productivity):

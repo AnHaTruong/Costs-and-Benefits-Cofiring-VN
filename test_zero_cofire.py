@@ -12,7 +12,7 @@ from parameters import plant_parameter_MD1, cofire_MD1, SupplyChain_MD1, price_M
 from parameters import emission_factor, farm_parameter, transport_parameter
 from System import System
 
-MongDuong1NullCofiringSystem = System("Mong Duong 1", plant_parameter_MD1,
+MongDuong1NullCofiringSystem = System(plant_parameter_MD1,
                                       cofire_MD1._replace(biomass_ratio_energy=v_zeros),
                                       SupplyChain_MD1,
                                       price_MD1,

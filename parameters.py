@@ -119,7 +119,8 @@ external_cost = pd.Series({'CO2': 1 * USD / t,
                            'NOx': 286 * USD / t})
 
 
-Plant_Parameter = namedtuple("Plant_Parameter", ['capacity',
+Plant_Parameter = namedtuple("Plant_Parameter", ['name',
+                                                 'capacity',
                                                  'capacity_factor',
                                                  'commissioning',
                                                  'boiler_technology',
@@ -131,7 +132,8 @@ Plant_Parameter = namedtuple("Plant_Parameter", ['capacity',
                                                  'emission_control',
                                                  'coal'])
 
-plant_parameter_MD1 = Plant_Parameter(capacity=1080 * MW * y,
+plant_parameter_MD1 = Plant_Parameter(name='Mong Duong 1',
+                                      capacity=1080 * MW * y,
                                       capacity_factor=0.60,
                                       commissioning=2015,
                                       boiler_technology='CFB',
@@ -181,10 +183,11 @@ cofire_MD1 = Cofire_Tech(biomass_ratio_energy=v_after_invest * 0.05,
                          OM_hour_MWh=0.12 * hr / MWh,  # working hour for OM per MWh
                          wage_operation_maintenance=1.67 * USD / hr)
 
-MongDuong1System = System("Mong Duong 1", plant_parameter_MD1, cofire_MD1, SupplyChain_MD1,
+MongDuong1System = System(plant_parameter_MD1, cofire_MD1, SupplyChain_MD1,
                           price_MD1, emission_factor, farm_parameter, transport_parameter)
 
-plant_parameter_NB = Plant_Parameter(capacity=100 * MW * y,
+plant_parameter_NB = Plant_Parameter(name='Ninh Binh',
+                                     capacity=100 * MW * y,
                                      capacity_factor=0.64,
                                      commissioning=1974,
                                      boiler_technology='PC',
@@ -208,5 +211,5 @@ SupplyChain_NB = SupplyChain(zones=[SupplyZone_NB],
 
 cofire_NB = cofire_MD1._replace(capital_cost=100 * USD / kW / y)
 
-NinhBinhSystem = System("Ninh Binh", plant_parameter_NB, cofire_NB, SupplyChain_NB,
+NinhBinhSystem = System(plant_parameter_NB, cofire_NB, SupplyChain_NB,
                         price_NB, emission_factor, farm_parameter, transport_parameter)

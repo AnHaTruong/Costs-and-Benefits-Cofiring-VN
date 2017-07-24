@@ -22,10 +22,10 @@ class System:
     Has a plant, cofiring plant, supply_chain, transporter, farmer
     The cofiring plant pays the farmer for biomass and the transporter for transport
     """
-    def __init__(self, plant_name, plant_parameter, cofire_tech, supply_chain, price,
+    def __init__(self, plant_parameter, cofire_tech, supply_chain, price,
                  emission_factor, farm_parameter, transport_parameter):
 
-        self.plant = PowerPlant(plant_name, plant_parameter, price.coal)
+        self.plant = PowerPlant(plant_parameter, price.coal)
         self.cofiring_plant = CofiringPlant(self.plant, cofire_tech)
         self.supply_chain = supply_chain.fit(self.cofiring_plant.biomass_used[1])
         self.farmer = Farmer(self.supply_chain, emission_factor, farm_parameter)
