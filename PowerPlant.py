@@ -22,6 +22,7 @@ class PowerPlant(Investment, Emitter):
     def __init__(self,
                  name,
                  parameter,
+                 coal_price,
                  derating=v_ones,
                  capital=0 * USD):
         Investment.__init__(self, name, capital)
@@ -29,6 +30,7 @@ class PowerPlant(Investment, Emitter):
         self.plant_efficiency = parameter.plant_efficiency * derating
 
         self.coal = parameter.coal
+        self.coal_price = coal_price
 
         self.power_generation = full(time_horizon + 1,
                                      parameter.capacity * parameter.capacity_factor,
@@ -51,7 +53,7 @@ class PowerPlant(Investment, Emitter):
         return display_as(cost, 'kUSD')
 
     def coal_cost(self):
-        cost = self.coal_used * self.coal.price
+        cost = self.coal_used * self.coal_price
         return display_as(cost, 'kUSD')
 
     def coal_transport_tkm(self):
@@ -113,6 +115,7 @@ class CofiringPlant(PowerPlant):
         PowerPlant.__init__(self,
                             plant.name + ' Cofire',
                             plant.parameter,
+                            plant.coal_price,
                             derating,
                             investment_cost)
 

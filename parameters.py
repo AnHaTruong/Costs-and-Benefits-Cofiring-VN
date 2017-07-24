@@ -34,8 +34,18 @@ from System import System
 discount_rate = 0.087771
 depreciation_period = 10
 tax_rate = 0.25               # Corporate tax in Vietnam
-feedin_tariff = {'MD1': 1239.17 * VND / kWh,
-                 'NB': 1665.6 * VND / kWh}
+
+Price = namedtuple('Price', 'biomass, transport, coal, electricity')
+
+price_MD = Price(biomass=37.26 * USD / t,
+                 transport=2000 * VND / t / km,
+                 coal=1131400 * VND / t,
+                 electricity=1239.17 * VND / kWh)
+
+price_NB = Price(biomass=37.26 * USD / t,
+                 transport=2000 * VND / t / km,
+                 coal=1825730 * VND / t,   # Includes transport
+                 electricity=1665.6 * VND / kWh)
 
 # hourly wage calculated from base salary defined in governmental regulations
 
@@ -48,31 +58,27 @@ transport_parameter = {'truck_loading_time': 2.7 / 60 * hr / t,  # (Ovaskainen &
                        'wage_bm_loading': 1.11 * USD / hr,
                        'truck_load': 20 * t,
                        'truck_velocity': 45 * km / hr,
-                       'wage_bm_transport': 1.11 * USD / hr,
-                       'transport_tariff': 2000 * VND / t / km}  # vantaiduongviet.com
+                       'wage_bm_transport': 1.11 * USD / hr}  # vantaiduongviet.com
 
 barge_fuel_consumption = 8 * g / t / km  # Van Dingenen & 2016
 mining_productivity_surface = 8.04 * t / hr  # www.eia.g
 mining_productivity_underground = 2.5 * t / hr  # ww.eia.gov
 coal_import_price = 73 * USD / t
 
-Fuel = namedtuple('Fuel', 'name, heat_value, price, transport_distance, transport_mean')
+Fuel = namedtuple('Fuel', 'name, heat_value, transport_distance, transport_mean')
 
 MD_Coal = Fuel(name="6b_coal",
                heat_value=19.43468 * MJ / kg,
-               price=1131400 * VND / t,
                transport_distance=0 * km,
                transport_mean='Conveyor belt')
 
 NB_Coal = Fuel(name="4b_coal",
                heat_value=21.5476 * MJ / kg,
-               price=1825730 * VND / t,  # Includes transport
                transport_distance=200 * km,
                transport_mean='Barge transport')
 
 straw = Fuel(name='Straw',
              heat_value=11.7 * MJ / kg,
-             price=37.26 * USD / t,
              transport_distance='Endogenous',
              transport_mean='Road transport')
 
@@ -140,7 +146,7 @@ MongDuong1_parameter = Plant_Parameter(capacity=1080 * MW * y,
                                        coal=MD_Coal)
 
 
-MongDuong1 = PowerPlant("Mong Duong 1", MongDuong1_parameter)
+MongDuong1 = PowerPlant("Mong Duong 1", MongDuong1_parameter, price_MD.coal)
 
 MDSupplyZone1 = SupplyZone(shape=Semi_Annulus(0 * km, 50 * km),
                            straw_density=MongDuong1_straw_density1,
@@ -179,8 +185,8 @@ cofire_MD1 = Cofire_Tech(biomass_ratio_energy=v_after_invest * 0.05,
                          OM_hour_MWh=0.12 * hr / MWh,  # working hour for OM per MWh
                          wage_operation_maintenance=1.67 * USD / hr)
 
-MongDuong1System = System(MongDuong1, cofire_MD1, feedin_tariff["MD1"], MD_SupplyChain,
-                          straw.price, emission_factor, farm_parameter, transport_parameter)
+MongDuong1System = System(MongDuong1, cofire_MD1, MD_SupplyChain,
+                          price_MD, emission_factor, farm_parameter, transport_parameter)
 
 NinhBinh_parameter = Plant_Parameter(capacity=100 * MW * y,
                                      capacity_factor=0.64,
@@ -195,7 +201,7 @@ NinhBinh_parameter = Plant_Parameter(capacity=100 * MW * y,
                                                        'SO2': 0.0, 'NOx': 0.0, 'PM10': 0.992},
                                      coal=NB_Coal)
 
-NinhBinh = PowerPlant("Ninh Binh", NinhBinh_parameter)
+NinhBinh = PowerPlant("Ninh Binh", NinhBinh_parameter, price_NB.coal)
 
 NBSupplyZone = SupplyZone(shape=Disk(50 * km),
                           straw_density=NinhBinh_straw_density,
@@ -208,5 +214,5 @@ NB_SupplyChain = SupplyChain(zones=[NBSupplyZone],
 
 cofire_NB = cofire_MD1._replace(capital_cost=100 * USD / kW / y)
 
-NinhBinhSystem = System(NinhBinh, cofire_NB, feedin_tariff["NB"], NB_SupplyChain,
-                        straw.price, emission_factor, farm_parameter, transport_parameter)
+NinhBinhSystem = System(NinhBinh, cofire_NB, NB_SupplyChain,
+                        price_NB, emission_factor, farm_parameter, transport_parameter)
