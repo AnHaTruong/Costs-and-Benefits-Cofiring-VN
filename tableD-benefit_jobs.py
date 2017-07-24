@@ -35,8 +35,8 @@ def print_job(system):
     row12 = system.transporter.loading_wages()[1]
     row9 = system.cofiring_plant.biomass_om_work()[1]
     row3 = system.cofiring_plant.biomass_om_wages()[1]
-    row10 = system.labor()[1]
-    row4 = system.wages()[1]
+    row10 = system.labor[1]
+    row4 = system.wages[1]
 
     display_as(row7, 'FTE')
     display_as(row8, 'FTE')
@@ -59,10 +59,10 @@ def print_job(system):
 
 def print_job_lost(system):
     print('Mining job lost from co-firing at', system.plant.name, '\n')
-    row = system.cofiring_plant.coal_work_lost(mining_productivity_underground)[1]
+    row = system.coal_work_lost(mining_productivity_underground)[1]
     display_as(row, 'FTE')
     print(cols.format('Job lost', row))
-    print(cols.format('Coal saved', system.cofiring_plant.coal_saved[1]))
+    print(cols.format('Coal saved', system.coal_saved[1]))
 
 
 print_job(MongDuong1System)

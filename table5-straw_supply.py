@@ -21,8 +21,8 @@ col4 = NinhBinhSystem.cofiring_plant.biomass_used[1]
 col5 = MongDuong1System.cofiring_plant.biomass_cost_per_t()[1]
 col6 = NinhBinhSystem.cofiring_plant.biomass_cost_per_t()[1]
 
-col9 = MongDuong1System.transport_cost_per_t()[1]
-col10 = NinhBinhSystem.transport_cost_per_t()[1]
+col9 = MongDuong1System.transport_cost_per_t[1]
+col10 = NinhBinhSystem.transport_cost_per_t[1]
 
 assert isclose(col5 - col9, MongDuong1System.biomass_value[1] / col3)
 assert isclose(col6 - col10, NinhBinhSystem.biomass_value[1] / col4)

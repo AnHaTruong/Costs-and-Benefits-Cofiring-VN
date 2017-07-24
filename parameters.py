@@ -34,6 +34,7 @@ from System import System
 discount_rate = 0.087771
 depreciation_period = 10
 tax_rate = 0.25               # Corporate tax in Vietnam
+coal_import_price = 73 * USD / t
 
 external_cost = pd.Series({'CO2': 1 * USD / t,
                            # Sakulniyomporn, Kubaha, and Chullabodhi (2011)
@@ -58,7 +59,6 @@ transport_parameter = {'truck_loading_time': 2.7 / 60 * hr / t,  # (Ovaskainen &
 barge_fuel_consumption = 8 * g / t / km  # Van Dingenen & 2016
 mining_productivity_surface = 8.04 * t / hr  # www.eia.g
 mining_productivity_underground = 2.5 * t / hr  # ww.eia.gov
-coal_import_price = 73 * USD / t
 
 
 Fuel = namedtuple('Fuel', 'name, heat_value, transport_distance, transport_mean')

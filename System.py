@@ -46,9 +46,11 @@ class System:
         self.farmer.revenue = self.biomass_value
         self.transporter.revenue = self.transport_cost
 
+    @property
     def transport_cost_per_t(self):
         return safe_divide(self.transport_cost, self.cofiring_plant.biomass_used)
 
+    @property
     def labor(self):
         """Total work time created from co-firing"""
         time = (self.farmer.labor()
@@ -56,6 +58,7 @@ class System:
                 + self.cofiring_plant.biomass_om_work())
         return display_as(time, 'hr')
 
+    @property
     def wages(self):
         """Total benefit from job creation from biomass co-firing"""
         amount = (self.farmer.labor_cost()
@@ -64,8 +67,16 @@ class System:
         return display_as(amount, 'kUSD')
 
     def wages_npv(self, discount_rate):
-        amount = npv(discount_rate, self.wages())
+        amount = npv(discount_rate, self.wages)
         return display_as(amount, 'kUSD')
+
+    @property
+    def coal_saved(self):
+        return display_as(self.cofiring_plant.coal_saved, 't')
+
+    def coal_work_lost(self, mining_productivity):
+        time = self.coal_saved / mining_productivity
+        return time
 
     def emission_reduction(self, external_cost):
         plant_reduction = (self.plant.emissions()['Total']

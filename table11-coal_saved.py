@@ -14,7 +14,7 @@ from parameters import MongDuong1System, NinhBinhSystem, coal_import_price
 
 
 def print_coal_saved(system):
-    col1 = system.cofiring_plant.coal_saved[1]
+    col1 = system.coal_saved[1]
     col2 = display_as(col1 * coal_import_price, 'kUSD')
 
     row = '{:35}{:23.0f}'
