@@ -40,8 +40,8 @@ def print_farmer_income(system):
     revenue = system.transporter.revenue[1]
     loading_cost = system.transporter.loading_wages()[1]
     driving_cost = system.transporter.driving_wages()[1]
-    fuel_cost = system.transporter.fuel_cost()
-    capital_cost = system.transporter.capital_cost()
+    fuel_cost = system.transporter.fuel_cost()[1]
+    capital_cost = system.transporter.capital_cost()[1]
     total = revenue - loading_cost - driving_cost
     row = '{:20}' + '{:10.0f}'
     print(row.format('Transport revenue', revenue))

@@ -47,19 +47,21 @@ external_cost = pd.Series({'CO2': 1 * USD / t,
 farm_parameter = {'winder_rental_cost': 40 * USD / ha,   # per period
                   'winder_haul': 6.57 * t / d,
                   'work_hour_day': 8 * hr / d,
-                  'wage_bm_collect': 1.11 * USD / hr}
+                  'wage_bm_collect': 1.11 * USD / hr,
+                  'fuel_cost_per_hour': 0 * USD / hr}
 
-transport_parameter = {'truck_loading_time': 2.7 / 60 * hr / t,  # (Ovaskainen & 2016 )
+transport_parameter = {'barge_fuel_consumption': 8 * g / t / km,  # Van Dingenen & 2016
+                       'truck_loading_time': 2.7 / 60 * hr / t,  # Ovaskainen & Lundberg (2016)
                        'wage_bm_loading': 1.11 * USD / hr,
                        'truck_load': 20 * t,
                        'truck_velocity': 45 * km / hr,
+                       'fuel_cost_per_hour_driving': 0 * USD / hr,
+                       'fuel_cost_per_hour_loading': 0 * USD / hr,
+                       'capital_cost_per_hour': 0 * USD / hr,
                        'wage_bm_transport': 1.11 * USD / hr}  # vantaiduongviet.com
 
-
-barge_fuel_consumption = 8 * g / t / km  # Van Dingenen & 2016
-mining_productivity_surface = 8.04 * t / hr  # www.eia.g
-mining_productivity_underground = 2.5 * t / hr  # ww.eia.gov
-
+mining_parameter = {'productivity_surface': 8.04 * t / hr,  # www.eia.g
+                    'productivity_underground': 2.5 * t / hr}  # ww.eia.gov
 
 Fuel = namedtuple('Fuel', 'name, heat_value, transport_distance, transport_mean')
 
@@ -106,9 +108,9 @@ emission_factor = {
                        'PM10': 0.04 * g / transport_parameter['truck_load'] / km},
     'Barge transport': {'CO2': 0.071 * kg / t / km,  # Binh & Tuan (2016)
                         # Van Dingenen et al. (2016)
-                        'SO2': 2 * g / kg * barge_fuel_consumption,
-                        'NOx': 50.75 * g / kg * barge_fuel_consumption,
-                        'PM10': 3.19 * g / kg * barge_fuel_consumption}}
+                        'SO2': 2 * g / kg * transport_parameter['barge_fuel_consumption'],
+                        'NOx': 50.75 * g / kg * transport_parameter['barge_fuel_consumption'],
+                        'PM10': 3.19 * g / kg * transport_parameter['barge_fuel_consumption']}}
 
 
 Plant_Parameter = namedtuple("Plant_Parameter", ['name',

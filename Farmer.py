@@ -6,7 +6,7 @@
 # Creative Commons Attribution-ShareAlike 4.0 International
 #
 
-from init import v_after_invest, v_ones, display_as, USD, hr
+from init import v_after_invest, v_ones, display_as
 from Emitter import Emitter
 from Investment import Investment
 
@@ -41,8 +41,7 @@ class Farmer(Investment, Emitter):
         return display_as(amount, 'kUSD')
 
     def fuel_cost(self):
-        hourly_fuel_cost = 0 * USD / hr
-        amount = self.labor() * hourly_fuel_cost
+        amount = self.labor() * self.parameter['fuel_cost_per_hour']
         return display_as(amount, 'kUSD')
 
     def operating_expenses(self):

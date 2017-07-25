@@ -16,7 +16,7 @@ TODO: renam the cells variables
 from init import FTE, display_as
 
 from parameters import MongDuong1System, NinhBinhSystem
-from parameters import mining_productivity_underground
+from parameters import mining_parameter
 
 print('')
 
@@ -59,7 +59,7 @@ def print_job(system):
 
 def print_job_lost(system):
     print('Mining job lost from co-firing at', system.plant.name, '\n')
-    row = system.coal_work_lost(mining_productivity_underground)[1]
+    row = system.coal_work_lost(mining_parameter['productivity_underground'])[1]
     display_as(row, 'FTE')
     print(cols.format('Job lost', row))
     print(cols.format('Coal saved', system.coal_saved[1]))

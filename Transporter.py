@@ -7,7 +7,7 @@
 #
 """Transporter: """
 
-from init import display_as, USD
+from init import display_as
 
 from Emitter import Emitter
 from Investment import Investment
@@ -60,15 +60,16 @@ class Transporter(Investment, Emitter):
         return display_as(amount, 'kUSD')
 
     def fuel_cost(self):
-        amount = 0 * USD
+        amount = (self.driving_work() * self.parameter['fuel_cost_per_hour_driving']
+                  + self.loading_work() * self.parameter['fuel_cost_per_hour_loading'])
         return display_as(amount, 'kUSD')
 
     def capital_cost(self):
-        amount = 0 * USD
+        amount = self.labor() * self.parameter['capital_cost_per_hour']
         return display_as(amount, 'kUSD')
 
     def operating_expenses(self):
-        amount = self.labor_cost() + self.fuel_cost() + self.capital_cost()
+        amount = self.labor_cost()   # + self.fuel_cost() + self.capital_cost()
         return display_as(amount, 'kUSD')
 
     def max_trip_time(self):
