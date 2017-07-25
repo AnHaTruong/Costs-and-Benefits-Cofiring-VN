@@ -5,7 +5,7 @@
 # minh.haduong@gmail.com
 # Creative Commons Attribution-ShareAlike 4.0 International
 #
-"""Transporter: """
+"""Represents the collective of transporters"""
 
 from init import display_as
 
@@ -17,10 +17,12 @@ class Transporter(Investment, Emitter):
     """Represents the collective of transporters
 
     quantity: total mass being transported
-    activity_level:  total  tkm  of transport services provided, determines driving cost and work
+    activity_level:  total  tkm  of transport services provided
 
     loading_work and loading_wages proportional to the quantity
     driving_work and driving_wages proportional to the activity level
+
+    emissions are proportional to activity level only (ASSUMPTION)
     """
     def __init__(self, supply_chain, emission_factor, transport_parameter):
 

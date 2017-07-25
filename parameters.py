@@ -185,7 +185,7 @@ price_MD1 = Price(biomass=37.26 * USD / t,
                   electricity=1239.17 * VND / kWh)
 
 MongDuong1System = System(plant_parameter_MD1, cofire_MD1, SupplyChain_MD1, price_MD1,
-                          emission_factor, farm_parameter, transport_parameter)
+                          farm_parameter, transport_parameter)
 
 
 plant_parameter_NB = Plant_Parameter(name='Ninh Binh',
@@ -217,4 +217,4 @@ price_NB = price_MD1._replace(coal=1825730 * VND / t,   # Includes transport
                               electricity=1665.6 * VND / kWh)
 
 NinhBinhSystem = System(plant_parameter_NB, cofire_NB, SupplyChain_NB, price_NB,
-                        emission_factor, farm_parameter, transport_parameter)
+                        farm_parameter, transport_parameter)
