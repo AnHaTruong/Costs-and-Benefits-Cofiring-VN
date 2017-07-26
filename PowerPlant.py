@@ -128,15 +128,12 @@ class CofiringPlant(PowerPlant):
         coal_name = plant_parameter.coal.name
         biomass_name = cofire_parameter.biomass.name
 
-        # pylint: disable=non-parent-init-called
-        Emitter.__init__(self,
-                         Activity(name=coal_name,
-                                  level=self.coal_used,
-                                  emission_factor=plant_parameter.emission_factor[coal_name]),
-                         Activity(name='Straw',
-                                  level=self.biomass_used,
-                                  emission_factor=plant_parameter.emission_factor[biomass_name]),
-                         emission_control=plant_parameter.emission_control)
+        self.activities = [Activity(name=coal_name,
+                                    level=self.coal_used,
+                                    emission_factor=plant_parameter.emission_factor[coal_name]),
+                           Activity(name='Straw',
+                                    level=self.biomass_used,
+                                    emission_factor=plant_parameter.emission_factor[biomass_name])]
 
         self._biomass_cost = None
 

@@ -40,30 +40,40 @@ class Emitter:
        Total       1300.0  1.51
 
        Polymorphic: activity level can be a scalar or an array representing a time series
+
        >>> import numpy as np
        >>> c = Activity('Combustion', np.array([1000, 110, 0]), {'CO2': 1, 'PM10': 0.0091})
        >>> print(Emitter(c))
                               CO2               PM10
        Combustion  [1000, 110, 0]  [9.1, 1.001, 0.0]
        Total       [1000, 110, 0]  [9.1, 1.001, 0.0]
+
+       Mutable: activities can be changed after the initialization
+
+       >>> e = Emitter()
+       >>> e.activities = [a]
+       >>> print(e)
+                      CO2  PM10
+       Combustion  1000.0   9.1
+       Total       1000.0   9.1
        """
     def __init__(self,
                  *activities,
                  emission_control=None):
         self.activities = activities
         self.emission_control = emission_control
-        self.pollutants = activities[0].emission_factor.keys()
-
-        self.control = {key: 1 for key in self.pollutants}
-
-        if emission_control:
-            for pollutant, fraction in emission_control.items():
-                self.control[pollutant] = 1 - fraction
 
     def __str__(self):
         return self.emissions().transpose().to_string()
 
     def emissions(self):
+        self.pollutants = self.activities[0].emission_factor.keys()
+
+        self.control = {key: 1 for key in self.pollutants}
+
+        if self.emission_control:
+            for pollutant, fraction in self.emission_control.items():
+                self.control[pollutant] = 1 - fraction
         df = pd.DataFrame({
             activity.name: {
                 pollutant:
