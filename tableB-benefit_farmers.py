@@ -20,7 +20,7 @@ def print_farmer_income(system):
 
     area = system.farmer.farm_area[1]
     revenue = system.farmer.revenue[1]
-    winder_cost = system.farmer.capital_cost[1]
+    winder_cost = system.farmer.capital_cost()[1]
     fuel_cost = system.farmer.fuel_cost()[1]
     collect_cost = system.farmer.labor_cost()[1]
     total = revenue - winder_cost - collect_cost - fuel_cost

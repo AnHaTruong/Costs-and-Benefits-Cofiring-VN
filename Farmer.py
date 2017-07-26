@@ -18,7 +18,6 @@ class Farmer(Investment, Emitter):
         self.quantity = supply_chain.quantity()
         self.parameter = farmer_parameter
         self.farm_area = self.quantity / supply_chain.average_straw_yield
-        self.capital_cost = self.farm_area * self.parameter['winder_rental_cost']
 
         field_burning_before = Activity(
             name='Straw',
@@ -51,6 +50,10 @@ class Farmer(Investment, Emitter):
         amount = self.labor() * self.parameter['fuel_cost_per_hour']
         return display_as(amount, 'kUSD')
 
+    def capital_cost(self):
+        amount = self.farm_area * self.parameter['winder_rental_cost']
+        return display_as(amount, 'kUSD')
+
     def operating_expenses(self):
-        expenses = self.labor_cost() + self.capital_cost + self.fuel_cost()
+        expenses = self.labor_cost() + self.capital_cost() + self.fuel_cost()
         return display_as(expenses, 'kUSD')

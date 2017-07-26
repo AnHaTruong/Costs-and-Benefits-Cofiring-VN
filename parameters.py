@@ -93,7 +93,6 @@ emission_factor = {
         'SO2': 2 * g / kg * (8 * g / t / km),
         'NOx': 50.75 * g / kg * (8 * g / t / km),
         'PM10': 3.19 * g / kg * (8 * g / t / km)},
-    # FIXME: Differentiate open air burning <> plant
     'straw': {
         'CO2': 0.0858 * kg / MJ * 11.7 * MJ / kg,  # (Shafie & 2013)
         # (Hoang & 2013)
