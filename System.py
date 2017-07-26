@@ -22,6 +22,7 @@ class System:
     Has a plant, cofiring plant, supply_chain, transporter, farmer
     The cofiring plant pays the farmer for biomass and the transporter for transport
     """
+    # pylint: disable=too-many-arguments
     def __init__(self, plant_parameter, cofire_parameter, supply_chain, price,
                  farm_parameter, transport_parameter):
 

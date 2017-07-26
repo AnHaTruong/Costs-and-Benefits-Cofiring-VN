@@ -7,8 +7,6 @@
 # minh.haduong@gmail.com
 # Creative Commons Attribution-ShareAlike 4.0 International
 #
-#
-# pylint: disable=E0611
 
 from natu.numpy import full, npv
 
@@ -84,6 +82,7 @@ class PowerPlant(Investment, Emitter):
         return display_as(result, 'USD/MWh')
 
 
+# pylint: disable=too-many-instance-attributes
 class CofiringPlant(PowerPlant):
 
     def __init__(self, plant_parameter, coal_price, cofire_parameter):

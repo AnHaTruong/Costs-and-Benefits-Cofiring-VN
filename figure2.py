@@ -15,7 +15,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from parameters import MongDuong1System, NinhBinhSystem
-from natu.units import t   # pylint: disable=E0611
+from natu.units import t
 
 
 # pylint: disable=too-many-locals

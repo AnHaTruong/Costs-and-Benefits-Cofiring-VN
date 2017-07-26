@@ -1,10 +1,12 @@
 doc-warnings: true
 test-warnings: false
 strictness: veryhigh
-max-line-length: 120
+max-line-length: 100
+autodetect: true
 ignore-paths:
   - natu
   - contrib
   - Data
   - tables.tocompare
-python targets 3
+python targets:
+  - 3

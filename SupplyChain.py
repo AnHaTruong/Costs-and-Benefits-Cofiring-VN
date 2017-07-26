@@ -5,7 +5,6 @@
 # minh.haduong@gmail.com
 # Creative Commons Attribution-ShareAlike 4.0 International
 #
-# pylint: disable=E0611
 """The biomass supply chain, meaning a list of zones produing biomass"""
 
 from copy import copy
@@ -13,7 +12,6 @@ from copy import copy
 from init import isclose, v_after_invest, v_zeros, display_as
 
 from natu.units import t, km, ha
-
 
 
 class SupplyZone:
