@@ -7,25 +7,32 @@
 #
 
 from init import v_after_invest, v_ones, display_as
-from Emitter import Emitter
+from Emitter import Emitter, Activity
 from Investment import Investment
 
 
 class Farmer(Investment, Emitter):
     """Farmer class represents the collective of farmers who produce and sell straw
     """
-    def __init__(self, supply_chain, emission_factor, farmer_parameter):
+    def __init__(self, supply_chain, farmer_parameter):
         self.quantity = supply_chain.quantity()
         self.parameter = farmer_parameter
         self.farm_area = self.quantity / supply_chain.average_straw_yield
         self.capital_cost = self.farm_area * self.parameter['winder_rental_cost']
 
-        field_burned_exante = v_ones * supply_chain.burnable()
-        self.emissions_exante = Emitter({'Straw': field_burned_exante},
-                                        emission_factor).emissions()
+        field_burning_before = Activity(
+            name='Straw',
+            level=v_ones * supply_chain.burnable(),
+            emission_factor=self.parameter['emission_factor']['straw'])
 
-        field_burned = field_burned_exante - v_after_invest * self.quantity
-        Emitter.__init__(self, {'Straw': field_burned}, emission_factor)
+        self.emissions_exante = Emitter(field_burning_before).emissions()
+
+        field_burning = Activity(
+            name='Straw',
+            level=field_burning_before.level - v_after_invest * self.quantity,
+            emission_factor=self.parameter['emission_factor']['straw'])
+
+        Emitter.__init__(self, field_burning)
 
         Investment.__init__(self)
 

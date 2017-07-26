@@ -12,7 +12,7 @@ from natu.numpy import full, npv
 
 from init import time_horizon, v_after_invest, v_ones, display_as, USD, safe_divide
 from Investment import Investment
-from Emitter import Emitter
+from Emitter import Emitter, Activity
 
 
 class PowerPlant(Investment, Emitter):
@@ -39,10 +39,12 @@ class PowerPlant(Investment, Emitter):
         self.coal_used = self.gross_heat_input / parameter.coal.heat_value
         display_as(self.coal_used, 't')
 
+        coal_name = parameter.coal.name
         Emitter.__init__(self,
-                         {parameter.coal.name: self.coal_used},
-                         parameter.emission_factor,
-                         parameter.emission_control)
+                         Activity(name=coal_name,
+                                  level=self.coal_used,
+                                  emission_factor=parameter.emission_factor[coal_name]),
+                         emission_control=parameter.emission_control)
 
     def operating_expenses(self):
         cost = self.fuel_cost() + self.operation_maintenance_cost()
@@ -56,9 +58,12 @@ class PowerPlant(Investment, Emitter):
         return self.coal_used * 2 * self.parameter.coal.transport_distance   # Return trip inputed
 
     def coal_transporter(self):
-        return Emitter({self.parameter.coal.transport_mean: self.coal_transport_tkm()},
-                       self.emission_factor
-                       )
+        transport_mean = self.parameter.coal.transport_mean
+        activity = Activity(
+            name=transport_mean,
+            level=self.coal_transport_tkm(),
+            emission_factor=self.parameter.emission_factor[transport_mean])
+        return Emitter(activity)
 
     def fuel_cost(self):
         return self.coal_cost()
@@ -120,13 +125,18 @@ class CofiringPlant(PowerPlant):
         self.coal_saved = biomass_heat / plant_parameter.coal.heat_value
 
         self.coal_used -= self.coal_saved
+        coal_name = plant_parameter.coal.name
+        biomass_name = cofire_parameter.biomass.name
 
         # pylint: disable=non-parent-init-called
         Emitter.__init__(self,
-                         {self.parameter.coal.name: self.coal_used,
-                          cofire_parameter.biomass.name: self.biomass_used},
-                         plant_parameter.emission_factor,
-                         plant_parameter.emission_control)
+                         Activity(name=coal_name,
+                                  level=self.coal_used,
+                                  emission_factor=plant_parameter.emission_factor[coal_name]),
+                         Activity(name='Straw',
+                                  level=self.biomass_used,
+                                  emission_factor=plant_parameter.emission_factor[biomass_name]),
+                         emission_control=plant_parameter.emission_control)
 
         self._biomass_cost = None
 

@@ -30,10 +30,8 @@ class System:
         self.cofiring_plant = CofiringPlant(plant_parameter, price.coal, cofire_parameter)
         self.supply_chain = supply_chain.fit(self.cofiring_plant.biomass_used[1])
         self.farmer = Farmer(self.supply_chain,
-                             plant_parameter.emission_factor,
                              farm_parameter)
         self.transporter = Transporter(self.supply_chain,
-                                       plant_parameter.emission_factor,
                                        transport_parameter)
 
         electricity_sales = self.plant.power_generation * price.electricity
@@ -44,7 +42,7 @@ class System:
         self.biomass_value = self.cofiring_plant.biomass_used * price.biomass
         display_as(self.biomass_value, "kUSD")
 
-        self.transport_cost = self.transporter.activity_level * price.transport
+        self.transport_cost = self.supply_chain.transport_tkm() * price.transport
         display_as(self.transport_cost, "kUSD")
 
         self.cofiring_plant.biomass_cost = self.biomass_value + self.transport_cost
@@ -86,11 +84,14 @@ class System:
     def emission_reduction(self, external_cost):
         plant_reduction = (self.plant.emissions()['Total']
                            - self.cofiring_plant.emissions()['Total'])
+
         transport_reduction = (self.plant.coal_transporter().emissions()['Total']
                                - self.cofiring_plant.coal_transporter().emissions()['Total']
                                - self.transporter.emissions()['Total'])
+
         field_reduction = (self.farmer.emissions_exante['Total']
                            - self.farmer.emissions()['Total'])
+
         total_reduction = plant_reduction + transport_reduction + field_reduction
         total_benefit = total_reduction * external_cost
         for pollutant in total_benefit:

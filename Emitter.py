@@ -6,8 +6,11 @@
 # Creative Commons Attribution-ShareAlike 4.0 International
 #
 """Emitter: this class represents a system which emits pollutants."""
+from collections import namedtuple
 
 import pandas as pd
+
+Activity = namedtuple('Activity', 'name, level, emission_factor')
 
 
 # pylint: disable=too-few-public-methods
@@ -15,66 +18,56 @@ class Emitter:
     """A system which emits pollutants.
 
        Multiple activities and multiple pollutants.
-       Each pollutant can be reduced by a given percentage (default: 0, no filter),
-           the reduction is end-of-pipe, common to all activities
        Emissions are proportional to an activity level,
            for example a quantity of fuel burned, or a distance traveled by a given mode
-       Polymorphic signature: activity level can be a scalar or an array representing a time series
 
-       The emission_factor table is a dictionary of dictionaries:
-           emission_factor[activity][pollutant]
+       Example:
+       >>> a = Activity('Combustion', 1000, {'CO2': 1, 'PM10': 0.0091})
+       >>> b = Activity('Transport', 300, {'CO2': 1, 'PM10': 0.02})
+       >>> print(Emitter(a, b))
+                      CO2  PM10
+       Combustion  1000.0   9.1
+       Transport    300.0   6.0
+       Total       1300.0  15.1
 
-       Simple example:
+       Each pollutant can be reduced by a given fraction (default: 0, no filter),
+           the reduction is end-of-pipe, common to all activities
 
-       from parameters import emission_factor
-       import numpy as np
-       print(Emitter({'Straw': np.array([0., 1000., 1000.])}, emission_factor))
+       >>> print(Emitter(a, b, emission_control={'PM10': 0.9}))
+                      CO2  PM10
+       Combustion  1000.0  0.91
+       Transport    300.0  0.60
+       Total       1300.0  1.51
 
-                     CO2                NOx             PM10                SO2
-Straw  [0.0, 1003.86, 1003.86]  [0.0, 2.28, 2.28]  [0.0, 9.1, 9.1]  [0.0, 0.18, 0.18]
-Total  [0.0, 1003.86, 1003.86]  [0.0, 2.28, 2.28]  [0.0, 9.1, 9.1]  [0.0, 0.18, 0.18]
-
-       Real example:
-
-       from parameters import emission_factor, MongDuong1System
-
-       emitter = Emitter({'6b_coal': MongDuong1System.cofiring_plant.coal_used,
-                          'Straw': MongDuong1System.cofiring_plant.biomass_used
-                          },
-                         emission_factor,
-                         {'CO2': 0.0, 'SO2': 0.982, 'NOx': 0.0, 'PM10': 0.996}
-                         )
-
-       print(emitter, "\n")
-       print(emitter.emissions()['Total'], "\n")
-       print(emitter.emissions()['Total']['CO2'], "\n")
+       Polymorphic: activity level can be a scalar or an array representing a time series
+       >>> import numpy as np
+       >>> c = Activity('Combustion', np.array([1000, 110, 0]), {'CO2': 1, 'PM10': 0.0091})
+       >>> print(Emitter(c))
+                              CO2               PM10
+       Combustion  [1000, 110, 0]  [9.1, 1.001, 0.0]
+       Total       [1000, 110, 0]  [9.1, 1.001, 0.0]
        """
     def __init__(self,
-                 activity_level,   # A dictionary of {activity: level, ...}
-                 emission_factor,
+                 *activities,
                  emission_control=None):
-        assert set(activity_level.keys()).issubset(emission_factor.keys())
-        self.levels = activity_level
-        self.activities = activity_level.keys()
-        self.emission_factor = emission_factor
+        self.activities = activities
         self.emission_control = emission_control
+        self.pollutants = activities[0].emission_factor.keys()
 
-        self.pollutants = emission_factor[list(activity_level)[0]].keys()
+        self.control = {key: 1 for key in self.pollutants}
 
-        if emission_control is None:
-            emission_control = {'CO2': 0, 'SO2': 0, 'NOx': 0, 'PM10': 0}
-        self.controled_emission_factor = pd.Series({
-            activity: pd.Series(emission_factor[activity]) * (1 - pd.Series(emission_control))
-            for activity in emission_factor})
+        if emission_control:
+            for pollutant, fraction in emission_control.items():
+                self.control[pollutant] = 1 - fraction
 
     def __str__(self):
         return self.emissions().transpose().to_string()
 
     def emissions(self):
         df = pd.DataFrame({
-            activity: {
+            activity.name: {
                 pollutant:
-                    self.levels[activity] * self.controled_emission_factor[activity][pollutant]
+                    activity.level * activity.emission_factor[pollutant] * self.control[pollutant]
                 for pollutant in self.pollutants}
             for activity in self.activities})
         df['Total'] = df.sum(axis=1)

@@ -9,7 +9,7 @@
 
 from init import display_as
 
-from Emitter import Emitter
+from Emitter import Emitter, Activity
 from Investment import Investment
 
 
@@ -24,18 +24,23 @@ class Transporter(Investment, Emitter):
 
     emissions are proportional to activity level only (ASSUMPTION)
     """
-    def __init__(self, supply_chain, emission_factor, transport_parameter):
+    def __init__(self, supply_chain, transport_parameter):
 
         Investment.__init__(self)
-        self.activity_level = supply_chain.transport_tkm()
-        Emitter.__init__(self, {'Road transport': self.activity_level}, emission_factor)
 
+        self.activity_level = supply_chain.transport_tkm()
         self.quantity = supply_chain.quantity()
         self.collection_radius = supply_chain.collection_radius()
 
         self.parameter = transport_parameter
         self.truck_load = self.parameter['truck_load']
         self.truck_trips = self.quantity / self.truck_load
+
+        activity = Activity(
+            name='Road transport',
+            level=self.activity_level,
+            emission_factor=self.parameter['emission_factor']['road_transport'])
+        Emitter.__init__(self, activity)
 
     def loading_work(self):  # Unloading work is included in om_work
         time = self.quantity * self.parameter['truck_loading_time']

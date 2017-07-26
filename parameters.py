@@ -43,74 +43,83 @@ external_cost = pd.Series({'CO2': 1 * USD / t,
                            'NOx': 286 * USD / t})
 
 
-# hourly wage calculated from base salary defined in governmental regulations
-farm_parameter = {'winder_rental_cost': 40 * USD / ha,   # per period
-                  'winder_haul': 6.57 * t / d,
-                  'work_hour_day': 8 * hr / d,
-                  'wage_bm_collect': 1.11 * USD / hr,
-                  'fuel_cost_per_hour': 0 * USD / hr}
-
-transport_parameter = {'barge_fuel_consumption': 8 * g / t / km,  # Van Dingenen & 2016
-                       'truck_loading_time': 2.7 / 60 * hr / t,  # Ovaskainen & Lundberg (2016)
-                       'wage_bm_loading': 1.11 * USD / hr,
-                       'truck_load': 20 * t,
-                       'truck_velocity': 45 * km / hr,
-                       'fuel_cost_per_hour_driving': 0 * USD / hr,
-                       'fuel_cost_per_hour_loading': 0 * USD / hr,
-                       'capital_cost_per_hour': 0 * USD / hr,
-                       'wage_bm_transport': 1.11 * USD / hr}  # vantaiduongviet.com
-
 mining_parameter = {'productivity_surface': 8.04 * t / hr,  # www.eia.g
                     'productivity_underground': 2.5 * t / hr}  # ww.eia.gov
 
 Fuel = namedtuple('Fuel', 'name, heat_value, transport_distance, transport_mean')
 
 coal_6b = Fuel(name="6b_coal",
-               heat_value=19.43468 * MJ / kg,
+               heat_value=19.43468 * MJ / kg,  # numerical value also used in emission_factor
                transport_distance=0 * km,
                transport_mean='Conveyor belt')
 
 coal_4b = Fuel(name="4b_coal",
-               heat_value=21.5476 * MJ / kg,
+               heat_value=21.5476 * MJ / kg,  # numerical value also used in emission_factor
                transport_distance=200 * km,
                transport_mean='Barge transport')
 
-straw = Fuel(name='Straw',
-             heat_value=11.7 * MJ / kg,
+straw = Fuel(name='straw',
+             heat_value=11.7 * MJ / kg,  # numerical value also used in emission_factor
              transport_distance='Endogenous',
              transport_mean='Road transport')
 
-
 emission_factor = {
-    '6b_coal': {'CO2': 0.0966 * kg / MJ * coal_6b.heat_value,  # IPCC 2006
-                # Eastern Research Group (2011)
-                'SO2': 11.5 * kg / t,
-                'NOx': 18 * kg / t,
-                'PM10': 43.8 * kg / t},
-    '4b_coal': {'CO2': 0.0966 * kg / MJ * coal_4b.heat_value,  # IPCC 2006
-                # Eastern Research Group (2011)
-                'SO2': 11.5 * kg / t,
-                'NOx': 18 * kg / t,
-                'PM10': 26.1 * kg / t},
-    'Straw': {'CO2': 0.0858 * kg / MJ * straw.heat_value,  # (Shafie & 2013)
-              # (Hoang & 2013)
-              'SO2': 0.18 * kg / t,
-              'NOx': 2.28 * kg / t,
-              'PM10': 9.1 * kg / t},
-    'Conveyor belt': {'CO2': 0.0 * kg / t / km,
-                      'SO2': 0. * kg / t / km,
-                      'NOx': 0. * kg / t / km,
-                      'PM10': 0. * kg / t / km},
-    'Road transport': {'CO2': 0.110 * kg / t / km,  # Binh & Tuan (2016)
-                       # http://naei.defra.gov.uk/data/ef-transport, year 2014
-                       'SO2': 0.003 * g / transport_parameter['truck_load'] / km,
-                       'NOx': 2.68 * g / transport_parameter['truck_load'] / km,
-                       'PM10': 0.04 * g / transport_parameter['truck_load'] / km},
-    'Barge transport': {'CO2': 0.071 * kg / t / km,  # Binh & Tuan (2016)
-                        # Van Dingenen et al. (2016)
-                        'SO2': 2 * g / kg * transport_parameter['barge_fuel_consumption'],
-                        'NOx': 50.75 * g / kg * transport_parameter['barge_fuel_consumption'],
-                        'PM10': 3.19 * g / kg * transport_parameter['barge_fuel_consumption']}}
+    '6b_coal': {
+        'CO2': 0.0966 * kg / MJ * 19.43468 * MJ / kg,  # IPCC 2006
+        # Eastern Research Group (2011)
+        'SO2': 11.5 * kg / t,
+        'NOx': 18 * kg / t,
+        'PM10': 43.8 * kg / t},
+    '4b_coal': {
+        'CO2': 0.0966 * kg / MJ * 21.5476 * MJ / kg,  # IPCC 2006
+        # Eastern Research Group (2011)
+        'SO2': 11.5 * kg / t,
+        'NOx': 18 * kg / t,
+        'PM10': 26.1 * kg / t},
+    'Conveyor belt': {
+        'CO2': 0 * kg / t / km,
+        'SO2': 0 * kg / t / km,
+        'NOx': 0 * kg / t / km,
+        'PM10': 0 * kg / t / km},
+    'road_transport': {
+        'CO2': 0.110 * kg / t / km,  # Binh & Tuan (2016)
+        # http://naei.defra.gov.uk/data/ef-transport, year 2014
+        'SO2': 0.003 * g / (20 * t) / km,
+        'NOx': 2.68 * g / (20 * t) / km,
+        'PM10': 0.04 * g / (20 * t) / km},
+    'Barge transport': {
+        'CO2': 0.071 * kg / t / km,  # Binh & Tuan (2016)
+        # Van Dingenen et al. (2016)
+        'SO2': 2 * g / kg * (8 * g / t / km),
+        'NOx': 50.75 * g / kg * (8 * g / t / km),
+        'PM10': 3.19 * g / kg * (8 * g / t / km)},
+    # FIXME: Differentiate open air burning <> plant
+    'straw': {
+        'CO2': 0.0858 * kg / MJ * 11.7 * MJ / kg,  # (Shafie & 2013)
+        # (Hoang & 2013)
+        'SO2': 0.18 * kg / t,
+        'NOx': 2.28 * kg / t,
+        'PM10': 9.1 * kg / t}}
+
+
+# hourly wage calculated from base salary defined in governmental regulations
+farm_parameter = {'winder_rental_cost': 40 * USD / ha,   # per period
+                  'winder_haul': 6.57 * t / d,
+                  'work_hour_day': 8 * hr / d,
+                  'wage_bm_collect': 1.11 * USD / hr,
+                  'fuel_cost_per_hour': 0 * USD / hr,
+                  'emission_factor': emission_factor}
+
+transport_parameter = {'barge_fuel_consumption': 8 * g / t / km,  # Van Dingenen & 2016
+                       'truck_loading_time': 2.7 / 60 * hr / t,  # Ovaskainen & Lundberg (2016)
+                       'wage_bm_loading': 1.11 * USD / hr,
+                       'truck_load': 20 * t,  # Also used in road_transport.emission_factor
+                       'truck_velocity': 45 * km / hr,
+                       'fuel_cost_per_hour_driving': 0 * USD / hr,
+                       'fuel_cost_per_hour_loading': 0 * USD / hr,
+                       'capital_cost_per_hour': 0 * USD / hr,
+                       'wage_bm_transport': 1.11 * USD / hr,  # vantaiduongviet.com
+                       'emission_factor': emission_factor}
 
 
 Plant_Parameter = namedtuple("Plant_Parameter", ['name',
