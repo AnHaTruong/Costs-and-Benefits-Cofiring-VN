@@ -26,17 +26,18 @@ class System:
     def __init__(self, plant_parameter, cofire_parameter, supply_chain, price,
                  farm_parameter, transport_parameter):
 
-        self.plant = PowerPlant(plant_parameter, price.coal)
-        self.cofiring_plant = CofiringPlant(plant_parameter, price.coal, cofire_parameter)
+        self.plant = PowerPlant(plant_parameter)
+        self.cofiring_plant = CofiringPlant(plant_parameter, cofire_parameter)
         self.supply_chain = supply_chain.fit(self.cofiring_plant.biomass_used[1])
-        self.farmer = Farmer(self.supply_chain,
-                             farm_parameter)
-        self.transporter = Transporter(self.supply_chain,
-                                       transport_parameter)
+        self.farmer = Farmer(self.supply_chain, farm_parameter)
+        self.transporter = Transporter(self.supply_chain, transport_parameter)
 
         electricity_sales = self.plant.power_generation * price.electricity
         display_as(electricity_sales, 'kUSD')
         self.plant.revenue = electricity_sales
+        self.cofiring_plant.coal_cost = self.cofiring_plant.coal_used * price.coal
+
+        self.plant.coal_cost = self.plant.coal_used * price.coal
         self.cofiring_plant.revenue = electricity_sales
 
         self.biomass_value = self.cofiring_plant.biomass_used * price.biomass

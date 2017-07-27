@@ -15,7 +15,7 @@ diffs  = $(patsubst %.py,%.diff,$(tablepyfiles))
 figurespyfiles = $(wildcard figure*.py)
 figures = $(patsubst %.py,%.png,$(figurespyfiles))
 
-doc_tests = Investment.doctest Emitter.doctest init.doctest
+doc_tests =  init.doctest Investment.doctest Emitter.doctest PowerPlant.doctest
 script_tests = test_zero_cofire.txt
 
 all: $(tables) $(figures)
@@ -60,7 +60,7 @@ archive:
 	zip -r $(distName).zip $(distName)
 	rm -rf $(distName)
 
-test: $(doc_tests) $(script_tests) reg_tests
+test: cleaner strawdata.py $(doc_tests) $(script_tests) reg_tests
 
 reg_tests: $(diffs)
 	@cat $^

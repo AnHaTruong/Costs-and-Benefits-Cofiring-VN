@@ -32,7 +32,7 @@ def tableC(system):
     print('{:30}{:30}{:20}'.format('', "Reference", "Cofiring"))
     printRowInt("Investment", system.plant.capital, system.cofiring_plant.capital)
     printRowNPV("Fuel cost", system.plant.fuel_cost(), system.cofiring_plant.fuel_cost())
-    printRowNPV("  Coal", system.plant.coal_cost(), system.cofiring_plant.coal_cost())
+    printRowNPV("  Coal", system.plant.coal_cost, system.cofiring_plant.coal_cost)
     printRowNPV_na("  Biomass", system.cofiring_plant.biomass_cost)
     printRowNPV_na("    transportation", system.transport_cost)
     printRowNPV_na("    straw at field", system.biomass_value)

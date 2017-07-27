@@ -16,15 +16,23 @@ from Emitter import Emitter, Activity
 
 
 class PowerPlant(Investment, Emitter):
-    """ A coal power plant, without co-firing"""
+    """ A coal power plant, without co-firing
+
+        The revenue and coal_cost are defined after the initializer:
+
+        >>> from parameters import plant_parameter_MD1, price_MD1
+        >>> plant = PowerPlant(plant_parameter_MD1)
+        >>> plant.revenue = plant.power_generation * price_MD1.electricity
+        >>> plant.coal_cost = plant.coal_used * price_MD1.coal
+        >>> print(plant.net_present_value(discount_rate=0.08))
+        1.29299e+06 kUSD
+    """
     def __init__(self,
                  parameter,
-                 coal_price,
                  derating=v_ones,
                  capital=0 * USD):
         Investment.__init__(self, parameter.name, capital)
         self.parameter = parameter
-        self.coal_price = coal_price
 
         self.plant_efficiency = parameter.plant_efficiency * derating
 
@@ -46,13 +54,42 @@ class PowerPlant(Investment, Emitter):
                                   emission_factor=parameter.emission_factor[coal_name]),
                          emission_control=parameter.emission_control)
 
+        self._coal_cost = None
+
+    @property
+    def coal_cost(self):
+        if self._coal_cost is None:
+            raise AttributeError('Using  PowerPlant.coal_cost  value before it is set')
+        return display_as(self._coal_cost, 'kUSD')
+
+    @coal_cost.setter
+    def coal_cost(self, value):
+        self._coal_cost = value
+
     def operating_expenses(self):
         cost = self.fuel_cost() + self.operation_maintenance_cost()
         return display_as(cost, 'kUSD')
 
-    def coal_cost(self):
-        cost = self.coal_used * self.coal_price
+    def fuel_cost(self):
+        return self.coal_cost
+
+    def operation_maintenance_cost(self):
+        return display_as(self.coal_om_cost(), 'kUSD')
+
+    def coal_om_cost(self):
+        fixed_om_coal = full(time_horizon + 1,
+                             self.parameter.fix_om_coal * self.parameter.capacity,
+                             dtype=object)
+        variable_om_coal = self.power_generation * self.parameter.variable_om_coal
+        cost = fixed_om_coal + variable_om_coal
         return display_as(cost, 'kUSD')
+
+    def lcoe(self, discount_rate, tax_rate, depreciation_period):
+        total_lifetime_power_production = npv(discount_rate, self.power_generation)
+        total_life_cycle_cost = npv(discount_rate,
+                                    self.cash_out(tax_rate, depreciation_period))
+        result = total_life_cycle_cost / total_lifetime_power_production
+        return display_as(result, 'USD/MWh')
 
     def coal_transport_tkm(self):
         return self.coal_used * 2 * self.parameter.coal.transport_distance   # Return trip inputed
@@ -65,32 +102,11 @@ class PowerPlant(Investment, Emitter):
             emission_factor=self.parameter.emission_factor[transport_mean])
         return Emitter(activity)
 
-    def fuel_cost(self):
-        return self.coal_cost()
-
-    def coal_om_cost(self):
-        fixed_om_coal = full(time_horizon + 1,
-                             self.parameter.fix_om_coal * self.parameter.capacity,
-                             dtype=object)
-        variable_om_coal = self.power_generation * self.parameter.variable_om_coal
-        cost = fixed_om_coal + variable_om_coal
-        return display_as(cost, 'kUSD')
-
-    def operation_maintenance_cost(self):
-        return display_as(self.coal_om_cost(), 'kUSD')
-
-    def lcoe(self, discount_rate, tax_rate, depreciation_period):
-        total_lifetime_power_production = npv(discount_rate, self.power_generation)
-        total_life_cycle_cost = npv(discount_rate,
-                                    self.cash_out(tax_rate, depreciation_period))
-        result = total_life_cycle_cost / total_lifetime_power_production
-        return display_as(result, 'USD/MWh')
-
 
 # pylint: disable=too-many-instance-attributes
 class CofiringPlant(PowerPlant):
 
-    def __init__(self, plant_parameter, coal_price, cofire_parameter):
+    def __init__(self, plant_parameter, cofire_parameter):
         self.cofire_parameter = cofire_parameter
 
         biomass_ratio_mass = (cofire_parameter.biomass_ratio_energy
@@ -109,7 +125,6 @@ class CofiringPlant(PowerPlant):
 
         PowerPlant.__init__(self,
                             plant_parameter,
-                            coal_price,
                             derating,
                             investment_cost)
 
@@ -155,7 +170,7 @@ class CofiringPlant(PowerPlant):
         return display_as(cost, 'USD / GJ')
 
     def fuel_cost(self):
-        cost = self.coal_cost() + self.biomass_cost
+        cost = self.coal_cost + self.biomass_cost
         return display_as(cost, 'kUSD')
 
     def operation_maintenance_cost(self):
