@@ -15,7 +15,8 @@ class Shape:
     """Abstract base class for a geometric shape.
 
     Let's keep it simple, since all fits in one file:
-    Child classes should define init, str, area, first_moment_of_area and shrink"""
+    Child classes should define init, str, area, first_moment_of_area and shrink
+    """
 
     def area(self):
         pass
@@ -28,6 +29,8 @@ class Shape:
 
 
 class Disk(Shape):
+    """A disk area"""
+
     def __init__(self, radius):
         assert radius >= 0 * m
         self.radius = radius

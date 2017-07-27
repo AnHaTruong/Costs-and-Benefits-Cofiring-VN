@@ -24,7 +24,6 @@ try:
 except NameError:
     exit()   # Quietly
 
-#import cProfile
 
 # The depreciation period is an discrete parameter. See item 2 on the list at
 # https://waterprogramming.wordpress.com/2014/02/11/

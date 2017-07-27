@@ -15,53 +15,50 @@ Activity = namedtuple('Activity', 'name, level, emission_factor')
 
 # pylint: disable=too-few-public-methods
 class Emitter:
-
     """A system which emits pollutants.
 
-       Multiple activities and multiple pollutants.
-       Emissions are proportional to an activity level,
-           for example a quantity of fuel burned, or a distance traveled by a given mode
+   Multiple activities and multiple pollutants.
+   Emissions are proportional to an activity level,
+   for example a quantity of fuel burned, or a distance traveled by a given mode
 
-       Example:
-       >>> a = Activity('Combustion', 1000, {'CO2': 1, 'PM10': 0.0091})
-       >>> b = Activity('Transport', 300, {'CO2': 1, 'PM10': 0.02})
-       >>> print(Emitter(a, b))
-                      CO2  PM10
-       Combustion  1000.0   9.1
-       Transport    300.0   6.0
-       Total       1300.0  15.1
+   Example:
+   >>> a = Activity('Combustion', 1000, {'CO2': 1, 'PM10': 0.0091})
+   >>> b = Activity('Transport', 300, {'CO2': 1, 'PM10': 0.02})
+   >>> print(Emitter(a, b))
+                  CO2  PM10
+   Combustion  1000.0   9.1
+   Transport    300.0   6.0
+   Total       1300.0  15.1
 
-       Each pollutant can be reduced by a given fraction (default: 0, no filter),
-           the reduction is end-of-pipe, common to all activities
+   Each pollutant can be reduced by a given fraction (default: 0, no filter),
+       the reduction is end-of-pipe, common to all activities
 
-       >>> print(Emitter(a, b, emission_control={'PM10': 0.9}))
-                      CO2  PM10
-       Combustion  1000.0  0.91
-       Transport    300.0  0.60
-       Total       1300.0  1.51
+   >>> print(Emitter(a, b, emission_control={'PM10': 0.9}))
+                  CO2  PM10
+   Combustion  1000.0  0.91
+   Transport    300.0  0.60
+   Total       1300.0  1.51
 
-       Polymorphic: activity level can be a scalar or an array representing a time series
+   Polymorphic: activity level can be a scalar or an array representing a time series
 
-       >>> import numpy as np
-       >>> c = Activity('Combustion', np.array([1000, 110, 0]), {'CO2': 1, 'PM10': 0.0091})
-       >>> print(Emitter(c))
-                              CO2               PM10
-       Combustion  [1000, 110, 0]  [9.1, 1.001, 0.0]
-       Total       [1000, 110, 0]  [9.1, 1.001, 0.0]
+   >>> import numpy as np
+   >>> c = Activity('Combustion', np.array([1000, 110, 0]), {'CO2': 1, 'PM10': 0.0091})
+   >>> print(Emitter(c))
+                          CO2               PM10
+   Combustion  [1000, 110, 0]  [9.1, 1.001, 0.0]
+   Total       [1000, 110, 0]  [9.1, 1.001, 0.0]
 
-       Mutable: activities can be changed after the initialization
+   Mutable: activities can be changed after the initialization
 
-       >>> e = Emitter()
-       >>> e.activities = [a]
-       >>> print(e)
-                      CO2  PM10
-       Combustion  1000.0   9.1
-       Total       1000.0   9.1
-       """
+   >>> e = Emitter()
+   >>> e.activities = [a]
+   >>> print(e)
+                  CO2  PM10
+   Combustion  1000.0   9.1
+   Total       1000.0   9.1
+   """
 
-    def __init__(self,
-                 *activities,
-                 emission_control=None):
+    def __init__(self, *activities, emission_control=None):
         self.activities = activities
         self.emission_control = emission_control
 

@@ -14,16 +14,19 @@ from Investment import Investment
 
 
 class Transporter(Investment, Emitter):
-    """Represents the collective of transporters
+    """The collective of transporters.
 
-    quantity: total mass being transported
-    activity_level:  total  tkm  of transport services provided
+    Members:
+        activity_level:  total  tkm  of transport services provided
+        quantity: total mass being transported
+        collection_radius: the maximum distance from the plant where biomass is collected
 
     loading_work and loading_wages proportional to the quantity
     driving_work and driving_wages proportional to the activity level
 
     emissions are proportional to activity level only (ASSUMPTION)
     """
+
     def __init__(self, supply_chain, transport_parameter):
 
         Investment.__init__(self)

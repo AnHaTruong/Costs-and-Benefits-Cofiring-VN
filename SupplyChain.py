@@ -15,6 +15,10 @@ from natu.units import t, km, ha
 
 
 class SupplyZone:
+    """A zone from wich biomass is collected.
+
+    Members: shape, straw_density, tortuosity factor
+    """
     def __init__(self,
                  shape,
                  straw_density,
@@ -58,6 +62,7 @@ class SupplyChain:
 
     Not vectorized, the supply chain does not vary with time
     """
+
     def __init__(self,
                  zones,
                  straw_production,
@@ -70,8 +75,9 @@ class SupplyChain:
 
     def fit(self, target_quantity):
         """Returns a copy of the supply chain
-           which is adjusted to produce exactly  target_quantity
-           disgard unused zone(s) and shrink the last one"""
+        which is adjusted to produce exactly  target_quantity
+        disgard unused zone(s) and shrink the last one
+        """
         assert target_quantity <= self.quantity()[1], 'Not enough biomass in supply chain: '
 
         i = 0

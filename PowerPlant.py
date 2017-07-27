@@ -16,17 +16,16 @@ from Emitter import Emitter, Activity
 
 
 class PowerPlant(Investment, Emitter):
+    """ A coal power plant, without co-firing.
 
-    """ A coal power plant, without co-firing
+    The revenue and coal_cost are defined after the initializer:
 
-        The revenue and coal_cost are defined after the initializer:
-
-        >>> from parameters import plant_parameter_MD1, price_MD1
-        >>> plant = PowerPlant(plant_parameter_MD1)
-        >>> plant.revenue = plant.power_generation * price_MD1.electricity
-        >>> plant.coal_cost = plant.coal_used * price_MD1.coal
-        >>> print(plant.net_present_value(discount_rate=0.08))
-        1.29299e+06 kUSD
+    >>> from parameters import plant_parameter_MD1, price_MD1
+    >>> plant = PowerPlant(plant_parameter_MD1)
+    >>> plant.revenue = plant.power_generation * price_MD1.electricity
+    >>> plant.coal_cost = plant.coal_used * price_MD1.coal
+    >>> print(plant.net_present_value(discount_rate=0.08))
+    1.29299e+06 kUSD
     """
 
     def __init__(self,

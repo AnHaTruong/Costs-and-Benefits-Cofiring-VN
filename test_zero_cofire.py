@@ -23,8 +23,8 @@ MongDuong1NullCofiringSystem = System(plant_parameter_MD1,
 npvA = MongDuong1NullCofiringSystem.plant.net_present_value(0.08, 0.2, 10)
 npvB = MongDuong1NullCofiringSystem.cofiring_plant.net_present_value(0.08, 0.2, 10)
 
-#print("No cofiring NPV:", npvA)
-#print("Cofiring 0% NPV:", npvB)
+# print("No cofiring NPV:", npvA)
+# print("Cofiring 0% NPV:", npvB)
 
 assert isclose(npvA, npvB)
 
@@ -33,8 +33,8 @@ p.revenue = p.power_generation * price_MD1.electricity
 p.coal_cost = p.coal_used * price_MD1.coal
 npvC = p.net_present_value(0.08, 0.2, 10)
 
-#print("No cofiring NPV:", npvA)
-#print("Direct PowerPlant object:", npvC)
+# print("No cofiring NPV:", npvA)
+# print("Direct PowerPlant object:", npvC)
 
 assert isclose(npvA, npvC)
 
@@ -42,7 +42,7 @@ lcoeA = MongDuong1NullCofiringSystem.plant.lcoe(0.08, 0.2, 10)
 
 lcoeB = MongDuong1NullCofiringSystem.cofiring_plant.lcoe(0.08, 0.2, 10)
 
-#print("No cofiring LCOE:", lcoeA)
-#print("Cofiring 0% LCOE:", lcoeB)
+# print("No cofiring LCOE:", lcoeA)
+# print("Cofiring 0% LCOE:", lcoeB)
 
 assert isclose(lcoeA, lcoeB)

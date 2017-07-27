@@ -17,10 +17,9 @@ from Transporter import Transporter
 
 
 class System:
+    """The system model of the cofiring economic sector.
 
-    """The cofiring sector and its market
-
-    Has a plant, cofiring plant, supply_chain, transporter, farmer
+    Members: plant, cofiring plant, supply_chain, transporter, farmer
     The cofiring plant pays the farmer for biomass and the transporter for transport
     """
 

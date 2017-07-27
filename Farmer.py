@@ -12,8 +12,11 @@ from Investment import Investment
 
 
 class Farmer(Investment, Emitter):
-    """Farmer class represents the collective of farmers who produce and sell straw
+    """The collective of farmers who produce and sell straw.
+
+    As an Investment, the Farmer.revenue has to be set after initialization.
     """
+
     def __init__(self, supply_chain, farmer_parameter):
         self.quantity = supply_chain.quantity()
         self.parameter = farmer_parameter
