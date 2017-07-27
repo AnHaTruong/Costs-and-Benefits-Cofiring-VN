@@ -16,6 +16,7 @@ from Emitter import Emitter, Activity
 
 
 class PowerPlant(Investment, Emitter):
+
     """ A coal power plant, without co-firing
 
         The revenue and coal_cost are defined after the initializer:
@@ -27,6 +28,7 @@ class PowerPlant(Investment, Emitter):
         >>> print(plant.net_present_value(discount_rate=0.08))
         1.29299e+06 kUSD
     """
+
     def __init__(self,
                  parameter,
                  derating=v_ones,

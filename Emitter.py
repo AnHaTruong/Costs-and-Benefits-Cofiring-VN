@@ -15,6 +15,7 @@ Activity = namedtuple('Activity', 'name, level, emission_factor')
 
 # pylint: disable=too-few-public-methods
 class Emitter:
+
     """A system which emits pollutants.
 
        Multiple activities and multiple pollutants.
@@ -57,6 +58,7 @@ class Emitter:
        Combustion  1000.0   9.1
        Total       1000.0   9.1
        """
+
     def __init__(self,
                  *activities,
                  emission_control=None):

@@ -31,55 +31,58 @@ df['straw density'] = (df['straw yield'] * df['Cultivation area (ha)'] * market_
 
 df['straw production'] = df['rice production (ton)'] * residue_to_product_ratio * t
 
+result = dict()
 
-NinhBinh_straw_density = df.loc['Ninh Binh', 'straw density']
-NinhBinh_straw_production = df.loc['Ninh Binh', 'straw production']
-NinhBinh_average_straw_yield = df.loc['Ninh Binh', 'straw yield']
+result['NinhBinh_straw_density'] = df.loc['Ninh Binh', 'straw density']
+result['NinhBinh_straw_production'] = df.loc['Ninh Binh', 'straw production']
+result['NinhBinh_average_straw_yield'] = df.loc['Ninh Binh', 'straw yield']
 
 
-MongDuong1_straw_density1 = df.loc['Quang Ninh', 'straw density']
+result['MongDuong1_straw_density1'] = df.loc['Quang Ninh', 'straw density']
 
 adjacent_provinces = ['Bac Giang', 'Hai Duong', 'Hai Phong']
 
 size = {province: df.loc[province, 'Total area (ha)']
         for province in adjacent_provinces}
 
-MongDuong1_straw_density2 = fsum([df.loc[province, 'straw density'] * size[province]
-                                  for province in adjacent_provinces]) / sum(size.values())
+result['MongDuong1_straw_density2'] = fsum(
+    [df.loc[province, 'straw density'] * size[province]
+     for province in adjacent_provinces]) / sum(size.values())
 
 all_provinces = adjacent_provinces + ['Quang Ninh']
 
-MongDuong1_straw_production = fsum([df.loc[province, 'straw production']
-                                    for province in all_provinces])
+result['MongDuong1_straw_production'] = fsum(
+    [df.loc[province, 'straw production']
+     for province in all_provinces])
 
 size = {province: df.loc[province, 'Total area (ha)']
         for province in all_provinces}
 
-MongDuong1_average_straw_yield = fsum([df.loc[province, 'straw yield'] * size[province]
-                                       for province in all_provinces]) / sum(size.values())
+result['MongDuong1_average_straw_yield'] = fsum(
+    [df.loc[province, 'straw yield'] * size[province]
+     for province in all_provinces]) / sum(size.values())
 
 
-def line(quantity_name: str) -> str:
-    """Returns a Python expression setting the value of quantity  q
+def my_repr(quantity) -> str:
+    """Return a valid Python representation of a quantity.
 
-    By default  natu  omits the  *  between number and unit in repr(q). Bad !
-    The  # nosec  comment disables bandit warning about using eval
+    Because the  Natu  bug with __repr__
+
+    >>> str(m)
+    '3 t'
+    >>> repr(m)      # Should return '3 * t'
+    '3 t'
+    >>> my_repr(m)
+    '3 * t'
     """
-    valid_repr = repr(eval(quantity_name)).replace(' ', ' * ', 1)  # nosec
-    return quantity_name + ' = ' + valid_repr
+    return repr(quantity).replace(' ', ' * ', 1)
 
 
 print("""
 # This file automatically generated, DO NOT EDIT
 
 from natu.units import t, ha
-""",
-      line("MongDuong1_straw_density1"),
-      line("MongDuong1_straw_density2"),
-      line("MongDuong1_straw_production"),
-      line("MongDuong1_average_straw_yield"),
-      line("NinhBinh_straw_density"),
-      line("NinhBinh_straw_production"),
-      line("NinhBinh_average_straw_yield"),
-      sep='\n'
-      )
+""")
+
+for name, value in result.items():
+    print(name, '=', my_repr(value))
