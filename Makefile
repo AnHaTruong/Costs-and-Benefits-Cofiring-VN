@@ -60,7 +60,8 @@ archive:
 	zip -r $(distName).zip $(distName)
 	rm -rf $(distName)
 
-test: cleaner strawdata.py $(doc_tests) $(script_tests) reg_tests
+test: cleaner strawdata.py
+	make $(doc_tests) $(script_tests) reg_tests -j
 
 reg_tests: $(diffs)
 	@cat $^
