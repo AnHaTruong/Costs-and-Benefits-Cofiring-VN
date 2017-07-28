@@ -11,9 +11,9 @@ import pandas as pd
 from natu.numpy import npv
 
 from init import display_as, safe_divide
-from PowerPlant import PowerPlant, CofiringPlant
-from Farmer import Farmer
-from Transporter import Transporter
+from powerplant import PowerPlant, CofiringPlant
+from farmer import Farmer
+from transporter import Transporter
 
 
 class System:

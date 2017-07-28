@@ -9,8 +9,8 @@
 
 from init import display_as
 
-from Emitter import Emitter, Activity
-from Investment import Investment
+from emitter import Emitter, Activity
+from investment import Investment
 
 
 class Transporter(Investment, Emitter):

@@ -10,8 +10,8 @@
 from init import isclose, v_zeros
 from parameters import plant_parameter_MD1, cofire_MD1, SupplyChain_MD1, price_MD1
 from parameters import farm_parameter, transport_parameter
-from System import System
-from PowerPlant import PowerPlant
+from system import System
+from powerplant import PowerPlant
 
 MongDuong1NullCofiringSystem = System(plant_parameter_MD1,
                                       cofire_MD1._replace(biomass_ratio_energy=v_zeros),

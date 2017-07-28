@@ -26,9 +26,9 @@ from strawdata import NinhBinh_straw_density, NinhBinh_straw_production
 from strawdata import MongDuong1_straw_production
 from strawdata import MongDuong1_average_straw_yield, NinhBinh_average_straw_yield
 
-from Shape import Semi_Annulus, Disk
-from SupplyChain import SupplyChain, SupplyZone
-from System import System
+from shape import Semiannulus, Disk
+from supplychain import SupplyChain, SupplyZone
+from system import System
 
 
 discount_rate = 0.087771
@@ -148,11 +148,11 @@ plant_parameter_MD1 = Plant_Parameter(name='Mong Duong 1',
                                                         'SO2': 0.982, 'NOx': 0.0, 'PM10': 0.996},
                                       coal=coal_6b)
 
-MDSupplyZone1 = SupplyZone(shape=Semi_Annulus(0 * km, 50 * km),
+MDSupplyZone1 = SupplyZone(shape=Semiannulus(0 * km, 50 * km),
                            straw_density=MongDuong1_straw_density1,
                            tortuosity_factor=1.5)
 
-MDSupplyZone2 = SupplyZone(shape=Semi_Annulus(50 * km, 100 * km),
+MDSupplyZone2 = SupplyZone(shape=Semiannulus(50 * km, 100 * km),
                            straw_density=MongDuong1_straw_density2,
                            tortuosity_factor=1.5)
 

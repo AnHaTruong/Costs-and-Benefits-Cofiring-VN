@@ -11,8 +11,8 @@
 from natu.numpy import full, npv
 
 from init import time_horizon, v_after_invest, v_ones, display_as, USD, safe_divide
-from Investment import Investment
-from Emitter import Emitter, Activity
+from investment import Investment
+from emitter import Emitter, Activity
 
 
 class PowerPlant(Investment, Emitter):

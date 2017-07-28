@@ -15,7 +15,7 @@ diffs  = $(patsubst %.py,%.diff,$(tablepyfiles))
 figurespyfiles = $(wildcard figure*.py)
 figures = $(patsubst %.py,%.png,$(figurespyfiles))
 
-doc_tests =  init.doctest Investment.doctest Emitter.doctest PowerPlant.doctest
+doc_tests =  init.doctest investment.doctest emitter.doctest powerplant.doctest
 script_tests = test_zero_cofire.txt
 
 all: $(tables) $(figures)
@@ -43,7 +43,7 @@ classes.dot packages.dot:
 
 .precious: strawdata.py
 
-.PHONY: test reg_tests reg_tests_reset clean cleaner archive
+.PHONY: test lint docstyle pep8 reg_tests reg_tests_reset clean cleaner archive
 
 distName:=CofiringEconomics-$(shell date --iso-8601)
 dirs=$(distName) $(distName)/data $(distName)/data/VNM_adm_shp $(distName)/tables.tocompare $(distName)/natu
@@ -68,6 +68,15 @@ reg_tests: $(diffs)
 
 reg_tests_reset: $(tables)
 	cp $^ tables.tocompare
+
+lint:
+	pylint3 *py
+
+docstyle:
+	pydocstyle *py
+
+pep8:
+	pep8 --exclude=natu
 
 clean:
 	rm -f $(tables)

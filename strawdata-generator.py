@@ -75,7 +75,7 @@ def my_repr(quantity) -> str:
     >>> my_repr(m)
     '3 * t'
     """
-    return repr(quantity).replace(' ', ' * ', 1)
+    return repr(quantity).replace(' t', ' * t', 1).replace('/ha', ' / ha', 1)
 
 
 print("""

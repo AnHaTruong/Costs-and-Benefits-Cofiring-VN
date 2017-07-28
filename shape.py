@@ -84,7 +84,7 @@ class Annulus(Shape):
         return self.R
 
 
-class Semi_Annulus(Annulus):
+class Semiannulus(Annulus):
     def __init__(self, r, R):
         Annulus.__init__(self, r, R)
 
@@ -98,7 +98,7 @@ class Semi_Annulus(Annulus):
         return Annulus.first_moment_of_area(self) / 2
 
     def shrink(self, factor):
-        """Returns a new Semiannulus, with same inner radius and total area scaled by factor"""
+        """Return a new Semiannulus, with same inner radius and total area scaled by factor."""
         assert factor >= 0
         new_R = sqrt(self.r**2 + factor * (self.R**2 - self.r**2))
-        return Semi_Annulus(self.r, new_R)
+        return Semiannulus(self.r, new_R)
