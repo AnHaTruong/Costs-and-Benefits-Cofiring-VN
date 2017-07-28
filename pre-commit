@@ -11,6 +11,8 @@
 git stash -q --keep-index
 make test
 make codestyle
+make docstyle
+make lint
 RESULT=$?
 git stash pop -q
 exit $RESULT

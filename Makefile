@@ -41,6 +41,9 @@ parameters.py: strawdata.py
 classes.dot packages.dot:
 	pyreverse3 *py
 
+.git/hooks/pre-commit: pre-commit
+	cp $^ $@
+
 .precious: strawdata.py
 
 .PHONY: test lint docstyle codestyle reg_tests reg_tests_reset clean cleaner archive
@@ -89,7 +92,7 @@ clean:
 	rm -f $(script_tests)
 	rm -f $(diffs)
 
-cleaner: clean
+cleaner: clean .git/hooks/pre-commit
 	find . -type f -name '*.pyc' -delete
 	rm -f strawdata.py
 	rm -rf __pycache__

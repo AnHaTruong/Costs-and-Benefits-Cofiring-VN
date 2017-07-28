@@ -6,7 +6,7 @@
 # (c) Minh Ha-Duong, An Ha Truong 2016-2017
 # minh.haduong@gmail.com
 # Creative Commons Attribution-ShareAlike 4.0 International
-#
+"""Define PowerPlant and its child class, CofiringPlant."""
 
 from natu.numpy import full, npv
 
@@ -15,28 +15,32 @@ from investment import Investment
 from emitter import Emitter, Activity
 
 
+#pylint: disable=too-many-instance-attributes
 class PowerPlant(Investment, Emitter):
-    """A coal power plant, without co-firing.
-
-    The revenue and coal_cost are defined after the initializer:
-
-    >>> from parameters import plant_parameter_MD1, price_MD1
-    >>> plant = PowerPlant(plant_parameter_MD1)
-    >>> plant.revenue = plant.power_generation * price_MD1.electricity
-    >>> plant.coal_cost = plant.coal_used * price_MD1.coal
-    >>> print(plant.net_present_value(discount_rate=0.08))
-    1.29299e+06 kUSD
-    """
+    """A coal power plant, without co-firing."""
 
     def __init__(self,
                  parameter,
                  derating=v_ones,
                  capital=0 * USD):
+        """Initialize the power plant, compute the amount of coal used.
+
+        The financials (revenue and coal_cost) are not initialized at this time,
+        they must be defined later:
+
+        >>> from parameters import plant_parameter_MD1, price_MD1
+        >>> plant = PowerPlant(plant_parameter_MD1)
+        >>> plant.revenue = plant.power_generation * price_MD1.electricity
+        >>> plant.coal_cost = plant.coal_used * price_MD1.coal
+        >>> print(plant.net_present_value(discount_rate=0.08))
+        1.29299e+06 kUSD
+
+        The capital cost represents the cost of installing cofiring,
+        it is zero in this case.
+        """
         Investment.__init__(self, parameter.name, capital)
         self.parameter = parameter
-
         self.plant_efficiency = parameter.plant_efficiency * derating
-
         self.power_generation = full(time_horizon + 1,
                                      parameter.capacity * parameter.capacity_factor,
                                      dtype=object)
@@ -104,8 +108,18 @@ class PowerPlant(Investment, Emitter):
 
 
 class CofiringPlant(PowerPlant):
+    """A coal-fired power plant which co-fires biomass."""
 
     def __init__(self, plant_parameter, cofire_parameter):
+        """Initialize the cofiring plant.
+
+        1/ Instanciate as a PowerPlant with a lower efficiency and higher capital cost
+        2/ Compute the biomass used and coal saved
+        3/ Overwrite the list of activities from grandparent class Emitter.
+
+        The financials (revenue, coal_cost, biomass_cost) are not initialized at this time,
+        they must be defined later:
+        """
         self.cofire_parameter = cofire_parameter
 
         biomass_ratio_mass = (cofire_parameter.biomass_ratio_energy
