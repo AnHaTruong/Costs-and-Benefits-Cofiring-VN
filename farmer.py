@@ -1,10 +1,11 @@
 # encoding: utf-8
 # Economic of co-firing in two power plants in Vietnam
 #
-# (c) Minh Ha-Duong, An Ha Truong 2016
+# (c) Minh Ha-Duong, An Ha Truong 2016-2017
 # minh.haduong@gmail.com
 # Creative Commons Attribution-ShareAlike 4.0 International
 #
+"""Represent the collective of farmers producing biomass."""
 
 from init import v_after_invest, v_ones, display_as
 from emitter import Emitter, Activity

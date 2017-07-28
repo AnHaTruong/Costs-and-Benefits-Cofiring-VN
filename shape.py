@@ -3,10 +3,12 @@
 #
 # Basic geometric shapes
 #
-# (c) Minh Ha-Duong, An Ha Truong 2016
+# (c) Minh Ha-Duong, An Ha Truong 2016-2017
 # minh.haduong@gmail.com
 # Creative Commons Attribution-ShareAlike 4.0 International
 #
+"""Define geometric shapes: Disk, Annulus (ring), Semiannulus (half a ring)."""
+
 from natu.math import sqrt, pi
 from natu.units import m
 
@@ -14,8 +16,7 @@ from natu.units import m
 class Shape:
     """Abstract base class for a geometric shape.
 
-    Let's keep it simple, since all fits in one file:
-    Child classes should define init, str, area, first_moment_of_area and shrink.
+    Virtual methods: area, first_moment_of_area, shrink.
     """
 
     def area(self):

@@ -7,9 +7,26 @@ pandas
 natu (provided, patched)
 sudo pip3 install xlrd
 sudo pip3 install SALib
+make
 
-natu:
-We patched the file natu/core.py using the provided diff to remove the dependency on reduce()
+Installation:
+If necessary the makefile will install  .git/hook/pre-commit  script when doing "make cleaner".
+
+Usage:
+make
+
+
+Code quality is promoted with these practices:
+0. Self testing with  assert  statements
+1. Unit testing with  doctests  comments in the code
+2. Function testing with ad hoc python scripts
+3. Regression testing with the  Makefile
+4. System testing (TODO): by reproducing previously published results using their cost numbers
+5. Compliance with Python code conventions is enforced with  pycodestyle  (aka pep8) before each commit
+6. Compliance with Python in-code documentation is enforced with  pydocstyle  (aka pep247) before each commit
+7. Static code analysis quality is enforced with  pylint  before each commit
+8. Coherence of computations with respect to physical units is enforced with the  natu  package
+
 
 Known bugs and workarounds:
 
@@ -17,17 +34,5 @@ doctest fails in an spyder3 IPython console with an unexpected argument in __ini
 See https://github.com/spyder-ide/spyder/issues/1855
 Use a simple Python console instead.
 
-install the pre-commit script to always run the tests before commit
-ln pre-commit .git/hooks/
+Patch the file natu/core.py using the provided diff to remove the dependency on reduce()
 
-
-Quality programming goals
-1. Zero code duplicates using codacy 
-2. Zero issues regarding PEP8 compliance using  codacy  (with reasonable number of tests enabled)
-
-Four kinds of testing:
-0. Self testing with  assert  statements
-1. Unit testing with  doctests  comments in the code
-2. Function testing with ad hoc python scripts
-3. Regression testing with the  Makefile
-4. System testing (TODO): by reproducing previously published results using their cost numbers

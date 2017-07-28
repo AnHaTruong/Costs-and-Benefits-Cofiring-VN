@@ -5,7 +5,7 @@
 # minh.haduong@gmail.com
 # Creative Commons Attribution-ShareAlike 4.0 International
 #
-#
+"""Define the class  System  used to instantiate a run of the model."""
 
 import pandas as pd
 from natu.numpy import npv
@@ -19,14 +19,14 @@ from transporter import Transporter
 class System:
     """The system model of the cofiring economic sector.
 
-    Members: plant, cofiring plant, supply_chain, transporter, farmer
-    The cofiring plant pays the farmer for biomass and the transporter for transport
+    Instance variables: plant, cofiring plant, supply_chain, transporter, farmer.
+    The class is designed immutable, don't change the members after initialization.
     """
 
     # pylint: disable=too-many-arguments
     def __init__(self, plant_parameter, cofire_parameter, supply_chain, price,
                  farm_parameter, transport_parameter):
-
+        """Instantiate the system actors, then realize the payments between them."""
         self.plant = PowerPlant(plant_parameter)
         self.cofiring_plant = CofiringPlant(plant_parameter, cofire_parameter)
         self.supply_chain = supply_chain.fit(self.cofiring_plant.biomass_used[1])
