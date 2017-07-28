@@ -16,7 +16,7 @@ from init import time_horizon, v_zeros, v_after_invest, USD, display_as
 
 
 class Investment:
-    """Financial project accounting class: NPV after revenue, operating expenses, amortization and taxes.
+    """Financial project accounting: NPV after revenue, operating expenses, amortization and taxes.
 
     The capital investment is made in period 0,
     revenue, operating expenses and taxes occur in subsequent periods

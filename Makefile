@@ -43,7 +43,7 @@ classes.dot packages.dot:
 
 .precious: strawdata.py
 
-.PHONY: test lint docstyle pep8 reg_tests reg_tests_reset clean cleaner archive
+.PHONY: test lint docstyle codestyle reg_tests reg_tests_reset clean cleaner archive
 
 distName:=CofiringEconomics-$(shell date --iso-8601)
 dirs=$(distName) $(distName)/data $(distName)/data/VNM_adm_shp $(distName)/tables.tocompare $(distName)/natu
@@ -79,8 +79,8 @@ docstyle:
 	# D203: 1 blank line required before class docstring   bug in the tool
 	pydocstyle --ignore=D102,D105,D203 *py
 
-pep8:
-	pep8 --exclude=natu
+codestyle:
+	pycodestyle --exclude=natu
 
 clean:
 	rm -f $(tables)

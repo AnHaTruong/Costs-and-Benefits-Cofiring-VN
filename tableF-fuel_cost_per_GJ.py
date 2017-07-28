@@ -20,6 +20,7 @@ def energy_cost(price, fuel):
     cost = price / fuel.heat_value
     return display_as(cost, 'USD / GJ')
 
+
 print("Cost of heat        MongDuong1          NinhBinh")
 print("Coal               ",                             # At plant gate
       energy_cost(price_MD1.coal, coal_6b), "    ",

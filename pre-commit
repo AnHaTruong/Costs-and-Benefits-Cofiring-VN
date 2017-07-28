@@ -9,8 +9,8 @@
 #       i.e. - $ 'git commit --no-verify'
 
 git stash -q --keep-index
-make cleaner
-make test -j5
+make test
+make codestyle
 RESULT=$?
 git stash pop -q
 exit $RESULT
