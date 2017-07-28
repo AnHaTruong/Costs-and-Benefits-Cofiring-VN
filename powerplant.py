@@ -48,11 +48,10 @@ class PowerPlant(Investment, Emitter):
         self.coal_used = self.gross_heat_input / parameter.coal.heat_value
         display_as(self.coal_used, 't')
 
-        coal_name = parameter.coal.name
         Emitter.__init__(self,
-                         Activity(name=coal_name,
+                         Activity(name=parameter.coal.name,
                                   level=self.coal_used,
-                                  emission_factor=parameter.emission_factor[coal_name]),
+                                  emission_factor=parameter.emission_factor[parameter.coal.name]),
                          emission_control=parameter.emission_control)
 
         self._coal_cost = None
@@ -104,7 +103,6 @@ class PowerPlant(Investment, Emitter):
         return Emitter(activity)
 
 
-# pylint: disable=too-many-instance-attributes
 class CofiringPlant(PowerPlant):
 
     def __init__(self, plant_parameter, cofire_parameter):
@@ -118,16 +116,13 @@ class CofiringPlant(PowerPlant):
                              - cofire_parameter.boiler_efficiency_loss(biomass_ratio_mass))
         boiler_efficiency[0] = plant_parameter.boiler_efficiency[0]
 
-        derating = boiler_efficiency / plant_parameter.boiler_efficiency
-
-        investment_cost = (cofire_parameter.capital_cost
-                           * plant_parameter.capacity
-                           * float(cofire_parameter.biomass_ratio_energy[1]))
-
-        PowerPlant.__init__(self,
-                            plant_parameter,
-                            derating,
-                            investment_cost)
+        PowerPlant.__init__(
+            self,
+            plant_parameter,
+            derating=boiler_efficiency / plant_parameter.boiler_efficiency,
+            capital=(cofire_parameter.capital_cost
+                     * plant_parameter.capacity
+                     * float(cofire_parameter.biomass_ratio_energy[1])))
 
         self.name = plant_parameter.name + ' Cofire'
 
@@ -141,15 +136,16 @@ class CofiringPlant(PowerPlant):
         self.coal_saved = biomass_heat / plant_parameter.coal.heat_value
 
         self.coal_used -= self.coal_saved
-        coal_name = plant_parameter.coal.name
-        biomass_name = cofire_parameter.biomass.name
 
-        self.activities = [Activity(name=coal_name,
-                                    level=self.coal_used,
-                                    emission_factor=plant_parameter.emission_factor[coal_name]),
-                           Activity(name='Straw',
-                                    level=self.biomass_used,
-                                    emission_factor=plant_parameter.emission_factor[biomass_name])]
+        self.activities = [
+            Activity(
+                name=plant_parameter.coal.name,
+                level=self.coal_used,
+                emission_factor=plant_parameter.emission_factor[plant_parameter.coal.name]),
+            Activity(
+                name='Straw',
+                level=self.biomass_used,
+                emission_factor=plant_parameter.emission_factor[cofire_parameter.biomass.name])]
 
         self._biomass_cost = None
 
