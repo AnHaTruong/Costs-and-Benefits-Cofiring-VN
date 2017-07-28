@@ -8,7 +8,7 @@
 #     Creative Commons Attribution-ShareAlike 4.0 International
 #
 #
-""" Print table 1 for Technical parameters of the plants"""
+"""Print table of the plant's technical parameters of the plants."""
 
 from init import isclose
 from parameters import MongDuong1System, NinhBinhSystem

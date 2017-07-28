@@ -16,7 +16,7 @@ from emitter import Emitter, Activity
 
 
 class PowerPlant(Investment, Emitter):
-    """ A coal power plant, without co-firing.
+    """A coal power plant, without co-firing.
 
     The revenue and coal_cost are defined after the initializer:
 

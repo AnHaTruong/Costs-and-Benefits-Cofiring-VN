@@ -8,7 +8,7 @@
 # Creative Commons Attribution-ShareAlike 4.0 International
 #
 #
-"""Input parameters of the model
+"""Define the model's input parameters.
 
 All numeric values should be defined in this module.
 """
@@ -172,7 +172,7 @@ Cofiring_Parameter = namedtuple('Cofiring_Parameter', ['biomass_ratio_energy',
 
 
 def boiler_efficiency_loss_function_T2000(biomass_ratio_mass):
-    """Boiler efficiency loss due to cofiring, according to Tillman 2000"""
+    """Boiler efficiency loss due to cofiring according to Tillman (2000)."""
     return 0.0044 * biomass_ratio_mass**2 + 0.0055 * biomass_ratio_mass
 
 

@@ -73,7 +73,11 @@ lint:
 	pylint3 *py
 
 docstyle:
-	pydocstyle *py
+	# Ignored messages:
+	# D102: Missing docstring in public method             too many positives
+	# D105: Missing docstring in magic method              why does it need a docstring ?
+	# D203: 1 blank line required before class docstring   bug in the tool
+	pydocstyle --ignore=D102,D105,D203 *py
 
 pep8:
 	pep8 --exclude=natu

@@ -8,7 +8,7 @@
 #     Creative Commons Attribution-ShareAlike 4.0 International
 #
 #
-""" Print table for the present value of benefit from co-firing added up"""
+"""Print table for the present value of benefit from co-firing added up."""
 
 from init import time_horizon
 from parameters import discount_rate, external_cost
@@ -21,6 +21,7 @@ print("")
 
 
 def print_benefit_add_up(system):
+    """Print table for the present value of benefit from co-firing added up."""
     print('')
     print(system.cofiring_plant.name)
     print('-------------------')

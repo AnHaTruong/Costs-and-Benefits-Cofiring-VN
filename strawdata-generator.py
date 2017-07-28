@@ -7,9 +7,9 @@
 # minh.haduong@gmail.com
 # Creative Commons Attribution-ShareAlike 4.0 International
 #
-""" Assimilates rice production data into a Python valid format
+"""Assimilate rice production data into a Python valid format.
 
-We assume that within a province, the straw production is uniform
+Assume that within a province, the straw production is uniform.
 """
 
 import pandas as pd
@@ -78,11 +78,10 @@ def my_repr(quantity) -> str:
     return repr(quantity).replace(' t', ' * t', 1).replace('/ha', ' / ha', 1)
 
 
-print("""
-# This file automatically generated, DO NOT EDIT
-
-from natu.units import t, ha
-""")
+print('"""Automatically generated file, DO NOT EDIT."""')
+print()
+print('from natu.units import t, ha')
+print()
 
 for name, value in result.items():
     print(name, '=', my_repr(value))

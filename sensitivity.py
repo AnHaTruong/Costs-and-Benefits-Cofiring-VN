@@ -8,6 +8,7 @@
 # Creative Commons Attribution-ShareAlike 4.0 International
 #
 #
+"""WORK IN PROGRESS."""
 
 from SALib.sample import saltelli
 from SALib.analyze import sobol
@@ -43,6 +44,7 @@ Y = np.empty([param_values.shape[0]])
 
 
 def model(args):
+    """Sandbox to test the API.""" 
     return MongDuong1.net_present_value(args[0], args[1], int(args[2])) / USD
 
 

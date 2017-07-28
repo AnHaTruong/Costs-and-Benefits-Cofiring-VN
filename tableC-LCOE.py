@@ -8,7 +8,7 @@
 #     Creative Commons Attribution-ShareAlike 4.0 International
 #
 #
-"""Compares the LCOE with and without cofiring"""
+"""Compare the levelized cost of electricity (LCOE) with and without cofiring."""
 from natu.numpy import npv
 
 from parameters import MongDuong1System, NinhBinhSystem
@@ -16,6 +16,7 @@ from parameters import discount_rate, tax_rate, depreciation_period
 
 
 def tableC(system):
+    """Compare the LCOE with and without cofiring for one system."""
     def printRowInt(label, a, b):
         print('{:30}{:8.0f}{:20.0f}'.format(label, a, b))
 

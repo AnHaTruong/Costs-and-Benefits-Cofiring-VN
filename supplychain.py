@@ -5,7 +5,7 @@
 # minh.haduong@gmail.com
 # Creative Commons Attribution-ShareAlike 4.0 International
 #
-"""The biomass supply chain, meaning a list of zones produing biomass"""
+"""The biomass supply chain is a list of zones produing biomass."""
 
 from copy import copy
 
@@ -19,6 +19,7 @@ class SupplyZone:
 
     Members: shape, straw_density, tortuosity factor
     """
+
     def __init__(self,
                  shape,
                  straw_density,
@@ -58,7 +59,7 @@ class SupplyZone:
 
 
 class SupplyChain:
-    """A collection of supply zones
+    """A collection of supply zones.
 
     Not vectorized, the supply chain does not vary with time
     """
@@ -74,9 +75,9 @@ class SupplyChain:
         self.average_straw_yield = average_straw_yield
 
     def fit(self, target_quantity):
-        """Returns a copy of the supply chain
-        which is adjusted to produce exactly  target_quantity
-        disgard unused zone(s) and shrink the last one
+        """Return a copy of the supply chain adjusted to produce exactly  target_quantity.
+
+        Disgard unused zone(s) and shrink the last one.
         """
         assert target_quantity <= self.quantity()[1], 'Not enough biomass in supply chain: '
 

@@ -5,7 +5,7 @@
 # minh.haduong@gmail.com
 # Creative Commons Attribution-ShareAlike 4.0 International
 #
-"""Table of extra net income for the straw supply chains"""
+"""Tabulate of extra net income for the farmer and the transporter."""
 
 from init import display_as
 
@@ -13,8 +13,7 @@ from parameters import MongDuong1System, NinhBinhSystem
 
 
 def print_farmer_income(system):
-    """This table prints farmers and transport revenue / expenses.
-    """
+    """Print farmers and transport revenue / expenses tables for one system."""
     print("Balance sheets of biomass supply sector players")
     print(system.plant.name)
 

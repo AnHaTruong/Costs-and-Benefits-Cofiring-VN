@@ -8,7 +8,7 @@
 # Creative Commons Attribution-ShareAlike 4.0 International
 #
 #
-"""Financial project accounting class: investment, revenue, operating_expenses"""
+"""Provide financial project management accounting."""
 
 import pandas as pd
 import natu.numpy as np
@@ -16,12 +16,12 @@ from init import time_horizon, v_zeros, v_after_invest, USD, display_as
 
 
 class Investment:
-    """Financial project accounting class: investment, revenue, operating_expenses
+    """Financial project accounting class: NPV after revenue, operating expenses, amortization and taxes.
 
     The capital investment is made in period 0,
-        There are revenue, operating expenses and taxes in subsequent periods
-        Taxes account for linear amortization of the capital starting period 1
-        No salvage value
+    revenue, operating expenses and taxes occur in subsequent periods
+    Taxes account for linear amortization of the capital starting period 1
+    No salvage value
 
     Virtual class: descendent class should redefine  operating_expense()  to
         return a vector of quantities of size time_horizon+1
@@ -36,8 +36,8 @@ class Investment:
     >>> i.revenue = v_zeros * USD
     >>> i.net_present_value(0, 0, 10)
     -1 kUSD
-
     """
+
     def __init__(self, name=None, capital=0 * USD):
         self.capital = display_as(capital, 'kUSD')
         self.name = name
@@ -54,7 +54,7 @@ class Investment:
         self._revenue = value
 
     def investment(self):
-        """Multi year investment coded but not tested"""
+        """Multi year investment coded but not tested."""
         v_invest = 1 - v_after_invest
         return display_as(v_invest * self.capital / sum(v_invest), 'kUSD')
 

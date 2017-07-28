@@ -5,7 +5,7 @@
 # minh.haduong@gmail.com
 # Creative Commons Attribution-ShareAlike 4.0 International
 #
-"""Represents the collective of transporters"""
+"""Represent the collective of transporters."""
 
 from init import display_as
 

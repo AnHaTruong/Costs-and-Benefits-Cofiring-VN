@@ -8,9 +8,9 @@
 #     Creative Commons Attribution-ShareAlike 4.0 International
 #
 #
-""" Print table D for job created from co-firing in job.py
+"""Print table D for job created from co-firing in job.py.
 
-TODO: renam the cells variables
+TODO: rename the cells variables.
 """
 
 from init import FTE, display_as
@@ -25,6 +25,7 @@ cols2 = '{:25}{:12.1f}{:12.1f}'
 
 
 def print_job(system):
+    """Print the number of full time equivalent (FTE) jobs created by cofiring."""
     print('Benefit from job creation:', system.plant.name, '\n')
 
     row7 = system.farmer.labor()[1]
@@ -58,6 +59,7 @@ def print_job(system):
 
 
 def print_job_lost(system):
+    """Print the number of full time equivalent (FTE) jobs destroyed by cofiring."""
     print('Mining job lost from co-firing at', system.plant.name, '\n')
     row = system.coal_work_lost(mining_parameter['productivity_underground'])[1]
     display_as(row, 'FTE')

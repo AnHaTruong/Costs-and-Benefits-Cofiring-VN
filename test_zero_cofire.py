@@ -5,7 +5,7 @@
 # minh.haduong@gmail.com
 # Creative Commons Attribution-ShareAlike 4.0 International
 #
-"""Testing the boundary case: biomass ratio 0%"""
+"""Test the boundary case: cofiring biomass ratio 0% is same as baseline plant."""
 
 from init import isclose, v_zeros
 from parameters import plant_parameter_MD1, cofire_MD1, SupplyChain_MD1, price_MD1

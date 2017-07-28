@@ -8,7 +8,7 @@
 #     Creative Commons Attribution-ShareAlike 4.0 International
 #
 #
-""" Details the net present value calculations """
+"""Print details of the net present value calculations."""
 
 from init import time_horizon
 from parameters import MongDuong1System, NinhBinhSystem

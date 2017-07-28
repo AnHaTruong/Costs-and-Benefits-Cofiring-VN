@@ -8,8 +8,7 @@
 #     Creative Commons Attribution-ShareAlike 4.0 International
 #
 #
-""" Plots the air pollutants emissions and CO2 emissions figure
-"""
+"""Plot the air pollutants emissions and CO2 emissions figure."""
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -20,7 +19,7 @@ from natu.units import t
 
 # pylint: disable=too-many-locals
 def plot_emissions(system, axes):
-    """Plots the air pollutants emissions and CO2 emissions figure for one site"""
+    """Plot the air pollutants emissions and CO2 emissions figure for one site."""
     kt = 1000 * t
     Mt = 1000000 * t
     cofiringplant = system.cofiring_plant

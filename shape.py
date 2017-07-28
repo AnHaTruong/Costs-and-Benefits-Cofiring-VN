@@ -15,7 +15,7 @@ class Shape:
     """Abstract base class for a geometric shape.
 
     Let's keep it simple, since all fits in one file:
-    Child classes should define init, str, area, first_moment_of_area and shrink
+    Child classes should define init, str, area, first_moment_of_area and shrink.
     """
 
     def area(self):
@@ -29,7 +29,7 @@ class Shape:
 
 
 class Disk(Shape):
-    """A disk area"""
+    """A disk is the area inside a circle."""
 
     def __init__(self, radius):
         assert radius >= 0 * m
@@ -42,11 +42,11 @@ class Disk(Shape):
         return pi * self.radius**2
 
     def first_moment_of_area(self):
-        """With respect to the center"""
+        """Return first momement with respect to the center."""
         return 2 * pi * self.radius**3 / 3
 
     def shrink(self, factor):
-        """Returns a new homotetic disk, changing the area by factor."""
+        """Return a new homotetic disk, changing the area by factor."""
         assert factor >= 0
         return Disk(self.radius * sqrt(factor))
 
@@ -55,7 +55,8 @@ class Disk(Shape):
 
 
 class Annulus(Shape):
-    """An annulus is the area between two concentric disks"""
+    """An annulus is the area between two concentric disks, a ring in common language."""
+
     def __init__(self, r, R):
         assert R >= r >= 0 * m
         self.r = r
@@ -71,11 +72,11 @@ class Annulus(Shape):
         return pi * (self.R**2 - self.r**2)
 
     def first_moment_of_area(self):
-        """With respect to the centroid"""
+        """Return first moment with respect to the centroid."""
         return 2 * pi * (self.R**3 - self.r**3) / 3
 
     def shrink(self, factor):
-        """Returns a new Annulus, with same inner radius and total area scaled by factor"""
+        """Return a new Annulus, with same inner radius and total area scaled by factor."""
         assert factor >= 0
         new_R = sqrt(self.r**2 + factor * (self.R**2 - self.r**2))
         return Annulus(self.r, new_R)
@@ -85,6 +86,8 @@ class Annulus(Shape):
 
 
 class Semiannulus(Annulus):
+    """A semiannulus is half an annulus."""
+
     def __init__(self, r, R):
         Annulus.__init__(self, r, R)
 

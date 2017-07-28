@@ -6,7 +6,7 @@
 # (c) Minh Ha-Duong, An Ha Truong 2016-2017
 # minh.haduong@gmail.com
 # Creative Commons Attribution-ShareAlike 4.0 International
-""" Common init file for all modules in the directory
+"""Common init file for all modules in the directory.
 
 This file should be imported before any "import natu ..."
 otherwise use_quantities does not work
@@ -51,19 +51,20 @@ v_after_invest[0] = 0
 
 
 def display_as(v, unit):
-    """Sets the display_unit of v or of v's items to 'unit'.
-       Returns v
-       Don't set display_unit directly in the code:
-           it would break when use_quantities = False
+    """Set the display_unit of v or of v's items to 'unit' and return v.
+
+    This function is more robust than using  qty.display_unit =  in the code directly,
+    because when  use_quantities = False  it is transparent instead of producing an error
 
     >>> display_as(2 * hr, 's')
     7200 s
+
+    Polymorphic: v can be a quantity or a vector of quantities
 
     >>> from natu.units import y
     >>> v = [48 * hr, 1 * y]
     >>> v
     [48 hr, 1 y]
-
     >>> display_as(v, 'd')
     [2 d, 365.25 d]
     """
@@ -77,7 +78,7 @@ def display_as(v, unit):
 
 
 def isclose(a, b, rel_tol=1e-09, abs_tol=0.0):
-    """Compare two floats for almost-equality according to PEP 485
+    """Compare two floats for almost-equality according to PEP 485.
 
     >>> .1 + .1 + .1 == .3
     False
@@ -89,10 +90,11 @@ def isclose(a, b, rel_tol=1e-09, abs_tol=0.0):
 
 
 def safe_divide(cost, mass):
+    """Divide two vectors elementwise, producing NaN instead of error when the divisor is zero."""
     result = cost.copy()
     for i, m in enumerate(mass):
-        if m == 0 * t:
-            result[i] = display_as(float('NaN') * USD / t, 'USD/t')
-        else:
+        if m.__nonzero__():
             result[i] /= m
+        else:
+            result[i] = display_as(float('NaN') * USD / t, 'USD/t')
     return display_as(result, 'USD/t')

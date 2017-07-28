@@ -7,13 +7,14 @@
 #     Creative Commons Attribution-ShareAlike 4.0 International
 #
 #
-""" Quantity and value of coal saved by co-firing."""
+"""Print quantity and value of coal saved by co-firing."""
 
 from init import display_as
 from parameters import MongDuong1System, NinhBinhSystem, coal_import_price
 
 
 def print_coal_saved(system):
+    """Print quantity and value of coal saved by cofiring."""
     col1 = system.coal_saved[1]
     col2 = display_as(col1 * coal_import_price, 'kUSD')
 

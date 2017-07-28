@@ -8,8 +8,7 @@
 #     Creative Commons Attribution-ShareAlike 4.0 International
 #
 #
-""" Draw Figure 3 to visualize table 12 added up benefits for different group
-"""
+"""Draw Figure 3 to visualize table 12 added up benefits for different group."""
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -20,6 +19,7 @@ from parameters import external_cost
 
 
 def benefit_array(system):
+    """Return the data to be plot."""
     MUSD = 10**6 * USD
     job_benefit = system.wages_npv(discount_rate) / MUSD
     plant_benefit = (system.cofiring_plant.net_present_value(discount_rate,

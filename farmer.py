@@ -39,13 +39,13 @@ class Farmer(Investment, Emitter):
         Investment.__init__(self)
 
     def labor(self):
-        """Work time needed to collect straw for co-firing per year"""
+        """Work time needed to collect straw for co-firing per year."""
         t_per_hr = self.parameter['winder_haul'] / self.parameter['work_hour_day']
         time = self.quantity / t_per_hr
         return display_as(time, 'hr')
 
     def labor_cost(self):
-        """Benefit from job creation from biomass collection"""
+        """Benefit from job creation from biomass collection."""
         amount = self.labor() * self.parameter['wage_bm_collect']
         return display_as(amount, 'kUSD')
 
