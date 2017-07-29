@@ -20,7 +20,7 @@ script_tests = test_zero_cofire.txt
 
 all: $(tables) $(figures)
 
-%.py: %-generator.py
+%.py: %_generator.py
 	$(PYTHON) $< > $@
 
 parameters.py: strawdata.py
