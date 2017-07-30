@@ -12,7 +12,7 @@
 
 import pandas as pd
 import natu.numpy as np
-from init import time_horizon, v_zeros, v_after_invest, USD, display_as
+from init import TIMEHORIZON, ZEROS, AFTER_INVEST, USD, display_as
 
 
 class Investment:
@@ -24,16 +24,16 @@ class Investment:
     No salvage value
 
     Virtual class: descendent class should redefine  operating_expense()  to
-        return a vector of quantities of size time_horizon+1
+        return a vector of quantities of size TIMEHORIZON+1
         which has the display unit set to kUSD
 
     The  revenue  must be set after the investment is initialized
         This is so because the code that set the revenue can also
         set it as an expense to another object.
 
-    >>> from init import v_zeros
+    >>> from init import ZEROS
     >>> i = Investment("test", 1000*USD)
-    >>> i.revenue = v_zeros * USD
+    >>> i.revenue = ZEROS * USD
     >>> i.net_present_value(0, 0, 10)
     -1 kUSD
     """
@@ -55,17 +55,17 @@ class Investment:
 
     def investment(self):
         """Multi year investment coded but not tested."""
-        v_invest = 1 - v_after_invest
+        v_invest = 1 - AFTER_INVEST
         return display_as(v_invest * self.capital / sum(v_invest), 'kUSD')
 
     @staticmethod
     def operating_expenses():
-        return display_as(v_zeros * USD, 'kUSD')
+        return display_as(ZEROS * USD, 'kUSD')
 
     def amortization(self, depreciation_period):
         assert isinstance(depreciation_period, int), "Depreciation period not an integer"
-        assert 0 < depreciation_period < time_horizon - 1, "Depreciation not in {1..timehorizon-2}"
-        v_cost = v_zeros.copy() * USD
+        assert 0 < depreciation_period < TIMEHORIZON - 1, "Depreciation not in {1..timehorizon-2}"
+        v_cost = ZEROS.copy() * USD
         for year in range(1, depreciation_period + 1):
             v_cost[year] = self.capital / float(depreciation_period)
         return display_as(v_cost, 'kUSD')

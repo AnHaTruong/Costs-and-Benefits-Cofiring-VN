@@ -17,9 +17,8 @@ from collections import namedtuple
 
 import pandas as pd
 
-from init import USD, VND, time_horizon, v_after_invest
+from init import USD, VND, AFTER_INVEST, ONES
 from natu.units import MJ, kg, t, d, hr, km, MW, ha, kW, y, kWh, MWh, g
-from natu.numpy import full
 
 from strawdata import MongDuong1_straw_density1, MongDuong1_straw_density2
 from strawdata import NinhBinh_straw_density, NinhBinh_straw_production
@@ -121,32 +120,32 @@ transport_parameter = {'barge_fuel_consumption': 8 * g / t / km,  # Van Dingenen
                        'emission_factor': emission_factor}
 
 
-Plant_Parameter = namedtuple("Plant_Parameter", ['name',
-                                                 'capacity',
-                                                 'capacity_factor',
-                                                 'commissioning',
-                                                 'boiler_technology',
-                                                 'boiler_efficiency',
-                                                 'plant_efficiency',
-                                                 'fix_om_coal',
-                                                 'variable_om_coal',
-                                                 'emission_factor',
-                                                 'emission_control',
-                                                 'coal'])
+PlantParameter = namedtuple("PlantParameter", ['name',
+                                               'capacity',
+                                               'capacity_factor',
+                                               'commissioning',
+                                               'boiler_technology',
+                                               'boiler_efficiency',
+                                               'plant_efficiency',
+                                               'fix_om_coal',
+                                               'variable_om_coal',
+                                               'emission_factor',
+                                               'emission_control',
+                                               'coal'])
 
-plant_parameter_MD1 = Plant_Parameter(name='Mong Duong 1',
-                                      capacity=1080 * MW * y,
-                                      capacity_factor=0.60,
-                                      commissioning=2015,
-                                      boiler_technology='CFB',
-                                      boiler_efficiency=full(time_horizon + 1, 87.03 / 100),
-                                      plant_efficiency=full(time_horizon + 1, 38.84 / 100),
-                                      fix_om_coal=29.31 * USD / kW / y,
-                                      variable_om_coal=0.0048 * USD / kWh,
-                                      emission_factor=emission_factor,
-                                      emission_control={'CO2': 0.0,
-                                                        'SO2': 0.982, 'NOx': 0.0, 'PM10': 0.996},
-                                      coal=coal_6b)
+plant_parameter_MD1 = PlantParameter(name='Mong Duong 1',
+                                     capacity=1080 * MW * y,
+                                     capacity_factor=0.60,
+                                     commissioning=2015,
+                                     boiler_technology='CFB',
+                                     boiler_efficiency=ONES * 87.03 / 100,
+                                     plant_efficiency=ONES * 38.84 / 100,
+                                     fix_om_coal=29.31 * USD / kW / y,
+                                     variable_om_coal=0.0048 * USD / kWh,
+                                     emission_factor=emission_factor,
+                                     emission_control={'CO2': 0.0,
+                                                       'SO2': 0.982, 'NOx': 0.0, 'PM10': 0.996},
+                                     coal=coal_6b)
 
 MDSupplyZone1 = SupplyZone(shape=Semiannulus(0 * km, 50 * km),
                            straw_density=MongDuong1_straw_density1,
@@ -161,14 +160,14 @@ SupplyChain_MD1 = SupplyChain(zones=[MDSupplyZone1, MDSupplyZone2],
                               straw_burn_rate=0.9,
                               average_straw_yield=MongDuong1_average_straw_yield)
 
-Cofiring_Parameter = namedtuple('Cofiring_Parameter', ['biomass_ratio_energy',
-                                                       'capital_cost',
-                                                       'fix_om_cost',
-                                                       'variable_om_cost',
-                                                       'biomass',
-                                                       'boiler_efficiency_loss',
-                                                       'OM_hour_MWh',
-                                                       'wage_operation_maintenance'])
+CofiringParameter = namedtuple('CofiringParameter', ['biomass_ratio_energy',
+                                                     'capital_cost',
+                                                     'fix_om_cost',
+                                                     'variable_om_cost',
+                                                     'biomass',
+                                                     'boiler_efficiency_loss',
+                                                     'OM_hour_MWh',
+                                                     'wage_operation_maintenance'])
 
 
 def boiler_efficiency_loss_function_T2000(biomass_ratio_mass):
@@ -176,14 +175,14 @@ def boiler_efficiency_loss_function_T2000(biomass_ratio_mass):
     return 0.0044 * biomass_ratio_mass**2 + 0.0055 * biomass_ratio_mass
 
 
-cofire_MD1 = Cofiring_Parameter(biomass_ratio_energy=v_after_invest * 0.05,
-                                capital_cost=50 * USD / kW / y,
-                                fix_om_cost=32.24 * USD / kW / y,
-                                variable_om_cost=0.006 * USD / kWh,
-                                biomass=straw,
-                                boiler_efficiency_loss=boiler_efficiency_loss_function_T2000,
-                                OM_hour_MWh=0.12 * hr / MWh,  # working hour for OM per MWh
-                                wage_operation_maintenance=1.67 * USD / hr)
+cofire_MD1 = CofiringParameter(biomass_ratio_energy=AFTER_INVEST * 0.05,
+                               capital_cost=50 * USD / kW / y,
+                               fix_om_cost=32.24 * USD / kW / y,
+                               variable_om_cost=0.006 * USD / kWh,
+                               biomass=straw,
+                               boiler_efficiency_loss=boiler_efficiency_loss_function_T2000,
+                               OM_hour_MWh=0.12 * hr / MWh,  # working hour for OM per MWh
+                               wage_operation_maintenance=1.67 * USD / hr)
 
 Price = namedtuple('Price', 'biomass, transport, coal, electricity')
 
@@ -196,19 +195,19 @@ MongDuong1System = System(plant_parameter_MD1, cofire_MD1, SupplyChain_MD1, pric
                           farm_parameter, transport_parameter)
 
 
-plant_parameter_NB = Plant_Parameter(name='Ninh Binh',
-                                     capacity=100 * MW * y,
-                                     capacity_factor=0.64,
-                                     commissioning=1974,
-                                     boiler_technology='PC',
-                                     boiler_efficiency=full(time_horizon + 1, 81.61 / 100),
-                                     plant_efficiency=full(time_horizon + 1, 21.77 / 100),
-                                     fix_om_coal=29.31 * USD / kW / y,
-                                     variable_om_coal=0.0048 * USD / kWh,
-                                     emission_factor=emission_factor,
-                                     emission_control={'CO2': 0.0,
-                                                       'SO2': 0.0, 'NOx': 0.0, 'PM10': 0.992},
-                                     coal=coal_4b)
+plant_parameter_NB = PlantParameter(name='Ninh Binh',
+                                    capacity=100 * MW * y,
+                                    capacity_factor=0.64,
+                                    commissioning=1974,
+                                    boiler_technology='PC',
+                                    boiler_efficiency=ONES * 81.61 / 100,
+                                    plant_efficiency=ONES * 21.77 / 100,
+                                    fix_om_coal=29.31 * USD / kW / y,
+                                    variable_om_coal=0.0048 * USD / kWh,
+                                    emission_factor=emission_factor,
+                                    emission_control={'CO2': 0.0,
+                                                      'SO2': 0.0, 'NOx': 0.0, 'PM10': 0.992},
+                                    coal=coal_4b)
 
 SupplyZone_NB = SupplyZone(shape=Disk(50 * km),
                            straw_density=NinhBinh_straw_density,

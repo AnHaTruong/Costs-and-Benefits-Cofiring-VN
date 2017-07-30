@@ -10,12 +10,12 @@
 #
 """Print table for the present value of benefit from co-firing added up."""
 
-from init import time_horizon
+from init import TIMEHORIZON
 from parameters import discount_rate, external_cost
 from parameters import MongDuong1System, NinhBinhSystem
 
 
-print("Total benefit over", time_horizon, "years")
+print("Total benefit over", TIMEHORIZON, "years")
 print("Discounted at", discount_rate)
 print("")
 

@@ -7,14 +7,14 @@
 #
 """Test the boundary case: cofiring biomass ratio 0% is same as baseline plant."""
 
-from init import isclose, v_zeros
+from init import isclose, ZEROS
 from parameters import plant_parameter_MD1, cofire_MD1, SupplyChain_MD1, price_MD1
 from parameters import farm_parameter, transport_parameter
 from system import System
 from powerplant import PowerPlant
 
 MongDuong1NullCofiringSystem = System(plant_parameter_MD1,
-                                      cofire_MD1._replace(biomass_ratio_energy=v_zeros),
+                                      cofire_MD1._replace(biomass_ratio_energy=ZEROS),
                                       SupplyChain_MD1,
                                       price_MD1,
                                       farm_parameter,

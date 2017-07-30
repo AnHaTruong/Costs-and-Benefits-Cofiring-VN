@@ -7,7 +7,7 @@
 #
 """Represent the collective of farmers producing biomass."""
 
-from init import v_after_invest, v_ones, display_as
+from init import AFTER_INVEST, ONES, display_as
 from emitter import Emitter, Activity
 from investment import Investment
 
@@ -25,14 +25,14 @@ class Farmer(Investment, Emitter):
 
         field_burning_before = Activity(
             name='Straw',
-            level=v_ones * supply_chain.burnable(),
+            level=ONES * supply_chain.burnable(),
             emission_factor=self.parameter['emission_factor']['straw'])
 
         self.emissions_exante = Emitter(field_burning_before).emissions()
 
         field_burning = Activity(
             name='Straw',
-            level=field_burning_before.level - v_after_invest * self.quantity,
+            level=field_burning_before.level - AFTER_INVEST * self.quantity,
             emission_factor=self.parameter['emission_factor']['straw'])
 
         Emitter.__init__(self, field_burning)

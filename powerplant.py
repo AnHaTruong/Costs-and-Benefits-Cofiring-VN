@@ -8,9 +8,9 @@
 # Creative Commons Attribution-ShareAlike 4.0 International
 """Define PowerPlant and its child class, CofiringPlant."""
 
-from natu.numpy import full, npv
+from natu.numpy import npv
 
-from init import time_horizon, v_after_invest, v_ones, display_as, USD, safe_divide
+from init import ONES, AFTER_INVEST, USD, display_as, safe_divide
 from investment import Investment
 from emitter import Emitter, Activity
 
@@ -21,7 +21,7 @@ class PowerPlant(Investment, Emitter):
 
     def __init__(self,
                  parameter,
-                 derating=v_ones,
+                 derating=ONES,
                  capital=0 * USD):
         """Initialize the power plant, compute the amount of coal used.
 
@@ -41,9 +41,7 @@ class PowerPlant(Investment, Emitter):
         Investment.__init__(self, parameter.name, capital)
         self.parameter = parameter
         self.plant_efficiency = parameter.plant_efficiency * derating
-        self.power_generation = full(time_horizon + 1,
-                                     parameter.capacity * parameter.capacity_factor,
-                                     dtype=object)
+        self.power_generation = ONES * parameter.capacity * parameter.capacity_factor
         display_as(self.power_generation, 'GWh')
 
         self.gross_heat_input = self.power_generation / self.plant_efficiency
@@ -81,9 +79,7 @@ class PowerPlant(Investment, Emitter):
         return display_as(self.coal_om_cost(), 'kUSD')
 
     def coal_om_cost(self):
-        fixed_om_coal = full(time_horizon + 1,
-                             self.parameter.fix_om_coal * self.parameter.capacity,
-                             dtype=object)
+        fixed_om_coal = ONES * self.parameter.fix_om_coal * self.parameter.capacity
         variable_om_coal = self.power_generation * self.parameter.variable_om_coal
         cost = fixed_om_coal + variable_om_coal
         return display_as(cost, 'kUSD')
@@ -140,7 +136,7 @@ class CofiringPlant(PowerPlant):
 
         self.name = plant_parameter.name + ' Cofire'
 
-        biomass_heat = (v_after_invest
+        biomass_heat = (AFTER_INVEST
                         * self.gross_heat_input
                         * self.cofire_parameter.biomass_ratio_energy)
 
@@ -190,7 +186,7 @@ class CofiringPlant(PowerPlant):
 
     def coal_om_cost(self):  # DISCUSS THIS
         # Fixed costs are proportional to capacity
-        fixed_om_coal = (v_after_invest
+        fixed_om_coal = (AFTER_INVEST
                          * self.parameter.fix_om_coal
                          * self.parameter.capacity
                          * (1 - self.cofire_parameter.biomass_ratio_energy))
@@ -216,10 +212,10 @@ class CofiringPlant(PowerPlant):
         return display_as(amount, 'kUSD')
 
     def biomass_om_cost(self):
-        fixed_om_bm = (v_after_invest
+        fixed_om_bm = (AFTER_INVEST
                        * self.cofire_parameter.fix_om_cost
                        * self.parameter.capacity * self.cofire_parameter.biomass_ratio_energy)
-        var_om_bm = (v_after_invest
+        var_om_bm = (AFTER_INVEST
                      * self.power_generation
                      * self.cofire_parameter.variable_om_cost
                      * self.cofire_parameter.biomass_ratio_energy)

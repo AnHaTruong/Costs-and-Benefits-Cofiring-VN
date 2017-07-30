@@ -9,7 +9,7 @@
 
 from copy import copy
 
-from init import isclose, v_after_invest, v_zeros, display_as
+from init import isclose, AFTER_INVEST, ZEROS, display_as
 
 from natu.units import t, km, ha
 
@@ -42,11 +42,11 @@ class SupplyZone:
         return display_as(a, 'ha')
 
     def quantity(self):
-        mass = v_after_invest * self.shape.area() * self.straw_density
+        mass = AFTER_INVEST * self.shape.area() * self.straw_density
         return display_as(mass, 't')
 
     def transport_tkm(self):
-        activity = (v_after_invest
+        activity = (AFTER_INVEST
                     * self.straw_density
                     * self.shape.first_moment_of_area()
                     * self.tortuosity_factor
@@ -113,13 +113,13 @@ class SupplyChain:
         return display_as(a, 'km2')
 
     def quantity(self):
-        mass = v_zeros * t
+        mass = ZEROS * t
         for zone in self.zones:
             mass += zone.quantity()
         return display_as(mass, 't')
 
     def transport_tkm(self):
-        activity = v_zeros * t * km
+        activity = ZEROS * t * km
         for zone in self.zones:
             activity += zone.transport_tkm()
         return display_as(activity, 't * km')

@@ -42,12 +42,12 @@ else:
 FTE = 1560 * hr
 units.FTE = FTE
 
-time_horizon = 20   # years
+TIMEHORIZON = 20   # years
 
-v_zeros = np.zeros(time_horizon + 1)
-v_ones = np.ones(time_horizon + 1)
-v_after_invest = np.ones(time_horizon + 1)
-v_after_invest[0] = 0
+ZEROS = np.zeros(TIMEHORIZON + 1)
+ONES = np.ones(TIMEHORIZON + 1)
+AFTER_INVEST = np.ones(TIMEHORIZON + 1)
+AFTER_INVEST[0] = 0
 
 
 def display_as(v, unit):

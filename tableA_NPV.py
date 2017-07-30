@@ -10,13 +10,13 @@
 #
 """Print details of the net present value calculations."""
 
-from init import time_horizon
+from init import TIMEHORIZON
 from parameters import MongDuong1System, NinhBinhSystem
 from parameters import price_MD1, price_NB, discount_rate, depreciation_period, tax_rate
 
 print('')
 
-print('Time Horizon', time_horizon, 'years')
+print('Time Horizon', TIMEHORIZON, 'years')
 print('Discount Rate', discount_rate)
 print('Depreciation', depreciation_period, 'years')
 

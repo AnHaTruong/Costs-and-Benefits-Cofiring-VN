@@ -10,14 +10,18 @@
 #
 """WORK IN PROGRESS."""
 
+import numpy as np
+
 from SALib.sample import saltelli
 from SALib.analyze import sobol
 
-from natu import config
-config.use_quantities = False
+#from natu import config
+# module configuration must be done BEFORE using it in the imported module
+#pylint: disable=wrong-import-position
+#config.use_quantities = False
 
-from init import time_horizon, USD, np    # pylint: disable=wrong-import-position
-from parameters import MongDuong1         # pylint: disable=wrong-import-position
+from init import TIMEHORIZON, USD
+from parameters import MongDuong1
 
 # Only run interactively, for now
 try:
@@ -35,7 +39,7 @@ problem = {'num_vars': 3,
            'names': ['discount_rate', 'tax_rate', 'depreciation_period'],
            'bounds': [[0, 0.15],
                       [0, 0.25],
-                      [1, time_horizon - 1]]
+                      [1, TIMEHORIZON - 1]]
            }
 
 param_values = saltelli.sample(problem, 100, calc_second_order=True)
