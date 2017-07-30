@@ -78,12 +78,17 @@ def display_as(v, unit):
 
 
 def isclose(a, b, rel_tol=1e-09, abs_tol=0.0):
-    """Compare two floats for almost-equality according to PEP 485.
+    """Compare two numbers or quantities for almost-equality according to PEP 485.
 
     >>> .1 + .1 + .1 == .3
     False
 
     >>> isclose(.1 + .1 + .1, .3)
+    True
+
+    This version works with natu quantities
+    The versions in standard library math or even in natu.math package do not (bug in natu ?)
+    >>> isclose(0 * VND, 0 * USD)
     True
     """
     return abs(a - b) <= max(rel_tol * max(abs(a), abs(b)), abs_tol)
