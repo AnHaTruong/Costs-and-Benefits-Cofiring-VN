@@ -85,11 +85,11 @@ class Emitter:
         if self.emission_control:
             for pollutant, fraction in self.emission_control.items():
                 control[pollutant] = 1 - fraction
-        df = pd.DataFrame({
+        result = pd.DataFrame({
             activity.name: {
                 pollutant:
                     activity.level * activity.emission_factor[pollutant] * control[pollutant]
                 for pollutant in pollutants}
             for activity in self.activities})
-        df['Total'] = df.sum(axis=1)
-        return df
+        result['Total'] = result.sum(axis=1)
+        return result

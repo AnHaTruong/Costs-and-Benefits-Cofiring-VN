@@ -50,8 +50,8 @@ AFTER_INVEST = np.ones(TIMEHORIZON + 1)
 AFTER_INVEST[0] = 0
 
 
-def display_as(v, unit):
-    """Set the display_unit of v or of v's items to 'unit' and return v.
+def display_as(qty, unit):
+    """Set the display_unit of qty or of qty's items to 'unit' and return qty.
 
     This function is more robust than using  qty.display_unit =  in the code directly,
     because when  use_quantities = False  it is transparent instead of producing an error
@@ -59,7 +59,7 @@ def display_as(v, unit):
     >>> display_as(2 * hr, 's')
     7200 s
 
-    Polymorphic: v can be a quantity or a vector of quantities
+    Polymorphic: qty can be a quantity or a vector of quantities
 
     >>> from natu.units import y
     >>> v = [48 * hr, 1 * y]
@@ -69,15 +69,15 @@ def display_as(v, unit):
     [2 d, 365.25 d]
     """
     if config.use_quantities:
-        if hasattr(v, '__iter__'):
-            for element in v:
+        if hasattr(qty, '__iter__'):
+            for element in qty:
                 element.display_unit = unit
         else:
-            v.display_unit = unit
-    return v
+            qty.display_unit = unit
+    return qty
 
 
-def isclose(a, b, rel_tol=1e-09, abs_tol=0.0):
+def isclose(qty_a, qty_b, rel_tol=1e-09, abs_tol=0.0):
     """Compare two numbers or quantities for almost-equality according to PEP 485.
 
     >>> .1 + .1 + .1 == .3
@@ -91,15 +91,15 @@ def isclose(a, b, rel_tol=1e-09, abs_tol=0.0):
     >>> isclose(0 * VND, 0 * USD)
     True
     """
-    return abs(a - b) <= max(rel_tol * max(abs(a), abs(b)), abs_tol)
+    return abs(qty_a - qty_b) <= max(rel_tol * max(abs(qty_a), abs(qty_b)), abs_tol)
 
 
-def safe_divide(cost, mass):
+def safe_divide(costs, masses):
     """Divide two vectors elementwise, producing NaN instead of error when the divisor is zero."""
-    result = cost.copy()
-    for i, m in enumerate(mass):
-        if m.__nonzero__():
-            result[i] /= m
+    result = costs.copy()
+    for i, mass in enumerate(masses):
+        if mass.__nonzero__():
+            result[i] /= mass
         else:
             result[i] = display_as(float('NaN') * USD / t, 'USD/t')
     return display_as(result, 'USD/t')

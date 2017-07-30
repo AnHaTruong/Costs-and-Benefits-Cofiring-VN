@@ -106,25 +106,23 @@ class Investment:
         pass
 
     def table(self, tax_rate=0.25, depreciation_period=10):
-        t = np.array([self.revenue,
-                      self.investment(),
-                      self.amortization(depreciation_period),
-                      self.operating_expenses(),
-                      self.earning_before_tax(depreciation_period),
-                      self.income_tax(tax_rate, depreciation_period),
-                      self.cash_out(tax_rate, depreciation_period),
-                      self.net_cash_flow(tax_rate, depreciation_period)
-                      ]
-                     )
-        return t
+        result = np.array([self.revenue,
+                          self.investment(),
+                          self.amortization(depreciation_period),
+                          self.operating_expenses(),
+                          self.earning_before_tax(depreciation_period),
+                          self.income_tax(tax_rate, depreciation_period),
+                          self.cash_out(tax_rate, depreciation_period),
+                          self.net_cash_flow(tax_rate, depreciation_period)])
+        return result
 
     def pretty_table(self, discount_rate, tax_rate, depreciation_period):
         print(self.name)
         print("NPV  =", self.net_present_value(discount_rate,
                                                tax_rate,
                                                depreciation_period))
-        t = self.table(tax_rate, depreciation_period)
-        t = np.transpose(t)
+        table = self.table(tax_rate, depreciation_period)
+        table = np.transpose(table)
         labels = ["Revenue",
                   "Investment",
                   "Amortization",
@@ -134,8 +132,8 @@ class Investment:
                   "Cash out",
                   "Net cashflow"
                   ]
-        t = pd.DataFrame(t, columns=labels)
+        result = pd.DataFrame(table, columns=labels)
         pd.set_option('display.max_columns', 10)
         pd.set_option('display.width', 150)
-        print(t)
-        return t
+        print(result)
+        return result
