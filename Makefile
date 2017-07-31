@@ -64,8 +64,9 @@ archive:
 	rm -rf $(distName)
 
 test: cleaner strawdata.py
-	make $(doc_tests) $(script_tests) reg_tests -j
-
+	py.test-3 --doctest-modules --ignore=natu/
+	make reg_tests -j
+	
 reg_tests: $(diffs)
 	@cat $^
 

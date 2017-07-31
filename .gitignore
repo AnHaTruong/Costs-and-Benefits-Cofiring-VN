@@ -16,3 +16,4 @@ natu/config/__pycache__/
 *.py[cod]
 SALib/
 SALib-0.7.1.dist-info/
+.cache/

@@ -21,13 +21,7 @@ from SALib.analyze import sobol
 #config.use_quantities = False
 
 from init import TIMEHORIZON, USD
-from parameters import MongDuong1
-
-# Only run interactively, for now
-try:
-    __IPYTHON__
-except NameError:
-    exit()   # Quietly
+import parameters as baseline
 
 
 # The depreciation period is an discrete parameter. See item 2 on the list at
@@ -35,33 +29,36 @@ except NameError:
 # extensions-of-salib-for-more-complex-sensitivity-analyses/
 # TLDR: Warning the Morris method is affected
 
-problem = {'num_vars': 3,
-           'names': ['discount_rate', 'tax_rate', 'depreciation_period'],
-           'bounds': [[0, 0.15],
-                      [0, 0.25],
-                      [1, TIMEHORIZON - 1]]
-           }
-
-param_values = saltelli.sample(problem, 100, calc_second_order=True)
-
-Y = np.empty([param_values.shape[0]])
-
 
 def model(args):
     """Sandbox to test the API."""
-    return MongDuong1.net_present_value(args[0], args[1], int(args[2])) / USD
+    return baseline.MongDuong1System.plant.net_present_value(args[0], args[1], int(args[2])) / USD
 
 
-for i, X in enumerate(param_values):
-    Y[i] = model(X)
+def sensitivy_analysis():
+    """Compute first and second order sensitivity of cofiring project's net present value.
 
-Si = sobol.analyze(problem, Y, print_to_console=False)
+    Variables: discount rate, tax rate, depreciation period
+    """
+    problem = {'num_vars': 3,
+               'names': ['discount_rate', 'tax_rate', 'depreciation_period'],
+               'bounds': [[0, 0.15],
+                          [0, 0.25],
+                          [1, TIMEHORIZON - 1]]}
 
-print(Si['S1'])
-print(Si['S1_conf'])
+    param_values = saltelli.sample(problem, 100, calc_second_order=True)
 
-print(Si['ST'])
+    Y = np.empty([param_values.shape[0]])
+    for i, X in enumerate(param_values):
+        Y[i] = model(X)
 
-print("x1-x2:", Si['S2'][0, 1])
-print("x1-x3:", Si['S2'][0, 2])
-print("x2-x3:", Si['S2'][1, 2])
+    Si = sobol.analyze(problem, Y, print_to_console=False)
+
+    print(Si['S1'])
+    print(Si['S1_conf'])
+
+    print(Si['ST'])
+
+    print("x1-x2:", Si['S2'][0, 1])
+    print("x1-x3:", Si['S2'][0, 2])
+    print("x2-x3:", Si['S2'][1, 2])

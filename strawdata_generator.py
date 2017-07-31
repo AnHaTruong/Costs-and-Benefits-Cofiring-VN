@@ -67,7 +67,7 @@ def my_repr(quantity) -> str:
     """Return a valid Python representation of a quantity.
 
     Because the  Natu  bug with __repr__
-
+    >>> m = 3 * t
     >>> str(m)
     '3 t'
     >>> repr(m)      # Should return '3 * t'
