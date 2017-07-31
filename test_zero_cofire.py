@@ -29,22 +29,22 @@ def null_cofiring_system():
 
 
 def test_npv(null_cofiring_system):
-    npvA = null_cofiring_system.plant.net_present_value(0.08, 0.2, 10)
-    npvB = null_cofiring_system.cofiring_plant.net_present_value(0.08, 0.2, 10)
-    assert isclose(npvA, npvB)
+    npv_plant = null_cofiring_system.plant.net_present_value(0.08, 0.2, 10)
+    npv_null_cofiring = null_cofiring_system.cofiring_plant.net_present_value(0.08, 0.2, 10)
+    assert isclose(npv_plant, npv_null_cofiring)
 
 
 def test_npv_powerplant(null_cofiring_system):
-    p = PowerPlant(baseline.plant_parameter_MD1)
-    p.revenue = p.power_generation * baseline.price_MD1.electricity
-    p.coal_cost = p.coal_used * baseline.price_MD1.coal
-    npvC = p.net_present_value(0.08, 0.2, 10)
+    plant = PowerPlant(baseline.plant_parameter_MD1)
+    plant.revenue = plant.power_generation * baseline.price_MD1.electricity
+    plant.coal_cost = plant.coal_used * baseline.price_MD1.coal
+    npv_plant_direct = plant.net_present_value(0.08, 0.2, 10)
 
-    npvA = null_cofiring_system.plant.net_present_value(0.08, 0.2, 10)
-    assert isclose(npvA, npvC)
+    npv_plant = null_cofiring_system.plant.net_present_value(0.08, 0.2, 10)
+    assert isclose(npv_plant, npv_plant_direct)
 
 
 def test_lcoe(null_cofiring_system):
-    lcoeA = null_cofiring_system.plant.lcoe(0.08, 0.2, 10)
-    lcoeB = null_cofiring_system.cofiring_plant.lcoe(0.08, 0.2, 10)
-    assert isclose(lcoeA, lcoeB)
+    lcoe_plant = null_cofiring_system.plant.lcoe(0.08, 0.2, 10)
+    lcoe_null_cofiring = null_cofiring_system.cofiring_plant.lcoe(0.08, 0.2, 10)
+    assert isclose(lcoe_plant, lcoe_null_cofiring)

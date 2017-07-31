@@ -17,17 +17,17 @@ from parameters import discount_rate, tax_rate, depreciation_period
 
 def lcoe(system):
     """Compare the LCOE with and without cofiring for one system."""
-    def row_int(label, a, b):
-        return '{:30}{:8.0f}{:20.0f}'.format(label, a, b)
+    def row_int(label, int_a, int_b):
+        return '{:30}{:8.0f}{:20.0f}'.format(label, int_a, int_b)
 
-    def row_float(label, x, y):
-        return '{:30}{:8.1f}{:20.1f}'.format(label, x, y)
+    def row_float(label, float_x, float_y):
+        return '{:30}{:8.1f}{:20.1f}'.format(label, float_x, float_y)
 
-    def row_npv(label, v, w):
-        return row_int(label, npv(discount_rate, v), npv(discount_rate, w))
+    def row_npv(label, vector_v, vector_w):
+        return row_int(label, npv(discount_rate, vector_v), npv(discount_rate, vector_w))
 
-    def row_npv_na(label, w):
-        return '{:43}{:20.0f}'.format(label, npv(discount_rate, w))
+    def row_npv_na(label, vector_w):
+        return '{:43}{:20.0f}'.format(label, npv(discount_rate, vector_w))
 
     lines = [system.plant.name]
 

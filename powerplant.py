@@ -172,7 +172,7 @@ class CofiringPlant(PowerPlant):
     def biomass_cost_per_t(self):
         return safe_divide(self.biomass_cost, self.biomass_used)
 
-    def biomass_cost_per_GJ(self):
+    def biomass_energy_cost(self):
         cost = self.biomass_cost_per_t() / self.cofire_parameter.biomass.heat_value
         return display_as(cost, 'USD / GJ')
 

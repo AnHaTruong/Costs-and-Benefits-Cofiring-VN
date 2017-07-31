@@ -31,8 +31,7 @@ def plot_emissions(system, axes):
 
     CO2trans = np.array([plant.coal_transporter().emissions().at['CO2', 'Total'][1],
                          (cofiringplant.coal_transporter().emissions().at['CO2', 'Total'][1]
-                          + system.transporter.emissions().at['CO2', 'Total'][1]
-                          )
+                          + system.transporter.emissions().at['CO2', 'Total'][1])
                          ]) / Mt
 
     field_emis_before = system.farmer.emissions_exante

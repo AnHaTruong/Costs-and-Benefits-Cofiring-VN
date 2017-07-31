@@ -107,14 +107,14 @@ class System:
         reduction = pd.DataFrame(list_of_series, index=row)
         return reduction
 
-    def CO2_npv(self, discount_rate, external_cost):
+    def mitigation_npv(self, discount_rate, external_cost):
         df = self.emission_reduction(external_cost)
-        v = df.loc['Benefit', 'CO2']
-        value = npv(discount_rate, v)
+        annual_mitigation_value = df.loc['Benefit', 'CO2']
+        value = npv(discount_rate, annual_mitigation_value)
         return display_as(value, 'kUSD')
 
     def health_npv(self, discount_rate, external_cost):
         df = self.emission_reduction(external_cost)
-        v = df.loc['Benefit'].drop('CO2').sum()
-        value = npv(discount_rate, v)
+        annual_health_benefit = df.loc['Benefit'].drop('CO2').sum()
+        value = npv(discount_rate, annual_health_benefit)
         return display_as(value, 'kUSD')

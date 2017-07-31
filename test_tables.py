@@ -36,57 +36,57 @@ def test_technical_parameters(regtest, systems):
 
 
 def test_coal_saved(regtest, systems):
-    table_MD1 = coal_saved(systems[0])
-    table_NB = coal_saved(systems[1])
-    regtest.write(table_MD1 + '\n' + table_NB)
+    table_a = coal_saved(systems[0])
+    table_b = coal_saved(systems[1])
+    regtest.write(table_a + '\n' + table_b)
 
 
 def test_benefits(regtest, systems):
-    table_MD1 = benefits(systems[0])
-    table_NB = benefits(systems[1])
-    regtest.write(table_MD1 + '\n' + table_NB)
+    table_a = benefits(systems[0])
+    table_b = benefits(systems[1])
+    regtest.write(table_a + '\n' + table_b)
 
 
 def test_emissions(regtest, systems):
-    table_MD1 = emissions(systems[0])
-    table_NB = emissions(systems[1])
-    regtest.write(table_MD1 + '\n' + table_NB)
+    table_a = emissions(systems[0])
+    table_b = emissions(systems[1])
+    regtest.write(table_a + '\n' + table_b)
 
 
 def test_net_present_value_plant(regtest, systems):
-    table_MD1 = systems[0].plant.pretty_table(
+    table_a = systems[0].plant.pretty_table(
         baseline.discount_rate,
         baseline.tax_rate,
         baseline.depreciation_period)
-    table_NB = systems[1].plant.pretty_table(
+    table_b = systems[1].plant.pretty_table(
         baseline.discount_rate,
         baseline.tax_rate,
         baseline.depreciation_period)
-    regtest.write(table_MD1 + '\n' + table_NB)
+    regtest.write(table_a + '\n' + table_b)
 
 
-def test_net_present_value_cofiring_plant(regtest, systems):
-    table_MD1 = systems[0].cofiring_plant.pretty_table(
+def test_net_present_value_cofiring(regtest, systems):
+    table_a = systems[0].cofiring_plant.pretty_table(
         baseline.discount_rate,
         baseline.tax_rate,
         baseline.depreciation_period)
-    table_NB = systems[1].cofiring_plant.pretty_table(
+    table_b = systems[1].cofiring_plant.pretty_table(
         baseline.discount_rate,
         baseline.tax_rate,
         baseline.depreciation_period)
-    regtest.write(table_MD1 + '\n' + table_NB)
+    regtest.write(table_a + '\n' + table_b)
 
 
 def test_upstream_benefits(regtest, systems):
-    table_MD1 = upstream_benefits(systems[0])
-    table_NB = upstream_benefits(systems[1])
-    regtest.write(table_MD1 + '\n' + table_NB)
+    table_a = upstream_benefits(systems[0])
+    table_b = upstream_benefits(systems[1])
+    regtest.write(table_a + '\n' + table_b)
 
 
 def test_job_changes(regtest, systems):
-    table_MD1 = job_changes(systems[0])
-    table_NB = job_changes(systems[1])
-    regtest.write(table_MD1 + '\n' + table_NB)
+    table_a = job_changes(systems[0])
+    table_b = job_changes(systems[1])
+    regtest.write(table_a + '\n' + table_b)
 
 
 def test_energy_costs(regtest, systems):
@@ -94,6 +94,6 @@ def test_energy_costs(regtest, systems):
 
 
 def test_lcoe(regtest, systems):
-    table_MD1 = lcoe(systems[0])
-    table_NB = lcoe(systems[1])
-    regtest.write(table_MD1 + '\n' + table_NB)
+    table_a = lcoe(systems[0])
+    table_b = lcoe(systems[1])
+    regtest.write(table_a + '\n' + table_b)

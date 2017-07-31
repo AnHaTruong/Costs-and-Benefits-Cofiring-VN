@@ -48,17 +48,19 @@ def sensitivy_analysis():
 
     param_values = saltelli.sample(problem, 100, calc_second_order=True)
 
-    Y = np.empty([param_values.shape[0]])
-    for i, X in enumerate(param_values):
-        Y[i] = model(X)
+    results = np.empty([param_values.shape[0]])
+    for i, parameter in enumerate(param_values):
+        results[i] = model(parameter)
 
-    Si = sobol.analyze(problem, Y, print_to_console=False)
+    sensitivity_indices = sobol.analyze(problem, results, print_to_console=False)
 
-    print(Si['S1'])
-    print(Si['S1_conf'])
+    print(sensitivity_indices['S1'])
+    print(sensitivity_indices['S1_conf'])
 
-    print(Si['ST'])
+    print(sensitivity_indices['ST'])
 
-    print("x1-x2:", Si['S2'][0, 1])
-    print("x1-x3:", Si['S2'][0, 2])
-    print("x2-x3:", Si['S2'][1, 2])
+    print("x1-x2:", sensitivity_indices['S2'][0, 1])
+    print("x1-x3:", sensitivity_indices['S2'][0, 2])
+    print("x2-x3:", sensitivity_indices['S2'][1, 2])
+
+# Do nothing for now...

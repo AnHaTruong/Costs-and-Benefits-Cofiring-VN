@@ -47,9 +47,9 @@ def energy_costs(system_a, system_b):
 
     lines.append(
         "Biomass plant gate  "
-        + str(system_a.cofiring_plant.biomass_cost_per_GJ()[1])
+        + str(system_a.cofiring_plant.biomass_energy_cost()[1])
         + "      "
-        + str(system_b.cofiring_plant.biomass_cost_per_GJ()[1]))
+        + str(system_b.cofiring_plant.biomass_energy_cost()[1]))
 
     return '\n'.join(lines)
 

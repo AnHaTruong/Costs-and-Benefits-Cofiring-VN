@@ -38,8 +38,8 @@ class SupplyZone:
                 )
 
     def area(self):
-        a = self.shape.area()
-        return display_as(a, 'ha')
+        surface = self.shape.area()
+        return display_as(surface, 'ha')
 
     def quantity(self):
         mass = AFTER_INVEST * self.shape.area() * self.straw_density
@@ -99,18 +99,18 @@ class SupplyChain:
         return collected
 
     def __str__(self):
-        s = "Supply chain\n"
-        s += "quantity = " + str(self.quantity()) + "\n"
-        s += "Collection_radius = " + str(self.collection_radius()) + "\n"
+        result = "Supply chain\n"
+        result += "quantity = " + str(self.quantity()) + "\n"
+        result += "Collection_radius = " + str(self.collection_radius()) + "\n"
         for zone in self.zones:
-            s += str(zone) + "\n"
-        return s
+            result += str(zone) + "\n"
+        return result
 
     def area(self):
-        a = 0 * ha
+        surface = 0 * ha
         for zone in self.zones:
-            a += zone.area()
-        return display_as(a, 'km2')
+            surface += zone.area()
+        return display_as(surface, 'km2')
 
     def quantity(self):
         mass = ZEROS * t
@@ -125,7 +125,7 @@ class SupplyChain:
         return display_as(activity, 't * km')
 
     def collection_radius(self):
-        return self.zones[-1].shape.outer_radius()
+        return self.zones[-1].shape.max_radius()
 
     def burnable(self):
         mass = self.straw_production * self.straw_burn_rate

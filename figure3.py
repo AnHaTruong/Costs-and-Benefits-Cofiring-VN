@@ -17,10 +17,11 @@ from parameters import discount_rate, tax_rate, depreciation_period
 from parameters import MongDuong1System, NinhBinhSystem
 from parameters import external_cost
 
+MUSD = 10**6 * USD
+
 
 def benefit_array(system):
     """Return the data to be plot."""
-    MUSD = 10**6 * USD
     job_benefit = system.wages_npv(discount_rate) / MUSD
     plant_benefit = (system.cofiring_plant.net_present_value(discount_rate,
                                                              tax_rate,
@@ -32,7 +33,7 @@ def benefit_array(system):
     transporter_benefit = system.transporter.net_present_value(discount_rate) / MUSD
     farmer_benefit = system.farmer.net_present_value(discount_rate) / MUSD
     health_benefit = system.health_npv(discount_rate, external_cost) / MUSD
-    climate_benefit = system.CO2_npv(discount_rate, external_cost) / MUSD
+    climate_benefit = system.mitigation_npv(discount_rate, external_cost) / MUSD
     return np.array([plant_benefit, transporter_benefit, farmer_benefit,
                      job_benefit, health_benefit, climate_benefit])
 

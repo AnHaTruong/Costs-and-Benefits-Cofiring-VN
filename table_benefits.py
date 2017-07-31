@@ -22,7 +22,8 @@ def benefits(system):
     table.append('-------------------')
     row2 = '{:30}' + '{:20.0f}'
     table.append(row2.format('Health', system.health_npv(discount_rate, external_cost)))
-    table.append(row2.format('Emission reduction', system.CO2_npv(discount_rate, external_cost)))
+    table.append(row2.format('Emission reduction',
+                             system.mitigation_npv(discount_rate, external_cost)))
     table.append(row2.format('Wages', system.wages_npv(discount_rate)))
     table.append(row2.format('Farmer earnings before tax',
                              system.farmer.net_present_value(discount_rate)))
