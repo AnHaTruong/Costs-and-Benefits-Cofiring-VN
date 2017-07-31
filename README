@@ -5,6 +5,8 @@ Requisite :
 Python 3
 pandas
 natu (provided, patched)
+pytest (Ubuntu package          python3-pytest)
+sudo -H pip3 install pytest-regtest
 sudo pip3 install xlrd
 sudo pip3 install SALib
 make

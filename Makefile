@@ -10,13 +10,9 @@ PYTHON = python3
 
 tablepyfiles = $(wildcard table*.py)
 tables = $(patsubst %.py,%.txt,$(tablepyfiles))
-diffs  = $(patsubst %.py,%.diff,$(tablepyfiles))
 
 figurespyfiles = $(wildcard figure*.py)
 figures = $(patsubst %.py,%.png,$(figurespyfiles))
-
-doc_tests =  init.doctest investment.doctest emitter.doctest powerplant.doctest
-script_tests = test_zero_cofire.txt
 
 all: $(tables) $(figures)
 
@@ -31,13 +27,6 @@ parameters.py: strawdata.py
 %.png: %.py
 	$(PYTHON) $< > $@
 
-%.diff: %.txt tables.tocompare/%.txt
-	@diff $^  > $@
-	@if [ -s $@ ]; then exit 1; fi;
-
-%.doctest: %.py
-	$(PYTHON) -m doctest -v $< > $@
-
 classes.dot packages.dot:
 	pyreverse3 *py
 
@@ -46,7 +35,7 @@ classes.dot packages.dot:
 
 .precious: strawdata.py
 
-.PHONY: test lint docstyle codestyle reg_tests reg_tests_reset clean cleaner archive
+.PHONY: test lint docstyle codestyle regtest_reset clean cleaner archive
 
 distName:=CofiringEconomics-$(shell date --iso-8601)
 dirs=$(distName) $(distName)/data $(distName)/data/VNM_adm_shp $(distName)/tables.tocompare $(distName)/natu
@@ -64,14 +53,10 @@ archive:
 	rm -rf $(distName)
 
 test: cleaner strawdata.py
-	py.test-3 --doctest-modules --pylint --ignore=natu/
-	make reg_tests -j
-	
-reg_tests: $(diffs)
-	@cat $^
+	py.test-3 --doctest-modules --ignore=natu/
 
-reg_tests_reset: $(tables)
-	cp $^ tables.tocompare
+regtest_reset:
+	py.test-3 --regtest-reset
 
 lint:
 	pylint3 *py
@@ -89,9 +74,6 @@ codestyle:
 clean:
 	rm -f $(tables)
 	rm -f $(figures)
-	rm -f $(doc_tests)
-	rm -f $(script_tests)
-	rm -f $(diffs)
 
 cleaner: clean .git/hooks/pre-commit
 	find . -type f -name '*.pyc' -delete

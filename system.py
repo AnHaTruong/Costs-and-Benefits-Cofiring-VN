@@ -16,6 +16,8 @@ from farmer import Farmer
 from transporter import Transporter
 
 
+#We should pass the parameters as an object
+#pylint: disable=too-many-instance-attributes
 class System:
     """The system model of the cofiring economic sector.
 
@@ -32,6 +34,7 @@ class System:
         self.supply_chain = supply_chain.fit(self.cofiring_plant.biomass_used[1])
         self.farmer = Farmer(self.supply_chain, farm_parameter)
         self.transporter = Transporter(self.supply_chain, transport_parameter)
+        self.price = price
 
         electricity_sales = self.plant.power_generation * price.electricity
         display_as(electricity_sales, 'kUSD')

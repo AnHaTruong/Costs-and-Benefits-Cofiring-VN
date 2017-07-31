@@ -117,10 +117,10 @@ class Investment:
         return result
 
     def pretty_table(self, discount_rate, tax_rate, depreciation_period):
-        print(self.name)
-        print("NPV  =", self.net_present_value(discount_rate,
-                                               tax_rate,
-                                               depreciation_period))
+        lines = [self.name]
+        lines.append("NPV  = " + str(self.net_present_value(discount_rate,
+                                                            tax_rate,
+                                                            depreciation_period)))
         table = self.table(tax_rate, depreciation_period)
         table = np.transpose(table)
         labels = ["Revenue",
@@ -135,5 +135,5 @@ class Investment:
         result = pd.DataFrame(table, columns=labels)
         pd.set_option('display.max_columns', 10)
         pd.set_option('display.width', 150)
-        print(result)
-        return result
+        lines.append(str(result))
+        return '\n'.join(lines)

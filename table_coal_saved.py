@@ -13,19 +13,18 @@ from init import display_as
 from parameters import MongDuong1System, NinhBinhSystem, coal_import_price
 
 
-def print_coal_saved(system):
-    """Print quantity and value of coal saved by cofiring."""
+def coal_saved(system):
+    """Tabulate the quantity and value of coal saved by cofiring."""
     col1 = system.coal_saved[1]
     col2 = display_as(col1 * coal_import_price, 'kUSD')
 
     row = '{:35}{:23.0f}'
-    print('Coal saved at', system.cofiring_plant.name)
-    print(row.format('Amount of coal saved from co-firing', col1))
-    print(row.format('Maximum benefit for trade balance', col2))
+    table = ['Coal saved at ' + str(system.cofiring_plant.name)]
+    table.append(row.format('Amount of coal saved from co-firing', col1))
+    table.append(row.format('Maximum benefit for trade balance', col2))
+    return '\n'.join(table)
 
 
-print_coal_saved(MongDuong1System)
-
+print(coal_saved(MongDuong1System))
 print('')
-
-print_coal_saved(NinhBinhSystem)
+print(coal_saved(NinhBinhSystem))

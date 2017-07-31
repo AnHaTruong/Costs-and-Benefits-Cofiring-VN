@@ -22,13 +22,11 @@ print('Depreciation', depreciation_period, 'years')
 
 print('')
 print('FIT', price_MD1.electricity)
-MongDuong1System.plant.pretty_table(discount_rate, tax_rate, depreciation_period)
-
-MongDuong1System.cofiring_plant.pretty_table(discount_rate, tax_rate, depreciation_period)
+print(MongDuong1System.plant.pretty_table(discount_rate, tax_rate, depreciation_period))
+print(MongDuong1System.cofiring_plant.pretty_table(discount_rate, tax_rate, depreciation_period))
 
 print('')
 
 print('FIT', price_NB.electricity)
-NinhBinhSystem.plant.pretty_table(discount_rate, tax_rate, depreciation_period)
-
-NinhBinhSystem.cofiring_plant.pretty_table(discount_rate, tax_rate, depreciation_period)
+print(NinhBinhSystem.plant.pretty_table(discount_rate, tax_rate, depreciation_period))
+print(NinhBinhSystem.cofiring_plant.pretty_table(discount_rate, tax_rate, depreciation_period))
