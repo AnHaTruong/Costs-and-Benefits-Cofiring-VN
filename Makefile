@@ -35,7 +35,7 @@ classes.dot packages.dot:
 
 .precious: strawdata.py
 
-.PHONY: test lint docstyle codestyle regtest_reset clean cleaner archive
+.PHONY:  archive test regtest-reset lint docstyle codestyle clean cleaner
 
 distName:=CofiringEconomics-$(shell date --iso-8601)
 dirs=$(distName) $(distName)/data $(distName)/data/VNM_adm_shp $(distName)/tables.tocompare $(distName)/natu
@@ -46,7 +46,7 @@ archive:
 	cp Makefile $(distName)
 	cp README $(distName)
 	cp *py $(distName)
-	cp -r tables.tocompare $(distName)
+	cp -r _regtest_outputs $(distName)
 	cp -r Data $(distName)
 	cp -r natu $(distName)
 	zip -r $(distName).zip $(distName)
@@ -55,7 +55,7 @@ archive:
 test: cleaner strawdata.py
 	py.test-3 --doctest-modules --ignore=natu/
 
-regtest_reset:
+regtest-reset:
 	py.test-3 --regtest-reset
 
 lint:

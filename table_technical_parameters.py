@@ -15,8 +15,10 @@ from natu.units import y
 from parameters import MongDuong1System, NinhBinhSystem
 
 
-def technical_parameters(plant_a, plant_b):
+def technical_parameters(system_a, system_b):
     """Tabulate the technical parameters for two plants."""
+    plant_a = system_a.plant
+    plant_b = system_b.plant
     table = ['\nTable 1. Technical parameters\n']
 
     table.append('{:24}{:>20}{:>20}'.format('Parameter', plant_a.name, plant_b.name))
@@ -56,4 +58,4 @@ def technical_parameters(plant_a, plant_b):
     return '\n'.join(table)
 
 
-print(technical_parameters(MongDuong1System.plant, NinhBinhSystem.plant))
+print(technical_parameters(MongDuong1System, NinhBinhSystem))
