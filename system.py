@@ -86,6 +86,10 @@ class System:
         time = self.coal_saved / mining_productivity
         return time
 
+    def coal_work_lost_value(self, mining_productivity, mining_wage):
+        value = self.coal_work_lost(mining_productivity) * mining_wage
+        return display_as(value, 'kUSD')
+
     def emission_reduction(self, external_cost):
         plant_reduction = (self.plant.emissions()['Total']
                            - self.cofiring_plant.emissions()['Total'])

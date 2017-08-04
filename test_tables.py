@@ -8,25 +8,23 @@
 """Test the boundary case: cofiring biomass ratio 0% is same as baseline plant."""
 
 import pytest
+import pandas as pd
 
-import parameters as baseline
-
-from table_technical_parameters import technical_parameters
-from table_coal_saved import coal_saved
-from table_benefits import benefits
-from table_emissions import emissions
-from table_upstream_benefits import upstream_benefits
-from table_job_changes import job_changes
-from table_energy_costs import energy_costs
-from table_lcoe import lcoe
+from parameters import MongDuong1System, NinhBinhSystem
+from parameters import discount_rate, tax_rate, depreciation_period
+from tables import technical_parameters, coal_saved, benefits, emissions, upstream_benefits
+from tables import job_changes, energy_costs, lcoe
+from tables import emission_reductions, balance_sheet_farmer, balance_sheet_transporter
 
 # pylint and pytest known compatibility bug
 # pylint: disable=redefined-outer-name
 
+pd.options.display.float_format = '{:,.1f}'.format
+
 
 @pytest.fixture()
 def systems():
-    return baseline.MongDuong1System, baseline.NinhBinhSystem
+    return MongDuong1System, NinhBinhSystem
 
 
 def test_energy_costs(regtest, systems):
@@ -35,6 +33,18 @@ def test_energy_costs(regtest, systems):
 
 def test_technical_parameters(regtest, systems):
     regtest.write(technical_parameters(*systems))
+
+
+def test_emission_reductions(regtest, systems):
+    regtest.write(str(emission_reductions(*systems)))
+
+
+def test_balance_sheet_farmer(regtest, systems):
+    regtest.write(str(balance_sheet_farmer(*systems)))
+
+
+def test_balance_sheet_transporter(regtest, systems):
+    regtest.write(str(balance_sheet_transporter(*systems)))
 
 
 def my_reg_test(regtest, systems, table):
@@ -66,24 +76,12 @@ def test_job_changes(regtest, systems):
 
 
 def test_net_present_value_plant(regtest, systems):
-    table_a = systems[0].plant.pretty_table(
-        baseline.discount_rate,
-        baseline.tax_rate,
-        baseline.depreciation_period)
-    table_b = systems[1].plant.pretty_table(
-        baseline.discount_rate,
-        baseline.tax_rate,
-        baseline.depreciation_period)
+    table_a = systems[0].plant.pretty_table(discount_rate, tax_rate, depreciation_period)
+    table_b = systems[1].plant.pretty_table(discount_rate, tax_rate, depreciation_period)
     regtest.write(table_a + '\n' + table_b)
 
 
 def test_net_present_value_cofiring(regtest, systems):
-    table_a = systems[0].cofiring_plant.pretty_table(
-        baseline.discount_rate,
-        baseline.tax_rate,
-        baseline.depreciation_period)
-    table_b = systems[1].cofiring_plant.pretty_table(
-        baseline.discount_rate,
-        baseline.tax_rate,
-        baseline.depreciation_period)
+    table_a = systems[0].cofiring_plant.pretty_table(discount_rate, tax_rate, depreciation_period)
+    table_b = systems[1].cofiring_plant.pretty_table(discount_rate, tax_rate, depreciation_period)
     regtest.write(table_a + '\n' + table_b)

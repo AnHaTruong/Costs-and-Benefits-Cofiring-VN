@@ -43,7 +43,8 @@ external_cost = pd.Series({'CO2': 1 * USD / t,
 
 
 mining_parameter = {'productivity_surface': 8.04 * t / hr,  # www.eia.g
-                    'productivity_underground': 2.5 * t / hr}  # ww.eia.gov
+                    'productivity_underground': 2.5 * t / hr,  # ww.eia.gov
+                    'wage': 0 * USD / hr}
 
 Fuel = namedtuple('Fuel', 'name, heat_value, transport_distance, transport_mean')
 

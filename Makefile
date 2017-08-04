@@ -7,9 +7,7 @@
 
 PYTHON = python3
 
-
-tablepyfiles = $(wildcard table*.py)
-tables = $(patsubst %.py,%.txt,$(tablepyfiles))
+tables = tables_manuscript.txt
 
 figurespyfiles = $(wildcard figure*.py)
 figures = $(patsubst %.py,%.png,$(figurespyfiles))

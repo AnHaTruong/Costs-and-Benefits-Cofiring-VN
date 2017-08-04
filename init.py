@@ -38,6 +38,8 @@ else:
     USD = 1
     VND = USD / 22270
 
+kUSD = 1000 * USD
+
 # Full Time Equivalent, a work time unit amounting to "1 job".
 FTE = 1560 * hr
 units.FTE = FTE
