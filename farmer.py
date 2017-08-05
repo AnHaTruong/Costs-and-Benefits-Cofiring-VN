@@ -7,7 +7,11 @@
 #
 """Represent the collective of farmers producing biomass."""
 
-from init import AFTER_INVEST, ONES, display_as
+import pandas as pd
+
+from natu.units import ha
+
+from init import AFTER_INVEST, ONES, display_as, USD
 from emitter import Emitter, Activity
 from investment import Investment
 
@@ -61,3 +65,26 @@ class Farmer(Investment, Emitter):
     def operating_expenses(self):
         expenses = self.labor_cost() + self.capital_cost() + self.fuel_cost()
         return display_as(expenses, 'kUSD')
+
+    def income_statement(self):
+        """Summarize the economic implications of collecting and selling straw."""
+        headings = ['Straw revenue',
+                    '- Winder rental',
+                    '- Winder fuel',
+                    '- Collection work']
+
+        cash_flows = pd.Series(
+            data=[self.revenue[1],
+                  - self.capital_cost()[1],
+                  - self.fuel_cost()[1],
+                  - self.labor_cost()[1]],
+            index=headings)
+
+        df = pd.DataFrame(
+            data=[cash_flows / (1000 * USD),
+                  cash_flows / self.farm_area[1] / (USD / ha)],
+            index=["Total",
+                   "Per ha"])
+        df["= Net income"] = df.sum(axis=1)
+        df["Unit"] = ['kUSD', 'USD/ha']
+        return df[["Unit"] + headings + ["= Net income"]].T

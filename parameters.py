@@ -135,7 +135,7 @@ PlantParameter = namedtuple("PlantParameter", ['name',
                                                'coal'])
 
 plant_parameter_MD1 = PlantParameter(name='Mong Duong 1',
-                                     capacity=1080 * MW * y,
+                                     capacity=1080 * MW,
                                      capacity_factor=0.60,
                                      commissioning=2015,
                                      boiler_technology='CFB',
@@ -197,7 +197,7 @@ MongDuong1System = System(plant_parameter_MD1, cofire_MD1, SupplyChain_MD1, pric
 
 
 plant_parameter_NB = PlantParameter(name='Ninh Binh',
-                                    capacity=100 * MW * y,
+                                    capacity=100 * MW,
                                     capacity_factor=0.64,
                                     commissioning=1974,
                                     boiler_technology='PC',

@@ -14,9 +14,12 @@ An Ha Truong, Minh Ha-Duong
 
 import pandas as pd
 
+from init import TIMEHORIZON
+
 from parameters import MongDuong1System, NinhBinhSystem
-from tables import lcoe, technical_parameters, emission_reductions
-from tables import balance_sheet_farmer, balance_sheet_transporter, balance_jobs
+from parameters import discount_rate, tax_rate, depreciation_period
+
+from tables import emission_reductions, balance_jobs
 
 
 systems = MongDuong1System, NinhBinhSystem
@@ -24,17 +27,28 @@ systems = MongDuong1System, NinhBinhSystem
 #%%
 
 print('Table 1: Results of profitability assessment')
+print("Net present value over", TIMEHORIZON, "years at discount rate =", discount_rate)
+print("Tax rate", tax_rate, ", linear capital depreciation over ", depreciation_period, "years")
+print()
+df = pd.concat(
+    [MongDuong1System.plant.lcoe_statement(discount_rate, tax_rate, depreciation_period),
+     MongDuong1System.cofiring_plant.lcoe_statement(discount_rate, tax_rate, depreciation_period),
+     NinhBinhSystem.plant.lcoe_statement(discount_rate, tax_rate, depreciation_period),
+     NinhBinhSystem.cofiring_plant.lcoe_statement(discount_rate, tax_rate, depreciation_period)],
+    axis=1)
 
-print(lcoe(MongDuong1System))
-print(lcoe(NinhBinhSystem))
+pd.options.display.float_format = '{:,.1f}'.format
+pd.set_option('display.width', 200)
+
+print(str(df))
+
 
 #%%
 
 pd.options.display.float_format = '{:,.0f}'.format
 
-
 table2 = """
-Table 2: Emission reductions and associated benefit from two plants
+Table 2: Emission reductions and associated benefits from the two projects
 
                     Mong Duong 1      Ninh Binh
 """ + str(emission_reductions(MongDuong1System, NinhBinhSystem))
@@ -46,14 +60,24 @@ print(table2)
 print("""
 Table 3a: Supply chain income and expenses in the co-firing scenario.
 
-Farmers             Mong Duong 1      Ninh Binh""")
+Farmers             Mong Duong 1     Ninh Binh""")
 
-print(balance_sheet_farmer(*systems))
+df = pd.concat(
+    [MongDuong1System.farmer.income_statement(),
+     NinhBinhSystem.farmer.income_statement()],
+    axis=1)
+
+print(str(df))
 
 print("""
 Transporters        Mong Duong 1      Ninh Binh""")
 
-print(balance_sheet_transporter(*systems))
+df = pd.concat(
+    [MongDuong1System.transporter.income_statement(),
+     NinhBinhSystem.transporter.income_statement()],
+    axis=1)
+
+print(str(df))
 
 #%%
 
@@ -70,6 +94,12 @@ print("""
 Table S1. Technical parameters
 """)
 
-print(technical_parameters(MongDuong1System, NinhBinhSystem))
+df = pd.concat(
+    [MongDuong1System.plant.characteristics(),
+     NinhBinhSystem.plant.characteristics()],
+    axis=1)
 
+pd.options.display.float_format = '{:,.2f}'.format
+
+print(str(df))
 #%%

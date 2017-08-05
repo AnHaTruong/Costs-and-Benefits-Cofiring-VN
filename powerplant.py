@@ -8,9 +8,12 @@
 # Creative Commons Attribution-ShareAlike 4.0 International
 """Define PowerPlant and its child class, CofiringPlant."""
 
+import pandas as pd
+
+from natu.units import y
 from natu.numpy import npv
 
-from init import ONES, AFTER_INVEST, USD, display_as, safe_divide
+from init import ONES, AFTER_INVEST, USD, MUSD, display_as, safe_divide
 from investment import Investment
 from emitter import Emitter, Activity
 
@@ -40,8 +43,9 @@ class PowerPlant(Investment, Emitter):
         """
         Investment.__init__(self, parameter.name, capital)
         self.parameter = parameter
+        self.derating = derating
         self.plant_efficiency = parameter.plant_efficiency * derating
-        self.power_generation = ONES * parameter.capacity * parameter.capacity_factor
+        self.power_generation = ONES * parameter.capacity * parameter.capacity_factor * y
         display_as(self.power_generation, 'GWh')
 
         self.gross_heat_input = self.power_generation / self.plant_efficiency
@@ -79,7 +83,7 @@ class PowerPlant(Investment, Emitter):
         return display_as(self.coal_om_cost(), 'kUSD')
 
     def coal_om_cost(self):
-        fixed_om_coal = ONES * self.parameter.fix_om_coal * self.parameter.capacity
+        fixed_om_coal = ONES * self.parameter.fix_om_coal * self.parameter.capacity * y
         variable_om_coal = self.power_generation * self.parameter.variable_om_coal
         cost = fixed_om_coal + variable_om_coal
         return display_as(cost, 'kUSD')
@@ -101,6 +105,42 @@ class PowerPlant(Investment, Emitter):
             level=self.coal_transport_tkm(),
             emission_factor=self.parameter.emission_factor[transport_mean])
         return Emitter(activity)
+
+    def characteristics(self):
+        """Describe the technical characteristics of the plant."""
+        description = pd.Series(name=self.parameter.name)
+        description["Comissioning year"] = self.parameter.commissioning
+        description["Boiler technology"] = self.parameter.boiler_technology
+        description["Installed capacity"] = self.parameter.capacity
+        description["Capacity factor"] = self.parameter.capacity_factor
+        description["Coal consumption"] = self.coal_used[1]
+        description["Heat value of coal"] = self.parameter.coal.heat_value
+        description["Plant efficiency"] = self.plant_efficiency[1]
+        description["Boiler efficiency"] = self.parameter.boiler_efficiency[1] * self.derating[1]
+        return description
+
+    def lcoe_statement(self, discount_rate, tax_rate, depreciation_period):
+        """Assess the levelized cost of electricity."""
+        statement = pd.Series(name=self.name)
+        statement["Investment    (MUSD)"] = self.capital / MUSD
+        statement["Fuel cost     (MUSD)"] = npv(discount_rate, self.fuel_cost()) / MUSD
+        statement["  Coal        (MUSD)"] = npv(discount_rate, self.coal_cost) / MUSD
+        statement["  Biomass     (MUSD)"] = 0
+        statement["O&M cost      (MUSD)"] = npv(
+            discount_rate, self.operation_maintenance_cost()) / MUSD
+        statement["  O&M coal    (MUSD)"] = npv(
+            discount_rate, self.coal_om_cost()) / MUSD
+        statement["  O&M biomass (MUSD)"] = 0
+        statement["Tax           (MUSD)"] = npv(
+            discount_rate, self.income_tax(tax_rate, depreciation_period)) / MUSD
+        statement["Cash_out      (MUSD)"] = npv(
+            discount_rate,
+            self.cash_out(tax_rate, depreciation_period)) / MUSD
+        statement["Electricity produced"] = npv(
+            discount_rate, self.power_generation)
+        statement["LCOE                "] = self.lcoe(
+            discount_rate, tax_rate, depreciation_period)
+        return statement
 
 
 class CofiringPlant(PowerPlant):
@@ -131,7 +171,7 @@ class CofiringPlant(PowerPlant):
             plant_parameter,
             derating=boiler_efficiency / plant_parameter.boiler_efficiency,
             capital=(cofire_parameter.capital_cost
-                     * plant_parameter.capacity
+                     * plant_parameter.capacity * y
                      * float(cofire_parameter.biomass_ratio_energy[1])))
 
         self.name = plant_parameter.name + ' Cofire'
@@ -188,9 +228,9 @@ class CofiringPlant(PowerPlant):
         # Fixed costs are proportional to capacity
         fixed_om_coal = (AFTER_INVEST
                          * self.parameter.fix_om_coal
-                         * self.parameter.capacity
+                         * self.parameter.capacity * y
                          * (1 - self.cofire_parameter.biomass_ratio_energy))
-        fixed_om_coal[0] = self.parameter.fix_om_coal * self.parameter.capacity
+        fixed_om_coal[0] = self.parameter.fix_om_coal * self.parameter.capacity * y
         # Variable costs proportional to generation after capacity factor
         variable_om_coal = (self.power_generation
                             * self.parameter.variable_om_coal
@@ -214,10 +254,20 @@ class CofiringPlant(PowerPlant):
     def biomass_om_cost(self):
         fixed_om_bm = (AFTER_INVEST
                        * self.cofire_parameter.fix_om_cost
-                       * self.parameter.capacity * self.cofire_parameter.biomass_ratio_energy)
+                       * self.parameter.capacity * y
+                       * self.cofire_parameter.biomass_ratio_energy)
         var_om_bm = (AFTER_INVEST
                      * self.power_generation
-                     * self.cofire_parameter.variable_om_cost
-                     * self.cofire_parameter.biomass_ratio_energy)
+                     * self.cofire_parameter.biomass_ratio_energy
+                     * self.cofire_parameter.variable_om_cost)
         cost = fixed_om_bm + var_om_bm
+        # error_message = "Biomass O&M variable costs appear lower than biomass OM wages."
+        # assert var_om_bm[1] > self.biomass_om_wages()[1], error_message
         return display_as(cost, 'kUSD')
+
+    def lcoe_statement(self, discount_rate, tax_rate, depreciation_period):
+        """Assess the levelized cost of electricity."""
+        statement = PowerPlant.lcoe_statement(self, discount_rate, tax_rate, depreciation_period)
+        statement["  Biomass     (MUSD)"] = npv(discount_rate, self.biomass_cost) / MUSD
+        statement["  O&M biomass (MUSD)"] = npv(discount_rate, self.biomass_om_cost()) / MUSD
+        return statement

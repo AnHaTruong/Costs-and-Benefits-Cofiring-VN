@@ -39,6 +39,7 @@ else:
     VND = USD / 22270
 
 kUSD = 1000 * USD
+MUSD = 1000 * kUSD
 
 # Full Time Equivalent, a work time unit amounting to "1 job".
 FTE = 1560 * hr

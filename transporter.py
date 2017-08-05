@@ -7,7 +7,9 @@
 #
 """Represent the collective of transporters."""
 
-from init import display_as
+import pandas as pd
+
+from init import display_as, USD
 
 from emitter import Emitter, Activity
 from investment import Investment
@@ -85,3 +87,27 @@ class Transporter(Investment, Emitter):
     def max_trip_time(self):
         time = self.collection_radius / self.parameter['truck_velocity']
         return display_as(time, 'hr')
+
+    def income_statement(self):
+        """Summarize the economic implications of transporting acticity."""
+        headings = ['Transport revenue',
+                    '- Truck rental',
+                    '- Truck fuel',
+                    '- Handling work',
+                    '- Driving work']
+
+        cash_flows = pd.Series(
+            data=[self.revenue[1],
+                  - self.capital_cost()[1],
+                  - self.fuel_cost()[1],
+                  - self.loading_wages()[1],
+                  - self.driving_wages()[1]],
+            index=headings)
+
+        df = pd.DataFrame(
+            data=[cash_flows / (1000 * USD),
+                  cash_flows / self.truck_trips[1] / USD],
+            index=["Total", "Per_trip"])
+        df["= Net income"] = df.sum(axis=1)
+        df["Unit"] = ['kUSD', 'USD']
+        return df[["Unit"] + headings + ["= Net income"]].T

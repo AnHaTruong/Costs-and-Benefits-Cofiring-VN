@@ -12,9 +12,9 @@ import pandas as pd
 
 from parameters import MongDuong1System, NinhBinhSystem
 from parameters import discount_rate, tax_rate, depreciation_period
-from tables import technical_parameters, coal_saved, benefits, emissions, upstream_benefits
-from tables import job_changes, energy_costs, lcoe
-from tables import emission_reductions, balance_sheet_farmer, balance_sheet_transporter
+from tables import coal_saved, benefits, emissions
+from tables import job_changes, energy_costs
+from tables import emission_reductions
 
 # pylint and pytest known compatibility bug
 # pylint: disable=redefined-outer-name
@@ -27,24 +27,43 @@ def systems():
     return MongDuong1System, NinhBinhSystem
 
 
+@pytest.fixture()
+def finance():
+    return discount_rate, tax_rate, depreciation_period
+
+
 def test_energy_costs(regtest, systems):
     regtest.write(energy_costs(*systems))
-
-
-def test_technical_parameters(regtest, systems):
-    regtest.write(technical_parameters(*systems))
 
 
 def test_emission_reductions(regtest, systems):
     regtest.write(str(emission_reductions(*systems)))
 
 
-def test_balance_sheet_farmer(regtest, systems):
-    regtest.write(str(balance_sheet_farmer(*systems)))
+def test_lcoe_details(regtest, systems, finance):
+    series_a = systems[0].plant.lcoe_statement(*finance)
+    series_b = systems[0].cofiring_plant.lcoe_statement(*finance)
+    series_c = systems[1].plant.lcoe_statement(*finance)
+    series_d = systems[1].cofiring_plant.lcoe_statement(*finance)
+    regtest.write('\n'.join([str(series_a), str(series_b), str(series_c), str(series_d)]))
 
 
-def test_balance_sheet_transporter(regtest, systems):
-    regtest.write(str(balance_sheet_transporter(*systems)))
+def test_technical_parameters(regtest, systems):
+    series_a = systems[0].plant.characteristics()
+    series_b = systems[1].plant.characteristics()
+    regtest.write(str(series_a) + "\n" + str(series_b))
+
+
+def test_income_farmer(regtest, systems):
+    df_a = systems[0].farmer.income_statement()
+    df_b = systems[1].farmer.income_statement()
+    regtest.write(str(df_a) + "\n" + str(df_b))
+
+
+def test_income_transporter(regtest, systems):
+    df_a = systems[0].transporter.income_statement()
+    df_b = systems[1].transporter.income_statement()
+    regtest.write(str(df_a) + "\n" + str(df_b))
 
 
 def my_reg_test(regtest, systems, table):
@@ -61,14 +80,6 @@ def test_benefits(regtest, systems):
 
 def test_emissions(regtest, systems):
     my_reg_test(regtest, systems, emissions)
-
-
-def test_lcoe(regtest, systems):
-    my_reg_test(regtest, systems, lcoe)
-
-
-def test_upstream_benefits(regtest, systems):
-    my_reg_test(regtest, systems, upstream_benefits)
 
 
 def test_job_changes(regtest, systems):

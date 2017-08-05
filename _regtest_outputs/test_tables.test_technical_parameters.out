@@ -1,9 +1,18 @@
-Parameter                       Mong Duong 1           Ninh Binh
-Comissioning year                       2015                1974
-Boiler technology                        CFB                  PC
-Installed capacity                      1080 MW              100 MW
-Capacity factor                         0.60                0.64
-Coal consumption                     2709083 t          430553 t
-Heat value of coal                        19 MJ/kg            22 MJ/kg
-Plant efficiency                      0.3884              0.2177
-Boiler efficiency                     0.8703              0.8161
+Comissioning year              2015
+Boiler technology               CFB
+Installed capacity          1080 MW
+Capacity factor                 0.6
+Coal consumption      2.70908e+06 t
+Heat value of coal    19.4347 MJ/kg
+Plant efficiency                0.4
+Boiler efficiency               0.9
+Name: Mong Duong 1, dtype: object
+Comissioning year              1974
+Boiler technology                PC
+Installed capacity           100 MW
+Capacity factor                 0.6
+Coal consumption           430553 t
+Heat value of coal    21.5476 MJ/kg
+Plant efficiency                0.2
+Boiler efficiency               0.8
+Name: Ninh Binh, dtype: object
