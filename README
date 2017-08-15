@@ -4,8 +4,8 @@ Blending biomass with fossil fuels is a relatively low-cost technology to use re
 Requisite :
 Python 3
 pandas
-natu (provided, patched)
-pytest (Ubuntu package          python3-pytest)
+natu 1.2
+pytest
 sudo -H pip3 install pytest-regtest
 sudo pip3 install xlrd
 sudo pip3 install SALib
@@ -14,9 +14,16 @@ make
 Installation:
 If necessary the makefile will install  .git/hook/pre-commit  script when doing "make cleaner".
 
+natu version 1.1 broken with Python 3, because core.py uses the reduce function without importing it
+Since version 1.2 is not in Pypi as of 2017/08 one should install from GitHub with
+sudo pip3 install -I git+https://github.com/kdavies4/natu.git
+
+pytest can be installed from the Ubuntu package "python3-pytest"
+
+The file  strawdata.py  is an automatically generated intermediate file
+
 Usage:
 make
-
 
 Code quality is promoted with these practices:
 0. Self testing with  assert  statements
@@ -35,6 +42,4 @@ Known bugs and workarounds:
 doctest fails in an spyder3 IPython console with an unexpected argument in __init__
 See https://github.com/spyder-ide/spyder/issues/1855
 Use a simple Python console instead.
-
-Patch the file natu/core.py using the provided diff to remove the dependency on reduce()
 

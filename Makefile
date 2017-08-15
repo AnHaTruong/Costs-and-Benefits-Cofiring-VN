@@ -36,7 +36,7 @@ classes.dot packages.dot:
 .PHONY:  archive test regtest-reset lint docstyle codestyle clean cleaner
 
 distName:=CofiringEconomics-$(shell date --iso-8601)
-dirs=$(distName) $(distName)/data $(distName)/data/VNM_adm_shp $(distName)/tables.tocompare $(distName)/natu
+dirs=$(distName) $(distName)/data $(distName)/data/VNM_adm_shp $(distName)/tables.tocompare
 
 archive:
 	-@rm -rf $(distName) 2>/dev/null
@@ -46,12 +46,11 @@ archive:
 	cp *py $(distName)
 	cp -r _regtest_outputs $(distName)
 	cp -r Data $(distName)
-	cp -r natu $(distName)
 	zip -r $(distName).zip $(distName)
 	rm -rf $(distName)
 
 test: cleaner strawdata.py
-	py.test-3 --doctest-modules --ignore=natu/
+	py.test-3 --doctest-modules
 
 regtest-reset:
 	py.test-3 --regtest-reset
@@ -67,7 +66,7 @@ docstyle:
 	pydocstyle --ignore=D102,D105,D203 *py
 
 codestyle:
-	pycodestyle --exclude=natu
+	pycodestyle
 
 clean:
 	rm -f $(tables)
