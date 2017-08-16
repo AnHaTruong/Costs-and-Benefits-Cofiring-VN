@@ -53,6 +53,12 @@ ONES = np.ones(TIMEHORIZON + 1)
 
 
 def after_invest(qty):
+    """Construct a time serie from a quantity.
+
+    Used to vectorize calculations involving qty.
+    Return  natu.numpy.array([0, qty, ..., qty]).
+    The dtype=object might be a performance cost when "use_quantities = False" (untested).
+    """
     assert not hasattr(qty, '__iter__'), "Vectorize only scalar arguments."
     return array([0 * qty] + [qty] * TIMEHORIZON, dtype=object)
 

@@ -17,8 +17,6 @@ all: $(tables) $(figures)
 %.py: %_generator.py
 	$(PYTHON) $< > $@
 
-parameters.py: strawdata.py
-
 %.txt: %.py parameters.py
 	$(PYTHON) $< > $@
 

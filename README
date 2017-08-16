@@ -20,7 +20,6 @@ sudo pip3 install -I git+https://github.com/kdavies4/natu.git
 
 pytest can be installed from the Ubuntu package "python3-pytest"
 
-The file  strawdata.py  is an automatically generated intermediate file
 
 Usage:
 make
