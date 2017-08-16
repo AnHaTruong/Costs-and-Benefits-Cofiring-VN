@@ -31,8 +31,6 @@ classes.dot packages.dot:
 .git/hooks/pre-commit: pre-commit
 	cp $^ $@
 
-.precious: strawdata.py
-
 .PHONY:  archive test regtest-reset lint docstyle codestyle clean cleaner
 
 distName:=CofiringEconomics-$(shell date --iso-8601)
@@ -49,7 +47,7 @@ archive:
 	zip -r $(distName).zip $(distName)
 	rm -rf $(distName)
 
-test: cleaner strawdata.py
+test: cleaner
 	py.test-3 --doctest-modules
 
 regtest-reset:
@@ -74,7 +72,6 @@ clean:
 
 cleaner: clean .git/hooks/pre-commit
 	find . -type f -name '*.pyc' -delete
-	rm -f strawdata.py
 	rm -rf __pycache__
 	rm -rf classes.dot packages.dot
 

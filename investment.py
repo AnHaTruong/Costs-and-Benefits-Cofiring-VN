@@ -12,7 +12,7 @@
 
 import pandas as pd
 import natu.numpy as np
-from init import TIMEHORIZON, ZEROS, AFTER_INVEST, USD, display_as
+from init import TIMEHORIZON, ZEROS, USD, after_invest, display_as
 
 
 class Investment:
@@ -54,8 +54,8 @@ class Investment:
         self._revenue = value
 
     def investment(self):
-        """Multi year investment coded but not tested."""
-        v_invest = 1 - AFTER_INVEST
+        """Multi year investment coded here but lots of code assume it occurs only in  year 0."""
+        v_invest = 1 - after_invest(1)
         return display_as(v_invest * self.capital / sum(v_invest), 'kUSD')
 
     @staticmethod

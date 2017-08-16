@@ -22,6 +22,7 @@ from natu import config
 # config.use_quantities = False
 
 import natu.numpy as np
+from natu.numpy import array
 from natu.units import hr, t
 from natu import units
 from natu.core import ScalarUnit
@@ -49,8 +50,11 @@ TIMEHORIZON = 20   # years
 
 ZEROS = np.zeros(TIMEHORIZON + 1)
 ONES = np.ones(TIMEHORIZON + 1)
-AFTER_INVEST = np.ones(TIMEHORIZON + 1)
-AFTER_INVEST[0] = 0
+
+
+def after_invest(qty):
+    assert not hasattr(qty, '__iter__'), "Vectorize only scalar arguments."
+    return array([0 * qty] + [qty] * TIMEHORIZON, dtype=object)
 
 
 def display_as(qty, unit):

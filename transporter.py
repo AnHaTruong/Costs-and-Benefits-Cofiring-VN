@@ -9,7 +9,7 @@
 
 import pandas as pd
 
-from init import display_as, USD
+from init import after_invest, display_as, USD
 
 from emitter import Emitter, Activity
 from investment import Investment
@@ -33,8 +33,8 @@ class Transporter(Investment, Emitter):
 
         Investment.__init__(self)
 
-        self.activity_level = supply_chain.transport_tkm()
-        self.quantity = supply_chain.quantity()
+        self.activity_level = after_invest(supply_chain.transport_tkm())
+        self.quantity = after_invest(supply_chain.quantity())
         self.collection_radius = supply_chain.collection_radius()
 
         self.parameter = transport_parameter

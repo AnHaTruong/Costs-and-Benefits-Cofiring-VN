@@ -13,7 +13,7 @@ import pandas as pd
 from natu.units import y
 from natu.numpy import npv
 
-from init import ONES, AFTER_INVEST, USD, MUSD, display_as, safe_divide
+from init import ONES, USD, MUSD, display_as, safe_divide
 from investment import Investment
 from emitter import Emitter, Activity
 
@@ -176,9 +176,7 @@ class CofiringPlant(PowerPlant):
 
         self.name = plant_parameter.name + ' Cofire'
 
-        biomass_heat = (AFTER_INVEST
-                        * self.gross_heat_input
-                        * self.cofire_parameter.biomass_ratio_energy)
+        biomass_heat = self.gross_heat_input * self.cofire_parameter.biomass_ratio_energy
 
         self.biomass_used = biomass_heat / cofire_parameter.biomass.heat_value
         display_as(self.biomass_used, 't')
@@ -226,16 +224,13 @@ class CofiringPlant(PowerPlant):
 
     def coal_om_cost(self):  # DISCUSS THIS
         # Fixed costs are proportional to capacity
-        fixed_om_coal = (AFTER_INVEST
+        fixed_om_coal = ((1 - self.cofire_parameter.biomass_ratio_energy)
                          * self.parameter.fix_om_coal
-                         * self.parameter.capacity * y
-                         * (1 - self.cofire_parameter.biomass_ratio_energy))
-        fixed_om_coal[0] = self.parameter.fix_om_coal * self.parameter.capacity * y
+                         * self.parameter.capacity * y)
         # Variable costs proportional to generation after capacity factor
-        variable_om_coal = (self.power_generation
-                            * self.parameter.variable_om_coal
-                            * (1 - self.cofire_parameter.biomass_ratio_energy))
-        variable_om_coal[0] = self.power_generation[0] * self.parameter.variable_om_coal
+        variable_om_coal = ((1 - self.cofire_parameter.biomass_ratio_energy)
+                            * self.power_generation
+                            * self.parameter.variable_om_coal)
         cost = fixed_om_coal + variable_om_coal
         return display_as(cost, 'kUSD')
 
@@ -252,13 +247,11 @@ class CofiringPlant(PowerPlant):
         return display_as(amount, 'kUSD')
 
     def biomass_om_cost(self):
-        fixed_om_bm = (AFTER_INVEST
+        fixed_om_bm = (self.cofire_parameter.biomass_ratio_energy
                        * self.cofire_parameter.fix_om_cost
-                       * self.parameter.capacity * y
-                       * self.cofire_parameter.biomass_ratio_energy)
-        var_om_bm = (AFTER_INVEST
+                       * self.parameter.capacity * y)
+        var_om_bm = (self.cofire_parameter.biomass_ratio_energy
                      * self.power_generation
-                     * self.cofire_parameter.biomass_ratio_energy
                      * self.cofire_parameter.variable_om_cost)
         cost = fixed_om_bm + var_om_bm
         # error_message = "Biomass O&M variable costs appear lower than biomass OM wages."

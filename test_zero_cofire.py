@@ -22,7 +22,7 @@ from powerplant import PowerPlant
 def null_cofiring_system():
     return System(baseline.plant_parameter_MD1,
                   baseline.cofire_MD1._replace(biomass_ratio_energy=ZEROS),
-                  baseline.SupplyChain_MD1,
+                  baseline.supply_chain_MD1,
                   baseline.price_MD1,
                   baseline.farm_parameter,
                   baseline.transport_parameter)

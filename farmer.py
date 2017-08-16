@@ -11,7 +11,7 @@ import pandas as pd
 
 from natu.units import ha
 
-from init import AFTER_INVEST, ONES, display_as, USD
+from init import ONES, after_invest, display_as, USD
 from emitter import Emitter, Activity
 from investment import Investment
 
@@ -23,9 +23,9 @@ class Farmer(Investment, Emitter):
     """
 
     def __init__(self, supply_chain, farmer_parameter):
-        self.quantity = supply_chain.quantity()
         self.parameter = farmer_parameter
-        self.farm_area = self.quantity / supply_chain.average_straw_yield
+        self.quantity = after_invest(supply_chain.quantity())
+        self.farm_area = after_invest(supply_chain.quantity() / supply_chain.average_straw_yield)
 
         field_burning_before = Activity(
             name='Straw',
@@ -36,7 +36,7 @@ class Farmer(Investment, Emitter):
 
         field_burning = Activity(
             name='Straw',
-            level=field_burning_before.level - AFTER_INVEST * self.quantity,
+            level=field_burning_before.level - self.quantity,
             emission_factor=self.parameter['emission_factor']['straw'])
 
         Emitter.__init__(self, field_burning)

@@ -10,23 +10,18 @@
 #
 """Define the model's input parameters.
 
-All numeric values should be defined in this module.
+All numeric values should be defined in this module,
+except those defined in the parameters_supplychain module
 """
 
 from collections import namedtuple
 
 import pandas as pd
 
-from init import USD, VND, AFTER_INVEST, ONES
+from init import USD, VND, ONES, after_invest
 from natu.units import MJ, kg, t, d, hr, km, MW, ha, kW, y, kWh, MWh, g
 
-from strawdata import MongDuong1_straw_density1, MongDuong1_straw_density2
-from strawdata import NinhBinh_straw_density, NinhBinh_straw_production
-from strawdata import MongDuong1_straw_production
-from strawdata import MongDuong1_average_straw_yield, NinhBinh_average_straw_yield
-
-from shape import Semiannulus, Disk
-from supplychain import SupplyChain, SupplyZone
+from parameters_supplychain import supply_chain_MD1, supply_chain_NB
 from system import System
 
 
@@ -148,18 +143,6 @@ plant_parameter_MD1 = PlantParameter(name='Mong Duong 1',
                                                        'SO2': 0.982, 'NOx': 0.0, 'PM10': 0.996},
                                      coal=coal_6b)
 
-MDSupplyZone1 = SupplyZone(shape=Semiannulus(0 * km, 50 * km),
-                           straw_density=MongDuong1_straw_density1,
-                           tortuosity_factor=1.5)
-
-MDSupplyZone2 = SupplyZone(shape=Semiannulus(50 * km, 100 * km),
-                           straw_density=MongDuong1_straw_density2,
-                           tortuosity_factor=1.5)
-
-SupplyChain_MD1 = SupplyChain(zones=[MDSupplyZone1, MDSupplyZone2],
-                              straw_production=MongDuong1_straw_production,
-                              straw_burn_rate=0.9,
-                              average_straw_yield=MongDuong1_average_straw_yield)
 
 CofiringParameter = namedtuple('CofiringParameter', ['biomass_ratio_energy',
                                                      'capital_cost',
@@ -176,7 +159,7 @@ def boiler_efficiency_loss_function_T2000(biomass_ratio_mass):
     return 0.0044 * biomass_ratio_mass**2 + 0.0055 * biomass_ratio_mass
 
 
-cofire_MD1 = CofiringParameter(biomass_ratio_energy=AFTER_INVEST * 0.05,
+cofire_MD1 = CofiringParameter(biomass_ratio_energy=after_invest(0.05),
                                capital_cost=50 * USD / kW / y,
                                fix_om_cost=32.24 * USD / kW / y,
                                variable_om_cost=0.006 * USD / kWh,
@@ -192,7 +175,7 @@ price_MD1 = Price(biomass=37.26 * USD / t,
                   coal=1131400 * VND / t,
                   electricity=1239.17 * VND / kWh)
 
-MongDuong1System = System(plant_parameter_MD1, cofire_MD1, SupplyChain_MD1, price_MD1,
+MongDuong1System = System(plant_parameter_MD1, cofire_MD1, supply_chain_MD1, price_MD1,
                           farm_parameter, transport_parameter)
 
 
@@ -210,19 +193,11 @@ plant_parameter_NB = PlantParameter(name='Ninh Binh',
                                                       'SO2': 0.0, 'NOx': 0.0, 'PM10': 0.992},
                                     coal=coal_4b)
 
-SupplyZone_NB = SupplyZone(shape=Disk(50 * km),
-                           straw_density=NinhBinh_straw_density,
-                           tortuosity_factor=1.5)
-
-SupplyChain_NB = SupplyChain(zones=[SupplyZone_NB],
-                             straw_production=NinhBinh_straw_production,
-                             straw_burn_rate=0.9,
-                             average_straw_yield=NinhBinh_average_straw_yield)
 
 cofire_NB = cofire_MD1._replace(capital_cost=100 * USD / kW / y)
 
 price_NB = price_MD1._replace(coal=1825730 * VND / t,   # Includes transport
                               electricity=1665.6 * VND / kWh)
 
-NinhBinhSystem = System(plant_parameter_NB, cofire_NB, SupplyChain_NB, price_NB,
+NinhBinhSystem = System(plant_parameter_NB, cofire_NB, supply_chain_NB, price_NB,
                         farm_parameter, transport_parameter)

@@ -9,7 +9,7 @@
 
 from copy import copy
 
-from init import isclose, AFTER_INVEST, ZEROS, display_as
+from init import isclose, display_as
 
 from natu.units import t, km, ha
 
@@ -34,7 +34,7 @@ class SupplyZone:
                 + "\n Straw density: " + str(self.straw_density)
                 + "\n quantity = " + str(self.quantity())
                 + "\n Tortuosity: " + str(self.tortuosity_factor)
-                + "\n Activity to transport all = " + str(self.transport_tkm()[1])
+                + "\n Activity to transport all = " + str(self.transport_tkm())
                 )
 
     def area(self):
@@ -42,12 +42,11 @@ class SupplyZone:
         return display_as(surface, 'ha')
 
     def quantity(self):
-        mass = AFTER_INVEST * self.shape.area() * self.straw_density
+        mass = self.shape.area() * self.straw_density
         return display_as(mass, 't')
 
     def transport_tkm(self):
-        activity = (AFTER_INVEST
-                    * self.straw_density
+        activity = (self.straw_density
                     * self.shape.first_moment_of_area()
                     * self.tortuosity_factor
                     )
@@ -79,23 +78,23 @@ class SupplyChain:
 
         Disgard unused zone(s) and shrink the last one.
         """
-        assert target_quantity <= self.quantity()[1], 'Not enough biomass in supply chain: '
+        assert target_quantity <= self.quantity(), 'Not enough biomass in supply chain: '
 
         i = 0
         collected = SupplyChain([copy(self.zones[0])],
                                 straw_production=self.straw_production,
                                 straw_burn_rate=self.straw_burn_rate,
                                 average_straw_yield=self.average_straw_yield)
-        while collected.quantity()[1] < target_quantity:
+        while collected.quantity() < target_quantity:
             i += 1
             collected.zones.append(copy(self.zones[i]))
 
-        excess = collected.quantity()[1] - target_quantity
+        excess = collected.quantity() - target_quantity
         assert excess >= 0 * t
-        reduction_factor = 1 - excess / collected.zones[i].quantity()[1]
+        reduction_factor = 1 - excess / collected.zones[i].quantity()
         collected.zones[i] = collected.zones[i].shrink(reduction_factor)
 
-        assert isclose(collected.quantity()[1], target_quantity)
+        assert isclose(collected.quantity(), target_quantity)
         return collected
 
     def __str__(self):
@@ -113,13 +112,13 @@ class SupplyChain:
         return display_as(surface, 'km2')
 
     def quantity(self):
-        mass = ZEROS * t
+        mass = 0 * t
         for zone in self.zones:
             mass += zone.quantity()
         return display_as(mass, 't')
 
     def transport_tkm(self):
-        activity = ZEROS * t * km
+        activity = 0 * t * km
         for zone in self.zones:
             activity += zone.transport_tkm()
         return display_as(activity, 't * km')
