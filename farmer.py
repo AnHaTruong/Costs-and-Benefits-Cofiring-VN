@@ -32,7 +32,7 @@ class Farmer(Investment, Emitter):
             level=ONES * supply_chain.burnable(),
             emission_factor=self.parameter['emission_factor']['straw'])
 
-        self.emissions_exante = Emitter(field_burning_before).emissions()
+        self.emissions_exante = Emitter(field_burning_before).emissions(total=False)
 
         field_burning = Activity(
             name='Straw',

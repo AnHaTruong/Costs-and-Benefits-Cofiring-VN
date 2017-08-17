@@ -47,50 +47,8 @@ def coal_saved(system):
     table.append(row.format('Maximum benefit for trade balance', col2))
     return '\n'.join(table)
 
-#%%
-
-
-def as_table(emission_df):
-    """Print a dataframe containing time series, showing only the second item of each element.
-
-    Assumes that investment occured in period 0, so period 1 is the rate with cofiring.
-    """
-    return str(emission_df.applymap(lambda v: v[1]).T) + '\n'
-
-
-def emissions(system):
-    """Print the various emissions tables.
-
-    There are many tables because:
-        Emissions come from the plant, the supply, the straw supply, the open field burning
-        Emissions can be  without cofiring / with cofiring / the difference
-    """
-    cofireplant = system.cofiring_plant
-    plant = system.plant
-    table = []
-    table.append(plant.name + ' BASELINE EMISSION')
-    table.append('Emission from power plant')
-    table.append(as_table(plant.emissions()))
-    table.append('Emission from coal supply')
-    table.append(as_table(plant.coal_transporter().emissions()))
-    table.append('Emission from open field burning')
-    table.append(as_table(system.farmer.emissions_exante))
-    table.append(plant.name + ' COFIRING EMISSION')
-    table.append('Emission from power plant')
-    table.append(as_table(cofireplant.emissions()))
-    table.append('Emission from coal supply')
-    table.append(as_table(cofireplant.coal_transporter().emissions()))
-    table.append('Emission from straw supply')
-    table.append(as_table(system.transporter.emissions()))
-    table.append('Emission from open field burning')
-    table.append(as_table(system.farmer.emissions()))
-    table.append('-------')
-    table.append(plant.name + ' EMISSION REDUCTION\n')
-    table.append(as_table(system.emission_reduction(external_cost).T))
-    return '\n'.join(table)
 
 #%%
-
 
 def year_1(df):
     """Replace the vector [a, b, b, b, .., b] by the quantity  b per year, in a dataframe.
@@ -103,6 +61,33 @@ def year_1(df):
         assert list(vector)[1:] == [scalar] * (len(vector) - 1)
         return scalar / y
     return df.applymap(projector).T
+
+
+def atmosphere_emissions(system, total=False):
+    """Tabulate emissions to the atmosphere in different parts of the system.
+
+    TODO: rewrite as system methods
+    """
+    plant = system.plant
+    cofire_plant = system.cofiring_plant
+    farmer = system.farmer
+
+    baseline = pd.DataFrame(columns=['CO2', 'NOx', 'PM10', 'SO2'])
+    baseline = baseline.append(year_1(plant.emissions()))
+    baseline = baseline.append(year_1(plant.coal_transporter().emissions()))
+    baseline = baseline.append(year_1(farmer.emissions_exante))
+    if total:
+        baseline.loc["Total"] = baseline.sum()
+
+    cofiring = pd.DataFrame(columns=['CO2', 'NOx', 'PM10', 'SO2'])
+    cofiring = cofiring.append(year_1(cofire_plant.emissions()))
+    cofiring = cofiring.append(year_1(cofire_plant.coal_transporter().emissions()))
+    cofiring = cofiring.append(year_1(farmer.emissions()))
+    cofiring = cofiring.append(year_1(system.transporter.emissions()))
+    if total:
+        cofiring.loc["Total"] = cofiring.sum()
+
+    return baseline, cofiring
 
 
 def emission_reductions(system_a, system_b):

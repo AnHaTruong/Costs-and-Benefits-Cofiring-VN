@@ -75,9 +75,9 @@ class Emitter:
 
         Pollutants are in columns, activities are in row.
         """
-        return self.emissions().transpose().to_string()
+        return self.emissions(total=True).transpose().to_string()
 
-    def emissions(self):
+    def emissions(self, total=False):
         """Return a dataframe of emissions, including a total across all activities."""
         pollutants = self.activities[0].emission_factor.keys()
 
@@ -92,5 +92,6 @@ class Emitter:
                     activity.level * activity.emission_factor[pollutant] * control[pollutant]
                 for pollutant in pollutants}
             for activity in self.activities})
-        result['Total'] = result.sum(axis=1)
+        if total:
+            result['Total'] = result.sum(axis=1)  # Should return this directly
         return result

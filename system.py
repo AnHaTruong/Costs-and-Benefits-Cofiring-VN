@@ -96,15 +96,16 @@ class System:
         return display_as(value, 'kUSD')
 
     def emission_reduction(self, external_cost):
-        plant_reduction = (self.plant.emissions()['Total']
-                           - self.cofiring_plant.emissions()['Total'])
+        plant_reduction = (self.plant.emissions(total=True)['Total']
+                           - self.cofiring_plant.emissions(total=True)['Total'])
 
-        transport_reduction = (self.plant.coal_transporter().emissions()['Total']
-                               - self.cofiring_plant.coal_transporter().emissions()['Total']
-                               - self.transporter.emissions()['Total'])
+        transport_reduction = (
+            self.plant.coal_transporter().emissions(total=True)['Total']
+            - self.cofiring_plant.coal_transporter().emissions(total=True)['Total']
+            - self.transporter.emissions(total=True)['Total'])
 
-        field_reduction = (self.farmer.emissions_exante['Total']
-                           - self.farmer.emissions()['Total'])
+        field_reduction = (self.farmer.emissions_exante['Straw']
+                           - self.farmer.emissions(total=True)['Total'])
 
         total_reduction = plant_reduction + transport_reduction + field_reduction
         total_benefit = total_reduction * external_cost
