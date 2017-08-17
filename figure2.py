@@ -14,66 +14,58 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from parameters import MongDuong1System, NinhBinhSystem
-from natu.units import kt, Mt
+from natu.units import kt, Mt, y
 
 
-def data_to_plot(system):
+#%%
+
+def plot_data(system):
     """Return CO2 and other air pollutants emissions for one site."""
-    cofiringplant = system.cofiring_plant
-    plant = system.plant
+    baseline = system.emissions_baseline(total=True) * y
+    cofiring = system.emissions_cofiring(total=True) * y
 
-    CO2stack = np.array([plant.emissions(total=True).at['CO2', 'Total'][1],
-                         cofiringplant.emissions(total=True).at['CO2', 'Total'][1]
-                         ]) / Mt
+    CO2stack = np.array([baseline.at['Total_plant', 'CO2'],
+                         cofiring.at['Total_plant', 'CO2']]) / Mt
 
-    CO2trans = np.array(
-        [plant.coal_transporter().emissions(total=True).at['CO2', 'Total'][1],
-         (cofiringplant.coal_transporter().emissions(total=True).at['CO2', 'Total'][1]
-         + system.transporter.emissions(total=True).at['CO2', 'Total'][1])
-         ]) / Mt
+    CO2trans = np.array([baseline.at['Total_transport', 'CO2'],
+                         cofiring.at['Total_transport', 'CO2']]) / Mt
 
-    field_emis_before = system.farmer.emissions_exante
-    field_emis_after = system.farmer.emissions(total=True)
-    CO2field = np.array([field_emis_before.at['CO2', 'Straw'][1],
-                         field_emis_after.at['CO2', 'Total'][1]]
-                        ) / Mt
+    CO2field = np.array([baseline.at['Total_field', 'CO2'],
+                         cofiring.at['Total_field', 'CO2']]) / Mt
 
-    polstack = np.array([plant.emissions(total=True).at['SO2', 'Total'][1],
-                         cofiringplant.emissions(total=True).at['SO2', 'Total'][1],
-                         plant.emissions(total=True).at['PM10', 'Total'][1],
-                         cofiringplant.emissions(total=True).at['PM10', 'Total'][1],
-                         plant.emissions(total=True).at['NOx', 'Total'][1],
-                         cofiringplant.emissions(total=True).at['NOx', 'Total'][1]
+    polstack = np.array([baseline.at['Total_plant', 'SO2'],
+                         cofiring.at['Total_plant', 'SO2'],
+                         baseline.at['Total_plant', 'PM10'],
+                         cofiring.at['Total_plant', 'PM10'],
+                         baseline.at['Total_plant', 'NOx'],
+                         cofiring.at['Total_plant', 'NOx']
                          ]) / kt
 
-    coal_transport_emis_before = plant.coal_transporter().emissions(total=True)
-    coal_transport_emis_after = cofiringplant.coal_transporter().emissions(total=True)
-    straw_transport_emis = system.transporter.emissions(total=True)
-    poltrans = np.array([coal_transport_emis_before.at['SO2', 'Total'][1],
-                         (coal_transport_emis_after.at['SO2', 'Total'][1]
-                          + straw_transport_emis.at['SO2', 'Total'][1]),
-                         coal_transport_emis_before.at['PM10', 'Total'][1],
-                         (coal_transport_emis_after.at['PM10', 'Total'][1]
-                          + straw_transport_emis.at['PM10', 'Total'][1]),
-                         coal_transport_emis_before.at['NOx', 'Total'][1],
-                         (coal_transport_emis_after.at['NOx', 'Total'][1]
-                          + straw_transport_emis.at['NOx', 'Total'][1])
+    poltrans = np.array([baseline.at['Total_transport', 'SO2'],
+                         cofiring.at['Total_transport', 'SO2'],
+                         baseline.at['Total_transport', 'PM10'],
+                         cofiring.at['Total_transport', 'PM10'],
+                         baseline.at['Total_transport', 'NOx'],
+                         cofiring.at['Total_transport', 'NOx']
                          ]) / kt
 
-    polfield = np.array([field_emis_before.at['SO2', 'Straw'][1],
-                         field_emis_after.at['SO2', 'Total'][1],
-                         field_emis_before.at['PM10', 'Straw'][1],
-                         field_emis_after.at['PM10', 'Total'][1],
-                         field_emis_before.at['NOx', 'Straw'][1],
-                         field_emis_after.at['NOx', 'Total'][1]
+    polfield = np.array([baseline.at['Total_field', 'SO2'],
+                         cofiring.at['Total_field', 'SO2'],
+                         baseline.at['Total_field', 'PM10'],
+                         cofiring.at['Total_field', 'PM10'],
+                         baseline.at['Total_field', 'NOx'],
+                         cofiring.at['Total_field', 'NOx']
                          ]) / kt
 
     return CO2stack, CO2trans, CO2field, polstack, poltrans, polfield
 
 
+#%%
+
+
 def plot_emissions(system, axes):
     """Plot to compare atmospheric pollution with and without cofiring."""
-    CO2stack, CO2trans, CO2field, polstack, poltrans, polfield = data_to_plot(system)
+    CO2stack, CO2trans, CO2field, polstack, poltrans, polfield = plot_data(system)
     ind = [0, 0.5]
     width = 0.48
     index = [2, 2.5, 3.5, 4, 5, 5.5]

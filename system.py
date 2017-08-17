@@ -96,15 +96,20 @@ class System:
         return display_as(value, 'kUSD')
 
     def emissions_baseline(self, total=False):
+        """Tabulate system annual atmospheric emissions without cofiring."""
         baseline = pd.DataFrame(columns=['CO2', 'NOx', 'PM10', 'SO2'])
         baseline = baseline.append(year_1(self.plant.emissions()))
         baseline = baseline.append(year_1(self.plant.coal_transporter().emissions()))
         baseline = baseline.append(year_1(self.farmer.emissions_exante))
         if total:
             baseline.loc["Total"] = baseline.sum()
+            baseline.loc["Total_plant"] = baseline.iloc[0]
+            baseline.loc["Total_transport"] = baseline.iloc[1]
+            baseline.loc["Total_field"] = baseline.iloc[2]
         return baseline
 
     def emissions_cofiring(self, total=False):
+        """Tabulate system annual atmospheric emissions with cofiring."""
         cofiring = pd.DataFrame(columns=['CO2', 'NOx', 'PM10', 'SO2'])
         cofiring = cofiring.append(year_1(self.cofiring_plant.emissions()))
         cofiring = cofiring.append(year_1(self.cofiring_plant.coal_transporter().emissions()))
@@ -112,9 +117,13 @@ class System:
         cofiring = cofiring.append(year_1(self.transporter.emissions()))
         if total:
             cofiring.loc["Total"] = cofiring.sum()
+            cofiring.loc["Total_plant"] = cofiring.iloc[0] + cofiring.iloc[1]
+            cofiring.loc["Total_transport"] = cofiring.iloc[2] + cofiring.iloc[4]
+            cofiring.loc["Total_field"] = cofiring.iloc[3]
         return cofiring
 
     def emission_reduction(self, external_cost):
+        """Tabulate reductions of annual atmospheric emissions with cofiring."""
         plant_reduction = (self.plant.emissions(total=True)['Total']
                            - self.cofiring_plant.emissions(total=True)['Total'])
 
