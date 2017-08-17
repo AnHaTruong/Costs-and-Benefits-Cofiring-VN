@@ -10,7 +10,7 @@
 import pandas as pd
 from natu.numpy import npv
 
-from init import after_invest, display_as, safe_divide
+from init import after_invest, year_1, display_as, safe_divide
 from powerplant import PowerPlant, CofiringPlant
 from farmer import Farmer
 from transporter import Transporter
@@ -94,6 +94,25 @@ class System:
     def coal_work_lost_value(self, mining_productivity, mining_wage):
         value = self.coal_work_lost(mining_productivity) * mining_wage
         return display_as(value, 'kUSD')
+
+    def emissions_baseline(self, total=False):
+        baseline = pd.DataFrame(columns=['CO2', 'NOx', 'PM10', 'SO2'])
+        baseline = baseline.append(year_1(self.plant.emissions()))
+        baseline = baseline.append(year_1(self.plant.coal_transporter().emissions()))
+        baseline = baseline.append(year_1(self.farmer.emissions_exante))
+        if total:
+            baseline.loc["Total"] = baseline.sum()
+        return baseline
+
+    def emissions_cofiring(self, total=False):
+        cofiring = pd.DataFrame(columns=['CO2', 'NOx', 'PM10', 'SO2'])
+        cofiring = cofiring.append(year_1(self.cofiring_plant.emissions()))
+        cofiring = cofiring.append(year_1(self.cofiring_plant.coal_transporter().emissions()))
+        cofiring = cofiring.append(year_1(self.farmer.emissions()))
+        cofiring = cofiring.append(year_1(self.transporter.emissions()))
+        if total:
+            cofiring.loc["Total"] = cofiring.sum()
+        return cofiring
 
     def emission_reduction(self, external_cost):
         plant_reduction = (self.plant.emissions(total=True)['Total']

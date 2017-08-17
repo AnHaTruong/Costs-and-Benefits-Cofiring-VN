@@ -12,7 +12,7 @@ import pandas as pd
 
 from natu.units import y, t
 
-from init import display_as, isclose, USD, kUSD, FTE
+from init import display_as, isclose, USD, kUSD, FTE, year_1
 from parameters import coal_import_price, external_cost, mining_parameter
 from parameters import discount_rate
 
@@ -49,45 +49,6 @@ def coal_saved(system):
 
 
 #%%
-
-def year_1(df):
-    """Replace the vector [a, b, b, b, .., b] by the quantity  b per year, in a dataframe.
-
-    Object  y  denotes the unit symbol for "year".
-    This assumes that investment occured in period 0, then steady state from period 1 onwards.
-    """
-    def projector(vector):
-        scalar = vector[1]
-        assert list(vector)[1:] == [scalar] * (len(vector) - 1)
-        return scalar / y
-    return df.applymap(projector).T
-
-
-def atmosphere_emissions(system, total=False):
-    """Tabulate emissions to the atmosphere in different parts of the system.
-
-    TODO: rewrite as system methods
-    """
-    plant = system.plant
-    cofire_plant = system.cofiring_plant
-    farmer = system.farmer
-
-    baseline = pd.DataFrame(columns=['CO2', 'NOx', 'PM10', 'SO2'])
-    baseline = baseline.append(year_1(plant.emissions()))
-    baseline = baseline.append(year_1(plant.coal_transporter().emissions()))
-    baseline = baseline.append(year_1(farmer.emissions_exante))
-    if total:
-        baseline.loc["Total"] = baseline.sum()
-
-    cofiring = pd.DataFrame(columns=['CO2', 'NOx', 'PM10', 'SO2'])
-    cofiring = cofiring.append(year_1(cofire_plant.emissions()))
-    cofiring = cofiring.append(year_1(cofire_plant.coal_transporter().emissions()))
-    cofiring = cofiring.append(year_1(farmer.emissions()))
-    cofiring = cofiring.append(year_1(system.transporter.emissions()))
-    if total:
-        cofiring.loc["Total"] = cofiring.sum()
-
-    return baseline, cofiring
 
 
 def emission_reductions(system_a, system_b):

@@ -23,7 +23,7 @@ from natu import config
 
 import natu.numpy as np
 from natu.numpy import array
-from natu.units import hr, t
+from natu.units import hr, t, y
 from natu import units
 from natu.core import ScalarUnit
 
@@ -68,6 +68,19 @@ def after_invest(qty):
     """
     assert not hasattr(qty, '__iter__'), "Vectorize only scalar arguments."
     return array([0 * qty] + [qty] * TIMEHORIZON, dtype=object)
+
+
+def year_1(df):
+    """Replace the vector [a, b, b, b, .., b] by the quantity  b per year, in a dataframe.
+
+    Object  y  denotes the unit symbol for "year".
+    This assumes that investment occured in period 0, then steady state from period 1 onwards.
+    """
+    def projector(vector):
+        scalar = vector[1]
+        assert list(vector)[1:] == [scalar] * (len(vector) - 1)
+        return scalar / y
+    return df.applymap(projector).T
 
 
 def display_as(qty, unit):

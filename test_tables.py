@@ -12,7 +12,7 @@ import pandas as pd
 
 from parameters import MongDuong1System, NinhBinhSystem
 from parameters import discount_rate, tax_rate, depreciation_period
-from tables import coal_saved, benefits, atmosphere_emissions
+from tables import coal_saved, benefits
 from tables import job_changes, energy_costs
 from tables import emission_reductions
 
@@ -66,9 +66,15 @@ def test_income_transporter(regtest, systems):
     regtest.write(str(df_a) + "\n" + str(df_b))
 
 
-def test_atmosphere_emissions(regtest, systems):
-    df_a = atmosphere_emissions(systems[0])
-    df_b = atmosphere_emissions(systems[1])
+def test_emissions_baseline(regtest, systems):
+    df_a = systems[0].emissions_baseline()
+    df_b = systems[1].emissions_baseline()
+    regtest.write(str(df_a) + "\n" + str(df_b))
+
+
+def test_emissions_cofiring(regtest, systems):
+    df_a = systems[0].emissions_cofiring()
+    df_b = systems[1].emissions_cofiring()
     regtest.write(str(df_a) + "\n" + str(df_b))
 
 
