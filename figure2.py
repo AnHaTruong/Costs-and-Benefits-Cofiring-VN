@@ -14,14 +14,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from parameters import MongDuong1System, NinhBinhSystem
-from natu.units import t
+from natu.units import kt, Mt
 
 
-# pylint: disable=too-many-locals
-def plot_emissions(system, axes):
-    """Plot the air pollutants emissions and CO2 emissions figure for one site."""
-    kt = 1000 * t
-    Mt = 1000000 * t
+def data_to_plot(system):
+    """Return CO2 and other air pollutants emissions for one site."""
     cofiringplant = system.cofiring_plant
     plant = system.plant
 
@@ -70,6 +67,12 @@ def plot_emissions(system, axes):
                          field_emis_after.at['NOx', 'Total'][1]
                          ]) / kt
 
+    return CO2stack, CO2trans, CO2field, polstack, poltrans, polfield
+
+
+def plot_emissions(system, axes):
+    """Plot to compare atmospheric pollution with and without cofiring."""
+    CO2stack, CO2trans, CO2field, polstack, poltrans, polfield = data_to_plot(system)
     ind = [0, 0.5]
     width = 0.48
     index = [2, 2.5, 3.5, 4, 5, 5.5]
@@ -99,7 +102,7 @@ def plot_emissions(system, axes):
     ax2.tick_params(axis='y', length=0)
     ax1.legend(bbox_to_anchor=(0.98, 0.8),
                prop={'size': 9},
-               title=plant.name + ' Emissions',
+               title=system.plant.name + ' Emissions',
                frameon=False)
 
 

@@ -8,16 +8,15 @@
 #     Creative Commons Attribution-ShareAlike 4.0 International
 #
 #
-"""Draw Figure 3 to visualize table 12 added up benefits for different group."""
+"""Draw a figure showing the cumulative costs/benefits for different groups."""
 
 import matplotlib.pyplot as plt
-import numpy as np
-from init import USD
-from parameters import discount_rate, tax_rate, depreciation_period
-from parameters import MongDuong1System, NinhBinhSystem
-from parameters import external_cost
 
-MUSD = 10**6 * USD
+import numpy as np
+
+from init import MUSD
+from parameters import discount_rate, tax_rate, depreciation_period, external_cost
+from parameters import MongDuong1System, NinhBinhSystem
 
 
 def benefit_array(system):

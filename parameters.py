@@ -154,7 +154,7 @@ CofiringParameter = namedtuple('CofiringParameter', ['biomass_ratio_energy',
                                                      'wage_operation_maintenance'])
 
 
-def boiler_efficiency_loss_function_T2000(biomass_ratio_mass):
+def boiler_efficiency_loss_T2000(biomass_ratio_mass):
     """Boiler efficiency loss due to cofiring according to Tillman (2000)."""
     return 0.0044 * biomass_ratio_mass**2 + 0.0055 * biomass_ratio_mass
 
@@ -164,7 +164,7 @@ cofire_MD1 = CofiringParameter(biomass_ratio_energy=after_invest(0.05),
                                fix_om_cost=32.24 * USD / kW / y,
                                variable_om_cost=0.006 * USD / kWh,
                                biomass=straw,
-                               boiler_efficiency_loss=boiler_efficiency_loss_function_T2000,
+                               boiler_efficiency_loss=boiler_efficiency_loss_T2000,
                                OM_hour_MWh=0.12 * hr / MWh,  # working hour for OM per MWh
                                wage_operation_maintenance=1.67 * USD / hr)
 

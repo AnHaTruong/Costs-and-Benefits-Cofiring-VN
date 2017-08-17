@@ -27,6 +27,12 @@ from natu.units import hr, t
 from natu import units
 from natu.core import ScalarUnit
 
+# Allow other modules to use
+#   from natu.units import kt, Mt
+# pylint: disable=protected-access
+t._prefixable = True
+
+
 # Semantic overloading: we reuse the "amount" dimension to mean "value"
 
 if config.use_quantities:
@@ -41,6 +47,7 @@ else:
 
 kUSD = 1000 * USD
 MUSD = 1000 * kUSD
+
 
 # Full Time Equivalent, a work time unit amounting to "1 job".
 FTE = 1560 * hr
