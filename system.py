@@ -156,3 +156,74 @@ class System:
         annual_health_benefit = df.loc['Benefit'].drop('CO2').sum()
         value = npv(discount_rate, annual_health_benefit)
         return display_as(value, 'kUSD')
+
+    def benefits(self, discount_rate, external_cost):
+        """Tabulate the present value of various benefits from co-firing."""
+        table = ['']
+        table.append(self.cofiring_plant.name)
+        table.append('-------------------')
+        row2 = '{:30}' + '{:20.0f}'
+        table.append(row2.format('Health', self.health_npv(discount_rate, external_cost)))
+        table.append(row2.format('Emission reduction',
+                                 self.mitigation_npv(discount_rate, external_cost)))
+        table.append(row2.format('Wages', self.wages_npv(discount_rate)))
+        table.append(row2.format('Farmer earnings before tax',
+                                 self.farmer.net_present_value(discount_rate)))
+        table.append(row2.format('Trader earnings before tax',
+                                 self.transporter.net_present_value(discount_rate)))
+        return '\n'.join(table)
+
+    def coal_saved_benefits(self, coal_import_price):
+        """Tabulate the quantity and value of coal saved by cofiring."""
+        col1 = self.coal_saved[1]
+        col2 = display_as(col1 * coal_import_price, 'kUSD')
+
+        row = '{:35}{:23.0f}'
+        table = ['Coal saved at ' + str(self.cofiring_plant.name)]
+        table.append(row.format('Amount of coal saved from co-firing', col1))
+        table.append(row.format('Maximum benefit for trade balance', col2))
+        return '\n'.join(table)
+
+    # Code really smell, will change result to DataFrame now.
+    # pylint: disable=too-many-locals
+    def job_changes(self, mining_parameter):
+        """Tabulate the number of full time equivalent (FTE) jobs created/destroyed by cofiring."""
+        cols = '{:25}{:12.1f}'
+        cols2 = '{:25}{:12.1f}{:12.1f}'
+
+        lines = ['Benefit from job creation: ' + self.plant.name + '\n']
+
+        row7 = self.farmer.labor()[1]
+        row1 = self.farmer.labor_cost()[1]
+        row8 = self.transporter.driving_work()[1]
+        row2 = self.transporter.driving_wages()[1]
+        row11 = self.transporter.loading_work()[1]
+        row12 = self.transporter.loading_wages()[1]
+        row9 = self.cofiring_plant.biomass_om_work()[1]
+        row3 = self.cofiring_plant.biomass_om_wages()[1]
+        row10 = self.labor[1]
+        row4 = self.wages[1]
+
+        display_as(row7, 'FTE')
+        display_as(row8, 'FTE')
+        display_as(row9, 'FTE')
+        display_as(row10, 'FTE')
+        display_as(row11, 'FTE')
+
+        lines.append(cols2.format('Biomass collection', row7, row1))
+        lines.append(cols2.format('Biomass transportation', row8, row2))
+        lines.append(cols2.format('Biomass loading', row11, row12))
+        lines.append(cols2.format('O&M', row9, row3))
+        lines.append(cols2.format('Total', row10, row4))
+        lines.append('')
+        lines.append(cols.format('Area collected', self.supply_chain.area()))
+        lines.append(cols.format('Collection radius', self.supply_chain.collection_radius()))
+        lines.append(cols.format('Maximum transport time', self.transporter.max_trip_time()))
+        lines.append(cols.format('Number of truck trips', self.transporter.truck_trips[1]))
+        lines.append('')
+        lines.append('Mining job lost from co-firing at ' + self.plant.name + '\n')
+        row = self.coal_work_lost(mining_parameter['productivity_underground'])[1]
+        display_as(row, 'FTE')
+        lines.append(cols.format('Job lost', row))
+        lines.append(cols.format('Coal saved', self.coal_saved[1]))
+        return '\n'.join(lines)

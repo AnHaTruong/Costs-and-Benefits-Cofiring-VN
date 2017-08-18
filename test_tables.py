@@ -12,8 +12,10 @@ import pandas as pd
 
 from parameters import MongDuong1System, NinhBinhSystem
 from parameters import discount_rate, tax_rate, depreciation_period
-from tables import coal_saved, benefits
-from tables import job_changes, energy_costs
+# We are using them inside an eval string
+# pylint: disable=unused-import
+from parameters import external_cost, coal_import_price, mining_parameter
+from tables import energy_costs
 from tables import emission_reductions
 
 # pylint and pytest known compatibility bug
@@ -21,15 +23,12 @@ from tables import emission_reductions
 
 pd.options.display.float_format = '{:,.1f}'.format
 
+finance = discount_rate, tax_rate, depreciation_period
+
 
 @pytest.fixture()
 def systems():
     return MongDuong1System, NinhBinhSystem
-
-
-@pytest.fixture()
-def finance():
-    return discount_rate, tax_rate, depreciation_period
 
 
 def test_energy_costs(regtest, systems):
@@ -40,71 +39,57 @@ def test_emission_reductions(regtest, systems):
     regtest.write(str(emission_reductions(*systems)))
 
 
-def test_plant_lcoe_statement(regtest, systems, finance):
-    series_a = systems[0].plant.lcoe_statement(*finance)
-    series_b = systems[1].plant.lcoe_statement(*finance)
-    regtest.write(str(series_a) + '\n' + str(series_b))
+# pylint: disable=eval-used, unused-argument
+def f(systems, method):
+    result_a = eval('systems[0].' + method)
+    result_b = eval('systems[1].' + method)
+    return str(result_a) + "\n" + str(result_b)
 
 
-def test_cofiring_plant_lcoe(regtest, systems, finance):
-    series_a = systems[0].cofiring_plant.lcoe_statement(*finance)
-    series_b = systems[1].cofiring_plant.lcoe_statement(*finance)
-    regtest.write(str(series_a) + '\n' + str(series_b))
+def test_plant_lcoe_statement(regtest, systems):
+    regtest.write(f(systems, 'plant.lcoe_statement(*finance)'))
+
+
+def test_cofiring_plant_lcoe(regtest, systems):
+    regtest.write(f(systems, 'cofiring_plant.lcoe_statement(*finance)'))
 
 
 def test_technical_parameters(regtest, systems):
-    series_a = systems[0].plant.characteristics()
-    series_b = systems[1].plant.characteristics()
-    regtest.write(str(series_a) + "\n" + str(series_b))
+    regtest.write(f(systems, 'plant.characteristics()'))
 
 
 def test_income_farmer(regtest, systems):
-    df_a = systems[0].farmer.income_statement()
-    df_b = systems[1].farmer.income_statement()
-    regtest.write(str(df_a) + "\n" + str(df_b))
+    regtest.write(f(systems, 'farmer.income_statement()'))
 
 
 def test_income_transporter(regtest, systems):
-    df_a = systems[0].transporter.income_statement()
-    df_b = systems[1].transporter.income_statement()
-    regtest.write(str(df_a) + "\n" + str(df_b))
+    regtest.write(f(systems, 'transporter.income_statement()'))
 
 
 def test_emissions_baseline(regtest, systems):
-    df_a = systems[0].emissions_baseline()
-    df_b = systems[1].emissions_baseline()
-    regtest.write(str(df_a) + "\n" + str(df_b))
+    regtest.write(f(systems, 'emissions_baseline()'))
 
 
 def test_emissions_cofiring(regtest, systems):
-    df_a = systems[0].emissions_cofiring()
-    df_b = systems[1].emissions_cofiring()
-    regtest.write(str(df_a) + "\n" + str(df_b))
-
-
-def my_reg_test(regtest, systems, table):
-    regtest.write(table(systems[0]) + '\n' + table(systems[1]))
-
-
-def test_coal_saved(regtest, systems):
-    my_reg_test(regtest, systems, coal_saved)
-
-
-def test_benefits(regtest, systems):
-    my_reg_test(regtest, systems, benefits)
-
-
-def test_job_changes(regtest, systems):
-    my_reg_test(regtest, systems, job_changes)
+    regtest.write(f(systems, 'emissions_cofiring()'))
 
 
 def test_net_present_value_plant(regtest, systems):
-    table_a = systems[0].plant.pretty_table(discount_rate, tax_rate, depreciation_period)
-    table_b = systems[1].plant.pretty_table(discount_rate, tax_rate, depreciation_period)
-    regtest.write(table_a + '\n' + table_b)
+    regtest.write(f(systems, 'plant.pretty_table(*finance)'))
 
 
 def test_net_present_value_cofiring(regtest, systems):
-    table_a = systems[0].cofiring_plant.pretty_table(discount_rate, tax_rate, depreciation_period)
-    table_b = systems[1].cofiring_plant.pretty_table(discount_rate, tax_rate, depreciation_period)
-    regtest.write(table_a + '\n' + table_b)
+    regtest.write(
+        f(systems, 'cofiring_plant.pretty_table(*finance)'))
+
+
+def test_coal_saved(regtest, systems):
+    regtest.write(f(systems, 'coal_saved_benefits(coal_import_price)'))
+
+
+def test_benefits(regtest, systems):
+    regtest.write(f(systems, 'benefits(discount_rate, external_cost)'))
+
+
+def test_job_changes(regtest, systems):
+    regtest.write(f(systems, 'job_changes(mining_parameter)'))
