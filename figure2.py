@@ -11,92 +11,63 @@
 """Plot the air pollutants emissions and CO2 emissions figure."""
 
 import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
+
 import numpy as np
 
 from parameters import MongDuong1System, NinhBinhSystem
 from natu.units import kt, Mt, y
-
-
-#%%
-
-def plot_data(system):
-    """Return CO2 and other air pollutants emissions for one site."""
-    baseline = system.emissions_baseline(total=True) * y
-    cofiring = system.emissions_cofiring(total=True) * y
-
-    CO2stack = np.array([baseline.at['Total_plant', 'CO2'],
-                         cofiring.at['Total_plant', 'CO2']]) / Mt
-
-    CO2trans = np.array([baseline.at['Total_transport', 'CO2'],
-                         cofiring.at['Total_transport', 'CO2']]) / Mt
-
-    CO2field = np.array([baseline.at['Total_field', 'CO2'],
-                         cofiring.at['Total_field', 'CO2']]) / Mt
-
-    polstack = np.array([baseline.at['Total_plant', 'SO2'],
-                         cofiring.at['Total_plant', 'SO2'],
-                         baseline.at['Total_plant', 'PM10'],
-                         cofiring.at['Total_plant', 'PM10'],
-                         baseline.at['Total_plant', 'NOx'],
-                         cofiring.at['Total_plant', 'NOx']
-                         ]) / kt
-
-    poltrans = np.array([baseline.at['Total_transport', 'SO2'],
-                         cofiring.at['Total_transport', 'SO2'],
-                         baseline.at['Total_transport', 'PM10'],
-                         cofiring.at['Total_transport', 'PM10'],
-                         baseline.at['Total_transport', 'NOx'],
-                         cofiring.at['Total_transport', 'NOx']
-                         ]) / kt
-
-    polfield = np.array([baseline.at['Total_field', 'SO2'],
-                         cofiring.at['Total_field', 'SO2'],
-                         baseline.at['Total_field', 'PM10'],
-                         cofiring.at['Total_field', 'PM10'],
-                         baseline.at['Total_field', 'NOx'],
-                         cofiring.at['Total_field', 'NOx']
-                         ]) / kt
-
-    return CO2stack, CO2trans, CO2field, polstack, poltrans, polfield
-
 
 #%%
 
 
 def plot_emissions(system, axes):
     """Plot to compare atmospheric pollution with and without cofiring."""
-    CO2stack, CO2trans, CO2field, polstack, poltrans, polfield = plot_data(system)
-    ind = [0, 0.5]
-    width = 0.48
-    index = [2, 2.5, 3.5, 4, 5, 5.5]
+    baseline = system.emissions_baseline(total=True) * y
+    cofiring = system.emissions_cofiring(total=True) * y
 
-    ax1 = axes
-    ax2 = ax1.twiny()
+    def emis(segment, pollutant='CO2', unit=Mt):
+        return np.array([baseline.at['Total_' + segment, pollutant],
+                         cofiring.at['Total_' + segment, pollutant]]) / unit
 
-    ax1.barh(ind, CO2stack, width, color='darkred', edgecolor='none', label='Plant emissions')
-    ax1.barh(ind, CO2trans, width, color='mistyrose', edgecolor='none',
-             left=CO2stack, label='Transport emissions')
-    ax1.barh(ind, CO2field, width, color='salmon', edgecolor='none',
-             left=(CO2stack + CO2trans), label='Field emissions')
+    def emis3(segment):
+        return np.concatenate(
+            [emis(segment, 'SO2', kt), emis(segment, 'PM10', kt), emis(segment, 'NOx', kt)])
 
-    ax2.barh(index, polstack, width, color='darkred', edgecolor='none')
-    ax2.barh(index, poltrans, width, color='mistyrose', edgecolor='none', left=polstack)
-    ax2.barh(index, polfield, width, color='salmon', edgecolor='none', left=(polstack + poltrans))
+    def barhstack(axes, bottom, width, height=0.48, xlabel=None):
+        """Plot a horizontal stacked bar, width is a sequence of three horizontal dimensions."""
+        axes.barh(bottom, width[0], height, color='darkred', edgecolor='none')
+        axes.barh(bottom, width[1], height, width[0], color='mistyrose', edgecolor='none')
+        axes.barh(bottom, width[2], height, width[0] + width[1], color='salmon', edgecolor='none')
+        axes.tick_params(axis='y', length=0)
+        axes.set_xlabel(xlabel)
 
-    ax1.set_xlabel('CO2 emission (Mt/y)')
-    ax2.set_xlabel('Air pollutant Emission (kt/y)')
+    bot1 = [0, 0.5]
+    bot2 = [2, 2.5, 3.5, 4, 5, 5.5]
 
-    plt.yticks(np.concatenate((ind, index), axis=0), ('CO2 Baseline', 'CO2 Cofire',
-                                                      'SO2 Baseline', 'SO2 Cofire',
-                                                      'PM10 Baseline', 'PM10 Cofire',
-                                                      'NOx Baseline', 'NOx Cofire')
-               )
-    ax1.tick_params(axis='y', length=0)
-    ax2.tick_params(axis='y', length=0)
-    ax1.legend(bbox_to_anchor=(0.98, 0.8),
-               prop={'size': 9},
-               title=system.plant.name + ' Emissions',
-               frameon=False)
+    barhstack(axes,
+              bot1,
+              [emis('plant'), emis('transport'), emis('field')],
+              xlabel='CO2 emission (Mt/y)')
+
+    barhstack(axes.twiny(),
+              bot2,
+              [emis3('plant'), emis3('transport'), emis3('field')],
+              xlabel='Air pollutant Emission (kt/y)')
+
+    plt.yticks(np.concatenate((bot1, bot2)), ('CO2 Baseline', 'CO2 Cofire',
+                                              'SO2 Baseline', 'SO2 Cofire',
+                                              'PM10 Baseline', 'PM10 Cofire',
+                                              'NOx Baseline', 'NOx Cofire'))
+
+    legend_plant = mpatches.Patch(color='darkred', label='Plant emissions')
+    legend_transport = mpatches.Patch(color='mistyrose', label='Transport emissions')
+    legend_field = mpatches.Patch(color='salmon', label='Field emissions')
+    axes.legend(handles=[legend_plant, legend_transport, legend_field],
+                bbox_to_anchor=(0.98, 0.8),
+                prop={'size': 9},
+                title=system.plant.name + ' Emissions',
+                frameon=False)
 
 
 # noinspection PyTypeChecker

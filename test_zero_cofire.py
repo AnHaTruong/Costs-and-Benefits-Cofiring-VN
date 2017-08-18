@@ -35,6 +35,7 @@ def test_npv(null_cofiring_system):
 
 
 def test_npv_powerplant(null_cofiring_system):
+    """Compare NPV of baseline plant without cofiring with NPV of cofiring plant at zero ratio."""
     plant = PowerPlant(baseline.plant_parameter_MD1)
     plant.revenue = plant.power_generation * baseline.price_MD1.electricity
     plant.coal_cost = plant.coal_used * baseline.price_MD1.coal

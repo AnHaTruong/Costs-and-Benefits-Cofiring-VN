@@ -40,12 +40,16 @@ def test_emission_reductions(regtest, systems):
     regtest.write(str(emission_reductions(*systems)))
 
 
-def test_lcoe_details(regtest, systems, finance):
+def test_plant_lcoe_statement(regtest, systems, finance):
     series_a = systems[0].plant.lcoe_statement(*finance)
-    series_b = systems[0].cofiring_plant.lcoe_statement(*finance)
-    series_c = systems[1].plant.lcoe_statement(*finance)
-    series_d = systems[1].cofiring_plant.lcoe_statement(*finance)
-    regtest.write('\n'.join([str(series_a), str(series_b), str(series_c), str(series_d)]))
+    series_b = systems[1].plant.lcoe_statement(*finance)
+    regtest.write(str(series_a) + '\n' + str(series_b))
+
+
+def test_cofiring_plant_lcoe_statement(regtest, systems, finance):
+    series_a = systems[0].cofiring_plant.lcoe_statement(*finance)
+    series_b = systems[1].cofiring_plant.lcoe_statement(*finance)
+    regtest.write(str(series_a) + '\n' + str(series_b))
 
 
 def test_technical_parameters(regtest, systems):
