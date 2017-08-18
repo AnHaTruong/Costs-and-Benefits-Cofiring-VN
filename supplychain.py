@@ -48,8 +48,7 @@ class SupplyZone:
     def transport_tkm(self):
         activity = (self.straw_density
                     * self.shape.first_moment_of_area()
-                    * self.tortuosity_factor
-                    )
+                    * self.tortuosity_factor)
         return display_as(activity, 't * km')
 
     def shrink(self, factor):

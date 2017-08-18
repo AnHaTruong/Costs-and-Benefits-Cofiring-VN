@@ -54,7 +54,10 @@ class Investment:
         self._revenue = value
 
     def investment(self):
-        """Multi year investment coded here but lots of code assume it occurs only in  year 0."""
+        """Multi year investment possible.
+
+        But code outside this module assume it occurs only in  year 0.
+        """
         v_invest = 1 - after_invest(1)
         return display_as(v_invest * self.capital / sum(v_invest), 'kUSD')
 
@@ -63,6 +66,7 @@ class Investment:
         return display_as(ZEROS * USD, 'kUSD')
 
     def amortization(self, depreciation_period):
+        """Return vector of linear amortization amounts."""
         assert isinstance(depreciation_period, int), "Depreciation period not an integer"
         assert 0 < depreciation_period < TIMEHORIZON - 1, "Depreciation not in {1..timehorizon-2}"
         v_cost = ZEROS.copy() * USD
@@ -106,6 +110,7 @@ class Investment:
         pass
 
     def table(self, tax_rate=0.25, depreciation_period=10):
+        """Tabulate the characteristics of the investment, returning an np.array."""
         result = np.array([self.revenue,
                           self.investment(),
                           self.amortization(depreciation_period),
@@ -117,6 +122,7 @@ class Investment:
         return result
 
     def pretty_table(self, discount_rate, tax_rate, depreciation_period):
+        """Tabulate the characteristics of the investment, returning a multiline string."""
         lines = [self.name]
         lines.append("NPV  = " + str(self.net_present_value(discount_rate,
                                                             tax_rate,

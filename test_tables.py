@@ -46,7 +46,7 @@ def test_plant_lcoe_statement(regtest, systems, finance):
     regtest.write(str(series_a) + '\n' + str(series_b))
 
 
-def test_cofiring_plant_lcoe_statement(regtest, systems, finance):
+def test_cofiring_plant_lcoe(regtest, systems, finance):
     series_a = systems[0].cofiring_plant.lcoe_statement(*finance)
     series_b = systems[1].cofiring_plant.lcoe_statement(*finance)
     regtest.write(str(series_a) + '\n' + str(series_b))

@@ -89,6 +89,7 @@ class PowerPlant(Investment, Emitter):
         return display_as(cost, 'kUSD')
 
     def lcoe(self, discount_rate, tax_rate, depreciation_period):
+        """Return the levelized cost of electricity, taxes included."""
         total_lifetime_power_production = npv(discount_rate, self.power_generation)
         total_life_cycle_cost = npv(discount_rate,
                                     self.cash_out(tax_rate, depreciation_period))
@@ -99,6 +100,7 @@ class PowerPlant(Investment, Emitter):
         return self.coal_used * 2 * self.parameter.coal.transport_distance   # Return trip inputed
 
     def coal_transporter(self):
+        """Return an Emitter object to access emissions from coal transport."""
         transport_mean = self.parameter.coal.transport_mean
         activity = Activity(
             name=transport_mean,
@@ -247,6 +249,7 @@ class CofiringPlant(PowerPlant):
         return display_as(amount, 'kUSD')
 
     def biomass_om_cost(self):
+        """Return  Operation and Maintenance costs of the biomass cofiring part of the plant."""
         fixed_om_bm = (self.cofire_parameter.biomass_ratio_energy
                        * self.cofire_parameter.fix_om_cost
                        * self.parameter.capacity * y)
