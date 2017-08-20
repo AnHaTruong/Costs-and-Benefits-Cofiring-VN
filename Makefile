@@ -14,9 +14,6 @@ figures = $(patsubst %.py,%.png,$(figurespyfiles))
 
 all: $(tables) $(figures)
 
-%.py: %_generator.py
-	$(PYTHON) $< > $@
-
 %.txt: %.py parameters.py
 	$(PYTHON) $< > $@
 
@@ -48,6 +45,16 @@ archive:
 test: cleaner
 	py.test-3 --doctest-modules
 
+coverage: coverage.xml
+	python3.5-coverage html
+	see htmlcov/index.html
+
+coverage.xml:
+	py.test-3 --doctest-modules --cov=. --cov-report term-missing --cov-report xml
+
+codacy-update: coverage.xml
+	export CODACY_PROJECT_TOKEN=e69e0e5c845f4e2dbc1c13fbaa35aeab; python-codacy-coverage -r coverage.xml
+
 regtest-reset:
 	py.test-3 --regtest-reset
 
@@ -72,4 +79,5 @@ cleaner: clean .git/hooks/pre-commit
 	find . -type f -name '*.pyc' -delete
 	rm -rf __pycache__
 	rm -rf classes.dot packages.dot
+	rm -rf .coverage coverage.xml htmlcov
 

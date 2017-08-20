@@ -15,8 +15,7 @@ from parameters import discount_rate, tax_rate, depreciation_period
 # We are using them inside an eval string
 # pylint: disable=unused-import
 from parameters import external_cost, coal_import_price, mining_parameter
-from tables import energy_costs
-from tables import emission_reductions
+from tables import energy_costs, straw_supply, emission_reductions
 
 # pylint and pytest known compatibility bug
 # pylint: disable=redefined-outer-name
@@ -37,6 +36,10 @@ def test_energy_costs(regtest, systems):
 
 def test_emission_reductions(regtest, systems):
     regtest.write(str(emission_reductions(*systems)))
+
+
+def test_straw_supply(regtest, systems):
+    regtest.write(straw_supply(*systems))
 
 
 # pylint: disable=eval-used, unused-argument

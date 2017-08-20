@@ -1,0 +1,34 @@
+
+Table 5. Straw required and straw cost estimation
+
+Parameter                           Mong Duong 1               Ninh Binh
+Straw required                        225127 t                 39673 t
+Straw cost                                45.14 USD/t             38.45 USD/t
+Biomass raw cost                          37.26 USD/t             37.26 USD/t
+Biomass transportation cost                7.88 USD/t              1.19 USD/t
+
+Mong Duong 1 Supply chain
+quantity = 225127 t
+Collection_radius = 71.0001 km
+Supply zone
+ Shape: Semiannulus. Half of the Annulus with inner radius 0 km, outer radius 50 km, area 3926.99 km2
+ Straw density: 5.45569 t/km2
+ quantity = 21424.4 t
+ Tortuosity: 1.5
+ Activity to transport all = 1.07122e+06 km*t
+Supply zone
+ Shape: Semiannulus. Half of the Annulus with inner radius 50 km, outer radius 71.0001 km, area 3991.41 km(2)
+ Straw density: 51.0352 t/km2
+ quantity = 203702 t
+ Tortuosity: 1.5
+ Activity to transport all = 1.86716e+07 km*t
+
+Ninh Binh Supply chain
+quantity = 39673.4 t
+Collection_radius = 13.2317 km
+Supply zone
+ Shape: Disk with radius 13.2317 km, area 550.02 km2
+ Straw density: 72.1308 t/km2
+ quantity = 39673.4 t
+ Tortuosity: 1.5
+ Activity to transport all = 524945 km*t

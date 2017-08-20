@@ -6,9 +6,10 @@ Python 3
 pandas
 natu 1.2
 pytest
+pytest-cov
 sudo -H pip3 install pytest-regtest
-sudo pip3 install xlrd
-sudo pip3 install SALib
+sudo -H pip3 install xlrd
+sudo -H pip3 install SALib
 make
 
 Installation:
@@ -19,6 +20,7 @@ Since version 1.2 is not in Pypi as of 2017/08 one should install from GitHub wi
 sudo pip3 install -I git+https://github.com/kdavies4/natu.git
 
 pytest can be installed from the Ubuntu package "python3-pytest"
+pytest-cov can be installed from the Ubuntu package "python3-coverage"
 
 
 Usage:
