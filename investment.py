@@ -12,7 +12,7 @@
 
 import pandas as pd
 import natu.numpy as np
-from init import TIMEHORIZON, ZEROS, USD, after_invest, display_as
+from init import TIMEHORIZON, ZEROS, USD, kUSD, after_invest, display_as, isclose
 
 
 class Investment:
@@ -27,9 +27,11 @@ class Investment:
         return a vector of quantities of size TIMEHORIZON+1
         which has the display unit set to kUSD
 
-    The  revenue  must be set after the investment is initialized
+    The  revenue  must be set after the investment is initialized.
         This is so because the code that set the revenue can also
         set it as an expense to another object.
+
+    The expenses must be set in child classes.
 
     >>> from init import ZEROS
     >>> i = Investment("test", 1000*USD)
@@ -42,6 +44,8 @@ class Investment:
         self.capital = display_as(capital, 'kUSD')
         self.name = name
         self._revenue = None
+        self.expenses = []
+        self.expenses_index = []
 
     @property
     def revenue(self):
@@ -67,6 +71,8 @@ class Investment:
 
     def amortization(self, depreciation_period):
         """Return vector of linear amortization amounts."""
+        if not self.capital:
+            return display_as(ZEROS * USD, 'kUSD')
         assert isinstance(depreciation_period, int), "Depreciation period not an integer"
         assert 0 < depreciation_period < TIMEHORIZON - 1, "Depreciation not in {1..timehorizon-2}"
         v_cost = ZEROS.copy() * USD
@@ -74,7 +80,7 @@ class Investment:
             v_cost[year] = self.capital / float(depreciation_period)
         return display_as(v_cost, 'kUSD')
 
-    def earning_before_tax(self, depreciation_period):
+    def earning_before_tax(self, depreciation_period=None):
         earning = (self.revenue
                    - self.operating_expenses()
                    - self.amortization(depreciation_period))
@@ -143,3 +149,16 @@ class Investment:
         pd.set_option('display.width', 150)
         lines.append(str(result))
         return '\n'.join(lines)
+
+    def earning_before_tax_detail(self):
+        """Tabulate the earning before taxes (there are no interests)."""
+        sales = pd.Series([self.revenue[1]], ['Sales revenue'])
+        cash_flows = sales.append(- pd.Series(self.expenses, self.expenses_index))
+        df = pd.DataFrame(data=[cash_flows / kUSD], index=["kUSD"])
+        df["= Earning Before Tax"] = df.sum(axis=1)
+
+        a = self.earning_before_tax()[1] / kUSD
+        b = df.loc["kUSD", "= Earning Before Tax"]
+        assert isclose(a, b), "Inconsistent EBT estimates"
+
+        return df.T

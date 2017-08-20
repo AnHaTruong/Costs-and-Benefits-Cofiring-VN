@@ -43,7 +43,7 @@ def test_emission_reductions(regtest, systems):
 def f(systems, method):
     result_a = eval('systems[0].' + method)
     result_b = eval('systems[1].' + method)
-    return str(result_a) + "\n" + str(result_b)
+    return str(result_a) + "\n\n" + str(result_b)
 
 
 def test_plant_lcoe_statement(regtest, systems):
@@ -59,11 +59,11 @@ def test_technical_parameters(regtest, systems):
 
 
 def test_income_farmer(regtest, systems):
-    regtest.write(f(systems, 'farmer.income_statement()'))
+    regtest.write(f(systems, 'farmer.earning_before_tax_detail()'))
 
 
 def test_income_transporter(regtest, systems):
-    regtest.write(f(systems, 'transporter.income_statement()'))
+    regtest.write(f(systems, 'transporter.earning_before_tax_detail()'))
 
 
 def test_emissions_baseline(regtest, systems):

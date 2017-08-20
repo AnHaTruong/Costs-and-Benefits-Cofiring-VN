@@ -58,13 +58,13 @@ print(table2)
 #%%
 
 print("""
-Table 3a: Supply chain income and expenses in the co-firing scenario.
+Table 3a: Supply chain earnings before taxes in the co-firing scenario.
 
 Farmers             Mong Duong 1     Ninh Binh""")
 
 df = pd.concat(
-    [MongDuong1System.farmer.income_statement(),
-     NinhBinhSystem.farmer.income_statement()],
+    [MongDuong1System.farmer.earning_before_tax_detail(),
+     NinhBinhSystem.farmer.earning_before_tax_detail()],
     axis=1)
 
 print(str(df))
@@ -73,8 +73,8 @@ print("""
 Transporters        Mong Duong 1      Ninh Binh""")
 
 df = pd.concat(
-    [MongDuong1System.transporter.income_statement(),
-     NinhBinhSystem.transporter.income_statement()],
+    [MongDuong1System.transporter.earning_before_tax_detail(),
+     NinhBinhSystem.transporter.earning_before_tax_detail()],
     axis=1)
 
 print(str(df))

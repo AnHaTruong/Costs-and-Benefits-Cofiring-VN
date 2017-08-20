@@ -9,14 +9,15 @@
 
 import pandas as pd
 
-from init import after_invest, display_as, USD
+from init import after_invest, display_as, USD, kUSD
 
 from emitter import Emitter, Activity
 from investment import Investment
 
 
+#pylint: disable=too-many-instance-attributes
 class Transporter(Investment, Emitter):
-    """The collective of transporters.
+    """The transporter segment of the system.
 
     Members:
         activity_level:  total  tkm  of transport services provided
@@ -27,6 +28,8 @@ class Transporter(Investment, Emitter):
     driving_work and driving_wages proportional to the activity level
 
     emissions are proportional to activity level only (ASSUMPTION)
+
+    The capital is zero, we assume the trucks are rented.
     """
 
     def __init__(self, supply_chain, transport_parameter):
@@ -76,38 +79,32 @@ class Transporter(Investment, Emitter):
                   + self.loading_work() * self.parameter['fuel_cost_per_hour_loading'])
         return display_as(amount, 'kUSD')
 
-    def capital_cost(self):
-        amount = self.labor() * self.parameter['capital_cost_per_hour']
+    def rental_cost(self):
+        amount = self.labor() * self.parameter['rental_cost_per_hour']
         return display_as(amount, 'kUSD')
 
     def operating_expenses(self):
-        amount = self.labor_cost()   # + self.fuel_cost() + self.capital_cost()
+        amount = self.labor_cost() + self.fuel_cost() + self.rental_cost()
         return display_as(amount, 'kUSD')
 
     def max_trip_time(self):
         time = self.collection_radius / self.parameter['truck_velocity']
         return display_as(time, 'hr')
 
-    def income_statement(self):
-        """Summarize the economic implications of transporting acticity."""
-        headings = ['Transport revenue',
-                    '- Truck rental',
-                    '- Truck fuel',
-                    '- Handling work',
-                    '- Driving work']
+    def earning_before_tax_detail(self):
+        """Tabulate the annual net income before taxes in the transporting segment."""
+        self.expenses = [self.rental_cost()[1],
+                         self.fuel_cost()[1],
+                         self.loading_wages()[1],
+                         self.driving_wages()[1]]
+        self.expenses_index = ['- Truck rental',
+                               '- Truck fuel',
+                               '- Handling work',
+                               '- Driving work']
 
-        cash_flows = pd.Series(
-            data=[self.revenue[1],
-                  - self.capital_cost()[1],
-                  - self.fuel_cost()[1],
-                  - self.loading_wages()[1],
-                  - self.driving_wages()[1]],
-            index=headings)
+        df = Investment.earning_before_tax_detail(self)
 
-        df = pd.DataFrame(
-            data=[cash_flows / (1000 * USD),
-                  cash_flows / self.truck_trips[1] / USD],
-            index=["Total", "Per_trip"])
-        df["= Net income"] = df.sum(axis=1)
-        df["Unit"] = ['kUSD', 'USD']
-        return df[["Unit"] + headings + ["= Net income"]].T
+        per_trip = df / self.truck_trips[1] * kUSD / USD
+        per_trip.columns = ['USD/trip']
+
+        return pd.concat([df, per_trip], axis=1)

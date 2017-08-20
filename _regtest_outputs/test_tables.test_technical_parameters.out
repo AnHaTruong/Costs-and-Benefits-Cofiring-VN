@@ -7,6 +7,7 @@ Heat value of coal    19.4347 MJ/kg
 Plant efficiency                0.4
 Boiler efficiency               0.9
 Name: Mong Duong 1, dtype: object
+
 Comissioning year              1974
 Boiler technology                PC
 Installed capacity           100 MW

@@ -1,16 +1,15 @@
-                    Total Per_trip
-Unit                 kUSD      USD
-Transport revenue 1,773.0    157.5
-- Truck rental       -0.0     -0.0
-- Truck fuel         -0.0     -0.0
-- Handling work     -11.2     -1.0
-- Driving work      -24.3     -2.2
-= Net income      1,737.4    154.4
-                  Total Per_trip
-Unit               kUSD      USD
-Transport revenue  47.1     23.8
-- Truck rental     -0.0     -0.0
-- Truck fuel       -0.0     -0.0
-- Handling work    -2.0     -1.0
-- Driving work     -0.6     -0.3
-= Net income       44.5     22.4
+                        kUSD USD/trip
+Sales revenue        1,773.0    157.5
+- Truck rental          -0.0     -0.0
+- Truck fuel            -0.0     -0.0
+- Handling work        -11.2     -1.0
+- Driving work         -24.3     -2.2
+= Earning Before Tax 1,737.4    154.4
+
+                      kUSD USD/trip
+Sales revenue         47.1     23.8
+- Truck rental        -0.0     -0.0
+- Truck fuel          -0.0     -0.0
+- Handling work       -2.0     -1.0
+- Driving work        -0.6     -0.3
+= Earning Before Tax  44.5     22.4

@@ -11,15 +11,16 @@ import pandas as pd
 
 from natu.units import ha
 
-from init import ONES, after_invest, display_as, USD
+from init import ONES, after_invest, display_as, USD, kUSD
 from emitter import Emitter, Activity
 from investment import Investment
 
 
 class Farmer(Investment, Emitter):
-    """The collective of farmers who produce and sell straw.
+    """The farming segment of the system: farmers who produce and sell straw.
 
     As an Investment, the Farmer.revenue has to be set after initialization.
+    The capital is zero, we assume the winder is rented.
     """
 
     def __init__(self, supply_chain, farmer_parameter):
@@ -58,33 +59,21 @@ class Farmer(Investment, Emitter):
         amount = self.labor() * self.parameter['fuel_cost_per_hour']
         return display_as(amount, 'kUSD')
 
-    def capital_cost(self):
+    def rental_cost(self):
         amount = self.farm_area * self.parameter['winder_rental_cost']
         return display_as(amount, 'kUSD')
 
     def operating_expenses(self):
-        expenses = self.labor_cost() + self.capital_cost() + self.fuel_cost()
+        expenses = self.labor_cost() + self.rental_cost() + self.fuel_cost()
         return display_as(expenses, 'kUSD')
 
-    def income_statement(self):
-        """Summarize the economic implications of collecting and selling straw."""
-        headings = ['Straw revenue',
-                    '- Winder rental',
-                    '- Winder fuel',
-                    '- Collection work']
+    def earning_before_tax_detail(self):
+        """Tabulate the annual net income before taxes in the farming segment."""
+        self.expenses = [self.rental_cost()[1], self.fuel_cost()[1], self.labor_cost()[1]]
+        self.expenses_index = ['- Winder rental', '- Winder fuel', '- Collection work']
+        df = Investment.earning_before_tax_detail(self)
 
-        cash_flows = pd.Series(
-            data=[self.revenue[1],
-                  - self.capital_cost()[1],
-                  - self.fuel_cost()[1],
-                  - self.labor_cost()[1]],
-            index=headings)
+        per_ha = df / (self.farm_area[1] / ha) * kUSD / USD
+        per_ha.columns = ['USD/ha']
 
-        df = pd.DataFrame(
-            data=[cash_flows / (1000 * USD),
-                  cash_flows / self.farm_area[1] / (USD / ha)],
-            index=["Total",
-                   "Per ha"])
-        df["= Net income"] = df.sum(axis=1)
-        df["Unit"] = ['kUSD', 'USD/ha']
-        return df[["Unit"] + headings + ["= Net income"]].T
+        return pd.concat([df, per_ha], axis=1)

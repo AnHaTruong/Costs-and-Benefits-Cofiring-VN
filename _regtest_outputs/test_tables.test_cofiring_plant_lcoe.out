@@ -10,6 +10,7 @@ Cash_out      (MUSD)            2,355.7
 Electricity produced        58368.1 GWh
 LCOE                    40.3601 USD/MWh
 Name: Mong Duong 1 Cofire, dtype: object
+
 Investment    (MUSD)                0.5
 Fuel cost     (MUSD)              360.7
   Coal        (MUSD)              346.5

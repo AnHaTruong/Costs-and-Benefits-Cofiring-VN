@@ -4,6 +4,7 @@ Straw                225996 t/y  513.289 t/y    8.19461 t/y    0.729411 t/y
 Conveyor belt             0 t/y        0 t/y          0 t/y           0 t/y
 Straw           1.63986e+06 t/y   3724.5 t/y    14865.3 t/y      294.04 t/y
 Road transport      2171.71 t/y  2.64554 t/y  0.0394856 t/y  0.00296142 t/y
+
                          CO2            NOx            PM10              SO2
 4b_coal           851953 t/y    7367.36 t/y     85.4614 t/y      4706.93 t/y
 Straw            39826.5 t/y    90.4553 t/y     2.88822 t/y      7.14121 t/y
