@@ -31,6 +31,19 @@ class Investment:
         This is so because the code that set the revenue can also
         set it as an expense to another object.
 
+    >>> i = Investment('test')
+    >>> i.revenue()
+    Traceback (most recent call last):
+        ...
+    AttributeError: Accessing  Investment.revenue  value before it is set
+
+    >>> i.revenue = after_invest(3000 * USD)
+    >>> # set the costs of whoever is paying the 3000 USD per year
+    >>> i.revenue
+    array([0 kUSD, 3 kUSD, 3 kUSD, 3 kUSD, 3 kUSD, 3 kUSD, 3 kUSD, 3 kUSD,
+           3 kUSD, 3 kUSD, 3 kUSD, 3 kUSD, 3 kUSD, 3 kUSD, 3 kUSD, 3 kUSD,
+           3 kUSD, 3 kUSD, 3 kUSD, 3 kUSD, 3 kUSD], dtype=object)
+
     The expenses must be set in child classes.
 
     >>> from init import ZEROS

@@ -77,7 +77,14 @@ class Annulus(Shape):
         return 2 * pi * (self.outer_radius**3 - self.inner_radius**3) / 3
 
     def shrink(self, factor):
-        """Return a new Annulus, with same inner radius and total area scaled by factor."""
+        """Return a new Annulus, with same inner radius and total area scaled by factor.
+
+        >>> a = Annulus(1 * m, 30 * m)
+        >>> print(a)
+        Annulus with inner radius 1 m, outer radius 30 m, area 2824.29 m2
+        >>> print(a.shrink(0.5))
+        Annulus with inner radius 1 m, outer radius 21.225 m, area 1412.15 m(2)
+        """
         assert factor >= 0
         new_outer_radius = sqrt(
             self.inner_radius**2 + factor * (self.outer_radius**2 - self.inner_radius**2))

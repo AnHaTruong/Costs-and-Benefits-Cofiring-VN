@@ -34,6 +34,11 @@ class PowerPlant(Investment, Emitter):
         >>> from parameters import plant_parameter_MD1, price_MD1
         >>> plant = PowerPlant(plant_parameter_MD1)
         >>> plant.revenue = plant.power_generation * price_MD1.electricity
+        >>> plant.operating_expenses()
+        Traceback (most recent call last):
+            ...
+        AttributeError: Accessing  PowerPlant.coal_cost  value before it is set
+
         >>> plant.coal_cost = plant.coal_used * price_MD1.coal
         >>> print(plant.net_present_value(discount_rate=0.08))
         1.29299e+06 kUSD
@@ -65,7 +70,7 @@ class PowerPlant(Investment, Emitter):
     @property
     def coal_cost(self):
         if self._coal_cost is None:
-            raise AttributeError('Using  PowerPlant.coal_cost  value before it is set')
+            raise AttributeError('Accessing  PowerPlant.coal_cost  value before it is set')
         return display_as(self._coal_cost, 'kUSD')
 
     @coal_cost.setter
@@ -157,6 +162,20 @@ class CofiringPlant(PowerPlant):
 
         The financials (revenue, coal_cost, biomass_cost) are not initialized at this time,
         they must be defined later:
+
+        >>> from parameters import plant_parameter_MD1, cofire_MD1, price_MD1
+        >>> plant = CofiringPlant(plant_parameter_MD1, cofire_MD1)
+        >>> plant.revenue = plant.power_generation * price_MD1.electricity
+        >>> plant.coal_cost = plant.coal_used * price_MD1.coal # free transport in test
+        >>> plant.operating_expenses()
+        Traceback (most recent call last):
+            ...
+        AttributeError: Accessing  CofiringPlant.biomass_cost  value before it is set
+
+        >>> plant.biomass_cost = plant.biomass_used * price_MD1.biomass
+        >>> print(plant.net_present_value(discount_rate=0.08))
+        1.26988e+06 kUSD
+
         """
         self.cofire_parameter = cofire_parameter
 
@@ -202,7 +221,7 @@ class CofiringPlant(PowerPlant):
     @property
     def biomass_cost(self):
         if self._biomass_cost is None:
-            raise AttributeError('Using  CofiringPlant.biomass_cost  value before it is set')
+            raise AttributeError('Accessing  CofiringPlant.biomass_cost  value before it is set')
         return display_as(self._biomass_cost, 'kUSD')
 
     @biomass_cost.setter
