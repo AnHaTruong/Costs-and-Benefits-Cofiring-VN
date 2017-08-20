@@ -41,7 +41,7 @@ class Farmer(Investment, Emitter):
 
         Emitter.__init__(self, field_burning)
 
-        Investment.__init__(self)
+        Investment.__init__(self, "Farmers")
 
     def labor(self):
         """Work time needed to collect straw for co-firing per year."""

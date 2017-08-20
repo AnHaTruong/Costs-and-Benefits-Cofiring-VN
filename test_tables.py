@@ -83,6 +83,11 @@ def test_net_present_value_cofiring(regtest, systems):
         f(systems, 'cofiring_plant.pretty_table(*finance)'))
 
 
+def test_farmer_pretty_table(regtest, systems):
+    regtest.write(
+        f(systems, 'farmer.pretty_table(*finance)'))
+
+
 def test_coal_saved(regtest, systems):
     regtest.write(f(systems, 'coal_saved_benefits(coal_import_price)'))
 

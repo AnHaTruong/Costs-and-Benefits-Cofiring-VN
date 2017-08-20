@@ -38,7 +38,7 @@ class Investment:
     -1 kUSD
     """
 
-    def __init__(self, name=None, capital=0 * USD):
+    def __init__(self, name, capital=0 * USD):
         self.capital = display_as(capital, 'kUSD')
         self.name = name
         self._revenue = None

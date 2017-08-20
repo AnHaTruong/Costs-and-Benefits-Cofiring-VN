@@ -31,7 +31,7 @@ class Transporter(Investment, Emitter):
 
     def __init__(self, supply_chain, transport_parameter):
 
-        Investment.__init__(self)
+        Investment.__init__(self, "Transporter")
 
         self.activity_level = after_invest(supply_chain.transport_tkm())
         self.quantity = after_invest(supply_chain.quantity())
