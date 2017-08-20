@@ -58,42 +58,43 @@ straw = Fuel(name='straw',
              transport_distance='Endogenous',
              transport_mean='Road transport')
 
-emission_factor = {
-    '6b_coal': {
-        'CO2': 0.0966 * kg / MJ * 19.43468 * MJ / kg,  # IPCC 2006
-        # Eastern Research Group (2011)
-        'SO2': 11.5 * kg / t,
-        'NOx': 18 * kg / t,
-        'PM10': 43.8 * kg / t},
-    '4b_coal': {
-        'CO2': 0.0966 * kg / MJ * 21.5476 * MJ / kg,  # IPCC 2006
-        # Eastern Research Group (2011)
-        'SO2': 11.5 * kg / t,
-        'NOx': 18 * kg / t,
-        'PM10': 26.1 * kg / t},
-    'Conveyor belt': {
-        'CO2': 0 * kg / t / km,
-        'SO2': 0 * kg / t / km,
-        'NOx': 0 * kg / t / km,
-        'PM10': 0 * kg / t / km},
-    'road_transport': {
-        'CO2': 0.110 * kg / t / km,  # Binh & Tuan (2016)
-        # http://naei.defra.gov.uk/data/ef-transport, year 2014
-        'SO2': 0.003 * g / (20 * t) / km,
-        'NOx': 2.68 * g / (20 * t) / km,
-        'PM10': 0.04 * g / (20 * t) / km},
-    'Barge transport': {
-        'CO2': 0.071 * kg / t / km,  # Binh & Tuan (2016)
-        # Van Dingenen et al. (2016)
-        'SO2': 2 * g / kg * (8 * g / t / km),
-        'NOx': 50.75 * g / kg * (8 * g / t / km),
-        'PM10': 3.19 * g / kg * (8 * g / t / km)},
-    'straw': {
-        'CO2': 0.0858 * kg / MJ * 11.7 * MJ / kg,  # (Shafie & 2013)
-        # (Hoang & 2013)
-        'SO2': 0.18 * kg / t,
-        'NOx': 2.28 * kg / t,
-        'PM10': 9.1 * kg / t}}
+emission_factor = dict()
+
+emission_factor['6b_coal'] = {
+    'CO2': 0.0966 * kg / MJ * coal_6b.heat_value,  # IPCC 2006
+    'SO2': 11.5 * kg / t,                          # Eastern Research Group (2011)
+    'NOx': 18 * kg / t,                            # idem
+    'PM10': 43.8 * kg / t}                         # idem
+
+emission_factor['4b_coal'] = {
+    'CO2': 0.0966 * kg / MJ * coal_4b.heat_value,  # IPCC 2006
+    'SO2': emission_factor['6b_coal']['SO2'],
+    'NOx': emission_factor['6b_coal']['NOx'],
+    'PM10': 26.1 * kg / t}
+
+emission_factor['Conveyor belt'] = {
+    'CO2': 0 * kg / t / km,
+    'SO2': 0 * kg / t / km,
+    'NOx': 0 * kg / t / km,
+    'PM10': 0 * kg / t / km}
+
+emission_factor['road_transport'] = {
+    'CO2': 0.110 * kg / t / km,          # Binh & Tuan (2016)
+    'SO2': 0.003 * g / (20 * t) / km,    # http://naei.defra.gov.uk/data/ef-transport, year 2014
+    'NOx': 2.68 * g / (20 * t) / km,     # idem
+    'PM10': 0.04 * g / (20 * t) / km}    # idem
+
+emission_factor['Barge transport'] = {
+    'CO2': 0.071 * kg / t / km,                  # Binh & Tuan (2016)
+    'SO2': 2 * g / kg * (8 * g / t / km),        # Van Dingenen et al. (2016)
+    'NOx': 50.75 * g / kg * (8 * g / t / km),    # idem
+    'PM10': 3.19 * g / kg * (8 * g / t / km)}    # idem
+
+emission_factor['straw'] = {
+    'CO2': 0.0858 * kg / MJ * 11.7 * MJ / kg,  # (Shafie & 2013)
+    'SO2': 0.18 * kg / t,                      # (Hoang & 2013)
+    'NOx': 2.28 * kg / t,                      # idem
+    'PM10': 9.1 * kg / t}                      # idem
 
 
 # hourly wage calculated from base salary defined in governmental regulations
@@ -186,8 +187,8 @@ plant_parameter_NB = PlantParameter(name='Ninh Binh',
                                     boiler_technology='PC',
                                     boiler_efficiency=ONES * 81.61 / 100,
                                     plant_efficiency=ONES * 21.77 / 100,
-                                    fix_om_coal=29.31 * USD / kW / y,
-                                    variable_om_coal=0.0048 * USD / kWh,
+                                    fix_om_coal=plant_parameter_MD1.fix_om_coal,
+                                    variable_om_coal=plant_parameter_MD1.variable_om_coal,
                                     emission_factor=emission_factor,
                                     emission_control={'CO2': 0.0,
                                                       'SO2': 0.0, 'NOx': 0.0, 'PM10': 0.992},
