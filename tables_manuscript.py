@@ -20,9 +20,33 @@ from parameters import MongDuong1System, NinhBinhSystem
 from parameters import discount_rate, tax_rate, depreciation_period
 
 from tables import emission_reductions, balance_jobs
+from tables import emission_reductions_by_activity, emission_reductions_benefits
 
 
 systems = MongDuong1System, NinhBinhSystem
+
+#%%
+
+pd.options.display.float_format = '{:,.1f}'.format
+
+table1 = """
+ICERE 2018 Table 1: Emission reductions by activity
+
+""" + str(emission_reductions_by_activity(*systems))
+
+print(table1)
+
+
+#%%
+
+table2 = """
+ICERE 2018 Table 2: Emission reductions benefits
+
+       Mong Duong 1                 Ninh Binh
+""" + str(emission_reductions_benefits(*systems))
+
+print(table2)
+
 
 #%%
 
