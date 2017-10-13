@@ -65,6 +65,9 @@ def after_invest(qty):
     Used to vectorize calculations involving qty.
     Return  natu.numpy.array([0, qty, ..., qty]).
     The dtype=object might be a performance cost when "use_quantities = False" (untested).
+
+    >>> after_invest(3 * t)
+    array([0 t, 3 t, 3 t, ..., 3 t, 3 t, 3 t], dtype=object)
     """
     assert not hasattr(qty, '__iter__'), "Vectorize only scalar arguments."
     return array([0 * qty] + [qty] * TIMEHORIZON, dtype=object)
@@ -128,7 +131,19 @@ def isclose(qty_a, qty_b, rel_tol=1e-09, abs_tol=0.0):
 
 
 def safe_divide(costs, masses):
-    """Divide two vectors elementwise, producing NaN instead of error when the divisor is zero."""
+    """Divide two vectors elementwise, producing NaN instead of error when the divisor is zero.
+
+    >>> costs = np.array([100 * USD, 200 * USD])
+    >>> masses = np.array([0 * t, 10 * t])
+
+    >>> safe_divide(costs, masses)
+    array([nan USD/t, 20 USD/t], dtype=object)
+
+    >>> costs / masses
+    Traceback (most recent call last):
+     ...
+    ZeroDivisionError: float division by zero
+    """
     result = costs.copy()
     for i, mass in enumerate(masses):
         if mass.__nonzero__():
@@ -136,3 +151,21 @@ def safe_divide(costs, masses):
         else:
             result[i] = display_as(float('NaN') * USD / t, 'USD/t')
     return display_as(result, 'USD/t')
+
+
+def solve_linear(f, x0, x1):
+    """Solve equation f(x) == 0, where f is linear, given two points x0 and x1.
+
+    The solution of  a x + b == 0  is  x = - b / a
+    This is trivial, but the function is useful when  f  is a black box.
+    If f is not linear, computes where the secant at x0 and x1 intersects the horizontal axis.
+
+    >>> solve_linear(lambda x: 2 * x + 4, 0, 1)
+    -2.0
+    """
+    assert not isclose(x1, x0), "Starting points are too close."
+    y0 = f(x0)                         # y0 = a x0 + b
+    y1 = f(x1)                         # y1 = a x1 + b
+    a = (y1 - y0) / (x1 - x0)
+    b = y0 - a * x0
+    return - b / a
