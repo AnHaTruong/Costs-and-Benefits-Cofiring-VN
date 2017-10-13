@@ -138,11 +138,13 @@ class System:
 
         total_reduction = plant_reduction + transport_reduction + field_reduction
         total_benefit = total_reduction * external_cost
+        total_emission = self.emissions_baseline(total=True).loc["Total"]
+        relative_reduction = total_reduction / total_emission
         for pollutant in total_benefit:
             display_as(pollutant, 'kUSD')
         list_of_series = [plant_reduction, transport_reduction, field_reduction,
-                          total_reduction, total_benefit]
-        row = ['Plant', 'Transport', 'Field', 'Total', 'Benefit']
+                          total_reduction, total_benefit, relative_reduction]
+        row = ['Plant', 'Transport', 'Field', 'Total', 'Benefit', 'Relative']
         reduction = pd.DataFrame(list_of_series, index=row)
         return reduction
 

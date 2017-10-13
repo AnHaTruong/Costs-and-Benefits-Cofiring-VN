@@ -19,31 +19,47 @@ from parameters import external_cost, mining_parameter
 #%%
 
 
-def emission_reductions_details(system_a, system_b):
+def emission_reductions_by_activity(system_a, system_b):
     """Summarize the emissions reduction in mass and value."""
     reductions_a = year_1(system_a.emission_reduction(external_cost))
     reductions_b = year_1(system_b.emission_reduction(external_cost))
     contents = [
-        external_cost / (USD / t),
         reductions_a['Plant'] / (t / y),
         reductions_a['Transport'] / (t / y),
         reductions_a['Field'] / (t / y),
-        reductions_a['Total'] / (t / y),
-        reductions_a['Benefit'] / (kUSD / y),
         reductions_b['Plant'] / (t / y),
         reductions_b['Transport'] / (t / y),
-        reductions_b['Field'] / (t / y),
-        reductions_b['Total'] / (t / y),
-        reductions_b['Benefit'] / (kUSD / y)]
-    headers = ['Specific cost',
-               "Plant", "Transport", "Field", " Quantity", "Value",
-               "Plant", "Transport", "Field", " Quantity", "Value"]
+        reductions_b['Field'] / (t / y)]
+    headers = ["Plant", "Transport", "Field",
+               "Plant", "Transport", "Field"]
     df = pd.DataFrame(
         data=contents,
         index=headers)
-    df["Unit"] = ["USD/t", "t/y", "t/y", "t/y", "t/y", "kUSD/y",
-                  "t/y", "t/y", "t/y", "t/y", "kUSD/y"]
-    return df[["Unit", "CO2", "SO2", "PM10", "NOx"]].T
+    df["Unit"] = ["t/y", "t/y", "t/y", "t/y", "t/y", "t/y"]
+    return df[["Unit", "CO2", "SO2", "PM10", "NOx"]]
+
+#%%
+
+
+def emission_reductions_benefits(system_a, system_b):
+    """Summarize the emissions reduction in mass and value."""
+    reductions_a = year_1(system_a.emission_reduction(external_cost))
+    reductions_b = year_1(system_b.emission_reduction(external_cost))
+    contents = [
+        reductions_a['Total'] / (t / y),
+        reductions_a['Relative'] * 100,
+        reductions_a['Benefit'] / (kUSD / y),
+        reductions_b['Total'] / (t / y),
+        reductions_a['Relative'] * 100,
+        reductions_b['Benefit'] / (kUSD / y)]
+    headers = [" Quantity", "Percent", "Value",
+               " Quantity", "Percent", "Value"]
+    df = pd.DataFrame(
+        data=contents,
+        index=headers)
+    df["Unit"] = ["t/y", "%", "kUSD/y", "t/y", "%", "kUSD/y"]
+    return df[["CO2", "SO2", "PM10", "NOx"]].T
+
 
 #%%
 
