@@ -43,11 +43,12 @@ class System:
 
         electricity_sales = self.plant.power_generation * price.electricity
         display_as(electricity_sales, 'kUSD')
-        self.plant.revenue = electricity_sales
-        self.cofiring_plant.coal_cost = self.cofiring_plant.coal_used * price.coal
 
+        self.plant.revenue = electricity_sales
         self.plant.coal_cost = self.plant.coal_used * price.coal
+
         self.cofiring_plant.revenue = electricity_sales
+        self.cofiring_plant.coal_cost = self.cofiring_plant.coal_used * price.coal
 
         self.biomass_value = self.cofiring_plant.biomass_used * price.biomass
         display_as(self.biomass_value, "kUSD")
