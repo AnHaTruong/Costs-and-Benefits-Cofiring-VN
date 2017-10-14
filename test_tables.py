@@ -35,7 +35,7 @@ def test_energy_costs(regtest, systems):
 
 
 def test_emission_reductions(regtest, systems):
-    regtest.write(str(emission_reductions(*systems)))
+    regtest.write(str(emission_reductions(*systems, external_cost)))
 
 
 def test_straw_supply(regtest, systems):
