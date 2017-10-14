@@ -13,13 +13,13 @@ import pandas as pd
 from natu.units import y, t
 
 from init import display_as, isclose, USD, kUSD, FTE, year_1
-from parameters import external_cost, mining_parameter
+from parameters import mining_parameter
 
 
 #%%
 
 
-def emission_reductions_by_activity(system_a, system_b):
+def emission_reductions_by_activity(system_a, system_b, external_cost):
     """Summarize the emissions reduction in mass and value."""
     reductions_a = year_1(system_a.emission_reduction(external_cost))
     reductions_b = year_1(system_b.emission_reduction(external_cost))
@@ -41,7 +41,7 @@ def emission_reductions_by_activity(system_a, system_b):
 #%%
 
 
-def emission_reductions_benefits(system_a, system_b):
+def emission_reductions_benefits(system_a, system_b, external_cost):
     """Summarize the emissions reduction in mass and value."""
     reductions_a = year_1(system_a.emission_reduction(external_cost))
     reductions_b = year_1(system_b.emission_reduction(external_cost))
@@ -64,7 +64,7 @@ def emission_reductions_benefits(system_a, system_b):
 #%%
 
 
-def emission_reductions(system_a, system_b):
+def emission_reductions(system_a, system_b, external_cost):
     """Summarize the emissions reduction in mass and value."""
     reductions_a = year_1(system_a.emission_reduction(external_cost))
     reductions_b = year_1(system_b.emission_reduction(external_cost))

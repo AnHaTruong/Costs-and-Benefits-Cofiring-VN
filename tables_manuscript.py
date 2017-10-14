@@ -16,11 +16,12 @@ import pandas as pd
 
 from init import TIMEHORIZON
 
-from parameters import MongDuong1System, NinhBinhSystem
-from parameters import discount_rate, tax_rate, depreciation_period
+from parameters import (MongDuong1System, NinhBinhSystem,
+                        discount_rate, tax_rate, depreciation_period,
+                        external_cost, external_cost_SKC, external_cost_ZWY, external_cost_HAS)
 
-from tables import emission_reductions, balance_jobs
-from tables import emission_reductions_by_activity, emission_reductions_benefits
+from tables import (emission_reductions, balance_jobs,
+                    emission_reductions_by_activity, emission_reductions_benefits)
 
 
 systems = MongDuong1System, NinhBinhSystem
@@ -32,18 +33,20 @@ pd.options.display.float_format = '{:,.1f}'.format
 table1 = """
 ICERE 2018 Table 1: Emission reductions by activity
 
-""" + str(emission_reductions_by_activity(*systems))
+""" + str(emission_reductions_by_activity(*systems, external_cost)) + "\n\n"
 
 print(table1)
 
 
 #%%
 
-table2 = """
-ICERE 2018 Table 2: Emission reductions benefits
-
-       Mong Duong 1                 Ninh Binh
-""" + str(emission_reductions_benefits(*systems))
+table2 = (
+    "ICERE 2018 Table 2: Emission reductions benefits (external costs SKC, ZWY, HAS)\n\n" +
+    "       Mong Duong 1                 Ninh Binh" +
+    str(emission_reductions_benefits(*systems, external_cost_SKC)) + "\n\n" +
+    str(emission_reductions_benefits(*systems, external_cost_ZWY)) + "\n\n" +
+    str(emission_reductions_benefits(*systems, external_cost_HAS)) + "\n\n\n"
+)
 
 print(table2)
 
@@ -75,7 +78,7 @@ table2 = """
 Table 2: Emission reductions and associated benefits from the two projects
 
                     Mong Duong 1      Ninh Binh
-""" + str(emission_reductions(MongDuong1System, NinhBinhSystem))
+""" + str(emission_reductions(MongDuong1System, NinhBinhSystem, external_cost))
 
 print(table2)
 
