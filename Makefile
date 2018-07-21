@@ -43,33 +43,38 @@ archive:
 	rm -rf $(distName)
 
 test: cleaner
-	py.test-3 --doctest-modules
+	py.test --doctest-modules
 
 coverage: coverage.xml
 	python3.5-coverage html
 	see htmlcov/index.html
 
 coverage.xml:
-	py.test-3 --doctest-modules --cov=. --cov-report term-missing --cov-report xml
+	py.test --doctest-modules --cov=. --cov-report term-missing --cov-report xml
 
 codacy-update: coverage.xml
 	export CODACY_PROJECT_TOKEN=e69e0e5c845f4e2dbc1c13fbaa35aeab; python-codacy-coverage -r coverage.xml
 
 regtest-reset:
-	py.test-3 --regtest-reset
+	py.test --regtest-reset
 
 lint:
-	pylint3 *py
+	pylint *py
 
 docstyle:
 	# Ignored messages:
 	# D102: Missing docstring in public method             too many positives
 	# D105: Missing docstring in magic method              why does it need a docstring ?
 	# D203: 1 blank line required before class docstring   bug in the tool
-	pydocstyle --ignore=D102,D105,D203 *py
+	# D213: Multi-line docstring summary should start at the second line
+	pydocstyle --ignore=D102,D105,D107,D203,D213 *py
 
 codestyle:
-	pycodestyle
+	# Ignore messages:
+	# W503 line break before binary operator
+	# W504: line break after binary operator
+	# E265: Block comment should start with '# '
+	pycodestyle --ignore=E265,W503,W504 *py
 
 clean:
 	rm -f $(tables)

@@ -115,7 +115,7 @@ farm_parameter = {'winder_rental_cost': 40 * USD / ha,   # per period
                   'winder_haul': 6.57 * t / d,
                   'work_hour_day': 8 * hr / d,
                   'wage_bm_collect': 1.11 * USD / hr,
-                  'fuel_cost_per_hour': 0 * USD / hr,
+                  'fuel_cost_per_hour': 0.5 * USD / hr,
                   'emission_factor': emission_factor}
 
 transport_parameter = {'barge_fuel_consumption': 8 * g / t / km,  # Van Dingenen & 2016
