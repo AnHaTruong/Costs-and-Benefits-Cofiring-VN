@@ -71,6 +71,8 @@ straw = Fuel(name='straw',
              transport_distance='Endogenous',
              transport_mean='Road transport')
 
+diesel_heat_value = 45.5 * MJ / kg   # ACEA
+
 emission_factor = dict()
 
 emission_factor['6b_coal'] = {
@@ -84,6 +86,12 @@ emission_factor['4b_coal'] = {
     'SO2': emission_factor['6b_coal']['SO2'],
     'NOx': emission_factor['6b_coal']['NOx'],
     'PM10': 26.1 * kg / t}
+
+emission_factor['diesel'] = {
+    'CO2': 0.0705 * kg / MJ * diesel_heat_value,    # EPA AP-42, VolI, 3,3
+    'SO2': 0.0004 * kg / MJ * diesel_heat_value,    # EPA AP-42, VolI, 3,3
+    'NOx': 0.0018 * kg / MJ * diesel_heat_value,    # EPA AP-42, VolI, 3,3
+    'PM10': 0.00014 * kg / MJ * diesel_heat_value}  # EPA AP-42, VolI, 3,3
 
 emission_factor['Conveyor belt'] = {
     'CO2': 0 * kg / t / km,
@@ -108,7 +116,6 @@ emission_factor['straw'] = {
     'SO2': 0.18 * kg / t,                      # (Hoang & 2013)
     'NOx': 2.28 * kg / t,                      # idem
     'PM10': 9.1 * kg / t}                      # idem
-
 
 # hourly wage calculated from base salary defined in governmental regulations
 farm_parameter = {'winder_rental_cost': 40 * USD / ha,   # per period
