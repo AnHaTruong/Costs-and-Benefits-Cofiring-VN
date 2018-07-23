@@ -18,6 +18,7 @@ from collections import namedtuple
 
 import pandas as pd
 
+# pylint: disable=wrong-import-order
 from init import USD, VND, ONES, after_invest
 from natu.units import MJ, kg, t, d, hr, km, MW, ha, kW, y, kWh, MWh, g
 
