@@ -40,7 +40,12 @@ class Farmer(Investment, Emitter):
             level=field_burning_before.level - self.quantity,
             emission_factor=self.parameter['emission_factor']['straw'])
 
-        Emitter.__init__(self, field_burning)
+        winder_use = Activity(
+            name='diesel',
+            level=self.quantity / (self.parameter['winder_haul'] / self.parameter['fuel_use']),
+            emission_factor=self.parameter['emission_factor']['diesel'])
+
+        Emitter.__init__(self, field_burning, winder_use)
 
         Investment.__init__(self, "Farmers")
 

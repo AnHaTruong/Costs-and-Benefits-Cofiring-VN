@@ -3,6 +3,7 @@
 Straw                225996 t/y  513.289 t/y    8.19461 t/y    0.729411 t/y
 Conveyor belt             0 t/y        0 t/y          0 t/y           0 t/y
 Straw           1.63986e+06 t/y   3724.5 t/y    14865.3 t/y      294.04 t/y
+diesel              457.252 t/y  11.6745 t/y   0.908018 t/y     2.59434 t/y
 Road transport      2171.71 t/y  2.64554 t/y  0.0394856 t/y  0.00296142 t/y
 
                          CO2            NOx            PM10              SO2
@@ -10,4 +11,5 @@ Road transport      2171.71 t/y  2.64554 t/y  0.0394856 t/y  0.00296142 t/y
 Straw            39826.5 t/y    90.4553 t/y     2.88822 t/y      7.14121 t/y
 Barge transport  11624.1 t/y      66.47 t/y     4.17811 t/y      2.61951 t/y
 Straw             397726 t/y    903.328 t/y     3605.39 t/y      71.3154 t/y
+diesel           80.5801 t/y    2.05736 t/y    0.160017 t/y     0.457192 t/y
 Road transport   57.7439 t/y  0.0703426 t/y  0.00104989 t/y  7.87417e-05 t/y
