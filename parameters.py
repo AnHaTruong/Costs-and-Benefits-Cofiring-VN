@@ -133,7 +133,7 @@ transport_parameter = {'barge_fuel_consumption': 8 * g / t / km,  # Van Dingenen
                        'wage_bm_loading': 1.11 * USD / hr,
                        'truck_load': 20 * t,  # Also used in road_transport.emission_factor
                        'truck_velocity': 45 * km / hr,
-                       'fuel_cost_per_hour_driving': 0 * USD / hr,
+                       'fuel_cost_per_hour_driving': 7.15 * USD / hr,
                        'fuel_cost_per_hour_loading': 0 * USD / hr,
                        'rental_cost_per_hour': 0 * USD / hr,
                        'wage_bm_transport': 1.11 * USD / hr,  # vantaiduongviet.com
