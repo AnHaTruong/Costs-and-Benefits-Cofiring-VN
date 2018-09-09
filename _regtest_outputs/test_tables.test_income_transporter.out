@@ -1,20 +1,3 @@
-<<<<<<< Updated upstream
-                         kUSD USD/trip
-Sales revenue         1,773.0    157.5
-- Truck rental       -2,565.4   -227.9
-- Truck fuel           -156.8    -13.9
-- Handling work         -11.2     -1.0
-- Driving work          -24.3     -2.2
-= Earning Before Tax   -984.8    -87.5
-
-                       kUSD USD/trip
-Sales revenue          47.1     23.8
-- Truck rental       -189.5    -95.5
-- Truck fuel           -4.2     -2.1
-- Handling work        -2.0     -1.0
-- Driving work         -0.6     -0.3
-= Earning Before Tax -149.1    -75.2
-=======
                         kUSD USD/trip
 Sales revenue        1,773.0    157.5
 - Truck rental        -308.5    -27.4
@@ -30,4 +13,3 @@ Sales revenue         47.1     23.8
 - Handling work       -2.0     -1.0
 - Driving work        -0.6     -0.3
 = Earning Before Tax  17.6      8.9
->>>>>>> Stashed changes
