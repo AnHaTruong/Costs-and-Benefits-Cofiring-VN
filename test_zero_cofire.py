@@ -9,7 +9,7 @@
 
 import pytest
 
-from init import isclose, ZEROS
+from init import isclose
 import parameters as baseline
 from system import System
 from powerplant import PowerPlant
@@ -20,8 +20,9 @@ from powerplant import PowerPlant
 
 @pytest.fixture()
 def null_cofiring_system():
+    no_cofiring = baseline.cofire_MD1.biomass_ratio_energy * 0
     return System(baseline.plant_parameter_MD1,
-                  baseline.cofire_MD1._replace(biomass_ratio_energy=ZEROS),
+                  baseline.cofire_MD1._replace(biomass_ratio_energy=no_cofiring),
                   baseline.supply_chain_MD1,
                   baseline.price_MD1,
                   baseline.farm_parameter,

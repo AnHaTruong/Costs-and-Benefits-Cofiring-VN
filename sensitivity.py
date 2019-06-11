@@ -20,7 +20,7 @@ from SALib.analyze import sobol
 #pylint: disable=wrong-import-position
 #config.use_quantities = False
 
-from init import TIMEHORIZON, USD
+from init import USD
 import parameters as baseline
 
 
@@ -44,7 +44,7 @@ def sensitivy_analysis():
                'names': ['discount_rate', 'tax_rate', 'depreciation_period'],
                'bounds': [[0, 0.15],
                           [0, 0.25],
-                          [1, TIMEHORIZON - 1]]}
+                          [1, baseline.MongDuong1System.plant.parameter.time_horizon - 1]]}
 
     param_values = saltelli.sample(problem, 100, calc_second_order=True)
 

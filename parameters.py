@@ -19,12 +19,11 @@ from collections import namedtuple
 import pandas as pd
 
 # pylint: disable=wrong-import-order
-from init import USD, VND, ONES, after_invest
+from init import USD, VND, after_invest
 from natu.units import MJ, kg, t, d, hr, km, MW, ha, kW, y, kWh, MWh, g
 
 from parameters_supplychain import supply_chain_MD1, supply_chain_NB
 from system import System
-
 
 discount_rate = 0.087771
 depreciation_period = 10
@@ -125,8 +124,8 @@ farm_parameter = {'winder_rental_cost': 40 * USD / ha,   # per period
                   'wage_bm_collect': 1.11 * USD / hr,
                   'fuel_cost_per_hour': 0.5 * USD / hr,
                   'emission_factor': emission_factor,
-                  'fuel_use': 4.16 * kg / d
-                  }
+                  'fuel_use': 4.16 * kg / d,
+                  'time_horizon': 20}
 
 transport_parameter = {'barge_fuel_consumption': 8 * g / t / km,  # Van Dingenen & 2016
                        'truck_loading_time': 2.7 / 60 * hr / t,  # Ovaskainen & Lundberg (2016)
@@ -137,7 +136,8 @@ transport_parameter = {'barge_fuel_consumption': 8 * g / t / km,  # Van Dingenen
                        'fuel_cost_per_hour_loading': 0 * USD / hr,
                        'rental_cost_per_hour': 9.62 * USD / hr,
                        'wage_bm_transport': 1.11 * USD / hr,  # vantaiduongviet.com
-                       'emission_factor': emission_factor}
+                       'emission_factor': emission_factor,
+                       'time_horizon': 20}
 
 
 PlantParameter = namedtuple("PlantParameter", ['name',
@@ -145,27 +145,29 @@ PlantParameter = namedtuple("PlantParameter", ['name',
                                                'capacity_factor',
                                                'commissioning',
                                                'boiler_technology',
-                                               'boiler_efficiency',
+                                               'boiler_efficiency_new',
                                                'plant_efficiency',
                                                'fix_om_coal',
                                                'variable_om_coal',
                                                'emission_factor',
                                                'emission_control',
-                                               'coal'])
+                                               'coal',
+                                               'time_horizon'])
 
 plant_parameter_MD1 = PlantParameter(name='Mong Duong 1',
                                      capacity=1080 * MW,
                                      capacity_factor=0.60,
                                      commissioning=2015,
                                      boiler_technology='CFB',
-                                     boiler_efficiency=ONES * 87.03 / 100,
-                                     plant_efficiency=ONES * 38.84 / 100,
+                                     boiler_efficiency_new=87.03 / 100,
+                                     plant_efficiency=38.84 / 100,
                                      fix_om_coal=29.31 * USD / kW / y,
                                      variable_om_coal=0.0048 * USD / kWh,
                                      emission_factor=emission_factor,
                                      emission_control={'CO2': 0.0,
                                                        'SO2': 0.982, 'NOx': 0.0, 'PM10': 0.996},
-                                     coal=coal_6b)
+                                     coal=coal_6b,
+                                     time_horizon=20)
 
 
 CofiringParameter = namedtuple('CofiringParameter', ['biomass_ratio_energy',
@@ -183,7 +185,8 @@ def boiler_efficiency_loss_quadratic(biomass_ratio_mass):
     return 0.0044 * biomass_ratio_mass**2 + 0.0055 * biomass_ratio_mass
 
 
-cofire_MD1 = CofiringParameter(biomass_ratio_energy=after_invest(0.05),
+cofire_MD1 = CofiringParameter(biomass_ratio_energy=after_invest(0.05,
+                                                                 plant_parameter_MD1.time_horizon),
                                capital_cost=50 * USD / kW / y,
                                fix_om_cost=32.24 * USD / kW / y,
                                variable_om_cost=0.006 * USD / kWh,
@@ -208,14 +211,15 @@ plant_parameter_NB = PlantParameter(name='Ninh Binh',
                                     capacity_factor=0.64,
                                     commissioning=1974,
                                     boiler_technology='PC',
-                                    boiler_efficiency=ONES * 81.61 / 100,
-                                    plant_efficiency=ONES * 21.77 / 100,
+                                    boiler_efficiency_new=81.61 / 100,
+                                    plant_efficiency=21.77 / 100,
                                     fix_om_coal=plant_parameter_MD1.fix_om_coal,
                                     variable_om_coal=plant_parameter_MD1.variable_om_coal,
                                     emission_factor=emission_factor,
                                     emission_control={'CO2': 0.0,
                                                       'SO2': 0.0, 'NOx': 0.0, 'PM10': 0.992},
-                                    coal=coal_4b)
+                                    coal=coal_4b,
+                                    time_horizon=20)
 
 
 cofire_NB = cofire_MD1._replace(capital_cost=100 * USD / kW / y)

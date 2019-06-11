@@ -53,7 +53,8 @@ class System:
         self.biomass_value = self.cofiring_plant.biomass_used * price.biomass
         display_as(self.biomass_value, "kUSD")
 
-        self.transport_cost = after_invest(self.supply_chain.transport_tkm() * price.transport)
+        self.transport_cost = after_invest(self.supply_chain.transport_tkm() * price.transport,
+                                           self.transporter.parameter['time_horizon'])
         display_as(self.transport_cost, "kUSD")
 
         self.cofiring_plant.biomass_cost = self.biomass_value + self.transport_cost

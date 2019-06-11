@@ -9,11 +9,12 @@
 """Define PowerPlant and its child class, CofiringPlant."""
 
 import pandas as pd
+import numpy as np
 
 from natu.units import y
 from natu.numpy import npv
 
-from init import ONES, USD, MUSD, display_as, safe_divide
+from init import USD, MUSD, display_as, safe_divide
 from investment import Investment
 from emitter import Emitter, Activity
 
@@ -24,7 +25,7 @@ class PowerPlant(Investment, Emitter):
 
     def __init__(self,
                  parameter,
-                 derating=ONES,
+                 derating=None,
                  capital=0 * USD):
         """Initialize the power plant, compute the amount of coal used.
 
@@ -46,12 +47,18 @@ class PowerPlant(Investment, Emitter):
         The capital cost represents the cost of installing cofiring,
         it is zero in this case.
         """
-        Investment.__init__(self, parameter.name, capital)
+        Investment.__init__(self, parameter.name, parameter.time_horizon, capital)
         self.parameter = parameter
-        self.derating = derating
-        self.plant_efficiency = parameter.plant_efficiency * derating
-        self.power_generation = ONES * parameter.capacity * parameter.capacity_factor * y
+
+        self.power_generation = (np.ones(parameter.time_horizon + 1) *
+                                 parameter.capacity * parameter.capacity_factor * y)
         display_as(self.power_generation, 'GWh')
+
+        if derating is not None:
+            self.derating = derating
+        else:
+            self.derating = np.ones(parameter.time_horizon + 1)
+        self.plant_efficiency = parameter.plant_efficiency * self.derating
 
         self.gross_heat_input = self.power_generation / self.plant_efficiency
         display_as(self.gross_heat_input, 'TJ')
@@ -88,7 +95,9 @@ class PowerPlant(Investment, Emitter):
         return display_as(self.coal_om_cost(), 'kUSD')
 
     def coal_om_cost(self):
-        fixed_om_coal = ONES * self.parameter.fix_om_coal * self.parameter.capacity * y
+        """Return the vector of operation and maintenance cost."""
+        fixed_om_coal = (np.ones(self.parameter.time_horizon + 1) *
+                         self.parameter.fix_om_coal * self.parameter.capacity * y)
         variable_om_coal = self.power_generation * self.parameter.variable_om_coal
         cost = fixed_om_coal + variable_om_coal
         return display_as(cost, 'kUSD')
@@ -123,7 +132,7 @@ class PowerPlant(Investment, Emitter):
         description["Coal consumption"] = self.coal_used[1]
         description["Heat value of coal"] = self.parameter.coal.heat_value
         description["Plant efficiency"] = self.plant_efficiency[1]
-        description["Boiler efficiency"] = self.parameter.boiler_efficiency[1] * self.derating[1]
+        description["Boiler efficiency"] = self.parameter.boiler_efficiency_new
         return description
 
     def lcoe_statement(self, discount_rate, tax_rate, depreciation_period):
@@ -183,14 +192,15 @@ class CofiringPlant(PowerPlant):
                               * plant_parameter.coal.heat_value
                               / cofire_parameter.biomass.heat_value)
 
-        boiler_efficiency = (plant_parameter.boiler_efficiency
+        boiler_efficiency = (np.ones(plant_parameter.time_horizon + 1) *
+                             plant_parameter.boiler_efficiency_new
                              - cofire_parameter.boiler_efficiency_loss(biomass_ratio_mass))
-        boiler_efficiency[0] = plant_parameter.boiler_efficiency[0]
+        boiler_efficiency[0] = plant_parameter.boiler_efficiency_new
 
         PowerPlant.__init__(
             self,
             plant_parameter,
-            derating=boiler_efficiency / plant_parameter.boiler_efficiency,
+            derating=boiler_efficiency / plant_parameter.boiler_efficiency_new,
             capital=(cofire_parameter.capital_cost
                      * plant_parameter.capacity * y
                      * float(cofire_parameter.biomass_ratio_energy[1])))

@@ -12,7 +12,7 @@
 
 import pandas as pd
 import natu.numpy as np
-from init import TIMEHORIZON, ZEROS, USD, kUSD, after_invest, display_as, isclose
+from init import USD, kUSD, after_invest, display_as, isclose
 
 
 class Investment:
@@ -24,38 +24,36 @@ class Investment:
     No salvage value
 
     Virtual class: descendent class should redefine  operating_expense()  to
-        return a vector of quantities of size TIMEHORIZON+1
+        return a vector of quantities of size time_horizon+1
         which has the display unit set to kUSD
 
     The  revenue  must be set after the investment is initialized.
         This is so because the code that set the revenue can also
         set it as an expense to another object.
 
-    >>> i = Investment('test')
+    >>> i = Investment('test', 20)
     >>> i.revenue()
     Traceback (most recent call last):
         ...
     AttributeError: Accessing  Investment.revenue  value before it is set
 
-    >>> i.revenue = after_invest(3000 * USD)
+    >>> i.revenue = after_invest(3000 * USD, 20)
     >>> # set the costs of whoever is paying the 3000 USD per year
     >>> i.revenue
     array([0 kUSD, 3 kUSD, 3 kUSD, 3 kUSD, 3 kUSD, 3 kUSD, 3 kUSD, 3 kUSD,
            3 kUSD, 3 kUSD, 3 kUSD, 3 kUSD, 3 kUSD, 3 kUSD, 3 kUSD, 3 kUSD,
            3 kUSD, 3 kUSD, 3 kUSD, 3 kUSD, 3 kUSD], dtype=object)
 
-    The expenses must be set in child classes.
-
-    >>> from init import ZEROS
-    >>> i = Investment("test", 1000*USD)
-    >>> i.revenue = ZEROS * USD
+    >>> i = Investment("test", 20, 1000*USD)
+    >>> i.revenue = np.zeros(21) * USD
     >>> i.net_present_value(0, 0, 10)
     -1 kUSD
     """
 
-    def __init__(self, name, capital=0 * USD):
+    def __init__(self, name, time_horizon, capital=0 * USD):
         self.capital = display_as(capital, 'kUSD')
         self.name = name
+        self.time_horizon = time_horizon
         self._revenue = None
         self.expenses = []
         self.expenses_index = []
@@ -75,20 +73,20 @@ class Investment:
 
         But code outside this module assume it occurs only in  year 0.
         """
-        v_invest = 1 - after_invest(1)
+        v_invest = 1 - after_invest(1, self.time_horizon)
         return display_as(v_invest * self.capital / sum(v_invest), 'kUSD')
 
-    @staticmethod
-    def operating_expenses():
-        return display_as(ZEROS * USD, 'kUSD')
+    def operating_expenses(self):
+        return display_as(np.zeros(self.time_horizon + 1) * USD, 'kUSD')
 
     def amortization(self, depreciation_period):
         """Return vector of linear amortization amounts."""
         if not self.capital:
-            return display_as(ZEROS * USD, 'kUSD')
+            return display_as(np.zeros(self.time_horizon + 1) * USD, 'kUSD')
         assert isinstance(depreciation_period, int), "Depreciation period not an integer"
-        assert 0 < depreciation_period < TIMEHORIZON - 1, "Depreciation not in {1..timehorizon-2}"
-        v_cost = ZEROS.copy() * USD
+        assert depreciation_period > 0, "Depreciation period negative"
+        assert depreciation_period < self.time_horizon - 1, "Depreciation >= timehorizon - 2 year"
+        v_cost = np.zeros(self.time_horizon + 1).copy() * USD
         for year in range(1, depreciation_period + 1):
             v_cost[year] = self.capital / float(depreciation_period)
         return display_as(v_cost, 'kUSD')

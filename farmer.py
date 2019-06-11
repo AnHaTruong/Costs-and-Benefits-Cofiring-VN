@@ -8,10 +8,11 @@
 """Represent the collective of farmers producing biomass."""
 
 import pandas as pd
+import numpy as np
 
 from natu.units import ha
 
-from init import ONES, after_invest, display_as, USD, kUSD
+from init import after_invest, display_as, USD, kUSD
 from emitter import Emitter, Activity
 from investment import Investment
 
@@ -25,12 +26,13 @@ class Farmer(Investment, Emitter):
 
     def __init__(self, supply_chain, farmer_parameter):
         self.parameter = farmer_parameter
-        self.quantity = after_invest(supply_chain.quantity())
-        self.farm_area = after_invest(supply_chain.quantity() / supply_chain.average_straw_yield)
+        self.quantity = after_invest(supply_chain.quantity(), self.parameter['time_horizon'])
+        self.farm_area = after_invest(supply_chain.quantity() / supply_chain.average_straw_yield,
+                                      self.parameter['time_horizon'])
 
         field_burning_before = Activity(
             name='Straw',
-            level=ONES * supply_chain.burnable(),
+            level=np.ones(self.parameter['time_horizon'] + 1) * supply_chain.burnable(),
             emission_factor=self.parameter['emission_factor']['straw'])
 
         self.emissions_exante = Emitter(field_burning_before).emissions(total=False)
@@ -47,7 +49,7 @@ class Farmer(Investment, Emitter):
 
         Emitter.__init__(self, field_burning, winder_use)
 
-        Investment.__init__(self, "Farmers")
+        Investment.__init__(self, "Farmers", self.parameter['time_horizon'])
 
     def labor(self):
         """Work time needed to collect straw for co-firing per year."""

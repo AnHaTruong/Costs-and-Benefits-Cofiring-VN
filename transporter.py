@@ -34,10 +34,11 @@ class Transporter(Investment, Emitter):
 
     def __init__(self, supply_chain, transport_parameter):
 
-        Investment.__init__(self, "Transporter")
+        Investment.__init__(self, "Transporter", transport_parameter['time_horizon'])
 
-        self.activity_level = after_invest(supply_chain.transport_tkm())
-        self.quantity = after_invest(supply_chain.quantity())
+        self.activity_level = after_invest(supply_chain.transport_tkm(),
+                                           transport_parameter['time_horizon'])
+        self.quantity = after_invest(supply_chain.quantity(), transport_parameter['time_horizon'])
         self.collection_radius = supply_chain.collection_radius()
 
         self.parameter = transport_parameter

@@ -21,7 +21,6 @@ Units thread into arrays from the right but not from the left
 from natu import config
 # config.use_quantities = False
 
-import natu.numpy as np
 from natu.numpy import array
 from natu.units import hr, t, y
 from natu import units
@@ -53,24 +52,19 @@ MUSD = 1000 * kUSD
 FTE = 1560 * hr
 units.FTE = FTE
 
-TIMEHORIZON = 20   # years
-
-ZEROS = np.zeros(TIMEHORIZON + 1)
-ONES = np.ones(TIMEHORIZON + 1)
-
-
-def after_invest(qty):
+def after_invest(qty, time_horizon):
     """Construct a time serie from a quantity.
 
     Used to vectorize calculations involving qty.
+    Assumes invest completes in the first year.
     Return  natu.numpy.array([0, qty, ..., qty]).
     The dtype=object might be a performance cost when "use_quantities = False" (untested).
 
-    >>> after_invest(3 * t)
+    >>> after_invest(3 * t, 20)
     array([0 t, 3 t, 3 t, ..., 3 t, 3 t, 3 t], dtype=object)
     """
     assert not hasattr(qty, '__iter__'), "Vectorize only scalar arguments."
-    return array([0 * qty] + [qty] * TIMEHORIZON, dtype=object)
+    return array([0 * qty] + [qty] * time_horizon, dtype=object)
 
 
 def year_1(df):
@@ -133,6 +127,7 @@ def isclose(qty_a, qty_b, rel_tol=1e-09, abs_tol=0.0):
 def safe_divide(costs, masses):
     """Divide two vectors elementwise, producing NaN instead of error when the divisor is zero.
 
+    >>> import natu.numpy as np
     >>> costs = np.array([100 * USD, 200 * USD])
     >>> masses = np.array([0 * t, 10 * t])
 
