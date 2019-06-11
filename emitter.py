@@ -43,11 +43,11 @@ class Emitter:
     Polymorphic: activity level can be a scalar or an array representing a time series
 
     >>> import numpy as np
-    >>> c = Activity('Combustion', np.array([1000, 110, 0]), {'CO2': 1, 'PM10': 0.0091})
+    >>> c = Activity('Combustion', np.array([1000, 110, 0]), {'CO2': 1, 'PM10': 0.001})
     >>> print(Emitter(c))
-                           CO2               PM10
-    Combustion  [1000, 110, 0]  [9.1, 1.001, 0.0]
-    Total       [1000, 110, 0]  [9.1, 1.001, 0.0]
+                           CO2              PM10
+    Combustion  [1000, 110, 0]  [1.0, 0.11, 0.0]
+    Total       [1000, 110, 0]  [1.0, 0.11, 0.0]
 
     Mutable: activities can be changed after the initialization
 
@@ -64,8 +64,7 @@ class Emitter:
 
         *activities: each must be an Activity namedtuple
         emission_control: a dictionary of str: float, where str is the pollutant name
-            and the float between 0 and 1 is the fraction remaining after the control
-            (for no control the fraction is 1)
+            and the float between 0 and 1 is the filter efficiency
         """
         self.activities = activities
         self.emission_control = emission_control

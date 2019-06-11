@@ -1,30 +1,29 @@
 Blending biomass with fossil fuels is a relatively low-cost technology to use renewable energy in the electricity generation sector. Most coal power plants can co-fire a small fraction (<10% energy) of biomass without major retrofit. In high income countries, over a hundred of power plants cofire biomass, often because governments forced utilities to deliver a minimum fraction of their electricity from renewable sources. Would that technology be appropriate in a middle income country on a coal binge: Vietnam? Here we show that the costs of cofiring 5% rice straw with coal are relatively modest, presenting two cases where the levelized cost of electricity would increase by less than 1%. These costs are lower than the benefits accruing to farmers selling straw to the plant and neighbors benefiting from improved air quality. Assuming a carbon value of 1$/tCO2, the value of avoided CO2 is small in front of agricultural and air quality benefits.
 
+## Installation
 
-Requisite :
-Python 3
-pandas
-natu 1.2
-pytest
-pytest-cov
-sudo -H pip3 install pytest-regtest
-sudo -H pip3 install xlrd
-sudo -H pip3 install SALib
-make
+The model is written in  Python 3.
+It uses pandas, pytest, SALib and other python dependencies listed in the file `requirement.txt`.
 
-Installation:
-If necessary the makefile will install  .git/hook/pre-commit  script when doing "make cleaner".
+Installation should be   ***pip3 install -r requirements.txt***
+and then ***sudo apt install pylint, pycodestyle, pydocstyle***
 
-natu version 1.1 broken with Python 3, because core.py uses the reduce function without importing it
-Since version 1.2 is not in Pypi as of 2017/08 one should install from GitHub with
-sudo pip3 install -I git+https://github.com/kdavies4/natu.git
+Failing that, here are installation notes:
++ We don't test compatibility with Python 2.
++ `pandas` can be installed from Ubuntu package `python3-pandas`
++  `xlrd` can be installed from Ubuntu package  `python3-xlrd`
++ `pytest` can be installed from the Ubuntu package `python3-pytest` but DON'T. That is an old version.
++ `pytest-cov` can be installed from the Ubuntu package `python3-coverage`
++ `SALib can be installed `sudo pip3 install salib`
++ `natu` version 1.2 is required with Python 3, not in Pypi as of 2017/11, so we install from GitHub
++ If necessary the makefile will install  `.git/hook/pre-commit`  script when doing `make cleaner`.
 
-pytest can be installed from the Ubuntu package "python3-pytest"
-pytest-cov can be installed from the Ubuntu package "python3-coverage"
+## Usage
 
+The project is managed with `make`. To make all figures and tables, use:
+```make```
 
-Usage:
-make
+## Contribution
 
 Code quality is promoted with these practices:
 0. Self testing with  assert  statements
@@ -37,9 +36,18 @@ Code quality is promoted with these practices:
 7. Coherence of computations with respect to physical units is enforced with the  natu  package
 
 
+## Bugs
 Known bugs and workarounds:
 
 doctest fails in an spyder3 IPython console with an unexpected argument in __init__
 See https://github.com/spyder-ide/spyder/issues/1855
 Use a simple Python console instead.
 
+The reason `natu` version 1.1 is broken with Python 3, is that `core.py` uses the `reduce` function without importing it.
+As an alternative to pip, one can install a local copy with:
+```
+git clone git@github.com:kdavies4/natu.git
+cd natu
+pip3 install -e .
+```
+Doing that will make static code analysis tools like lint cry a lot. Exclude the subdirectory `natu/` from their search path.

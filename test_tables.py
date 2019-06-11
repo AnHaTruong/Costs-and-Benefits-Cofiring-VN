@@ -20,6 +20,7 @@ from tables import energy_costs, straw_supply, emission_reductions
 # pylint and pytest known compatibility bug
 # pylint: disable=redefined-outer-name
 
+pd.set_option('display.max_columns', None)
 pd.options.display.float_format = '{:,.1f}'.format
 
 finance = discount_rate, tax_rate, depreciation_period

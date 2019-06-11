@@ -7,7 +7,7 @@
 
 PYTHON = python3
 PYTEST = py.test
-PYLINT = pylint
+PYLINT = pylint3
 
 tables = tables_manuscript.txt
 
