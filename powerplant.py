@@ -178,27 +178,22 @@ class FuelPowerPlant(PowerPlant, Emitter):
 
     def lcoe_statement(self, discount_rate, tax_rate, depreciation_period):
         """Assess the levelized cost of electricity."""
- #       statement = PowerPlant.lcoe_statement(self, discount_rate, tax_rate, depreciation_period)
-        statement = pd.Series(name=self.name)
-        statement["Investment    (MUSD)"] = self.capital / MUSD
+        statement = PowerPlant.lcoe_statement(self, discount_rate, tax_rate, depreciation_period)
         statement["Fuel cost     (MUSD)"] = npv(discount_rate, self.all_fuel_cost()) / MUSD
         statement["  Coal        (MUSD)"] = npv(discount_rate, self.fuel_cost) / MUSD
-        statement["  Biomass     (MUSD)"] = 0
-        statement["O&M cost      (MUSD)"] = npv(
-            discount_rate, self.operation_maintenance_cost()) / MUSD
         statement["  O&M coal    (MUSD)"] = npv(
             discount_rate, self.fuel_om_cost()) / MUSD
-        statement["  O&M biomass (MUSD)"] = 0
-        statement["Tax           (MUSD)"] = npv(
-            discount_rate, self.income_tax(tax_rate, depreciation_period)) / MUSD
-        statement["Cash_out      (MUSD)"] = npv(
-            discount_rate,
-            self.cash_out(tax_rate, depreciation_period)) / MUSD
-        statement["Electricity produced"] = npv(
-            discount_rate, self.power_generation)
-        statement["LCOE                "] = self.lcoe(
-            discount_rate, tax_rate, depreciation_period)
-        return statement
+        return statement.reindex(index=["Investment    (MUSD)",
+                                        "Fuel cost     (MUSD)",
+                                        "  Coal        (MUSD)",
+                                        "  Biomass     (MUSD)",
+                                        "O&M cost      (MUSD)",
+                                        "  O&M coal    (MUSD)",
+                                        "  O&M biomass (MUSD)",
+                                        "Tax           (MUSD)",
+                                        "Cash_out      (MUSD)",
+                                        "Electricity produced",
+                                        "LCOE                "], fill_value=0.0)
 
 
 class CofiringPlant(FuelPowerPlant):
