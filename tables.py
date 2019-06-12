@@ -101,9 +101,9 @@ def energy_costs(system_a, system_b):
 
     lines.append(
         "Coal                "
-        + str(energy_cost(system_a.price.coal, system_a.plant.parameter.coal))
+        + str(energy_cost(system_a.price.coal, system_a.plant.parameter.fuel))
         + "      "
-        + str(energy_cost(system_b.price.coal, system_b.plant.parameter.coal)))
+        + str(energy_cost(system_b.price.coal, system_b.plant.parameter.fuel)))
 
     lines.append(
         "Biomass in field    "

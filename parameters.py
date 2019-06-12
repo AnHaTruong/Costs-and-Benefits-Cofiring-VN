@@ -151,7 +151,7 @@ PlantParameter = namedtuple("PlantParameter", ['name',
                                                'variable_om',
                                                'emission_factor',
                                                'emission_control',
-                                               'coal',
+                                               'fuel',
                                                'time_horizon'])
 
 plant_parameter_MD1 = PlantParameter(name='Mong Duong 1',
@@ -166,7 +166,7 @@ plant_parameter_MD1 = PlantParameter(name='Mong Duong 1',
                                      emission_factor=emission_factor,
                                      emission_control={'CO2': 0.0,
                                                        'SO2': 0.982, 'NOx': 0.0, 'PM10': 0.996},
-                                     coal=coal_6b,
+                                     fuel=coal_6b,
                                      time_horizon=20)
 
 
@@ -218,7 +218,7 @@ plant_parameter_NB = PlantParameter(name='Ninh Binh',
                                     emission_factor=emission_factor,
                                     emission_control={'CO2': 0.0,
                                                       'SO2': 0.0, 'NOx': 0.0, 'PM10': 0.992},
-                                    coal=coal_4b,
+                                    fuel=coal_4b,
                                     time_horizon=20)
 
 

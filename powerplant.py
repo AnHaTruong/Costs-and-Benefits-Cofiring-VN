@@ -120,13 +120,13 @@ class CoalPowerPlant(PowerPlant, Emitter):
         self.gross_heat_input = self.power_generation / self.plant_efficiency
         display_as(self.gross_heat_input, 'TJ')
 
-        self.coal_used = self.gross_heat_input / parameter.coal.heat_value
+        self.coal_used = self.gross_heat_input / parameter.fuel.heat_value
         display_as(self.coal_used, 't')
 
         Emitter.__init__(self,
-                         Activity(name=parameter.coal.name,
+                         Activity(name=parameter.fuel.name,
                                   level=self.coal_used,
-                                  emission_factor=parameter.emission_factor[parameter.coal.name]),
+                                  emission_factor=parameter.emission_factor[parameter.fuel.name]),
                          emission_control=parameter.emission_control)
 
         self._coal_cost = None
@@ -155,11 +155,11 @@ class CoalPowerPlant(PowerPlant, Emitter):
         return PowerPlant.operation_maintenance_cost(self)
 
     def coal_transport_tkm(self):
-        return self.coal_used * 2 * self.parameter.coal.transport_distance   # Return trip inputed
+        return self.coal_used * 2 * self.parameter.fuel.transport_distance   # Return trip inputed
 
     def coal_transporter(self):
         """Return an Emitter object to access emissions from coal transport."""
-        transport_mean = self.parameter.coal.transport_mean
+        transport_mean = self.parameter.fuel.transport_mean
         activity = Activity(
             name=transport_mean,
             level=self.coal_transport_tkm(),
@@ -172,7 +172,7 @@ class CoalPowerPlant(PowerPlant, Emitter):
         description["Boiler technology"] = self.parameter.boiler_technology
         description["Capacity factor"] = self.parameter.capacity_factor
         description["Coal consumption"] = self.coal_used[1]
-        description["Heat value of coal"] = self.parameter.coal.heat_value
+        description["Heat value of coal"] = self.parameter.fuel.heat_value
         description["Plant efficiency"] = self.plant_efficiency[1]
         description["Boiler efficiency"] = self.parameter.boiler_efficiency_new
         return description
@@ -231,7 +231,7 @@ class CofiringPlant(CoalPowerPlant):
         self.cofire_parameter = cofire_parameter
 
         biomass_ratio_mass = (cofire_parameter.biomass_ratio_energy
-                              * plant_parameter.coal.heat_value
+                              * plant_parameter.fuel.heat_value
                               / cofire_parameter.biomass.heat_value)
 
         boiler_efficiency = (np.ones(plant_parameter.time_horizon + 1) *
@@ -254,15 +254,15 @@ class CofiringPlant(CoalPowerPlant):
         self.biomass_used = biomass_heat / cofire_parameter.biomass.heat_value
         display_as(self.biomass_used, 't')
 
-        self.coal_saved = biomass_heat / plant_parameter.coal.heat_value
+        self.coal_saved = biomass_heat / plant_parameter.fuel.heat_value
 
         self.coal_used -= self.coal_saved
 
         self.activities = [
             Activity(
-                name=plant_parameter.coal.name,
+                name=plant_parameter.fuel.name,
                 level=self.coal_used,
-                emission_factor=plant_parameter.emission_factor[plant_parameter.coal.name]),
+                emission_factor=plant_parameter.emission_factor[plant_parameter.fuel.name]),
             Activity(
                 name='Straw',
                 level=self.biomass_used,
