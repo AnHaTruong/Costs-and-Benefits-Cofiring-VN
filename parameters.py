@@ -3,7 +3,7 @@
 #
 # Plant parameters
 #
-# (c) Minh Ha-Duong, An Ha Truong 2016-2017
+# (c) Minh Ha-Duong, An Ha Truong 2016-2019
 # minh.haduong@gmail.com
 # Creative Commons Attribution-ShareAlike 4.0 International
 #
@@ -54,22 +54,25 @@ mining_parameter = {'productivity_surface': 8.04 * t / hr,  # www.eia.g
                     'productivity_underground': 2.5 * t / hr,  # ww.eia.gov
                     'wage': 0 * USD / hr}
 
-Fuel = namedtuple('Fuel', 'name, heat_value, transport_distance, transport_mean')
+Fuel = namedtuple('Fuel', 'name, heat_value, transport_distance, transport_mean, unit')
 
 coal_6b = Fuel(name="6b_coal",
                heat_value=19.43468 * MJ / kg,  # numerical value also used in emission_factor
                transport_distance=0 * km,
-               transport_mean='Conveyor belt')
+               transport_mean='Conveyor belt',
+               unit='t')
 
 coal_4b = Fuel(name="4b_coal",
                heat_value=21.5476 * MJ / kg,  # numerical value also used in emission_factor
                transport_distance=200 * km,
-               transport_mean='Barge transport')
+               transport_mean='Barge transport',
+               unit='t')
 
 straw = Fuel(name='straw',
              heat_value=11.7 * MJ / kg,  # numerical value also used in emission_factor
              transport_distance='Endogenous',
-             transport_mean='Road transport')
+             transport_mean='Road transport',
+             unit='t')
 
 diesel_heat_value = 45.5 * MJ / kg   # ACEA
 

@@ -3,7 +3,7 @@
 #
 #
 #
-# (c) Minh Ha-Duong, An Ha Truong   2016
+# (c) Minh Ha-Duong, An Ha Truong   2016-2019
 #     minh.haduong@gmail.com
 #     Creative Commons Attribution-ShareAlike 4.0 International
 #

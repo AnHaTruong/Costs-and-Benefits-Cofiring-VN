@@ -3,10 +3,10 @@
 #
 # A Power plant
 #
-# (c) Minh Ha-Duong, An Ha Truong 2016-2017
+# (c) Minh Ha-Duong, An Ha Truong 2016-2019
 # minh.haduong@gmail.com
 # Creative Commons Attribution-ShareAlike 4.0 International
-"""Define CoalPowerPlant and its child class, CofiringPlant."""
+"""Define PowerPlant, FuelPowerPlant and CofiringPlant."""
 
 import pandas as pd
 import numpy as np
@@ -43,7 +43,7 @@ class PowerPlant(Investment):
     def operation_maintenance_cost(self):
         """Return the vector of operation and maintenance cost."""
         fixed_om = (np.ones(self.parameter.time_horizon + 1) *
-                         self.parameter.fixed_om * self.parameter.capacity * y)
+                    self.parameter.fixed_om * self.parameter.capacity * y)
         variable_om = self.power_generation * self.parameter.variable_om
         cost = fixed_om + variable_om
         return display_as(cost, 'kUSD')
@@ -82,32 +82,31 @@ class PowerPlant(Investment):
 
 
 #pylint: disable=too-many-instance-attributes
-class CoalPowerPlant(PowerPlant, Emitter):
-    """A coal power plant, without co-firing."""
+class FuelPowerPlant(PowerPlant, Emitter):
+    """A power plant using a single fuel, like coal or gas, without co-firing."""
 
     def __init__(self,
                  parameter,
                  derating=None,
                  capital=0 * USD):
-        """Initialize the power plant, compute the amount of coal used.
+        """Initialize the power plant, compute the amount of fuel used.
 
-        The financials (revenue and coal_cost) are not initialized at this time,
+        The financials (revenue and fuel_cost) are not initialized at this time,
         they must be defined later:
 
         >>> from parameters import plant_parameter_MD1, price_MD1
-        >>> plant = CoalPowerPlant(plant_parameter_MD1)
+        >>> plant = FuelPowerPlant(plant_parameter_MD1)
         >>> plant.revenue = plant.power_generation * price_MD1.electricity
         >>> plant.operating_expenses()
         Traceback (most recent call last):
             ...
-        AttributeError: Accessing  CoalPowerPlant.coal_cost  value before it is set
+        AttributeError: Accessing  FuelPowerPlant.fuel_cost  value before it is set
 
-        >>> plant.coal_cost = plant.coal_used * price_MD1.coal
+        >>> plant.fuel_cost = plant.fuel_used * price_MD1.coal
         >>> print(plant.net_present_value(discount_rate=0.08))
         1.29299e+06 kUSD
 
-        The capital cost represents the cost of installing cofiring,
-        it is zero in this case.
+        The capital cost is zero in this case
         """
         PowerPlant.__init__(self, parameter, capital)
 
@@ -120,49 +119,49 @@ class CoalPowerPlant(PowerPlant, Emitter):
         self.gross_heat_input = self.power_generation / self.plant_efficiency
         display_as(self.gross_heat_input, 'TJ')
 
-        self.coal_used = self.gross_heat_input / parameter.fuel.heat_value
-        display_as(self.coal_used, 't')
+        self.fuel_used = self.gross_heat_input / parameter.fuel.heat_value
+        display_as(self.fuel_used, parameter.fuel.unit)
 
         Emitter.__init__(self,
                          Activity(name=parameter.fuel.name,
-                                  level=self.coal_used,
+                                  level=self.fuel_used,
                                   emission_factor=parameter.emission_factor[parameter.fuel.name]),
                          emission_control=parameter.emission_control)
 
-        self._coal_cost = None
+        self._fuel_cost = None
 
     @property
-    def coal_cost(self):
-        if self._coal_cost is None:
-            raise AttributeError('Accessing  CoalPowerPlant.coal_cost  value before it is set')
-        return display_as(self._coal_cost, 'kUSD')
-
-    @coal_cost.setter
-    def coal_cost(self, value):
-        self._coal_cost = value
-
     def fuel_cost(self):
-        return self.coal_cost
+        if self._fuel_cost is None:
+            raise AttributeError('Accessing  FuelPowerPlant.fuel_cost  value before it is set')
+        return display_as(self._fuel_cost, 'kUSD')
+
+    @fuel_cost.setter
+    def fuel_cost(self, value):
+        self._fuel_cost = value
+
+    def all_fuel_cost(self):
+        return self.fuel_cost
 
     def operating_expenses(self):
-        cost = self.fuel_cost() + self.operation_maintenance_cost()
+        cost = self.all_fuel_cost() + self.operation_maintenance_cost()
         return display_as(cost, 'kUSD')
 
     def operation_maintenance_cost(self):
-        return display_as(self.coal_om_cost(), 'kUSD')
+        return display_as(self.fuel_om_cost(), 'kUSD')
 
-    def coal_om_cost(self):
+    def fuel_om_cost(self):
         return PowerPlant.operation_maintenance_cost(self)
 
-    def coal_transport_tkm(self):
-        return self.coal_used * 2 * self.parameter.fuel.transport_distance   # Return trip inputed
+    def fuel_transport_tkm(self):
+        return self.fuel_used * 2 * self.parameter.fuel.transport_distance   # Return trip inputed
 
-    def coal_transporter(self):
+    def fuel_transporter(self):
         """Return an Emitter object to access emissions from coal transport."""
         transport_mean = self.parameter.fuel.transport_mean
         activity = Activity(
             name=transport_mean,
-            level=self.coal_transport_tkm(),
+            level=self.fuel_transport_tkm(),
             emission_factor=self.parameter.emission_factor[transport_mean])
         return Emitter(activity)
 
@@ -171,23 +170,24 @@ class CoalPowerPlant(PowerPlant, Emitter):
         description = PowerPlant.characteristics(self)
         description["Boiler technology"] = self.parameter.boiler_technology
         description["Capacity factor"] = self.parameter.capacity_factor
-        description["Coal consumption"] = self.coal_used[1]
-        description["Heat value of coal"] = self.parameter.fuel.heat_value
+        description["Fuel consumption"] = self.fuel_used[1]
+        description["Heat value of fuel"] = self.parameter.fuel.heat_value
         description["Plant efficiency"] = self.plant_efficiency[1]
         description["Boiler efficiency"] = self.parameter.boiler_efficiency_new
         return description
 
     def lcoe_statement(self, discount_rate, tax_rate, depreciation_period):
         """Assess the levelized cost of electricity."""
+ #       statement = PowerPlant.lcoe_statement(self, discount_rate, tax_rate, depreciation_period)
         statement = pd.Series(name=self.name)
         statement["Investment    (MUSD)"] = self.capital / MUSD
-        statement["Fuel cost     (MUSD)"] = npv(discount_rate, self.fuel_cost()) / MUSD
-        statement["  Coal        (MUSD)"] = npv(discount_rate, self.coal_cost) / MUSD
+        statement["Fuel cost     (MUSD)"] = npv(discount_rate, self.all_fuel_cost()) / MUSD
+        statement["  Coal        (MUSD)"] = npv(discount_rate, self.fuel_cost) / MUSD
         statement["  Biomass     (MUSD)"] = 0
         statement["O&M cost      (MUSD)"] = npv(
             discount_rate, self.operation_maintenance_cost()) / MUSD
         statement["  O&M coal    (MUSD)"] = npv(
-            discount_rate, self.coal_om_cost()) / MUSD
+            discount_rate, self.fuel_om_cost()) / MUSD
         statement["  O&M biomass (MUSD)"] = 0
         statement["Tax           (MUSD)"] = npv(
             discount_rate, self.income_tax(tax_rate, depreciation_period)) / MUSD
@@ -201,23 +201,23 @@ class CoalPowerPlant(PowerPlant, Emitter):
         return statement
 
 
-class CofiringPlant(CoalPowerPlant):
-    """A coal-fired power plant which co-fires biomass."""
+class CofiringPlant(FuelPowerPlant):
+    """A power plant which co-fires biomass with a main fuel."""
 
     def __init__(self, plant_parameter, cofire_parameter):
         """Initialize the cofiring plant.
 
-        1/ Instanciate as a CoalPowerPlant with a lower efficiency and higher capital cost
+        1/ Instanciate as a FuelPowerPlant with a lower efficiency and higher capital cost
         2/ Compute the biomass used and coal saved
         3/ Overwrite the list of activities from grandparent class Emitter.
 
-        The financials (revenue, coal_cost, biomass_cost) are not initialized at this time,
+        The financials (revenue, fuel_cost, biomass_cost) are not initialized at this time,
         they must be defined later:
 
         >>> from parameters import plant_parameter_MD1, cofire_MD1, price_MD1
         >>> plant = CofiringPlant(plant_parameter_MD1, cofire_MD1)
         >>> plant.revenue = plant.power_generation * price_MD1.electricity
-        >>> plant.coal_cost = plant.coal_used * price_MD1.coal # free transport in test
+        >>> plant.fuel_cost = plant.fuel_used * price_MD1.coal # free transport in test
         >>> plant.operating_expenses()
         Traceback (most recent call last):
             ...
@@ -239,7 +239,7 @@ class CofiringPlant(CoalPowerPlant):
                              - cofire_parameter.boiler_efficiency_loss(biomass_ratio_mass))
         boiler_efficiency[0] = plant_parameter.boiler_efficiency_new
 
-        CoalPowerPlant.__init__(
+        FuelPowerPlant.__init__(
             self,
             plant_parameter,
             derating=boiler_efficiency / plant_parameter.boiler_efficiency_new,
@@ -254,14 +254,14 @@ class CofiringPlant(CoalPowerPlant):
         self.biomass_used = biomass_heat / cofire_parameter.biomass.heat_value
         display_as(self.biomass_used, 't')
 
-        self.coal_saved = biomass_heat / plant_parameter.fuel.heat_value
+        self.fuel_saved = biomass_heat / plant_parameter.fuel.heat_value
 
-        self.coal_used -= self.coal_saved
+        self.fuel_used -= self.fuel_saved
 
         self.activities = [
             Activity(
                 name=plant_parameter.fuel.name,
-                level=self.coal_used,
+                level=self.fuel_used,
                 emission_factor=plant_parameter.emission_factor[plant_parameter.fuel.name]),
             Activity(
                 name='Straw',
@@ -287,24 +287,24 @@ class CofiringPlant(CoalPowerPlant):
         cost = self.biomass_cost_per_t() / self.cofire_parameter.biomass.heat_value
         return display_as(cost, 'USD / GJ')
 
-    def fuel_cost(self):
-        cost = self.coal_cost + self.biomass_cost
+    def all_fuel_cost(self):
+        cost = self.fuel_cost + self.biomass_cost
         return display_as(cost, 'kUSD')
 
     def operation_maintenance_cost(self):
-        cost = self.coal_om_cost() + self.biomass_om_cost()
+        cost = self.fuel_om_cost() + self.biomass_om_cost()
         return display_as(cost, 'kUSD')
 
-    def coal_om_cost(self):  # DISCUSS THIS
+    def fuel_om_cost(self):  # DISCUSS THIS
         # Fixed costs are proportional to capacity
-        fixed_om_coal = ((1 - self.cofire_parameter.biomass_ratio_energy)
+        fixed_om_fuel = ((1 - self.cofire_parameter.biomass_ratio_energy)
                          * self.parameter.fixed_om
                          * self.parameter.capacity * y)
         # Variable costs proportional to generation after capacity factor
-        variable_om_coal = ((1 - self.cofire_parameter.biomass_ratio_energy)
+        variable_om_fuel = ((1 - self.cofire_parameter.biomass_ratio_energy)
                             * self.power_generation
                             * self.parameter.variable_om)
-        cost = fixed_om_coal + variable_om_coal
+        cost = fixed_om_fuel + variable_om_fuel
         return display_as(cost, 'kUSD')
 
         # Approximation "Small biomass ratio"
@@ -334,7 +334,7 @@ class CofiringPlant(CoalPowerPlant):
 
     def lcoe_statement(self, discount_rate, tax_rate, depreciation_period):
         """Assess the levelized cost of electricity."""
-        statement = CoalPowerPlant.lcoe_statement(self,
+        statement = FuelPowerPlant.lcoe_statement(self,
                                                   discount_rate, tax_rate, depreciation_period)
         statement["  Biomass     (MUSD)"] = npv(discount_rate, self.biomass_cost) / MUSD
         statement["  O&M biomass (MUSD)"] = npv(discount_rate, self.biomass_om_cost()) / MUSD

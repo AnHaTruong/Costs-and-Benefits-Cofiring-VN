@@ -1,7 +1,7 @@
 # encoding: utf-8
 # Economic of co-firing in two power plants in Vietnam
 #
-# (c) Minh Ha-Duong, An Ha Truong 2016-2017
+# (c) Minh Ha-Duong, An Ha Truong 2016-2019
 # minh.haduong@gmail.com
 # Creative Commons Attribution-ShareAlike 4.0 International
 #
@@ -11,7 +11,7 @@ import pandas as pd
 from natu.numpy import npv
 
 from init import after_invest, year_1, display_as, safe_divide
-from powerplant import CoalPowerPlant, CofiringPlant
+from powerplant import FuelPowerPlant, CofiringPlant
 from farmer import Farmer
 from transporter import Transporter
 
@@ -29,7 +29,7 @@ class System:
     def __init__(self, plant_parameter, cofire_parameter, supply_chain, price,
                  farm_parameter, transport_parameter):
         """Instantiate the system actors."""
-        self.plant = CoalPowerPlant(plant_parameter)
+        self.plant = FuelPowerPlant(plant_parameter)
         self.cofiring_plant = CofiringPlant(plant_parameter, cofire_parameter)
         self.supply_chain = supply_chain.fit(self.cofiring_plant.biomass_used[1])
         self.farmer = Farmer(self.supply_chain, farm_parameter)
@@ -45,10 +45,10 @@ class System:
         display_as(electricity_sales, 'kUSD')
 
         self.plant.revenue = electricity_sales
-        self.plant.coal_cost = self.plant.coal_used * price.coal
+        self.plant.fuel_cost = self.plant.fuel_used * price.coal
 
         self.cofiring_plant.revenue = electricity_sales
-        self.cofiring_plant.coal_cost = self.cofiring_plant.coal_used * price.coal
+        self.cofiring_plant.fuel_cost = self.cofiring_plant.fuel_used * price.coal
 
         self.biomass_value = self.cofiring_plant.biomass_used * price.biomass
         display_as(self.biomass_value, "kUSD")
@@ -87,7 +87,7 @@ class System:
 
     @property
     def coal_saved(self):
-        return display_as(self.cofiring_plant.coal_saved, 't')
+        return display_as(self.cofiring_plant.fuel_saved, 't')
 
     def coal_work_lost(self, mining_productivity):
         time = self.coal_saved / mining_productivity
@@ -101,7 +101,7 @@ class System:
         """Tabulate system annual atmospheric emissions without cofiring."""
         baseline = pd.DataFrame(columns=['CO2', 'NOx', 'PM10', 'SO2'])
         baseline = baseline.append(year_1(self.plant.emissions()))
-        baseline = baseline.append(year_1(self.plant.coal_transporter().emissions()))
+        baseline = baseline.append(year_1(self.plant.fuel_transporter().emissions()))
         baseline = baseline.append(year_1(self.farmer.emissions_exante))
         if total:
             baseline.loc["Total"] = baseline.sum()
@@ -114,7 +114,7 @@ class System:
         """Tabulate system annual atmospheric emissions with cofiring."""
         cofiring = pd.DataFrame(columns=['CO2', 'NOx', 'PM10', 'SO2'])
         cofiring = cofiring.append(year_1(self.cofiring_plant.emissions()))
-        cofiring = cofiring.append(year_1(self.cofiring_plant.coal_transporter().emissions()))
+        cofiring = cofiring.append(year_1(self.cofiring_plant.fuel_transporter().emissions()))
         cofiring = cofiring.append(year_1(self.farmer.emissions()))
         cofiring = cofiring.append(year_1(self.transporter.emissions()))
         if total:
@@ -130,8 +130,8 @@ class System:
                            - self.cofiring_plant.emissions(total=True)['Total'])
 
         transport_reduction = (
-            self.plant.coal_transporter().emissions(total=True)['Total']
-            - self.cofiring_plant.coal_transporter().emissions(total=True)['Total']
+            self.plant.fuel_transporter().emissions(total=True)['Total']
+            - self.cofiring_plant.fuel_transporter().emissions(total=True)['Total']
             - self.transporter.emissions(total=True)['Total'])
 
         field_reduction = (self.farmer.emissions_exante['Straw']

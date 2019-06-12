@@ -2,8 +2,8 @@ Comissioning year              2015
 Installed capacity          1080 MW
 Boiler technology               CFB
 Capacity factor                 0.6
-Coal consumption      2.70908e+06 t
-Heat value of coal    19.4347 MJ/kg
+Fuel consumption      2.70908e+06 t
+Heat value of fuel    19.4347 MJ/kg
 Plant efficiency                0.4
 Boiler efficiency               0.9
 Name: Mong Duong 1, dtype: object
@@ -12,8 +12,8 @@ Comissioning year              1974
 Installed capacity           100 MW
 Boiler technology                PC
 Capacity factor                 0.6
-Coal consumption           430553 t
-Heat value of coal    21.5476 MJ/kg
+Fuel consumption           430553 t
+Heat value of fuel    21.5476 MJ/kg
 Plant efficiency                0.2
 Boiler efficiency               0.8
 Name: Ninh Binh, dtype: object
