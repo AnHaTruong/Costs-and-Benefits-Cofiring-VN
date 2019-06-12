@@ -6,7 +6,7 @@
 # (c) Minh Ha-Duong, An Ha Truong 2016-2017
 # minh.haduong@gmail.com
 # Creative Commons Attribution-ShareAlike 4.0 International
-"""Define PowerPlant and its child class, CofiringPlant."""
+"""Define CoalPowerPlant and its child class, CofiringPlant."""
 
 import pandas as pd
 import numpy as np
@@ -20,7 +20,7 @@ from emitter import Emitter, Activity
 
 
 #pylint: disable=too-many-instance-attributes
-class PowerPlant(Investment, Emitter):
+class CoalPowerPlant(Investment, Emitter):
     """A coal power plant, without co-firing."""
 
     def __init__(self,
@@ -33,12 +33,12 @@ class PowerPlant(Investment, Emitter):
         they must be defined later:
 
         >>> from parameters import plant_parameter_MD1, price_MD1
-        >>> plant = PowerPlant(plant_parameter_MD1)
+        >>> plant = CoalPowerPlant(plant_parameter_MD1)
         >>> plant.revenue = plant.power_generation * price_MD1.electricity
         >>> plant.operating_expenses()
         Traceback (most recent call last):
             ...
-        AttributeError: Accessing  PowerPlant.coal_cost  value before it is set
+        AttributeError: Accessing  CoalPowerPlant.coal_cost  value before it is set
 
         >>> plant.coal_cost = plant.coal_used * price_MD1.coal
         >>> print(plant.net_present_value(discount_rate=0.08))
@@ -77,7 +77,7 @@ class PowerPlant(Investment, Emitter):
     @property
     def coal_cost(self):
         if self._coal_cost is None:
-            raise AttributeError('Accessing  PowerPlant.coal_cost  value before it is set')
+            raise AttributeError('Accessing  CoalPowerPlant.coal_cost  value before it is set')
         return display_as(self._coal_cost, 'kUSD')
 
     @coal_cost.setter
@@ -159,13 +159,13 @@ class PowerPlant(Investment, Emitter):
         return statement
 
 
-class CofiringPlant(PowerPlant):
+class CofiringPlant(CoalPowerPlant):
     """A coal-fired power plant which co-fires biomass."""
 
     def __init__(self, plant_parameter, cofire_parameter):
         """Initialize the cofiring plant.
 
-        1/ Instanciate as a PowerPlant with a lower efficiency and higher capital cost
+        1/ Instanciate as a CoalPowerPlant with a lower efficiency and higher capital cost
         2/ Compute the biomass used and coal saved
         3/ Overwrite the list of activities from grandparent class Emitter.
 
@@ -197,7 +197,7 @@ class CofiringPlant(PowerPlant):
                              - cofire_parameter.boiler_efficiency_loss(biomass_ratio_mass))
         boiler_efficiency[0] = plant_parameter.boiler_efficiency_new
 
-        PowerPlant.__init__(
+        CoalPowerPlant.__init__(
             self,
             plant_parameter,
             derating=boiler_efficiency / plant_parameter.boiler_efficiency_new,
@@ -292,7 +292,8 @@ class CofiringPlant(PowerPlant):
 
     def lcoe_statement(self, discount_rate, tax_rate, depreciation_period):
         """Assess the levelized cost of electricity."""
-        statement = PowerPlant.lcoe_statement(self, discount_rate, tax_rate, depreciation_period)
+        statement = CoalPowerPlant.lcoe_statement(self,
+                                                  discount_rate, tax_rate, depreciation_period)
         statement["  Biomass     (MUSD)"] = npv(discount_rate, self.biomass_cost) / MUSD
         statement["  O&M biomass (MUSD)"] = npv(discount_rate, self.biomass_om_cost()) / MUSD
         return statement

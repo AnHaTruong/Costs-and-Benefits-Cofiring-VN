@@ -11,7 +11,7 @@ import pandas as pd
 from natu.numpy import npv
 
 from init import after_invest, year_1, display_as, safe_divide
-from powerplant import PowerPlant, CofiringPlant
+from powerplant import CoalPowerPlant, CofiringPlant
 from farmer import Farmer
 from transporter import Transporter
 
@@ -29,7 +29,7 @@ class System:
     def __init__(self, plant_parameter, cofire_parameter, supply_chain, price,
                  farm_parameter, transport_parameter):
         """Instantiate the system actors."""
-        self.plant = PowerPlant(plant_parameter)
+        self.plant = CoalPowerPlant(plant_parameter)
         self.cofiring_plant = CofiringPlant(plant_parameter, cofire_parameter)
         self.supply_chain = supply_chain.fit(self.cofiring_plant.biomass_used[1])
         self.farmer = Farmer(self.supply_chain, farm_parameter)

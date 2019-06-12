@@ -12,7 +12,7 @@ import pytest
 from init import isclose
 import parameters as baseline
 from system import System
-from powerplant import PowerPlant
+from powerplant import CoalPowerPlant
 
 # pylint and pytest known compatibility bug
 # pylint: disable=redefined-outer-name
@@ -37,7 +37,7 @@ def test_npv(null_cofiring_system):
 
 def test_npv_powerplant(null_cofiring_system):
     """Compare NPV of baseline plant without cofiring with NPV of cofiring plant at zero ratio."""
-    plant = PowerPlant(baseline.plant_parameter_MD1)
+    plant = CoalPowerPlant(baseline.plant_parameter_MD1)
     plant.revenue = plant.power_generation * baseline.price_MD1.electricity
     plant.coal_cost = plant.coal_used * baseline.price_MD1.coal
     npv_plant_direct = plant.net_present_value(0.08, 0.2, 10)
