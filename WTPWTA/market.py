@@ -47,7 +47,6 @@ def farmer_minimum(system):
 
 print("Farmers WTA for Mong Duong 1 = ", farmer_minimum(MongDuong1System))
 
-
 print("Farmers WTA for Ninh Binh = ", farmer_minimum(NinhBinhSystem))
 
 #%%
@@ -71,3 +70,5 @@ def plant_gain(system, biomass_price, transport_price):
     print("Biomass price", biomass_price, "USD/t  ", "Transport price", transport_price, "USD/t  ")
     print("Profit", profit)
     return profit
+
+print("Code incomplete, should compute plant WTP here")
