@@ -3,7 +3,7 @@
 #
 # Plant parameters
 #
-# (c) Minh Ha-Duong, An Ha Truong 2016-2017
+# (c) Minh Ha-Duong, An Ha Truong 2016-2019
 # minh.haduong@gmail.com
 # Creative Commons Attribution-ShareAlike 4.0 International
 #
@@ -23,7 +23,7 @@ from init import USD, VND, after_invest
 from natu.units import MJ, kg, t, d, hr, km, MW, ha, kW, y, kWh, MWh, g
 
 from parameters_supplychain import supply_chain_MD1, supply_chain_NB
-from system import System
+from classes.system import System
 
 discount_rate = 0.087771
 depreciation_period = 10

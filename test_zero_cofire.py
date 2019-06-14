@@ -1,7 +1,7 @@
 # encoding: utf-8
 # Economic of co-firing in two power plants in Vietnam
 #
-# (c) Minh Ha-Duong, An Ha Truong 2016-2017
+# (c) Minh Ha-Duong, An Ha Truong 2016-2019
 # minh.haduong@gmail.com
 # Creative Commons Attribution-ShareAlike 4.0 International
 #
@@ -11,8 +11,8 @@ import pytest
 
 from init import isclose
 import parameters as baseline
-from system import System
-from powerplant import PowerPlant
+from classes.system import System
+from classes.powerplant import PowerPlant
 
 # pylint and pytest known compatibility bug
 # pylint: disable=redefined-outer-name

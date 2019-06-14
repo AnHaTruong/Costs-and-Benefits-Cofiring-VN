@@ -3,7 +3,7 @@
 #
 # Rice data processing
 #
-# (c) Minh Ha-Duong, An Ha Truong 2016-2017
+# (c) Minh Ha-Duong, An Ha Truong 2016-2019
 # minh.haduong@gmail.com
 # Creative Commons Attribution-ShareAlike 4.0 International
 #
@@ -16,8 +16,8 @@ import pandas as pd
 from natu.units import ha, t, km
 from natu.math import fsum
 
-from supplychain import SupplyChain, SupplyZone
-from shape import Semiannulus, Disk
+from classes.supplychain import SupplyChain, SupplyZone
+from classes.shape import Semiannulus, Disk
 
 
 # Leinonen and Nguyen 2013 : 50% of straw is collected and 79% of collected straw is sold
