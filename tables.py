@@ -12,7 +12,7 @@ import pandas as pd
 
 from natu.units import y, t
 
-from init import display_as, isclose, USD, kUSD, FTE, year_1
+from model.utils import display_as, isclose, USD, kUSD, FTE, year_1
 from parameters import mining_parameter
 
 

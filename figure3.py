@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 
 import numpy as np
 
-from init import MUSD
+from model.utils import MUSD
 from parameters import discount_rate, tax_rate, depreciation_period, external_cost
 from parameters import MongDuong1System, NinhBinhSystem
 

@@ -1,7 +1,7 @@
 # encoding: utf-8
 # Economic of co-firing in two power plants in Vietnam
 #
-# (c) Minh Ha-Duong, An Ha Truong 2016-2017
+# (c) Minh Ha-Duong, An Ha Truong 2016-2019
 # minh.haduong@gmail.com
 # Creative Commons Attribution-ShareAlike 4.0 International
 #
@@ -12,7 +12,7 @@ An Ha Truong, Minh Ha-Duong
 2017
 """
 
-from init import display_as, solve_linear
+from model.utils import display_as, solve_linear
 
 from parameters import MongDuong1System, NinhBinhSystem, price_MD1
 from parameters import discount_rate, tax_rate, depreciation_period

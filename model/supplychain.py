@@ -10,7 +10,7 @@
 from copy import copy
 
 # pylint: disable=wrong-import-order
-from init import isclose, display_as
+from utils import isclose, display_as
 from natu.units import t, km, ha
 
 

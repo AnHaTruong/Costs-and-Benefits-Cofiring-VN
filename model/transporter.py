@@ -9,7 +9,7 @@
 
 import pandas as pd
 
-from init import after_invest, display_as, USD, kUSD
+from utils import after_invest, display_as, USD, kUSD
 
 from emitter import Emitter, Activity
 from investment import Investment

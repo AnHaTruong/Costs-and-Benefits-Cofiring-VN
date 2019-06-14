@@ -12,7 +12,7 @@ import numpy as np
 
 from natu.units import ha
 
-from init import after_invest, display_as, USD, kUSD
+from utils import after_invest, display_as, USD, kUSD
 from emitter import Emitter, Activity
 from investment import Investment
 

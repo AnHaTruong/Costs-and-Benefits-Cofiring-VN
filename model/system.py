@@ -10,7 +10,7 @@
 import pandas as pd
 from natu.numpy import npv
 
-from init import after_invest, year_1, display_as, safe_divide
+from utils import after_invest, year_1, display_as, safe_divide
 from powerplant import PowerPlant, CofiringPlant
 from farmer import Farmer
 from transporter import Transporter

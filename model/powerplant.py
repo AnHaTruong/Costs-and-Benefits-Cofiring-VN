@@ -14,7 +14,7 @@ import numpy as np
 from natu.units import y
 from natu.numpy import npv
 
-from init import USD, MUSD, display_as, safe_divide
+from utils import USD, MUSD, display_as, safe_divide
 from investment import Investment
 from emitter import Emitter, Activity
 

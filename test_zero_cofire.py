@@ -9,10 +9,10 @@
 
 import pytest
 
-from init import isclose
 import parameters as baseline
-from classes.system import System
-from classes.powerplant import PowerPlant
+from model.utils import isclose
+from model.system import System
+from model.powerplant import PowerPlant
 
 # pylint and pytest known compatibility bug
 # pylint: disable=redefined-outer-name

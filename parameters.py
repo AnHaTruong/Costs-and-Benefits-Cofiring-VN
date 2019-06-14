@@ -19,11 +19,12 @@ from collections import namedtuple
 import pandas as pd
 
 # pylint: disable=wrong-import-order
-from init import USD, VND, after_invest
+from model.utils import USD, VND, after_invest
+from model.system import System
+
 from natu.units import MJ, kg, t, d, hr, km, MW, ha, kW, y, kWh, MWh, g
 
 from parameters_supplychain import supply_chain_MD1, supply_chain_NB
-from classes.system import System
 
 discount_rate = 0.087771
 depreciation_period = 10

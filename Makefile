@@ -1,6 +1,6 @@
 # Economic of co-firing in two power plants in Vietnam
 #
-# (c) Minh Ha-Duong, An Ha Truong 2016, 2017
+# (c) Minh Ha-Duong, An Ha Truong 2016-2019
 # minh.haduong@gmail.com
 # Creative Commons Attribution-ShareAlike 4.0 International
 #
@@ -23,7 +23,7 @@ all: $(tables) $(figures)
 	$(PYTHON) $< > $@
 
 classes.dot packages.dot:
-	pyreverse3 *py classes/*.py
+	pyreverse3 *py model/*.py
 
 .git/hooks/pre-commit: pre-commit
 	cp $^ $@
@@ -38,7 +38,7 @@ archive:
 	mkdir $(dirs)
 	cp Makefile $(distName)
 	cp README $(distName)
-	cp *py classes/*.py $(distName)
+	cp *py model/*.py $(distName)
 	cp -r _regtest_outputs $(distName)
 	cp -r Data $(distName)
 	zip -r $(distName).zip $(distName)
@@ -62,7 +62,7 @@ regtest-reset:
 
 lint:
 	$(PYLINT) *py
-	$(PYLINT) classes/*.py
+	$(PYLINT) model/*.py
 
 docstyle:
 	# Ignored messages:
@@ -70,14 +70,14 @@ docstyle:
 	# D105: Missing docstring in magic method              why does it need a docstring ?
 	# D203: 1 blank line required before class docstring   bug in the tool
 	# D213: Multi-line docstring summary should start at the second line
-	pydocstyle --ignore=D102,D105,D107,D203,D213 *py classes/*.py
+	pydocstyle --ignore=D102,D105,D107,D203,D213 *py model/*.py
 
 codestyle:
 	# Ignore messages:
 	# W503 line break before binary operator
 	# W504: line break after binary operator
 	# E265: Block comment should start with '# '
-	pycodestyle --ignore=E265,W503,W504 *py classes/*.py
+	pycodestyle --ignore=E265,W503,W504 *py model/*.py
 
 clean:
 	rm -f $(tables)

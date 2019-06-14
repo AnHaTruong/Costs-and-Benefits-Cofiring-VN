@@ -12,7 +12,7 @@
 
 import pandas as pd
 import natu.numpy as np
-from init import USD, kUSD, after_invest, display_as, isclose
+from utils import USD, kUSD, after_invest, display_as, isclose
 
 
 class Investment:
