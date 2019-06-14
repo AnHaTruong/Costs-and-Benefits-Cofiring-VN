@@ -3,7 +3,7 @@
 #
 # A Power plant
 #
-# (c) Minh Ha-Duong, An Ha Truong 2016-2017
+# (c) Minh Ha-Duong, An Ha Truong 2016-2019
 # minh.haduong@gmail.com
 # Creative Commons Attribution-ShareAlike 4.0 International
 """Define PowerPlant and its child class, CofiringPlant."""
