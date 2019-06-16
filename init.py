@@ -52,6 +52,7 @@ MUSD = 1000 * kUSD
 FTE = 1560 * hr
 units.FTE = FTE
 
+
 def after_invest(qty, time_horizon):
     """Construct a time serie from a quantity.
 
