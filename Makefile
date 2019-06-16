@@ -8,7 +8,7 @@
 PYTHON = python3
 PYTEST = python3 -m pytest
 PYLINT = pylint3
-SOURCEDIRS = . model WTPWTA manuscript1
+SOURCEDIRS = . model manuscript1
 
 tables = tables_manuscript.txt
 
@@ -16,8 +16,8 @@ figures = figure2.png figure3.png
 
 all: $(tables) $(figures)
  
-feasibility: WTPWTA/market.py manuscript1/parameters.py
-	$(PYTHON) -m WTPWTA.market
+feasibility: manuscript1/feasibility.py manuscript1/parameters.py
+	$(PYTHON) -m manuscript1.feasibility
 
 figure2.png: manuscript1/figure2.py manuscript1/parameters.py
 	$(PYTHON) -m manuscript1.figure2 > $@
