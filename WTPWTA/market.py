@@ -14,8 +14,8 @@ An Ha Truong, Minh Ha-Duong
 
 from model.utils import display_as, solve_linear
 
-from parameters import MongDuong1System, NinhBinhSystem, price_MD1
-from parameters import discount_rate, tax_rate, depreciation_period
+from manuscript1.parameters import MongDuong1System, NinhBinhSystem, price_MD1
+from manuscript1.parameters import discount_rate, tax_rate, depreciation_period
 
 financials = discount_rate, tax_rate, depreciation_period
 systems = MongDuong1System, NinhBinhSystem

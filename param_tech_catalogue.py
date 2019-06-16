@@ -16,7 +16,7 @@ import numpy as np
 from model.utils import USD, after_invest
 from model.powerplant import PowerPlant
 from natu.units import MJ, kg, hr, MW, y, MUSD, MWh, GJ, t, kWh
-from parameters import emission_factor, PlantParameter
+from manuscript1.parameters import emission_factor, PlantParameter
 discount_rate = 0.1
 electricity_price = 0.08 * USD / kWh
 tax_rate = 0.0

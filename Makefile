@@ -8,24 +8,26 @@
 PYTHON = python3
 PYTEST = python3 -m pytest
 PYLINT = pylint3
-SOURCEDIRS = . model WTPWTA
+SOURCEDIRS = . model WTPWTA manuscript1
 
 tables = tables_manuscript.txt
 
-figurespyfiles = $(wildcard figure*.py)
-figures = $(patsubst %.py,%.png,$(figurespyfiles))
+figures = figure2.png figure3.png
 
 all: $(tables) $(figures)
  
-feasibility:
+feasibility: WTPWTA/market.py manuscript1/parameters.py
 	$(PYTHON) -m WTPWTA.market
 
+figure2.png: manuscript1/figure2.py manuscript1/parameters.py
+	$(PYTHON) -m manuscript1.figure2 > $@
 
-%.txt: %.py parameters.py
-	$(PYTHON) $< > $@
+figure3.png: manuscript1/figure3.py manuscript1/parameters.py
+	$(PYTHON) -m manuscript1.figure3 > $@
 
-%.png: %.py
-	$(PYTHON) $< > $@
+tables_manuscript.txt: manuscript1/tables_manuscript.py manuscript1/parameters.py
+	$(PYTHON) -m manuscript1.tables_manuscript > $@
+
 
 classes.dot packages.dot:
 	pyreverse3 *py */*.py

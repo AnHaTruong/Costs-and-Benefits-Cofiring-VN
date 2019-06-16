@@ -10,10 +10,11 @@
 
 import pandas as pd
 
+# pylint: disable=wrong-import-order
+from model.utils import display_as, isclose, USD, kUSD, FTE, year_1
 from natu.units import y, t
 
-from model.utils import display_as, isclose, USD, kUSD, FTE, year_1
-from parameters import mining_parameter
+from manuscript1.parameters import mining_parameter
 
 
 #%%

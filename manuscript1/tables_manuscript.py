@@ -14,12 +14,13 @@ An Ha Truong, Minh Ha-Duong
 
 import pandas as pd
 
-from parameters import (MongDuong1System, NinhBinhSystem,
-                        discount_rate, tax_rate, depreciation_period,
-                        external_cost, external_cost_SKC, external_cost_ZWY, external_cost_HAS)
+from manuscript1.parameters import (MongDuong1System, NinhBinhSystem,
+                                    discount_rate, tax_rate, depreciation_period,
+                                    external_cost, external_cost_SKC, external_cost_ZWY,
+                                    external_cost_HAS)
 
-from tables import (emission_reductions, balance_jobs,
-                    emission_reductions_by_activity, emission_reductions_benefits)
+from manuscript1.tables import (emission_reductions, balance_jobs,
+                                emission_reductions_by_activity, emission_reductions_benefits)
 
 
 systems = MongDuong1System, NinhBinhSystem
