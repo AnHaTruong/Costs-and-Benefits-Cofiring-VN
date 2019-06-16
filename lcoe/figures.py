@@ -17,8 +17,8 @@ import matplotlib.patches as mpatches
 from model.utils import USD
 from natu.units import MWh
 from natu.numpy import npv
-from param_tech_catalogue import discount_rate, tax_rate
-from param_tech_catalogue import Coal_Supercritical, CCGT, Solar_PV, Wind_Onshore, Wind_Offshore
+from lcoe.param_tech_catalogue import discount_rate, tax_rate, Coal_Supercritical
+from lcoe.param_tech_catalogue import CCGT, Solar_PV, Wind_Onshore, Wind_Offshore
 from manuscript1.parameters import depreciation_period
 
 # %% Creat a graph

@@ -60,4 +60,4 @@ pip3 install -e .
 ```
 Doing that will make static code analysis tools like lint cry a lot. Exclude the subdirectory `natu/` from their search path.
 
-
+TODO: configure Spyder3 to run modules in package from the project root directory.

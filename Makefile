@@ -8,11 +8,11 @@
 PYTHON = python3
 PYTEST = python3 -m pytest
 PYLINT = pylint3
-SOURCEDIRS = . model manuscript1
+SOURCEDIRS = . model manuscript1 lcoe
 
 tables = tables_manuscript.txt
 
-figures = figure2.png figure3.png
+figures = figure2.png figure3.png LCOE1.png LCOE1a.png LCOE2.png LCOE3.png
 
 all: $(tables) $(figures)
  
@@ -24,6 +24,9 @@ figure2.png: manuscript1/figure2.py manuscript1/parameters.py
 
 figure3.png: manuscript1/figure3.py manuscript1/parameters.py
 	$(PYTHON) -m manuscript1.figure3 > $@
+
+LCOE1.png LCOE1a.png LCOE2.png LCOE3.png: lcoe/figures.py
+	$(PYTHON) -m lcoe.figures
 
 tables_manuscript.txt: manuscript1/tables_manuscript.py manuscript1/parameters.py
 	$(PYTHON) -m manuscript1.tables_manuscript > $@
