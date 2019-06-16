@@ -3,7 +3,7 @@
 #
 # A Power plant
 #
-# (c) Minh Ha-Duong, An Ha Truong 2016-2017
+# (c) Minh Ha-Duong, An Ha Truong 2016-2019
 # minh.haduong@gmail.com
 # Creative Commons Attribution-ShareAlike 4.0 International
 """Define PowerPlant and its child class, CofiringPlant."""
@@ -14,7 +14,7 @@ import numpy as np
 from natu.units import y
 from natu.numpy import npv
 
-from init import USD, MUSD, display_as, safe_divide
+from utils import USD, MUSD, display_as, safe_divide
 from investment import Investment
 from emitter import Emitter, Activity
 

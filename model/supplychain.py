@@ -1,7 +1,7 @@
 # encoding: utf-8
 # Economic of co-firing in two power plants in Vietnam
 #
-# (c) Minh Ha-Duong, An Ha Truong 2016-2017
+# (c) Minh Ha-Duong, An Ha Truong 2016-2019
 # minh.haduong@gmail.com
 # Creative Commons Attribution-ShareAlike 4.0 International
 #
@@ -10,7 +10,7 @@
 from copy import copy
 
 # pylint: disable=wrong-import-order
-from init import isclose, display_as
+from utils import isclose, display_as
 from natu.units import t, km, ha
 
 

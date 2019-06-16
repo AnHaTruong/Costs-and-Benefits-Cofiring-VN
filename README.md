@@ -51,3 +51,5 @@ cd natu
 pip3 install -e .
 ```
 Doing that will make static code analysis tools like lint cry a lot. Exclude the subdirectory `natu/` from their search path.
+
+

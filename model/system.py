@@ -1,7 +1,7 @@
 # encoding: utf-8
 # Economic of co-firing in two power plants in Vietnam
 #
-# (c) Minh Ha-Duong, An Ha Truong 2016-2017
+# (c) Minh Ha-Duong, An Ha Truong 2016-2019
 # minh.haduong@gmail.com
 # Creative Commons Attribution-ShareAlike 4.0 International
 #
@@ -10,7 +10,7 @@
 import pandas as pd
 from natu.numpy import npv
 
-from init import after_invest, year_1, display_as, safe_divide
+from utils import after_invest, year_1, display_as, safe_divide
 from powerplant import PowerPlant, CofiringPlant
 from farmer import Farmer
 from transporter import Transporter
