@@ -8,6 +8,7 @@
 PYTHON = python3
 PYTEST = python3 -m pytest
 PYLINT = pylint3
+SOURCEDIRS = . model WTPWTA
 
 tables = tables_manuscript.txt
 
@@ -69,19 +70,10 @@ lint:
 	$(PYLINT) */*.py
 
 docstyle:
-	# Ignored messages:
-	# D102: Missing docstring in public method             too many positives
-	# D105: Missing docstring in magic method              why does it need a docstring ?
-	# D203: 1 blank line required before class docstring   bug in the tool
-	# D213: Multi-line docstring summary should start at the second line
-	pydocstyle --ignore=D102,D105,D107,D203,D213 *py */*.py
+	pydocstyle $(SOURCEDIRS)
 
 codestyle:
-	# Ignore messages:
-	# W503 line break before binary operator
-	# W504: line break after binary operator
-	# E265: Block comment should start with '# '
-	pycodestyle --ignore=E265,W503,W504 *py */*.py
+	pycodestyle $(SOURCEDIRS) tests
 
 clean:
 	rm -f $(tables)

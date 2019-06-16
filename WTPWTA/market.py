@@ -71,4 +71,5 @@ def plant_gain(system, biomass_price, transport_price):
     print("Profit", profit)
     return profit
 
+
 print("Code incomplete, should compute plant WTP here")

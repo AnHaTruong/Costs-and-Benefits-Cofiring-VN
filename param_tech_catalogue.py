@@ -13,9 +13,9 @@ from collections import namedtuple
 import pandas as pd
 import numpy as np
 # pylint: disable=wrong-import-order
-from init import USD, after_invest
+from model.utils import USD, after_invest
+from model.powerplant import PowerPlant
 from natu.units import MJ, kg, hr, MW, y, MUSD, MWh, GJ, t, kWh
-from powerplant import PowerPlant
 from parameters import emission_factor, PlantParameter
 discount_rate = 0.1
 electricity_price = 0.08 * USD / kWh

@@ -13,11 +13,12 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
+# pylint: disable=wrong-import-order
+from model.utils import USD
 from natu.units import MWh
 from natu.numpy import npv
-from init import USD
-from param_tech_catalogue import discount_rate, tax_rate, Coal_Supercritical
-from param_tech_catalogue import CCGT, Solar_PV, Wind_Onshore, Wind_Offshore
+from param_tech_catalogue import discount_rate, tax_rate
+from param_tech_catalogue import Coal_Supercritical, CCGT, Solar_PV, Wind_Onshore, Wind_Offshore
 from parameters import depreciation_period
 
 # %% Creat a graph
