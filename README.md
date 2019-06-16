@@ -32,7 +32,7 @@ Failing that, here are installation notes:
 The project is managed with `make`. To make all figures and tables, use:
 ```make```
 
-## Contribution
+## Code quality
 
 Code quality is promoted with these practices:
 
@@ -67,3 +67,5 @@ Doing that will make static code analysis tools like lint cry a lot. Exclude the
 Configure Spyder3 to run modules in package from the project root directory.
 
 Import common.utils before importing natu, to have a chance to disable it if needed.
+
+The precommit hook script is fragile to `git mv` commands. In this case do the tests manually, then commit with -n option.
