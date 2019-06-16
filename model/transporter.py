@@ -9,10 +9,10 @@
 
 import pandas as pd
 
-from utils import after_invest, display_as, USD, kUSD
+from model.utils import after_invest, display_as, USD, kUSD
 
-from emitter import Emitter, Activity
-from investment import Investment
+from model.emitter import Emitter, Activity
+from model.investment import Investment
 
 
 #pylint: disable=too-many-instance-attributes

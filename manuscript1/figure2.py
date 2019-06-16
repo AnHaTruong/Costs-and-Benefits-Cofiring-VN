@@ -16,7 +16,7 @@ import matplotlib.patches as mpatches
 import numpy as np
 
 # pylint: disable=wrong-import-order
-from parameters import MongDuong1System, NinhBinhSystem
+from manuscript1.parameters import MongDuong1System, NinhBinhSystem
 from natu.units import kt, Mt, y
 
 #%%

@@ -15,8 +15,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from model.utils import MUSD
-from parameters import discount_rate, tax_rate, depreciation_period, external_cost
-from parameters import MongDuong1System, NinhBinhSystem
+from manuscript1.parameters import discount_rate, tax_rate, depreciation_period, external_cost
+from manuscript1.parameters import MongDuong1System, NinhBinhSystem
 
 
 def benefit_array(system):

@@ -14,9 +14,9 @@ import numpy as np
 from natu.units import y
 from natu.numpy import npv
 
-from utils import USD, MUSD, display_as, safe_divide
-from investment import Investment
-from emitter import Emitter, Activity
+from model.utils import USD, MUSD, display_as, safe_divide
+from model.investment import Investment
+from model.emitter import Emitter, Activity
 
 
 #pylint: disable=too-many-instance-attributes
@@ -32,7 +32,7 @@ class PowerPlant(Investment, Emitter):
         The financials (revenue and coal_cost) are not initialized at this time,
         they must be defined later:
 
-        >>> from parameters import plant_parameter_MD1, price_MD1
+        >>> from manuscript1.parameters import plant_parameter_MD1, price_MD1
         >>> plant = PowerPlant(plant_parameter_MD1)
         >>> plant.revenue = plant.power_generation * price_MD1.electricity
         >>> plant.operating_expenses()
@@ -172,7 +172,7 @@ class CofiringPlant(PowerPlant):
         The financials (revenue, coal_cost, biomass_cost) are not initialized at this time,
         they must be defined later:
 
-        >>> from parameters import plant_parameter_MD1, cofire_MD1, price_MD1
+        >>> from manuscript1.parameters import plant_parameter_MD1, cofire_MD1, price_MD1
         >>> plant = CofiringPlant(plant_parameter_MD1, cofire_MD1)
         >>> plant.revenue = plant.power_generation * price_MD1.electricity
         >>> plant.coal_cost = plant.coal_used * price_MD1.coal # free transport in test
