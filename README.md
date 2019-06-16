@@ -1,12 +1,13 @@
 ## What this is about
 
-### What is cofiring?
+### Cofiring
 
 Blending biomass with fossil fuels is a relatively low-cost technology to use renewable energy in the electricity generation sector. Most coal power plants can co-fire a small fraction (<10% energy) of biomass without major retrofit. In high income countries, over a hundred of power plants cofire biomass, often because governments forced utilities to deliver a minimum fraction of their electricity from renewable sources.
 
-### Why is it important to study cofiring economics?
+### Key results
 
 Would that technology be relevant in Vietnam, a middle income country? Here we study the business case for cofiring 5% rice straw with coal, in an old and in a new coal power plant. We compute the costs and benefits for three segments --farmers, reseller and plant owner-- as well as external benefits to society as a whole. We find that there is a business case: based on existing coal costs, the willingness to pay of the plant owner is greater than the willingness to accept of the farmer, plus transportation costs. External benefits come from two effects: reducing open air straw burning, and displacing greenhouse gas emissions for coal. Assuming a carbon value of 1$/tCO2, the value of avoided CO2 is small in front of agricultural and air quality benefits.
+
 
 ## Installation
 
@@ -60,4 +61,9 @@ pip3 install -e .
 ```
 Doing that will make static code analysis tools like lint cry a lot. Exclude the subdirectory `natu/` from their search path.
 
-TODO: configure Spyder3 to run modules in package from the project root directory.
+
+## Development
+
+Configure Spyder3 to run modules in package from the project root directory.
+
+Import common.utils before importing natu, to have a chance to disable it if needed.
