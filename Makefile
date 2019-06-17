@@ -78,7 +78,8 @@ docstyle:
 	pydocstyle $(SOURCEDIRS)
 
 codestyle:
-	pycodestyle $(SOURCEDIRS) tests
+	pycodestyle
+
 
 clean:
 	rm -f $(tables)

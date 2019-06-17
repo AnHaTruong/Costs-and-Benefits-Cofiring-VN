@@ -14,17 +14,18 @@ All numeric values should be defined in this module,
 except those defined in the parameters_supplychain module
 """
 
-from collections import namedtuple
 
 import pandas as pd
 
 # pylint: disable=wrong-import-order
 from model.utils import USD, VND, after_invest
-from model.system import System
+from model.system import System, Price
+from model.powerplant import Fuel, PlantParameter, CofiringParameter
 
 from natu.units import MJ, kg, t, d, hr, km, MW, ha, kW, y, kWh, MWh, g
 
 from parameters_supplychain import supply_chain_MD1, supply_chain_NB
+
 
 discount_rate = 0.087771
 depreciation_period = 10
@@ -54,8 +55,6 @@ external_cost = external_cost_SKC
 mining_parameter = {'productivity_surface': 8.04 * t / hr,  # www.eia.g
                     'productivity_underground': 2.5 * t / hr,  # ww.eia.gov
                     'wage': 0 * USD / hr}
-
-Fuel = namedtuple('Fuel', 'name, heat_value, transport_distance, transport_mean')
 
 coal_6b = Fuel(name="6b_coal",
                heat_value=19.43468 * MJ / kg,  # numerical value also used in emission_factor
@@ -140,21 +139,6 @@ transport_parameter = {'barge_fuel_consumption': 8 * g / t / km,  # Van Dingenen
                        'emission_factor': emission_factor,
                        'time_horizon': 20}
 
-
-PlantParameter = namedtuple("PlantParameter", ['name',
-                                               'capacity',
-                                               'capacity_factor',
-                                               'commissioning',
-                                               'boiler_technology',
-                                               'boiler_efficiency_new',
-                                               'plant_efficiency',
-                                               'fix_om_coal',
-                                               'variable_om_coal',
-                                               'emission_factor',
-                                               'emission_control',
-                                               'coal',
-                                               'time_horizon'])
-
 plant_parameter_MD1 = PlantParameter(name='Mong Duong 1',
                                      capacity=1080 * MW,
                                      capacity_factor=0.60,
@@ -171,16 +155,6 @@ plant_parameter_MD1 = PlantParameter(name='Mong Duong 1',
                                      time_horizon=20)
 
 
-CofiringParameter = namedtuple('CofiringParameter', ['biomass_ratio_energy',
-                                                     'capital_cost',
-                                                     'fix_om_cost',
-                                                     'variable_om_cost',
-                                                     'biomass',
-                                                     'boiler_efficiency_loss',
-                                                     'OM_hour_MWh',
-                                                     'wage_operation_maintenance'])
-
-
 def boiler_efficiency_loss_quadratic(biomass_ratio_mass):
     """Boiler efficiency loss due to cofiring according to Tillman (2000)."""
     return 0.0044 * biomass_ratio_mass**2 + 0.0055 * biomass_ratio_mass
@@ -195,8 +169,6 @@ cofire_MD1 = CofiringParameter(biomass_ratio_energy=after_invest(0.05,
                                boiler_efficiency_loss=boiler_efficiency_loss_quadratic,
                                OM_hour_MWh=0.12 * hr / MWh,  # working hour for OM per MWh
                                wage_operation_maintenance=1.67 * USD / hr)
-
-Price = namedtuple('Price', 'biomass, transport, coal, electricity')
 
 price_MD1 = Price(biomass=37.26 * USD / t,
                   transport=2000 * VND / t / km,

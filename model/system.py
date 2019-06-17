@@ -6,6 +6,7 @@
 # Creative Commons Attribution-ShareAlike 4.0 International
 #
 """Define the class  System  used to instantiate a run of the model."""
+from collections import namedtuple
 
 import pandas as pd
 from natu.numpy import npv
@@ -14,6 +15,8 @@ from model.utils import after_invest, year_1, display_as, safe_divide
 from model.powerplant import PowerPlant, CofiringPlant
 from model.farmer import Farmer
 from model.transporter import Transporter
+
+Price = namedtuple('Price', 'biomass, transport, coal, electricity')
 
 
 #We should pass the parameters as an object

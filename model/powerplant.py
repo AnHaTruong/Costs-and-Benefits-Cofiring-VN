@@ -8,6 +8,8 @@
 # Creative Commons Attribution-ShareAlike 4.0 International
 """Define PowerPlant and its child class, CofiringPlant."""
 
+from collections import namedtuple
+
 import pandas as pd
 import numpy as np
 
@@ -17,6 +19,32 @@ from natu.numpy import npv
 from model.utils import USD, MUSD, display_as, safe_divide
 from model.investment import Investment
 from model.emitter import Emitter, Activity
+
+
+Fuel = namedtuple('Fuel', 'name, heat_value, transport_distance, transport_mean')
+
+PlantParameter = namedtuple("PlantParameter", ['name',
+                                               'capacity',
+                                               'capacity_factor',
+                                               'commissioning',
+                                               'boiler_technology',
+                                               'boiler_efficiency_new',
+                                               'plant_efficiency',
+                                               'fix_om_coal',
+                                               'variable_om_coal',
+                                               'emission_factor',
+                                               'emission_control',
+                                               'coal',
+                                               'time_horizon'])
+
+CofiringParameter = namedtuple('CofiringParameter', ['biomass_ratio_energy',
+                                                     'capital_cost',
+                                                     'fix_om_cost',
+                                                     'variable_om_cost',
+                                                     'biomass',
+                                                     'boiler_efficiency_loss',
+                                                     'OM_hour_MWh',
+                                                     'wage_operation_maintenance'])
 
 
 #pylint: disable=too-many-instance-attributes
