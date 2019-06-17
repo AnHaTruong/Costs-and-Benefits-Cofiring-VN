@@ -24,7 +24,7 @@ from model.powerplant import Fuel, PlantParameter, CofiringParameter
 
 from natu.units import MJ, kg, t, d, hr, km, MW, ha, kW, y, kWh, MWh, g
 
-from parameters_supplychain import supply_chain_MD1, supply_chain_NB
+from manuscript1.parameters_supplychain import supply_chain_MD1, supply_chain_NB
 
 
 discount_rate = 0.087771
