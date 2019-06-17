@@ -8,7 +8,7 @@
 PYTHON = python3
 PYTEST = python3 -m pytest
 PYLINT = pylint3
-SOURCEDIRS = . model manuscript1 lcoe
+SOURCEDIRS = model manuscript1 lcoe
 
 tables = tables_manuscript.txt
 
@@ -71,7 +71,6 @@ regtest-reset:
 	$(PYTEST) --regtest-reset
 
 lint:
-	$(PYLINT) *py
 	$(PYLINT) */*.py
 
 docstyle:

@@ -67,7 +67,7 @@ Doing that will make static code analysis tools like lint cry a lot. Exclude the
 The source files are organised in directories. From Python's point of view, the modules are organised in packages. Modules must be run from the root directory, not from the directory they are in. 
 
 + In a terminal, to run the file `manuscript1/figure2.py` the command is `python3 -m manuscript1.figure2`. The module name is the filename, without the `.py` extension. The package name is the directory name. The separator is a dot, since the slanted bar is OS specific.
-+ A graphical environment may also need to be told to run modules from the project root directory. Spyder3 opens the dialog box "Run settings for X" when you run a file X.py for the first time. In the `Working directory setting`, choose `The current working directory`. 
++ A graphical environment may also need to be told to run modules from the project root directory. Start Spyder3 from the project root directory. When it opens the dialog box "Run settings for X" when you run a file X.py for the first time. In the `Working directory setting`, choose `The current working directory`. 
 
 Import common.utils before importing natu, to have a chance to disable it if needed.
 

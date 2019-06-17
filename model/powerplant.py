@@ -60,14 +60,42 @@ class PowerPlant(Investment, Emitter):
         The financials (revenue and coal_cost) are not initialized at this time,
         they must be defined later:
 
-        >>> from manuscript1.parameters import plant_parameter_MD1, price_MD1
+        >>> from model.utils import VND
+        >>> from natu.units import t, km, kg, kWh, kW, MW, MJ
+        >>> plant_parameter_MD1 = PlantParameter(name='Mong Duong 1',
+        ...                                      capacity=1080 * MW,
+        ...                                      capacity_factor=0.60,
+        ...                                      commissioning=2015,
+        ...                                      boiler_technology='CFB',
+        ...                                      boiler_efficiency_new=87.03 / 100,
+        ...                                      plant_efficiency=38.84 / 100,
+        ...                                      fix_om_coal=29.31 * USD / kW / y,
+        ...                                      variable_om_coal=0.0048 * USD / kWh,
+        ...                                      emission_factor={'6b_coal': {
+        ...                                         'CO2': 0.0966 * kg / MJ * 19.43468 * MJ / kg,
+        ...                                         'SO2': 11.5 * kg / t,
+        ...                                         'NOx': 18 * kg / t,
+        ...                                         'PM10': 43.8 * kg / t}},
+        ...                                      emission_control={'CO2': 0.0,
+        ...                                                        'SO2': 0.982,
+        ...                                                        'NOx': 0.0,
+        ...                                                        'PM10': 0.996},
+        ...                                      coal=Fuel(name="6b_coal",
+        ...                                                heat_value=19.43468 * MJ / kg,
+        ...                                                transport_distance=0 * km,
+        ...                                                transport_mean='Conveyor belt'),
+        ...                                      time_horizon=20)
         >>> plant = PowerPlant(plant_parameter_MD1)
+        >>> from model.system import Price
+        >>> price_MD1 = Price(biomass=37.26 * USD / t,
+        ...                   transport=2000 * VND / t / km,
+        ...                   coal=1131400 * VND / t,
+        ...                   electricity=1239.17 * VND / kWh)
         >>> plant.revenue = plant.power_generation * price_MD1.electricity
         >>> plant.operating_expenses()
         Traceback (most recent call last):
             ...
         AttributeError: Accessing  PowerPlant.coal_cost  value before it is set
-
         >>> plant.coal_cost = plant.coal_used * price_MD1.coal
         >>> print(plant.net_present_value(discount_rate=0.08))
         1.29299e+06 kUSD
