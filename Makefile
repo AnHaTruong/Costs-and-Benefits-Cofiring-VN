@@ -10,14 +10,14 @@ PYTEST = python3 -m pytest
 PYLINT = pylint3
 SOURCEDIRS = model manuscript1 lcoe
 
-tables = tables_manuscript.txt
+tables = tables_manuscript.txt feasibility.txt
 
 figures = figure2.png figure3.png LCOE1.png LCOE1a.png LCOE2.png LCOE3.png
 
 all: $(tables) $(figures)
  
-feasibility: manuscript1/feasibility.py manuscript1/parameters.py
-	$(PYTHON) -m manuscript1.feasibility
+feasibility.txt: manuscript1/feasibility.py manuscript1/parameters.py
+	$(PYTHON) -m manuscript1.feasibility > $@
 
 figure2.png: manuscript1/figure2.py manuscript1/parameters.py
 	$(PYTHON) -m manuscript1.figure2 > $@
