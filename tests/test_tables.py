@@ -102,4 +102,4 @@ def test_benefits(regtest, systems):
 
 
 def test_job_changes(regtest, systems):
-    regtest.write(f(systems, 'job_changes(mining_parameter)'))
+    regtest.write(f(systems, 'job_changes()'))

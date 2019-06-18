@@ -17,7 +17,7 @@ from model.utils import MUSD, USD, t
 from model.system import System, label
 from manuscript1.parameters import discount_rate, tax_rate, depreciation_period, external_cost
 from manuscript1.parameters import plant_parameter_NB, cofire_NB, supply_chain_NB, price_NB
-from manuscript1.parameters import farm_parameter, transport_parameter
+from manuscript1.parameters import farm_parameter, transport_parameter, mining_parameter
 
 
 def benefit_array(system):
@@ -43,7 +43,7 @@ def case(price_fieldside, price_plantgate):
     price = price_NB._replace(biomass_plantgate=price_plantgate,
                               biomass_fieldside=price_fieldside)
     system = System(plant_parameter_NB, cofire_NB, supply_chain_NB, price, farm_parameter,
-                    transport_parameter)
+                    transport_parameter, mining_parameter)
     return system, label(price)
 
 

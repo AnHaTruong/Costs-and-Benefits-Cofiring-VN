@@ -39,13 +39,14 @@ class System:
 
     # pylint: disable=too-many-arguments
     def __init__(self, plant_parameter, cofire_parameter, supply_chain, price,
-                 farm_parameter, transport_parameter):
+                 farm_parameter, transport_parameter, mining_parameter):
         """Instantiate the system actors."""
         self.plant = PowerPlant(plant_parameter)
         self.cofiring_plant = CofiringPlant(plant_parameter, cofire_parameter)
         self.supply_chain = supply_chain.fit(self.cofiring_plant.biomass_used[1])
         self.farmer = Farmer(self.supply_chain, farm_parameter)
         self.transporter = Transporter(self.supply_chain, transport_parameter)
+        self.mining_parameter = mining_parameter
         self.price = None
         self.clear_market(price)
 
@@ -84,7 +85,8 @@ class System:
         """Return total work time created from co-firing."""
         time = (self.farmer.labor()
                 + self.transporter.labor()
-                + self.cofiring_plant.biomass_om_work())
+                + self.cofiring_plant.biomass_om_work()
+                - self.coal_work_lost)
         return display_as(time, 'hr')
 
     @property
@@ -92,7 +94,8 @@ class System:
         """Return total benefit from job creation from biomass co-firing."""
         amount = (self.farmer.labor_cost()
                   + self.transporter.labor_cost()
-                  + self.cofiring_plant.biomass_om_wages())
+                  + self.cofiring_plant.biomass_om_wages()
+                  - self.coal_wages_lost)
         return display_as(amount, 'kUSD')
 
     def wages_npv(self, discount_rate):
@@ -103,12 +106,14 @@ class System:
     def coal_saved(self):
         return display_as(self.cofiring_plant.coal_saved, 't')
 
-    def coal_work_lost(self, mining_productivity):
-        time = self.coal_saved / mining_productivity
-        return time
+    @property
+    def coal_work_lost(self):
+        time = self.coal_saved / self.mining_parameter['productivity_underground']
+        return display_as(time, "hr")
 
-    def coal_work_lost_value(self, mining_productivity, mining_wage):
-        value = self.coal_work_lost(mining_productivity) * mining_wage
+    @property
+    def coal_wages_lost(self):
+        value = self.coal_work_lost * self.mining_parameter['wage']
         return display_as(value, 'kUSD')
 
     def emissions_baseline(self, total=False):
@@ -204,7 +209,7 @@ class System:
 
     # Code really smell, will change result to DataFrame now.
     # pylint: disable=too-many-locals
-    def job_changes(self, mining_parameter):
+    def job_changes(self):
         """Tabulate the number of full time equivalent (FTE) jobs created/destroyed by cofiring."""
         cols = '{:25}{:12.1f}'
         cols2 = '{:25}{:12.1f}{:12.1f}'
@@ -219,9 +224,12 @@ class System:
         row12 = self.transporter.loading_wages()[1]
         row9 = self.cofiring_plant.biomass_om_work()[1]
         row3 = self.cofiring_plant.biomass_om_wages()[1]
+        row6 = - self.coal_work_lost[1]
+        row5 = - self.coal_wages_lost[1]
         row10 = self.labor[1]
         row4 = self.wages[1]
 
+        display_as(row6, 'FTE')
         display_as(row7, 'FTE')
         display_as(row8, 'FTE')
         display_as(row9, 'FTE')
@@ -232,6 +240,7 @@ class System:
         lines.append(cols2.format('Biomass transportation', row8, row2))
         lines.append(cols2.format('Biomass loading', row11, row12))
         lines.append(cols2.format('O&M', row9, row3))
+        lines.append(cols2.format('Mining', row6, row5))
         lines.append(cols2.format('Total', row10, row4))
         lines.append('')
         lines.append(cols.format('Area collected', self.supply_chain.area()))
@@ -240,8 +249,10 @@ class System:
         lines.append(cols.format('Number of truck trips', self.transporter.truck_trips[1]))
         lines.append('')
         lines.append('Mining job lost from co-firing at ' + self.plant.name + '\n')
-        row = self.coal_work_lost(mining_parameter['productivity_underground'])[1]
-        display_as(row, 'FTE')
-        lines.append(cols.format('Job lost', row))
         lines.append(cols.format('Coal saved', self.coal_saved[1]))
+        lines.append(cols.format('Productivity', self.mining_parameter['productivity_underground']))
+        lines.append(cols.format('Job lost', self.coal_work_lost[1]))
+        lines.append(cols.format('Job lost', display_as(self.coal_work_lost[1], "FTE")))
+        lines.append(cols.format('Wage', display_as(self.mining_parameter['wage'], "USD/hr")))
+        lines.append(cols.format('Wage lost', self.coal_wages_lost[1]))
         return '\n'.join(lines)

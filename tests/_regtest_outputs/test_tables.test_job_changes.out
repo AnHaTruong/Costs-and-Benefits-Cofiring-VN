@@ -4,7 +4,8 @@ Biomass collection              175.7 FTE       304.3 kUSD
 Biomass transportation           14.1 FTE        24.3 kUSD
 Biomass loading                   6.5 FTE        11.2 kUSD
 O&M                              21.8 FTE        56.9 kUSD
-Total                           218.1 FTE       396.8 kUSD
+Mining                          -34.8 FTE       -60.2 kUSD
+Total                           183.4 FTE       336.6 kUSD
 
 Area collected                 7918.4 km2
 Collection radius                71.0 km
@@ -13,8 +14,12 @@ Number of truck trips         11256.3
 
 Mining job lost from co-firing at Mong Duong 1
 
-Job lost                         34.8 FTE
 Coal saved                   135530.0 t
+Productivity                      2.5 t/hr
+Job lost                      54212.0 hr
+Job lost                         34.8 FTE
+Wage                              1.1 USD/hr
+Wage lost                        60.2 kUSD
 
 Benefit from job creation: Ninh Binh
 
@@ -22,7 +27,8 @@ Biomass collection               31.0 FTE        53.6 kUSD
 Biomass transportation            0.4 FTE         0.6 kUSD
 Biomass loading                   1.1 FTE         2.0 kUSD
 O&M                               2.2 FTE         5.6 kUSD
-Total                            34.6 FTE        61.9 kUSD
+Mining                           -5.5 FTE        -9.6 kUSD
+Total                            29.1 FTE        52.3 kUSD
 
 Area collected                  550.0 km2
 Collection radius                13.2 km
@@ -31,5 +37,9 @@ Number of truck trips          1983.7
 
 Mining job lost from co-firing at Ninh Binh
 
-Job lost                          5.5 FTE
 Coal saved                    21542.0 t
+Productivity                      2.5 t/hr
+Job lost                       8616.8 hr
+Job lost                          5.5 FTE
+Wage                              1.1 USD/hr
+Wage lost                         9.6 kUSD

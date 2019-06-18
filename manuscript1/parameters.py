@@ -54,7 +54,7 @@ external_cost = external_cost_SKC
 
 mining_parameter = {'productivity_surface': 8.04 * t / hr,  # www.eia.g
                     'productivity_underground': 2.5 * t / hr,  # ww.eia.gov
-                    'wage': 0 * USD / hr}
+                    'wage': 1.11 * USD / hr}   # Copied from farm work below, find source
 
 coal_6b = Fuel(name="6b_coal",
                heat_value=19.43468 * MJ / kg,  # numerical value also used in emission_factor
@@ -176,7 +176,7 @@ price_MD1 = Price(biomass_plantgate=45.13575 * USD / t,
                   electricity=1239.17 * VND / kWh)
 
 MongDuong1System = System(plant_parameter_MD1, cofire_MD1, supply_chain_MD1, price_MD1,
-                          farm_parameter, transport_parameter)
+                          farm_parameter, transport_parameter, mining_parameter)
 
 
 plant_parameter_NB = PlantParameter(name='Ninh Binh',
@@ -203,4 +203,4 @@ price_NB = Price(biomass_plantgate=38.4483 * USD / t,
                  electricity=1665.6 * VND / kWh)
 
 NinhBinhSystem = System(plant_parameter_NB, cofire_NB, supply_chain_NB, price_NB,
-                        farm_parameter, transport_parameter)
+                        farm_parameter, transport_parameter, mining_parameter)

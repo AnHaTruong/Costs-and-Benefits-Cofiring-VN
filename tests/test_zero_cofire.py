@@ -26,7 +26,8 @@ def null_cofiring_system():
                   baseline.supply_chain_MD1,
                   baseline.price_MD1,
                   baseline.farm_parameter,
-                  baseline.transport_parameter)
+                  baseline.transport_parameter,
+                  baseline.mining_parameter)
 
 
 def test_npv(null_cofiring_system):

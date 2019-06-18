@@ -14,7 +14,7 @@ import pandas as pd
 from model.utils import display_as, isclose, USD, kUSD, FTE, year_1
 from natu.units import y, t
 
-from manuscript1.parameters import mining_parameter
+#from manuscript1.parameters import mining_parameter
 
 
 #%%
@@ -145,6 +145,8 @@ def straw_supply(system_a, system_b):
 
     col11 = system_a.price.biomass_fieldside
     col12 = system_b.price.biomass_fieldside
+    display_as(col11, "USD/t")
+    display_as(col12, "USD/t")
 
     assert isclose(col11, system_a.farmer.revenue[1] / col3), "Problem with field side price"
     assert isclose(col12, system_b.farmer.revenue[1] / col4), "Problem with field side price"
@@ -178,7 +180,7 @@ def balance_jobs(system_a, system_b):
                   system.transporter.loading_work()[1],
                   system.transporter.driving_work()[1],
                   system.cofiring_plant.biomass_om_work()[1],
-                  - system.coal_work_lost(mining_parameter['productivity_underground'])[1]],
+                  - system.coal_work_lost[1]],
             index=headings)
 
     def wages(system):
@@ -187,9 +189,7 @@ def balance_jobs(system_a, system_b):
                   system.transporter.loading_wages()[1],
                   system.transporter.driving_wages()[1],
                   system.cofiring_plant.biomass_om_wages()[1],
-                  - system.coal_work_lost_value(
-                      mining_parameter['productivity_underground'],
-                      mining_parameter['wage'])[1]],
+                  - system.coal_wages_lost[1]],
             index=headings)
 
     contents = [
