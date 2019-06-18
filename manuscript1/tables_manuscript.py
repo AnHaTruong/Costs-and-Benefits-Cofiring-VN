@@ -19,9 +19,8 @@ from manuscript1.parameters import (MongDuong1System, NinhBinhSystem,
                                     external_cost, external_cost_SKC, external_cost_ZWY,
                                     external_cost_HAS)
 
-from manuscript1.tables import (emission_reductions, balance_jobs,
-                                emission_reductions_by_activity, emission_reductions_benefits)
-
+from model.tables import (emission_reductions, balance_jobs,
+                          emission_reductions_by_activity, emission_reductions_benefits)
 from model.system import label
 
 table_separator = '\n=================\n'
