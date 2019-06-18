@@ -55,6 +55,7 @@ class Investment:
         self.name = name
         self.time_horizon = time_horizon
         self._revenue = None
+        self.costs_of_goods_sold = display_as(np.zeros(self.time_horizon + 1) * USD, 'kUSD')
         self.expenses = []
         self.expenses_index = []
 
@@ -92,7 +93,9 @@ class Investment:
         return display_as(v_cost, 'kUSD')
 
     def earning_before_tax(self, depreciation_period=None):
+        """Return  EBT vector."""
         earning = (self.revenue
+                   - self.costs_of_goods_sold
                    - self.operating_expenses()
                    - self.amortization(depreciation_period))
         return display_as(earning, 'kUSD')
@@ -104,7 +107,9 @@ class Investment:
         return display_as(tax, 'kUSD')
 
     def cash_out(self, tax_rate, depreciation_period):
+        """Return cash out vector."""
         flow = (self.investment()
+                + self.costs_of_goods_sold
                 + self.operating_expenses()
                 + self.income_tax(tax_rate, depreciation_period))
         return display_as(flow, 'kUSD')
@@ -131,6 +136,7 @@ class Investment:
         result = np.array([self.revenue,
                           self.investment(),
                           self.amortization(depreciation_period),
+                          self.costs_of_goods_sold,
                           self.operating_expenses(),
                           self.earning_before_tax(depreciation_period),
                           self.income_tax(tax_rate, depreciation_period),
@@ -149,6 +155,7 @@ class Investment:
         labels = ["Revenue",
                   "Investment",
                   "Amortization",
+                  "Cost of goods",
                   "Op. Expense",
                   "Earn. B. Tax",
                   "Income tax",

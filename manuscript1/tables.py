@@ -109,12 +109,12 @@ def energy_costs(system_a, system_b):
     lines.append(
         "Biomass in field    "
         + str(energy_cost(
-            system_a.price.biomass,
+            system_a.price.biomass_fieldside,
             system_a.cofiring_plant.cofire_parameter.biomass))
         + "      "
         + str(energy_cost(
-            system_b.price.biomass,
-            system_a.cofiring_plant.cofire_parameter.biomass)))
+            system_b.price.biomass_fieldside,
+            system_b.cofiring_plant.cofire_parameter.biomass)))
 
     lines.append(
         "Biomass plant gate  "
@@ -123,6 +123,8 @@ def energy_costs(system_a, system_b):
         + str(system_b.cofiring_plant.biomass_energy_cost()[1]))
 
     return '\n'.join(lines)
+
+#%%
 
 
 def straw_supply(system_a, system_b):
@@ -135,17 +137,23 @@ def straw_supply(system_a, system_b):
     col5 = system_a.cofiring_plant.biomass_cost_per_t()[1]
     col6 = system_b.cofiring_plant.biomass_cost_per_t()[1]
 
+    assert isclose(col5, system_a.price.biomass_plantgate), "Problem with price at plant gate"
+    assert isclose(col6, system_b.price.biomass_plantgate), "Problem with price at plant gate"
+
     col9 = system_a.transport_cost_per_t[1]
     col10 = system_b.transport_cost_per_t[1]
 
-    assert isclose(col5 - col9, system_a.biomass_value[1] / col3)
-    assert isclose(col6 - col10, system_b.biomass_value[1] / col4)
+    col11 = system_a.price.biomass_fieldside
+    col12 = system_b.price.biomass_fieldside
 
-    table.append('{:24}{:>24}{:>24}'.format('Parameter', 'Mong Duong 1', 'Ninh Binh'))
-    table.append('{:24} {:>19.0f}{:>22.0f}'.format('Straw required', col3, col4))
-    table.append('{:24} {:>22.2f}{:>18.2f}'.format('Straw cost', col5, col6))
-    table.append('{:24} {:>22.2f}{:>18.2f}'.format('Biomass raw cost', col5 - col9, col6 - col10))
-    table.append('{:24} {:>19.2f}{:>18.2f}'.format('Biomass transportation cost', col9, col10))
+    assert isclose(col11, system_a.farmer.revenue[1] / col3), "Problem with field side price"
+    assert isclose(col12, system_b.farmer.revenue[1] / col4), "Problem with field side price"
+
+    table.append('{:24}{:>24}{:>24}'.format('Parameter', system_a.plant.name, system_b.plant.name))
+    table.append('{:24} {:>19.0f}{:>22.0f}'.format('Amount required', col3, col4))
+    table.append('{:24} {:>22.2f}{:>18.2f}'.format('Cost plant gate', col5, col6))
+    table.append('{:24} {:>19.2f}{:>18.2f}'.format('Transportation cost', col9, col10))
+    table.append('{:24} {:>22.2f}{:>18.2f}'.format('Cost field side', col11, col12))
     table.append('')
     table.append(system_a.plant.name + ' ' + str(system_a.supply_chain))
     table.append(system_b.plant.name + ' ' + str(system_b.supply_chain))

@@ -170,8 +170,8 @@ cofire_MD1 = CofiringParameter(biomass_ratio_energy=after_invest(0.05,
                                OM_hour_MWh=0.12 * hr / MWh,  # working hour for OM per MWh
                                wage_operation_maintenance=1.67 * USD / hr)
 
-price_MD1 = Price(biomass=37.26 * USD / t,
-                  transport=2000 * VND / t / km,
+price_MD1 = Price(biomass_plantgate=45.13575 * USD / t,
+                  biomass_fieldside=37.26 * USD / t,
                   coal=1131400 * VND / t,
                   electricity=1239.17 * VND / kWh)
 
@@ -197,8 +197,10 @@ plant_parameter_NB = PlantParameter(name='Ninh Binh',
 
 cofire_NB = cofire_MD1._replace(capital_cost=100 * USD / kW / y)
 
-price_NB = price_MD1._replace(coal=1825730 * VND / t,   # Includes transport
-                              electricity=1665.6 * VND / kWh)
+price_NB = Price(biomass_plantgate=38.4483 * USD / t,
+                 biomass_fieldside=37.26 * USD / t,
+                 coal=1825730 * VND / t,                 # Includes transport
+                 electricity=1665.6 * VND / kWh)
 
 NinhBinhSystem = System(plant_parameter_NB, cofire_NB, supply_chain_NB, price_NB,
                         farm_parameter, transport_parameter)

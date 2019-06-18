@@ -10,13 +10,13 @@
 import pytest
 import pandas as pd
 
-from parameters import MongDuong1System, NinhBinhSystem
-from parameters import discount_rate, tax_rate, depreciation_period
+from manuscript1.parameters import MongDuong1System, NinhBinhSystem
+from manuscript1.parameters import discount_rate, tax_rate, depreciation_period
 # We are using them inside an eval string
 # pylint: disable=unused-import
-# Spyder3 does not see that  coal_import_price, mining_parameter  are used within a string
-from parameters import external_cost, coal_import_price, mining_parameter
-from tables import energy_costs, straw_supply, emission_reductions
+# Spyder3 does not see that  coal_import_price, mining_parameter  are used within an eval string
+from manuscript1.parameters import external_cost, coal_import_price, mining_parameter
+from manuscript1.tables import energy_costs, straw_supply, emission_reductions
 
 # pylint and pytest known compatibility bug
 # pylint: disable=redefined-outer-name

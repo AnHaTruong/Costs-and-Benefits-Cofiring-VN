@@ -9,7 +9,7 @@
 
 import pytest
 
-import parameters as baseline
+import manuscript1.parameters as baseline
 from model.utils import isclose
 from model.system import System
 from model.powerplant import PowerPlant

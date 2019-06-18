@@ -14,18 +14,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from model.utils import MUSD, USD, t
-from model.system import System
+from model.system import System, label
 from manuscript1.parameters import discount_rate, tax_rate, depreciation_period, external_cost
 from manuscript1.parameters import plant_parameter_NB, cofire_NB, supply_chain_NB, price_NB
 from manuscript1.parameters import farm_parameter, transport_parameter
-
-NinhBinhSystem = System(plant_parameter_NB, cofire_NB, supply_chain_NB, price_NB,
-                        farm_parameter, transport_parameter)
-
-lowPrice = price_NB._replace(biomass=13 * USD / t)
-
-lowPriceSystem = System(plant_parameter_NB, cofire_NB, supply_chain_NB, lowPrice,
-                        farm_parameter, transport_parameter)
 
 
 def benefit_array(system):
@@ -46,14 +38,28 @@ def benefit_array(system):
                      job_benefit, climate_benefit, health_benefit])
 
 
+def case(price_fieldside, price_plantgate):
+    """Return a system for a given pair of straw prices, along with a formatted legend."""
+    price = price_NB._replace(biomass_plantgate=price_plantgate,
+                              biomass_fieldside=price_fieldside)
+    system = System(plant_parameter_NB, cofire_NB, supply_chain_NB, price, farm_parameter,
+                    transport_parameter)
+    return system, label(price)
+
+
+systemA, labelA = case(30 * USD / t, 37.26 * USD / t)
+systemB, labelB = case(10 * USD / t, 12 * USD / t)
+systemC, labelC = case(10 * USD / t, 36 * USD / t)
+
 index = np.arange(6)
-width = 0.4
+width = 0.3
 plt.figure(figsize=(10, 5))
-NB = plt.barh(index + width, benefit_array(NinhBinhSystem), width,
-              color='#ff4500', edgecolor='none',
-              label='Straw 37.3 USD/t')
-NB2 = plt.barh(index, benefit_array(lowPriceSystem), width,
-               color='navy', edgecolor='none', label='Straw 13 USD/t')
+NB = plt.barh(index + 2 * width, benefit_array(systemA), width,
+              color='#ff4500', edgecolor='none', label=labelA)
+NB2 = plt.barh(index + width, benefit_array(systemB), width,
+               color='navy', edgecolor='none', label=labelB)
+NB3 = plt.barh(index, benefit_array(systemC), width,
+               color='green', edgecolor='none', label=labelC)
 plt.title('Cofiring 5% straw in Ninh Binh power plant')
 plt.xlabel('Cumulative benefit over 20 years (M$)')
 plt.yticks(index + 0.2, ('Trader profit',

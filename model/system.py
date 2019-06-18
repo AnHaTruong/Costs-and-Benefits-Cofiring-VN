@@ -11,12 +11,21 @@ from collections import namedtuple
 import pandas as pd
 from natu.numpy import npv
 
-from model.utils import after_invest, year_1, display_as, safe_divide
+from model.utils import year_1, display_as, safe_divide
 from model.powerplant import PowerPlant, CofiringPlant
 from model.farmer import Farmer
 from model.transporter import Transporter
 
-Price = namedtuple('Price', 'biomass, transport, coal, electricity')
+Price = namedtuple('Price', 'biomass_plantgate, biomass_fieldside, coal, electricity')
+
+
+def label(price):
+    """Return a string with the straw price at field side and plant gate."""
+    display_as(price.biomass_plantgate, 'USD/t')
+    display_as(price.biomass_fieldside, 'USD/t')
+    display_as(price.coal, 'USD/t')
+    return (f'Straw {price.biomass_fieldside} field side, ' +
+            f'{price.biomass_plantgate} plant gate')
 
 
 #We should pass the parameters as an object
@@ -53,20 +62,22 @@ class System:
         self.cofiring_plant.revenue = electricity_sales
         self.cofiring_plant.coal_cost = self.cofiring_plant.coal_used * price.coal
 
-        self.biomass_value = self.cofiring_plant.biomass_used * price.biomass
-        display_as(self.biomass_value, "kUSD")
+        # Transaction  at the plant gate
+        self.biomass_value_plantgate = self.cofiring_plant.biomass_used * price.biomass_plantgate
+        display_as(self.biomass_value_plantgate, "kUSD")
+        self.cofiring_plant.biomass_cost = self.biomass_value_plantgate
+        self.transporter.revenue = self.biomass_value_plantgate
 
-        self.transport_cost = after_invest(self.supply_chain.transport_tkm() * price.transport,
-                                           self.transporter.parameter['time_horizon'])
-        display_as(self.transport_cost, "kUSD")
-
-        self.cofiring_plant.biomass_cost = self.biomass_value + self.transport_cost
-        self.farmer.revenue = self.biomass_value
-        self.transporter.revenue = self.transport_cost
+        # Transaction  at the field side
+        self.biomass_value_fieldside = self.cofiring_plant.biomass_used * price.biomass_fieldside
+        display_as(self.biomass_value_fieldside, "kUSD")
+        self.farmer.revenue = self.biomass_value_fieldside
+        self.transporter.costs_of_goods_sold = self.biomass_value_fieldside
 
     @property
     def transport_cost_per_t(self):
-        return safe_divide(self.transport_cost, self.cofiring_plant.biomass_used)
+        """Return technical cost to transport the straw, including labor, fuel and truck rental."""
+        return safe_divide(self.transporter.operating_expenses(), self.cofiring_plant.biomass_used)
 
     @property
     def labor(self):

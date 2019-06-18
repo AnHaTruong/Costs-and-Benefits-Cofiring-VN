@@ -22,8 +22,9 @@ from manuscript1.parameters import (MongDuong1System, NinhBinhSystem,
 from manuscript1.tables import (emission_reductions, balance_jobs,
                                 emission_reductions_by_activity, emission_reductions_benefits)
 
+from model.system import label
 
-systems = MongDuong1System, NinhBinhSystem
+table_separator = '\n=================\n'
 
 #%%
 
@@ -32,30 +33,35 @@ pd.options.display.float_format = '{:,.1f}'.format
 table1 = """
 ICERE 2018 Table 1: Emission reductions by activity
 
-""" + str(emission_reductions_by_activity(*systems, external_cost)) + "\n\n"
+""" + str(emission_reductions_by_activity(MongDuong1System, NinhBinhSystem, external_cost))
 
 print(table1)
 
 
 #%%
+print(table_separator)
 
 table2 = (
     "ICERE 2018 Table 2: Emission reductions benefits (external costs SKC, ZWY, HAS)\n\n" +
     "       Mong Duong 1                 Ninh Binh" +
-    str(emission_reductions_benefits(*systems, external_cost_SKC)) + "\n\n" +
-    str(emission_reductions_benefits(*systems, external_cost_ZWY)) + "\n\n" +
-    str(emission_reductions_benefits(*systems, external_cost_HAS)) + "\n\n\n"
+    str(emission_reductions_benefits(MongDuong1System, NinhBinhSystem, external_cost_SKC)) +
+    "\n\n" +
+    str(emission_reductions_benefits(MongDuong1System, NinhBinhSystem, external_cost_ZWY)) +
+    "\n\n" +
+    str(emission_reductions_benefits(MongDuong1System, NinhBinhSystem, external_cost_HAS))
 )
 
 print(table2)
 
 
 #%%
+print(table_separator)
 
 print('Table 1: Results of profitability assessment')
 print("Net present value over", MongDuong1System.plant.parameter.time_horizon,
       "years at discount rate =", discount_rate)
 print("Tax rate", tax_rate, ", linear capital depreciation over ", depreciation_period, "years")
+print("Coal", MongDuong1System.price.coal, ", straw", MongDuong1System.price.biomass_plantgate)
 print()
 df = pd.concat(
     [MongDuong1System.plant.lcoe_statement(discount_rate, tax_rate, depreciation_period),
@@ -71,11 +77,11 @@ print(str(df))
 
 
 #%%
+print(table_separator)
 
 pd.options.display.float_format = '{:,.0f}'.format
 
-table2 = """
-Table 2: Emission reductions and associated benefits from the two projects
+table2 = """Table 2: Emission reductions and associated benefits from the two projects
 
                     Mong Duong 1      Ninh Binh
 """ + str(emission_reductions(MongDuong1System, NinhBinhSystem, external_cost))
@@ -83,11 +89,13 @@ Table 2: Emission reductions and associated benefits from the two projects
 print(table2)
 
 #%%
+print(table_separator)
 
-print("""
-Table 3a: Supply chain earnings before taxes in the co-firing scenario.
-
-Farmers             Mong Duong 1     Ninh Binh""")
+print('Table 3a: Supply chain earnings before taxes in the co-firing scenario.')
+print(label(NinhBinhSystem.price) + " in Ninh Binh")
+print(label(MongDuong1System.price) + " in Mong Duong")
+print()
+print('Farmers             Mong Duong 1     Ninh Binh')
 
 df = pd.concat(
     [MongDuong1System.farmer.earning_before_tax_detail(),
@@ -107,19 +115,19 @@ df = pd.concat(
 print(str(df))
 
 #%%
+print(table_separator)
 
-print("""
-Table 3b: Job creation and destruction in the co-firing scenario.
+print("""Table 3b: Job creation and destruction in the co-firing scenario.
 
                Mong Duong 1  Ninh Binh""")
 
-print(balance_jobs(*systems))
+print(balance_jobs(MongDuong1System, NinhBinhSystem))
 
 
 #%%
-print("""
-Table S1. Technical parameters
-""")
+print(table_separator)
+
+print('Table S1. Technical parameters\n')
 
 df = pd.concat(
     [MongDuong1System.plant.characteristics(),

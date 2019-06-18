@@ -94,11 +94,13 @@ class Transporter(Investment, Emitter):
 
     def earning_before_tax_detail(self):
         """Tabulate the annual net income before taxes in the transporting segment."""
-        self.expenses = [self.rental_cost()[1],
+        self.expenses = [self.costs_of_goods_sold[1],
+                         self.rental_cost()[1],
                          self.fuel_cost()[1],
                          self.loading_wages()[1],
                          self.driving_wages()[1]]
-        self.expenses_index = ['- Truck rental',
+        self.expenses_index = ['- Buying straw',
+                               '- Truck rental',
                                '- Truck fuel',
                                '- Handling work',
                                '- Driving work']

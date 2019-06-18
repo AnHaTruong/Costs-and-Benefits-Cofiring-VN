@@ -27,7 +27,7 @@ def farmer_ebt(system, biomass_price):
     """Return farmer's Excess Before Taxes, for a given biomass price."""
     original_price = system.price
     try:
-        system.clear_market(original_price._replace(biomass=biomass_price))
+        system.clear_market(original_price._replace(biomass_fieldside=biomass_price))
         ebt = system.farmer.earning_before_tax()[1]
     finally:
         system.clear_market(original_price)
@@ -42,7 +42,7 @@ def farmer_minimum(system):
     """Compute and return the farmer's willingness to accept for its straw."""
     def f(x):
         return farmer_ebt(system, x)
-    return solve_linear(f, price_MD1.biomass, price_MD1.biomass / 2)
+    return solve_linear(f, price_MD1.biomass_fieldside, price_MD1.biomass_fieldside / 2)
 
 
 #%%
@@ -55,7 +55,7 @@ def plant_gain(system, biomass_price):
     """
     original_price = system.price
     try:
-        new_price = original_price._replace(biomass=biomass_price)
+        new_price = original_price._replace(biomass_plantgate=biomass_price)
         system.clear_market(new_price)
         npv_ante = system.plant.net_present_value(discount_rate, tax_rate, depreciation_period)
         npv_post = system.cofiring_plant.net_present_value(discount_rate,
@@ -73,7 +73,7 @@ def plant_maximum(system):
     """Compute and return the plant's willingness to pay for straw."""
     def f(x):
         return plant_gain(system, x)
-    return solve_linear(f, price_MD1.biomass, price_MD1.biomass / 2)
+    return solve_linear(f, price_MD1.biomass_plantgate, price_MD1.biomass_plantgate / 2)
 
 
 def feasibility(system):
