@@ -16,7 +16,11 @@ from model.powerplant import PowerPlant, CofiringPlant
 from model.farmer import Farmer
 from model.transporter import Transporter
 
-Price = namedtuple('Price', 'biomass_plantgate, biomass_fieldside, coal, electricity')
+Price = namedtuple('Price',
+                   'biomass_plantgate, biomass_fieldside, coal, electricity')
+
+MiningParameter = namedtuple('MiningParameter',
+                             'productivity_surface, productivity_underground, wage')
 
 
 def label(price):
@@ -108,12 +112,12 @@ class System:
 
     @property
     def coal_work_lost(self):
-        time = self.coal_saved / self.mining_parameter['productivity_underground']
+        time = self.coal_saved / self.mining_parameter.productivity_underground
         return display_as(time, "hr")
 
     @property
     def coal_wages_lost(self):
-        value = self.coal_work_lost * self.mining_parameter['wage']
+        value = self.coal_work_lost * self.mining_parameter.wage
         return display_as(value, 'kUSD')
 
     def emissions_baseline(self, total=False):
@@ -250,9 +254,9 @@ class System:
         lines.append('')
         lines.append('Mining job lost from co-firing at ' + self.plant.name + '\n')
         lines.append(cols.format('Coal saved', self.coal_saved[1]))
-        lines.append(cols.format('Productivity', self.mining_parameter['productivity_underground']))
+        lines.append(cols.format('Productivity', self.mining_parameter.productivity_underground))
         lines.append(cols.format('Job lost', self.coal_work_lost[1]))
         lines.append(cols.format('Job lost', display_as(self.coal_work_lost[1], "FTE")))
-        lines.append(cols.format('Wage', display_as(self.mining_parameter['wage'], "USD/hr")))
+        lines.append(cols.format('Wage', display_as(self.mining_parameter.wage, "USD/hr")))
         lines.append(cols.format('Wage lost', self.coal_wages_lost[1]))
         return '\n'.join(lines)

@@ -28,6 +28,7 @@ FarmerParameter = namedtuple("FarmerParameter", ['winder_rental_cost',
                                                  'fuel_use',
                                                  'time_horizon'])
 
+
 class Farmer(Investment, Emitter):
     """The farming segment of the system: farmers who produce and sell straw.
 

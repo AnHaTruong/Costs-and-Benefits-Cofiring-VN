@@ -7,12 +7,27 @@
 #
 """Represent the collective of transporters."""
 
+from collections import namedtuple
+
 import pandas as pd
 
 from model.utils import after_invest, display_as, USD, kUSD
 
 from model.emitter import Emitter, Activity
 from model.investment import Investment
+
+TransporterParameter = namedtuple("TransporterParameter",
+                                  ['barge_fuel_consumption',
+                                   'truck_loading_time',
+                                   'wage_bm_loading',
+                                   'truck_load',
+                                   'truck_velocity',
+                                   'fuel_cost_per_hour_driving',
+                                   'fuel_cost_per_hour_loading',
+                                   'rental_cost_per_hour',
+                                   'wage_bm_transport',
+                                   'emission_factor',
+                                   'time_horizon'])
 
 
 #pylint: disable=too-many-instance-attributes
@@ -34,29 +49,29 @@ class Transporter(Investment, Emitter):
 
     def __init__(self, supply_chain, transport_parameter):
 
-        Investment.__init__(self, "Transporter", transport_parameter['time_horizon'])
-
-        self.activity_level = after_invest(supply_chain.transport_tkm(),
-                                           transport_parameter['time_horizon'])
-        self.quantity = after_invest(supply_chain.quantity(), transport_parameter['time_horizon'])
-        self.collection_radius = supply_chain.collection_radius()
+        Investment.__init__(self, "Transporter", transport_parameter.time_horizon)
 
         self.parameter = transport_parameter
-        self.truck_load = self.parameter['truck_load']
+        self.activity_level = after_invest(supply_chain.transport_tkm(),
+                                           self.parameter.time_horizon)
+        self.quantity = after_invest(supply_chain.quantity(), self.parameter.time_horizon)
+        self.collection_radius = supply_chain.collection_radius()
+
+        self.truck_load = self.parameter.truck_load
         self.truck_trips = self.quantity / self.truck_load
 
         activity = Activity(
             name='Road transport',
             level=self.activity_level,
-            emission_factor=self.parameter['emission_factor']['road_transport'])
+            emission_factor=self.parameter.emission_factor['road_transport'])
         Emitter.__init__(self, activity)
 
     def loading_work(self):  # Unloading work is included in om_work
-        time = self.quantity * self.parameter['truck_loading_time']
+        time = self.quantity * self.parameter.truck_loading_time
         return display_as(time, 'hr')
 
     def driving_work(self):
-        time = self.activity_level / self.truck_load / self.parameter['truck_velocity']
+        time = self.activity_level / self.truck_load / self.parameter.truck_velocity
         return display_as(time, 'hr')
 
     def labor(self):
@@ -64,11 +79,11 @@ class Transporter(Investment, Emitter):
         return display_as(time, 'hr')
 
     def loading_wages(self):
-        amount = self.loading_work() * self.parameter['wage_bm_loading']
+        amount = self.loading_work() * self.parameter.wage_bm_loading
         return display_as(amount, 'kUSD')
 
     def driving_wages(self):
-        amount = self.driving_work() * self.parameter['wage_bm_transport']
+        amount = self.driving_work() * self.parameter.wage_bm_transport
         return display_as(amount, 'kUSD')
 
     def labor_cost(self):
@@ -76,12 +91,12 @@ class Transporter(Investment, Emitter):
         return display_as(amount, 'kUSD')
 
     def fuel_cost(self):
-        amount = (self.driving_work() * self.parameter['fuel_cost_per_hour_driving']
-                  + self.loading_work() * self.parameter['fuel_cost_per_hour_loading'])
+        amount = (self.driving_work() * self.parameter.fuel_cost_per_hour_driving
+                  + self.loading_work() * self.parameter.fuel_cost_per_hour_loading)
         return display_as(amount, 'kUSD')
 
     def rental_cost(self):
-        amount = self.labor() * self.parameter['rental_cost_per_hour']
+        amount = self.labor() * self.parameter.rental_cost_per_hour
         return display_as(amount, 'kUSD')
 
     def operating_expenses(self):
@@ -89,7 +104,7 @@ class Transporter(Investment, Emitter):
         return display_as(amount, 'kUSD')
 
     def max_trip_time(self):
-        time = self.collection_radius / self.parameter['truck_velocity']
+        time = self.collection_radius / self.parameter.truck_velocity
         return display_as(time, 'hr')
 
     def earning_before_tax_detail(self):
