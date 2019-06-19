@@ -21,6 +21,7 @@ import pandas as pd
 from model.utils import USD, VND, after_invest
 from model.system import System, Price
 from model.powerplant import Fuel, PlantParameter, CofiringParameter
+from model.farmer import FarmerParameter
 
 from natu.units import MJ, kg, t, d, hr, km, MW, ha, kW, y, kWh, MWh, g
 
@@ -118,14 +119,14 @@ emission_factor['straw'] = {
     'PM10': 9.1 * kg / t}                      # idem
 
 # hourly wage calculated from base salary defined in governmental regulations
-farm_parameter = {'winder_rental_cost': 40 * USD / ha,   # per period
-                  'winder_haul': 6.57 * t / d,
-                  'work_hour_day': 8 * hr / d,
-                  'wage_bm_collect': 1.11 * USD / hr,
-                  'fuel_cost_per_hour': 0.5 * USD / hr,
-                  'emission_factor': emission_factor,
-                  'fuel_use': 4.16 * kg / d,
-                  'time_horizon': 20}
+farm_parameter = FarmerParameter(winder_rental_cost=40 * USD / ha,   # per period
+                                 winder_haul=6.57 * t / d,
+                                 work_hour_day=8 * hr / d,
+                                 wage_bm_collect=1.11 * USD / hr,
+                                 fuel_cost_per_hour=0.5 * USD / hr,
+                                 emission_factor=emission_factor,
+                                 fuel_use=4.16 * kg / d,
+                                 time_horizon=20)
 
 transport_parameter = {'barge_fuel_consumption': 8 * g / t / km,  # Van Dingenen & 2016
                        'truck_loading_time': 2.7 / 60 * hr / t,  # Ovaskainen & Lundberg (2016)
