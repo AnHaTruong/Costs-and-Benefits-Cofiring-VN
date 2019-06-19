@@ -13,23 +13,17 @@ import matplotlib.pyplot as plt
 
 import numpy as np
 
-from model.utils import MUSD, USD, t
-from model.system import System, label
+from model.utils import MUSD, USD, t, display_as
 from manuscript1.parameters import discount_rate, tax_rate, depreciation_period, external_cost
-from manuscript1.parameters import plant_parameter_NB, cofire_NB, supply_chain_NB, price_NB
-from manuscript1.parameters import farm_parameter, transport_parameter, mining_parameter
+from manuscript1.parameters import NinhBinhSystem, price_NB
 
 
 def benefit_array(system):
     """Return the data to be plot."""
     job_benefit = system.wages_npv(discount_rate) / MUSD
-    plant_benefit = (system.cofiring_plant.net_present_value(discount_rate,
-                                                             tax_rate,
-                                                             depreciation_period)
-                     - system.plant.net_present_value(discount_rate,
-                                                      tax_rate,
-                                                      depreciation_period)
-                     ) / MUSD
+    plant_benefit = (
+        system.cofiring_plant.net_present_value(discount_rate, tax_rate, depreciation_period) -
+        system.plant.net_present_value(discount_rate, tax_rate, depreciation_period)) / MUSD
     transporter_benefit = system.transporter.net_present_value(discount_rate) / MUSD
     farmer_benefit = system.farmer.net_present_value(discount_rate) / MUSD
     health_benefit = system.health_npv(discount_rate, external_cost) / MUSD
@@ -38,29 +32,30 @@ def benefit_array(system):
                      job_benefit, climate_benefit, health_benefit])
 
 
-def case(price_fieldside, price_plantgate):
+def case(system, price_ref, price_fieldside, price_plantgate):
     """Return a system for a given pair of straw prices, along with a formatted legend."""
-    price = price_NB._replace(biomass_plantgate=price_plantgate,
-                              biomass_fieldside=price_fieldside)
-    system = System(plant_parameter_NB, cofire_NB, supply_chain_NB, price, farm_parameter,
-                    transport_parameter, mining_parameter)
-    return system, label(price)
+    price = price_ref._replace(biomass_plantgate=price_plantgate,
+                               biomass_fieldside=price_fieldside)
+    display_as(price.biomass_plantgate, 'USD/t')
+    display_as(price.biomass_fieldside, 'USD/t')
+    label = f'Straw {price.biomass_fieldside} field side, {price.biomass_plantgate} plant gate'
+    system.clear_market(price)
+    return benefit_array(system), label
 
 
-systemA, labelA = case(30 * USD / t, 37.26 * USD / t)
-systemB, labelB = case(10 * USD / t, 12 * USD / t)
-systemC, labelC = case(10 * USD / t, 36 * USD / t)
+dataA, labelA = case(NinhBinhSystem, price_NB, 30 * USD / t, 37.3 * USD / t)
+dataB, labelB = case(NinhBinhSystem, price_NB, 10 * USD / t, 12 * USD / t)
+dataC, labelC = case(NinhBinhSystem, price_NB, 10 * USD / t, 36 * USD / t)
+title = f'Cofiring 5% straw in {NinhBinhSystem.plant.name} power plant'
+NinhBinhSystem.clear_market(price_NB)   # Reset to default configuration for further uses
 
 index = np.arange(6)
 width = 0.3
 plt.figure(figsize=(10, 5))
-NB = plt.barh(index + 2 * width, benefit_array(systemA), width,
-              color='#ff4500', edgecolor='none', label=labelA)
-NB2 = plt.barh(index + width, benefit_array(systemB), width,
-               color='navy', edgecolor='none', label=labelB)
-NB3 = plt.barh(index, benefit_array(systemC), width,
-               color='green', edgecolor='none', label=labelC)
-plt.title('Cofiring 5% straw in Ninh Binh power plant')
+plt.barh(index + 2 * width, dataA, width, edgecolor='none', label=labelA, color='#ff4500')
+plt.barh(index + 1 * width, dataB, width, edgecolor='none', label=labelB, color='navy')
+plt.barh(index + 0 * width, dataC, width, edgecolor='none', label=labelC, color='green')
+plt.title(title)
 plt.xlabel('Cumulative benefit over 20 years (M$)')
 plt.yticks(index + 0.2, ('Trader profit',
                          'Plant profit',

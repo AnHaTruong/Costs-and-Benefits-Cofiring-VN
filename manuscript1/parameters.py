@@ -33,6 +33,7 @@ from manuscript1.parameters_supplychain import supply_chain_MD1, supply_chain_NB
 discount_rate = 0.087771
 depreciation_period = 10
 tax_rate = 0.25               # Corporate tax in Vietnam
+
 coal_import_price = 73 * USD / t
 
 external_cost_SKC = pd.Series({
@@ -78,7 +79,7 @@ straw = Fuel(
     transport_distance='Endogenous',
     transport_mean='Road transport')
 
-diesel_heat_value = 45.5 * MJ / kg   # ACEA
+_diesel_heat_value = 45.5 * MJ / kg   # ACEA
 
 emission_factor = dict()
 
@@ -95,10 +96,10 @@ emission_factor['4b_coal'] = {
     'PM10': 26.1 * kg / t}
 
 emission_factor['diesel'] = {
-    'CO2': 0.0705 * kg / MJ * diesel_heat_value,    # EPA AP-42, VolI, 3,3
-    'SO2': 0.0004 * kg / MJ * diesel_heat_value,    # EPA AP-42, VolI, 3,3
-    'NOx': 0.0018 * kg / MJ * diesel_heat_value,    # EPA AP-42, VolI, 3,3
-    'PM10': 0.00014 * kg / MJ * diesel_heat_value}  # EPA AP-42, VolI, 3,3
+    'CO2': 0.0705 * kg / MJ * _diesel_heat_value,    # EPA AP-42, VolI, 3,3
+    'SO2': 0.0004 * kg / MJ * _diesel_heat_value,    # EPA AP-42, VolI, 3,3
+    'NOx': 0.0018 * kg / MJ * _diesel_heat_value,    # EPA AP-42, VolI, 3,3
+    'PM10': 0.00014 * kg / MJ * _diesel_heat_value}  # EPA AP-42, VolI, 3,3
 
 emission_factor['Conveyor belt'] = {
     'CO2': 0 * kg / t / km,
@@ -123,6 +124,7 @@ emission_factor['straw'] = {
     'SO2': 0.18 * kg / t,                      # (Hoang & 2013)
     'NOx': 2.28 * kg / t,                      # idem
     'PM10': 9.1 * kg / t}                      # idem
+
 
 # hourly wage calculated from base salary defined in governmental regulations
 farm_parameter = FarmerParameter(
@@ -163,19 +165,13 @@ plant_parameter_MD1 = PlantParameter(
     coal=coal_6b,
     time_horizon=20)
 
-
-def boiler_efficiency_loss_quadratic(biomass_ratio_mass):
-    """Boiler efficiency loss due to cofiring according to Tillman (2000)."""
-    return 0.0044 * biomass_ratio_mass**2 + 0.0055 * biomass_ratio_mass
-
-
 cofire_MD1 = CofiringParameter(
     biomass_ratio_energy=after_invest(0.05, plant_parameter_MD1.time_horizon),
     capital_cost=50 * USD / kW / y,
     fix_om_cost=32.24 * USD / kW / y,
     variable_om_cost=0.006 * USD / kWh,
     biomass=straw,
-    boiler_efficiency_loss=boiler_efficiency_loss_quadratic,
+    boiler_efficiency_loss=lambda r: 0.0044 * r**2 + 0.0055 * r,  # Tillman (2000) r mass ratio
     OM_hour_MWh=0.12 * hr / MWh,  # working hour for OM per MWh
     wage_operation_maintenance=1.67 * USD / hr)
 
@@ -194,7 +190,6 @@ MongDuong1System = System(
     transport_parameter,
     mining_parameter)
 
-
 plant_parameter_NB = PlantParameter(
     name='Ninh Binh',
     capacity=100 * MW,
@@ -210,8 +205,8 @@ plant_parameter_NB = PlantParameter(
     coal=coal_4b,
     time_horizon=20)
 
-
-cofire_NB = cofire_MD1._replace(capital_cost=100 * USD / kW / y)
+cofire_NB = cofire_MD1._replace(
+    capital_cost=100 * USD / kW / y)
 
 price_NB = Price(
     biomass_plantgate=38.4483 * USD / t,

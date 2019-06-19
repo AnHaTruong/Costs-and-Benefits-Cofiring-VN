@@ -23,15 +23,6 @@ MiningParameter = namedtuple('MiningParameter',
                              'productivity_surface, productivity_underground, wage')
 
 
-def label(price):
-    """Return a string with the straw price at field side and plant gate."""
-    display_as(price.biomass_plantgate, 'USD/t')
-    display_as(price.biomass_fieldside, 'USD/t')
-    display_as(price.coal, 'USD/t')
-    return (f'Straw {price.biomass_fieldside} field side, ' +
-            f'{price.biomass_plantgate} plant gate')
-
-
 #We should pass the parameters as an object
 #pylint: disable=too-many-instance-attributes
 class System:
@@ -51,7 +42,6 @@ class System:
         self.farmer = Farmer(self.supply_chain, farm_parameter)
         self.transporter = Transporter(self.supply_chain, transport_parameter)
         self.mining_parameter = mining_parameter
-        self.price = None
         self.clear_market(price)
 
     def clear_market(self, price):
@@ -68,16 +58,14 @@ class System:
         self.cofiring_plant.coal_cost = self.cofiring_plant.coal_used * price.coal
 
         # Transaction  at the plant gate
-        self.biomass_value_plantgate = self.cofiring_plant.biomass_used * price.biomass_plantgate
-        display_as(self.biomass_value_plantgate, "kUSD")
-        self.cofiring_plant.biomass_cost = self.biomass_value_plantgate
-        self.transporter.revenue = self.biomass_value_plantgate
+        payment_plantgate = self.cofiring_plant.biomass_used * price.biomass_plantgate
+        display_as(payment_plantgate, "kUSD")
+        self.cofiring_plant.biomass_cost = self.transporter.revenue = payment_plantgate
 
         # Transaction  at the field side
-        self.biomass_value_fieldside = self.cofiring_plant.biomass_used * price.biomass_fieldside
-        display_as(self.biomass_value_fieldside, "kUSD")
-        self.farmer.revenue = self.biomass_value_fieldside
-        self.transporter.costs_of_goods_sold = self.biomass_value_fieldside
+        payment_fieldside = self.cofiring_plant.biomass_used * price.biomass_fieldside
+        display_as(payment_fieldside, "kUSD")
+        self.farmer.revenue = self.transporter.costs_of_goods_sold = payment_fieldside
 
     @property
     def transport_cost_per_t(self):

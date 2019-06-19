@@ -21,7 +21,8 @@ from manuscript1.parameters import (MongDuong1System, NinhBinhSystem,
 
 from model.tables import (emission_reductions, balance_jobs,
                           emission_reductions_by_activity, emission_reductions_benefits)
-from model.system import label
+from model.utils import display_as
+
 
 table_separator = '\n=================\n'
 
@@ -89,6 +90,16 @@ print(table2)
 
 #%%
 print(table_separator)
+
+
+def label(price):
+    """Return a string with the straw price at field side and plant gate."""
+    display_as(price.biomass_plantgate, 'USD/t')
+    display_as(price.biomass_fieldside, 'USD/t')
+    display_as(price.coal, 'USD/t')
+    return (f'Straw {price.biomass_fieldside} field side, ' +
+            f'{price.biomass_plantgate} plant gate')
+
 
 print('Table 3a: Supply chain earnings before taxes in the co-firing scenario.')
 print(label(NinhBinhSystem.price) + " in Ninh Binh")

@@ -57,8 +57,7 @@ class Transporter(Investment, Emitter):
         self.quantity = after_invest(supply_chain.quantity(), self.parameter.time_horizon)
         self.collection_radius = supply_chain.collection_radius()
 
-        self.truck_load = self.parameter.truck_load
-        self.truck_trips = self.quantity / self.truck_load
+        self.truck_trips = self.quantity / self.parameter.truck_load
 
         activity = Activity(
             name='Road transport',
@@ -71,7 +70,7 @@ class Transporter(Investment, Emitter):
         return display_as(time, 'hr')
 
     def driving_work(self):
-        time = self.activity_level / self.truck_load / self.parameter.truck_velocity
+        time = self.activity_level / self.parameter.truck_load / self.parameter.truck_velocity
         return display_as(time, 'hr')
 
     def labor(self):
