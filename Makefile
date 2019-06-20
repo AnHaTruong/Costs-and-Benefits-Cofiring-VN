@@ -8,7 +8,7 @@
 PYTHON = python3
 PYTEST = python3 -m pytest
 PYLINT = pylint3
-SOURCEDIRS = model manuscript1 lcoe
+SOURCEDIRS = model manuscript1 lcoe tests
 
 tables = tables_manuscript.txt feasibility.txt
 
@@ -41,15 +41,17 @@ classes.dot packages.dot:
 .PHONY:  archive test regtest-reset lint docstyle codestyle clean cleaner
 
 distName:=CofiringEconomics-$(shell date --iso-8601)
-dirs=$(distName) $(distName)/data $(distName)/data/VNM_adm_shp $(distName)/tables.tocompare
+dirs=$(distName) $(distName)/$(SOURCEDIRS) $(distName)/Data
 
 archive:
 	-@rm -rf $(distName) 2>/dev/null
-	mkdir $(dirs)
+	mkdir $(distName)
 	cp Makefile $(distName)
-	cp README $(distName)
-	cp *py */*.py $(distName)
-	cp -r _regtest_outputs $(distName)
+	cp pylintrc $(distName)
+	cp setup.cfg $(distName)
+	cp README.md $(distName)
+	cp pre-commit $(distName)
+	cp -r $(SOURCEDIRS) $(distName)
 	cp -r Data $(distName)
 	zip -r $(distName).zip $(distName)
 	rm -rf $(distName)
