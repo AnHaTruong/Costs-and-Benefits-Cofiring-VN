@@ -15,7 +15,7 @@ The model is written in  Python 3.
 It uses pandas, pytest, SALib and other python dependencies listed in the file `requirement.txt`.
 
 Installation should be   ***pip3 install -r requirements.txt***
-and then ***sudo apt install pylint, pycodestyle, pydocstyle***
+and then ***sudo apt install pylint3, pycodestyle, pydocstyle***
 
 Failing that, here are installation notes:
 + We don't test compatibility with Python 2.
