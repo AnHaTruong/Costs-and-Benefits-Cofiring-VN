@@ -59,7 +59,7 @@ external_cost = external_cost_SKC
 mining_parameter = MiningParameter(
     productivity_surface=8.04 * t / hr,  # www.eia.g
     productivity_underground=2.5 * t / hr,  # ww.eia.gov
-    wage=1.11 * USD / hr)   # Copied from farm work below, find source
+    wage=5.59 * USD / hr)   # Decision 1768/QD-TKV dated 28/9/2018
 
 coal_6b = Fuel(
     name="6b_coal",
@@ -131,7 +131,7 @@ farm_parameter = FarmerParameter(
     winder_rental_cost=40 * USD / ha,   # per period
     winder_haul=6.57 * t / d,
     work_hour_day=8 * hr / d,
-    wage_bm_collect=1.11 * USD / hr,
+    wage_bm_collect=3.7 * USD / hr,  # Tran Dang (2019)
     fuel_cost_per_hour=0.5 * USD / hr,
     emission_factor=emission_factor,
     fuel_use=4.16 * kg / d,
@@ -146,7 +146,7 @@ transport_parameter = TransporterParameter(
     fuel_cost_per_hour_driving=7.15 * USD / hr,
     fuel_cost_per_hour_loading=0 * USD / hr,
     rental_cost_per_hour=9.62 * USD / hr,
-    wage_bm_transport=1.11 * USD / hr,  # vantaiduongviet.com
+    wage_bm_transport=2.13 * USD / hr,  # http://vietnamsalary.careerbuilder.vn
     emission_factor=emission_factor,
     time_horizon=20)
 

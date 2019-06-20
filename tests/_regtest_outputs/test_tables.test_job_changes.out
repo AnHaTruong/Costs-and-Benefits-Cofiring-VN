@@ -1,11 +1,11 @@
 Benefit from job creation: Mong Duong 1
 
-Biomass collection              175.7 FTE       304.3 kUSD
-Biomass transportation           14.1 FTE        24.3 kUSD
+Biomass collection              175.7 FTE      1014.3 kUSD
+Biomass transportation           14.1 FTE        46.7 kUSD
 Biomass loading                   6.5 FTE        11.2 kUSD
 O&M                              21.8 FTE        56.9 kUSD
-Mining                          -34.8 FTE       -60.2 kUSD
-Total                           183.4 FTE       336.6 kUSD
+Mining                          -34.8 FTE      -303.0 kUSD
+Total                           183.4 FTE       826.1 kUSD
 
 Area collected                 7918.4 km2
 Collection radius                71.0 km
@@ -18,17 +18,17 @@ Coal saved                   135530.0 t
 Productivity                      2.5 t/hr
 Job lost                      54212.0 hr
 Job lost                         34.8 FTE
-Wage                              1.1 USD/hr
-Wage lost                        60.2 kUSD
+Wage                              5.6 USD/hr
+Wage lost                       303.0 kUSD
 
 Benefit from job creation: Ninh Binh
 
-Biomass collection               31.0 FTE        53.6 kUSD
-Biomass transportation            0.4 FTE         0.6 kUSD
+Biomass collection               31.0 FTE       178.7 kUSD
+Biomass transportation            0.4 FTE         1.2 kUSD
 Biomass loading                   1.1 FTE         2.0 kUSD
 O&M                               2.2 FTE         5.6 kUSD
-Mining                           -5.5 FTE        -9.6 kUSD
-Total                            29.1 FTE        52.3 kUSD
+Mining                           -5.5 FTE       -48.2 kUSD
+Total                            29.1 FTE       139.4 kUSD
 
 Area collected                  550.0 km2
 Collection radius                13.2 km
@@ -41,5 +41,5 @@ Coal saved                    21542.0 t
 Productivity                      2.5 t/hr
 Job lost                       8616.8 hr
 Job lost                          5.5 FTE
-Wage                              1.1 USD/hr
-Wage lost                         9.6 kUSD
+Wage                              5.6 USD/hr
+Wage lost                        48.2 kUSD
