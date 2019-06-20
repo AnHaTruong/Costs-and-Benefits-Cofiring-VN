@@ -97,8 +97,8 @@ def label(price):
     display_as(price.biomass_plantgate, 'USD/t')
     display_as(price.biomass_fieldside, 'USD/t')
     display_as(price.coal, 'USD/t')
-    return (f'Straw {price.biomass_fieldside} field side, ' +
-            f'{price.biomass_plantgate} plant gate')
+    return ('Straw ' + str(price.biomass_fieldside) + ' field side, ' +
+            str(price.biomass_plantgate) + ' plant gate')
 
 
 print('Table 3a: Supply chain earnings before taxes in the co-firing scenario.')

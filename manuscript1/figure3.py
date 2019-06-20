@@ -32,22 +32,24 @@ def benefit_array(system):
                      job_benefit, climate_benefit, health_benefit])
 
 
-def case(system, price_ref, price_fieldside, price_plantgate):
+def case(system, price_ref, p_fieldside, p_plantgate):
     """Return a system for a given pair of straw prices, along with a formatted legend."""
-    price = price_ref._replace(biomass_plantgate=price_plantgate,
-                               biomass_fieldside=price_fieldside)
+    price = price_ref._replace(biomass_plantgate=p_plantgate,
+                               biomass_fieldside=p_fieldside)
     display_as(price.biomass_plantgate, 'USD/t')
     display_as(price.biomass_fieldside, 'USD/t')
-    label = f'Straw {price.biomass_fieldside} field side, {price.biomass_plantgate} plant gate'
+    label = ('Straw ' + str(price.biomass_fieldside) + ' field side, ' +
+             str(price.biomass_plantgate) + ' plant gate')
     system.clear_market(price)
-    return benefit_array(system), label
+    data = benefit_array(system)
+    system.clear_market(price_ref)
+    return data, label
 
 
 dataA, labelA = case(NinhBinhSystem, price_NB, 30 * USD / t, 37.3 * USD / t)
 dataB, labelB = case(NinhBinhSystem, price_NB, 10 * USD / t, 12 * USD / t)
 dataC, labelC = case(NinhBinhSystem, price_NB, 10 * USD / t, 36 * USD / t)
-title = f'Cofiring 5% straw in {NinhBinhSystem.plant.name} power plant'
-NinhBinhSystem.clear_market(price_NB)   # Reset to default configuration for further uses
+title = 'Cofiring 5% straw in ' + str(NinhBinhSystem.plant.name) + ' power plant'
 
 index = np.arange(6)
 width = 0.3
