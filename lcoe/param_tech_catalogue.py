@@ -60,17 +60,18 @@ full_load_hour = {'coal subcritical': 6000 * hr,
 Fuel = namedtuple('Fuel', 'name, heat_value')
 coal_6b = Fuel(name="6b_coal",
                heat_value=19.43468 * MJ / kg)  # numerical value also used in emission_factor
-coal_upper = Fuel(name="coal_upper",
-                  heat_value=19.43468 * MJ / kg)
-coal_lower = Fuel(name="coal_lower",
-                  heat_value=19.43468 * MJ / kg)
+coal_upper = Fuel(name="coal_upper", heat_value=19.43468 * MJ / kg)
+coal_lower = Fuel(name="coal_lower", heat_value=19.43468 * MJ / kg)
+coal_IEA = Fuel(name='coal_IEA', heat_value=19.43468 * MJ / kg)
+coal_IEA_upper = Fuel(name='coal_IEA_upper', heat_value=19.43468 * MJ / kg)
+coal_IEA_lower = Fuel(name='coal_IEA_lower', heat_value=19.43468 * MJ / kg)
 
-natural_gas = Fuel(name='natural_gas',
-                   heat_value=47.1 * MJ / kg)  # www.engineeringtoolbox.com
-gas_upper = Fuel(name='gas_upper',
-                 heat_value=47.1 * MJ / kg)
-gas_lower = Fuel(name='gas_lower',
-                 heat_value=47.1 * MJ / kg)
+natural_gas = Fuel(name='natural_gas', heat_value=47.1 * MJ / kg)  # www.engineeringtoolbox.com
+gas_upper = Fuel(name='gas_upper', heat_value=47.1 * MJ / kg)
+gas_lower = Fuel(name='gas_lower', heat_value=47.1 * MJ / kg)
+gas_IEA = Fuel(name='gas_IEA', heat_value=47.1 * MJ / kg)
+gas_IEA_upper = Fuel(name='gas_IEA_upper', heat_value=47.1 * MJ / kg)
+gas_IEA_lower = Fuel(name='gas_IEA_lower', heat_value=47.1 * MJ / kg)
 
 
 # %%
@@ -91,7 +92,9 @@ fuel_price_data = pd.read_csv("Data/Fuel prices_LCOE.csv",
 #                                names=['Year', 'Avg_coal', 'Avg_gas'])
 # %%
 
+coal_price_IEA = 55.71 * USD / t  # historical coal price (IEA) 20 year average
 coal_price_2std = 18.16 * USD / t  # 2 standard deviation of historical coal price (IEA)
+gas_price_IEA = natural_gas.heat_value * 4.08 * USD / GJ  # historical gas price (IEA) 20y average
 gas_price_2std = natural_gas.heat_value * 2.69 * USD / GJ  # 2std of historical gas price (IEA)
 
 fuel_price = dict()
@@ -111,21 +114,29 @@ fuel_price['6b_coal'] = {'2020': (np.array(fuel_price_data.loc['2020':'2050', 'A
                          'Upper50': (coal_6b.heat_value *
                                      float(fuel_price_data['Avg_coal'][2050]) * USD / GJ)}
 
-fuel_price['coal_upper'] = {'2020': fuel_price['6b_coal']['2020'] + coal_price_2std,
-                            'Lower20': fuel_price['6b_coal']['2020'] + coal_price_2std,
-                            'Upper20': fuel_price['6b_coal']['2020'] + coal_price_2std,
-                            '2030': fuel_price['6b_coal']['2030'] + coal_price_2std,
-                            '2050': fuel_price['6b_coal']['2050'] + coal_price_2std,
-                            'Lower50': fuel_price['6b_coal']['2050'] + coal_price_2std,
-                            'Upper50': fuel_price['6b_coal']['2050'] + coal_price_2std}
+fuel_price['coal_upper'] = {}
+for key in fuel_price['6b_coal']:
+    fuel_price['coal_upper'][key] = fuel_price['6b_coal'][key] + coal_price_2std
 
-fuel_price['coal_lower'] = {'2020': fuel_price['6b_coal']['2020'] - coal_price_2std,
-                            'Lower20': fuel_price['6b_coal']['2020'] - coal_price_2std,
-                            'Upper20': fuel_price['6b_coal']['2020'] - coal_price_2std,
-                            '2030': fuel_price['6b_coal']['2030'] - coal_price_2std,
-                            '2050': fuel_price['6b_coal']['2050'] - coal_price_2std,
-                            'Lower50': fuel_price['6b_coal']['2050'] - coal_price_2std,
-                            'Upper50': fuel_price['6b_coal']['2050'] - coal_price_2std}
+fuel_price['coal_lower'] = {}
+for key in fuel_price['6b_coal']:
+    fuel_price['coal_lower'][key] = fuel_price['6b_coal'][key] - coal_price_2std
+
+fuel_price['coal_IEA'] = {'2020': coal_price_IEA,  # IEA historical data, 20y average
+                          'Lower20': coal_price_IEA,
+                          'Upper20': coal_price_IEA,
+                          '2030': coal_price_IEA,
+                          '2050': coal_price_IEA,
+                          'Lower50': coal_price_IEA,
+                          'Upper50': coal_price_IEA}
+
+fuel_price['coal_IEA_upper'] = {}
+for key in fuel_price['coal_IEA']:
+    fuel_price['coal_IEA_upper'][key] = fuel_price['coal_IEA'][key] + coal_price_2std
+
+fuel_price['coal_IEA_lower'] = {}
+for key in fuel_price['coal_IEA']:
+    fuel_price['coal_IEA_lower'][key] = fuel_price['coal_IEA'][key] - coal_price_2std
 
 fuel_price['natural_gas'] = {'2020': (np.array(fuel_price_data.loc['2020':'2050', 'Avg_gas'] *
                                       natural_gas.heat_value * USD / GJ)),
@@ -142,21 +153,28 @@ fuel_price['natural_gas'] = {'2020': (np.array(fuel_price_data.loc['2020':'2050'
                              'Upper50': (natural_gas.heat_value *
                                          float(fuel_price_data['Avg_gas'][2050]) * USD / GJ)}
 
-fuel_price['gas_upper'] = {'2020': fuel_price['natural_gas']['2020'] + gas_price_2std,
-                           'Lower20': fuel_price['natural_gas']['2020'] + gas_price_2std,
-                           'Upper20': fuel_price['natural_gas']['2020'] + gas_price_2std,
-                           '2030': fuel_price['natural_gas']['2030'] + gas_price_2std,
-                           '2050': fuel_price['natural_gas']['2050'] + gas_price_2std,
-                           'Lower50': fuel_price['natural_gas']['2050'] + gas_price_2std,
-                           'Upper50': fuel_price['natural_gas']['2050'] + gas_price_2std}
+fuel_price['gas_upper'] = {}
+for key in fuel_price['natural_gas']:
+    fuel_price['gas_upper'][key] = fuel_price['natural_gas'][key] + gas_price_2std
 
-fuel_price['gas_lower'] = {'2020': fuel_price['natural_gas']['2020'] - gas_price_2std,
-                           'Lower20': fuel_price['natural_gas']['2020'] - gas_price_2std,
-                           'Upper20': fuel_price['natural_gas']['2020'] - gas_price_2std,
-                           '2030': fuel_price['natural_gas']['2030'] - gas_price_2std,
-                           '2050': fuel_price['natural_gas']['2050'] - gas_price_2std,
-                           'Lower50': fuel_price['natural_gas']['2050'] - gas_price_2std,
-                           'Upper50': fuel_price['natural_gas']['2050'] - gas_price_2std}
+fuel_price['gas_lower'] = {}
+for key in fuel_price['natural_gas']:
+    fuel_price['gas_lower'][key] = fuel_price['natural_gas'][key] - gas_price_2std
+
+fuel_price['gas_IEA'] = {'2020': gas_price_IEA,
+                         'Lower20': gas_price_IEA,
+                         'Upper20': gas_price_IEA,
+                         '2030': gas_price_IEA,
+                         '2050': gas_price_IEA,
+                         'Lower50': gas_price_IEA,
+                         'Upper50': gas_price_IEA}
+fuel_price['gas_IEA_upper'] = {}
+for key in fuel_price['gas_IEA']:
+    fuel_price['gas_IEA_upper'][key] = fuel_price['gas_IEA'][key] + gas_price_2std
+
+fuel_price['gas_IEA_lower'] = {}
+for key in fuel_price['gas_IEA']:
+    fuel_price['gas_IEA_lower'][key] = fuel_price['gas_IEA'][key] - gas_price_2std
 
 emission_factor['natural_gas'] = {
     'CO2': 0.0561 * kg / MJ * natural_gas.heat_value,  # IPCC 2006
@@ -166,8 +184,14 @@ emission_factor['natural_gas'] = {
 
 emission_factor['coal_upper'] = emission_factor['6b_coal']
 emission_factor['coal_lower'] = emission_factor['6b_coal']
+emission_factor['coal_IEA'] = emission_factor['6b_coal']
+emission_factor['coal_IEA_upper'] = emission_factor['6b_coal']
+emission_factor['coal_IEA_lower'] = emission_factor['6b_coal']
 emission_factor['gas_upper'] = emission_factor['natural_gas']
 emission_factor['gas_lower'] = emission_factor['natural_gas']
+emission_factor['gas_IEA'] = emission_factor['natural_gas']
+emission_factor['gas_IEA_upper'] = emission_factor['natural_gas']
+emission_factor['gas_IEA_lower'] = emission_factor['natural_gas']
 emission_factor['RE'] = {
     'CO2': 0 * kg / t,
     'SO2': 0 * kg / t,
@@ -210,8 +234,8 @@ def create_plant(name, tech_data, fuel, year):
     return plant
 
 
-coal_list = [coal_6b, coal_upper, coal_lower]
-gas_list = [natural_gas, gas_upper, gas_lower]
+coal_list = [coal_6b, coal_upper, coal_lower, coal_IEA, coal_IEA_upper, coal_IEA_lower]
+gas_list = [natural_gas, gas_upper, gas_lower, gas_IEA, gas_IEA_upper, gas_IEA_lower]
 
 
 def create_plant_dict(tech_name, tech_data, fuel_list):

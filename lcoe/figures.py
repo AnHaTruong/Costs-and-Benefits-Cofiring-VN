@@ -99,8 +99,12 @@ index1 = [ind, ind1, ind2, ind3]
 index2 = [inda, inda + 0.5, inda + 1, inda + 1.5]
 xlabel = ['Coal', 'Coal', 'Coal',
           'Gas', 'Gas', 'Gas',
-          'Solar PV', 'Solar PV', 'Solar PV',
-          'Wind onshore', 'Wind onshore', 'Wind onshore']
+          'Solar', 'Solar', 'Solar',
+          'Wind', 'Wind', 'Wind']
+xlabel2 = ['Coal 2020', 'Coal 2030', 'Coal 2050',
+           'Gas 2020', 'Gas 2030', 'Gas 2050',
+           'Solar 2020', 'Solar 2030', 'Solar 2050',
+           'Wind 2020', 'Wind 2030', 'Wind 2050']
 
 
 def plot_lcoe(x, plant, color):
@@ -151,12 +155,13 @@ def plot_lcoe_figure(index, ff_scenarios, re_scenarios, color, text):
 
 plot_lcoe_figure(index1, ['2020', '2030', '2050'], ['2020', '2030', '2050'], color1,
                  ['2020', '2030', '2050'])
-plt.title('LCOE comparion among generation technologies')
+plt.title('Cost of electricity comparison among generation technologies')
 plt.savefig('LCOE1.png')
 plt.clf()
 
 plot_lcoe_figure(index2, ['2020', '2030', '2050'], ['2020', '2030', '2050'], color2,
                  [' ', ' ', ' '])
+plt.xticks(np.concatenate(index2), (xlabel2), rotation=45)
 plt.title('Recreation of EOR19 LCOE graph')
 plt.savefig('LCOE1a.png')
 plt.clf()
@@ -171,4 +176,13 @@ plot_lcoe_figure(index1, ['2050', 'Lower50', 'Upper50'], ['2020', 'Upper50', 'Lo
                  ['Base', 'maxFF, minRE', 'minFF, maxRE'])
 plt.title('LCOE comparison in 2050 with worst case and best case scenarios for RE')
 plt.savefig('LCOE3.png')
+plt.clf()
+
+lcoe_coal_SC = create_LCOE_df(Coal_Supercritical, 'coal_IEA',
+                              'coal_IEA_upper', 'coal_IEA_lower')
+lcoe_CCGT = create_LCOE_df(CCGT, 'gas_IEA', 'gas_IEA_upper', 'gas_IEA_lower')
+plot_lcoe_figure(index1, ['2020', '2030', '2050'], ['2020', '2030', '2050'], color1,
+                 ['2020', '2030', '2050'])
+plt.title('Cost of electricty comparison among generation technologies - IEA fuel cost')
+plt.savefig('LCOE4.png')
 plt.clf()
