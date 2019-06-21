@@ -17,9 +17,9 @@ import matplotlib.patches as mpatches
 from model.utils import USD
 from natu.units import MWh
 from natu.numpy import npv
-from lcoe.param_tech_catalogue import discount_rate, tax_rate, Coal_Supercritical
-from lcoe.param_tech_catalogue import CCGT, Solar_PV, Wind_Onshore, Wind_Offshore
-from manuscript1.parameters import depreciation_period
+from lcoe.param_tech_catalogue import (discount_rate, tax_rate, depreciation_period,
+                                       Coal_Supercritical, CCGT,
+                                       Solar_PV, Wind_Onshore, Wind_Offshore)
 
 # %% Creat a graph
 unit = USD / MWh
@@ -145,7 +145,7 @@ def plot_lcoe_figure(index, ff_scenarios, re_scenarios, color, text):
     legend_capital = mpatches.Patch(color=color[0], label='Capital cost')
     legend_OM = mpatches.Patch(color=color[1], label='O&M cost')
     legend_fuel = mpatches.Patch(color=color[2], label='Fuel cost')
-    plt.legend(loc='center right', handles=[legend_capital, legend_OM, legend_fuel],
+    plt.legend(loc='upper left', handles=[legend_capital, legend_OM, legend_fuel],
                prop={'size': 9})
     plt.text(0.3, 130, text[0])
     plt.text(1.2, 130, text[1])
@@ -155,27 +155,27 @@ def plot_lcoe_figure(index, ff_scenarios, re_scenarios, color, text):
 
 plot_lcoe_figure(index1, ['2020', '2030', '2050'], ['2020', '2030', '2050'], color1,
                  ['2020', '2030', '2050'])
-plt.title('Cost of electricity comparison among generation technologies')
-plt.savefig('LCOE1.png')
+plt.title('Cost of electricity from different technologies (VN technology catalogue 2019)')
+plt.savefig('LCOE-4tech-3years-catalogue.png')
 plt.clf()
 
 plot_lcoe_figure(index2, ['2020', '2030', '2050'], ['2020', '2030', '2050'], color2,
                  [' ', ' ', ' '])
 plt.xticks(np.concatenate(index2), (xlabel2), rotation=45)
-plt.title('Recreation of EOR19 LCOE graph')
-plt.savefig('LCOE1a.png')
+plt.title('Validation: compare to the VN Energy Outlook 2019 LCOE graph')
+plt.savefig('LCOE-asDEA2019.png')
 plt.clf()
 
 plot_lcoe_figure(index1, ['2020', 'Lower20', 'Upper20'], ['2020', 'Upper20', 'Lower20'], color1,
                  ['Base', 'maxFF, minRE', 'minFF, maxRE'])
-plt.title('LCOE comparison in 2020 with worst case and best case scenarios for RE')
-plt.savefig('LCOE2.png')
+plt.title('Uncertainty analysis of LCOE in 2020 (Technology catalogue extreme values)')
+plt.savefig('LCOE-4tech-2020-catalogueextremes.png')
 plt.clf()
 
 plot_lcoe_figure(index1, ['2050', 'Lower50', 'Upper50'], ['2020', 'Upper50', 'Lower50'], color1,
                  ['Base', 'maxFF, minRE', 'minFF, maxRE'])
-plt.title('LCOE comparison in 2050 with worst case and best case scenarios for RE')
-plt.savefig('LCOE3.png')
+plt.title('Uncertainty analysis of LCOE in 2050 (Technology catalogue extreme values)')
+plt.savefig('LCOE-4tech-2050-catalogueextremes.png')
 plt.clf()
 
 lcoe_coal_SC = create_LCOE_df(Coal_Supercritical, 'coal_IEA',
@@ -183,6 +183,6 @@ lcoe_coal_SC = create_LCOE_df(Coal_Supercritical, 'coal_IEA',
 lcoe_CCGT = create_LCOE_df(CCGT, 'gas_IEA', 'gas_IEA_upper', 'gas_IEA_lower')
 plot_lcoe_figure(index1, ['2020', '2030', '2050'], ['2020', '2030', '2050'], color1,
                  ['2020', '2030', '2050'])
-plt.title('Cost of electricty comparison among generation technologies - IEA fuel cost')
-plt.savefig('LCOE4.png')
+plt.title('Cost of electricity from different technologies (IEA fuel costs)')
+plt.savefig('LCOE-4tech-3years-IEAfuelcosts.png')
 plt.clf()

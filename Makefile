@@ -12,9 +12,12 @@ SOURCEDIRS = model manuscript1 lcoe tests
 
 tables = tables_manuscript.txt feasibility.txt
 
-figures = figure2.png figure3.png LCOE1.png LCOE1a.png LCOE2.png LCOE3.png
+figures-lcoe =  LCOE-4tech-3years-catalogue.png LCOE-4tech-3years-IEAfuelcosts.png\
+                LCOE-4tech-2020-catalogueextremes.png LCOE-4tech-2050-catalogueextremes.png\
+                LCOE-asDEA2019.png
+figures-manuscript1 = figure2.png figure3.png
 
-all: $(tables) $(figures)
+all: $(tables) $(figures-lcoe) $(figures-manuscript1)
  
 feasibility.txt: manuscript1/feasibility.py manuscript1/parameters.py
 	$(PYTHON) -m manuscript1.feasibility > $@
@@ -25,7 +28,7 @@ figure2.png: manuscript1/figure2.py manuscript1/parameters.py
 figure3.png: manuscript1/figure3.py manuscript1/parameters.py
 	$(PYTHON) -m manuscript1.figure3 > $@
 
-LCOE1.png LCOE1a.png LCOE2.png LCOE3.png: lcoe/figures.py
+$(figures-lcoe): lcoe/figures.py
 	$(PYTHON) -m lcoe.figures
 
 tables_manuscript.txt: manuscript1/tables_manuscript.py manuscript1/parameters.py
@@ -84,7 +87,7 @@ codestyle:
 
 clean:
 	rm -f $(tables)
-	rm -f $(figures)
+	rm -f $(figures-lcoe) $(figures-manuscript1)
 
 cleaner: clean .git/hooks/pre-commit
 	find . -type f -name '*.pyc' -delete

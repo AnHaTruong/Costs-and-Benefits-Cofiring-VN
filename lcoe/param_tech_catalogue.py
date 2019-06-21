@@ -14,12 +14,14 @@ import pandas as pd
 import numpy as np
 # pylint: disable=wrong-import-order
 from model.utils import USD, after_invest
-from model.powerplant import PowerPlant
+from model.powerplant import PowerPlant, PlantParameter
 from natu.units import MJ, kg, hr, MW, y, MUSD, MWh, GJ, t, kWh
-from manuscript1.parameters import emission_factor, PlantParameter
+from manuscript1.parameters import emission_factor
+
 discount_rate = 0.1
 electricity_price = 0.08 * USD / kWh
 tax_rate = 0.0
+depreciation_period = 10
 
 # %% Read data and input parameters
 
@@ -76,20 +78,11 @@ gas_IEA_lower = Fuel(name='gas_IEA_lower', heat_value=47.1 * MJ / kg)
 
 # %%
 
-fuel_price_data = pd.read_csv("Data/Fuel prices_LCOE.csv",
-                              sep="\t", decimal=",",
-                              header=0,
-                              usecols=[0, 10, 11],
-                              index_col=0,
-                              names=['Year', 'Avg_coal', 'Avg_gas'])
+fuel_price_data = pd.read_excel("Data/Fuel prices_LCOE.xlsx",
+                                sheet_name='FuelPrices',
+                                header=0, usecols='A, K, L', index_col=0,
+                                names=['Year', 'Avg_coal', 'Avg_gas'])
 
-
-# %%
-#
-#fuel_price_data = pd.read_excel("Data/Fuel prices_LCOE.xlsx",
-#                                sheet_name='FuelPrices',
-#                                header=0, usecols='A, K, L', index_col=0,
-#                                names=['Year', 'Avg_coal', 'Avg_gas'])
 # %%
 
 coal_price_IEA = 55.71 * USD / t  # historical coal price (IEA) 20 year average
@@ -197,6 +190,7 @@ emission_factor['RE'] = {
     'SO2': 0 * kg / t,
     'NOx': 0 * kg / t,
     'PM10': 0 * kg / t}
+
 # %% Instantiate plants
 
 
