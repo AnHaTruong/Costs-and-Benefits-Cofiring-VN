@@ -73,11 +73,9 @@ class SupplyChain:
     def __init__(self,
                  zones,
                  straw_production,
-                 straw_burn_rate,
                  average_straw_yield):
         self.zones = zones
         self.straw_production = straw_production
-        self.straw_burn_rate = straw_burn_rate
         self.average_straw_yield = average_straw_yield
 
     def fit(self, target_quantity):
@@ -90,7 +88,6 @@ class SupplyChain:
         i = 0
         collected = SupplyChain([copy(self.zones[0])],
                                 straw_production=self.straw_production,
-                                straw_burn_rate=self.straw_burn_rate,
                                 average_straw_yield=self.average_straw_yield)
         while collected.quantity_sold() < target_quantity:
             i += 1
@@ -118,6 +115,12 @@ class SupplyChain:
             surface += zone.area()
         return display_as(surface, 'km2')
 
+    def quantity(self):
+        mass = 0 * t
+        for zone in self.zones:
+            mass += zone.quantity()
+        return display_as(mass, 't')
+
     def quantity_sold(self):
         mass = 0 * t
         for zone in self.zones:
@@ -132,8 +135,3 @@ class SupplyChain:
 
     def collection_radius(self):
         return self.zones[-1].shape.max_radius()
-
-    def burnable(self):
-        mass = self.straw_production * self.straw_burn_rate
-#       mass = self.quantity() * self.straw_burn_rate
-        return display_as(mass, 't')

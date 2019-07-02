@@ -133,6 +133,7 @@ farm_parameter = FarmerParameter(
     work_hour_day=8 * hr / d,
     wage_bm_collect=3.7 * USD / hr,  # Tran Dang (2019)
     fuel_cost_per_hour=0.5 * USD / hr,
+    straw_burn_rate=0.9,
     emission_factor=emission_factor,
     fuel_use=4.16 * kg / d,
     time_horizon=20)

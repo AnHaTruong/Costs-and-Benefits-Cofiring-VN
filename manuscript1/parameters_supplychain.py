@@ -46,7 +46,6 @@ supply_zone_NB = SupplyZone(
 supply_chain_NB = SupplyChain(
     zones=[supply_zone_NB],
     straw_production=df.loc['Ninh Binh', 'straw production'],
-    straw_burn_rate=0.9,
     average_straw_yield=df.loc['Ninh Binh', 'straw yield'])
 
 
@@ -92,5 +91,4 @@ straw_yield_MD = fsum(
 supply_chain_MD1 = SupplyChain(
     zones=[supply_zone_1_MD, supply_zone_2_MD],
     straw_production=straw_production_MD,
-    straw_burn_rate=0.9,
     average_straw_yield=straw_yield_MD)

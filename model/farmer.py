@@ -24,6 +24,7 @@ FarmerParameter = namedtuple("FarmerParameter", ['winder_rental_cost',
                                                  'work_hour_day',
                                                  'wage_bm_collect',
                                                  'fuel_cost_per_hour',
+                                                 'straw_burn_rate',
                                                  'emission_factor',
                                                  'fuel_use',
                                                  'time_horizon'])
@@ -45,7 +46,9 @@ class Farmer(Investment, Emitter):
 
         field_burning_before = Activity(
             name='Straw',
-            level=np.ones(self.parameter.time_horizon + 1) * supply_chain.burnable(),
+            level=(np.ones(self.parameter.time_horizon + 1) *
+                   # To be replaced by quantity()
+                   supply_chain.straw_production * farmer_parameter.straw_burn_rate),
             emission_factor=self.parameter.emission_factor['straw'])
 
         self.emissions_exante = Emitter(field_burning_before).emissions(total=False)
