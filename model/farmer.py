@@ -38,8 +38,9 @@ class Farmer(Investment, Emitter):
 
     def __init__(self, supply_chain, farmer_parameter):
         self.parameter = farmer_parameter
-        self.quantity = after_invest(supply_chain.quantity(), self.parameter.time_horizon)
-        self.farm_area = after_invest(supply_chain.quantity() / supply_chain.average_straw_yield,
+        self.quantity = after_invest(supply_chain.quantity_sold(), self.parameter.time_horizon)
+        self.farm_area = after_invest(supply_chain.quantity_sold() /
+                                      supply_chain.average_straw_yield,
                                       self.parameter.time_horizon)
 
         field_burning_before = Activity(

@@ -12,13 +12,15 @@ quantity = 225127 t
 Collection_radius = 71.0001 km
 Supply zone
  Shape: Semiannulus. Half of the Annulus with inner radius 0 km, outer radius 50 km, area 3926.99 km2
- Straw density: 5.45569 t/km2
+ Straw density produced: 13.8119 t/km2
+ Straw density sold: 5.45569 t/km2
  quantity = 21424.4 t
  Tortuosity: 1.5
  Activity to transport all = 1.07122e+06 km*t
 Supply zone
  Shape: Semiannulus. Half of the Annulus with inner radius 50 km, outer radius 71.0001 km, area 3991.41 km(2)
- Straw density: 51.0352 t/km2
+ Straw density produced: 129.203 t/km2
+ Straw density sold: 51.0352 t/km2
  quantity = 203702 t
  Tortuosity: 1.5
  Activity to transport all = 1.86716e+07 km*t
@@ -28,7 +30,8 @@ quantity = 39673.4 t
 Collection_radius = 13.2317 km
 Supply zone
  Shape: Disk with radius 13.2317 km, area 550.02 km2
- Straw density: 72.1308 t/km2
+ Straw density produced: 182.61 t/km2
+ Straw density sold: 72.1308 t/km2
  quantity = 39673.4 t
  Tortuosity: 1.5
  Activity to transport all = 524945 km*t
