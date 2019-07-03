@@ -40,9 +40,7 @@ supply_zone_NB = SupplyZone(
 
 supply_chain_NB = SupplyChain(
     zones=[supply_zone_NB],
-    straw_production=df.loc['Ninh Binh', 'rice production (ton)'] * _residue_to_product_ratio * t,
-    average_straw_yield=(df.loc['Ninh Binh', 'Rice yield (ton/ha)'] * t / ha *
-                         _residue_to_product_ratio))
+    straw_production=df.loc['Ninh Binh', 'rice production (ton)'] * _residue_to_product_ratio * t)
 
 
 #%%
@@ -91,17 +89,6 @@ straw_production_MD = fsum([
     df.loc[province, 'rice production (ton)'] * _residue_to_product_ratio * t
     for province in all_provinces])
 
-area_all_MD = fsum([
-    df.loc[province, 'Total area (ha)']
-    for province in all_provinces])
-
-straw_yield_MD = fsum([
-    df.loc[province, 'Rice yield (ton/ha)'] * _residue_to_product_ratio * t / ha *
-    df.loc[province, 'Total area (ha)']
-    for province in all_provinces]) / area_all_MD
-
-
 supply_chain_MD1 = SupplyChain(
     zones=[supply_zone_1_MD, supply_zone_2_MD],
-    straw_production=straw_production_MD,
-    average_straw_yield=straw_yield_MD)
+    straw_production=straw_production_MD)

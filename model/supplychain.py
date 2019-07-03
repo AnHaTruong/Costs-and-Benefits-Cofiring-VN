@@ -9,7 +9,7 @@
 
 from copy import copy
 
-# pylint: disable=wrong-import-order,too-many-arguments,too-many-instance-attributes
+# pylint: disable=wrong-import-order,too-many-arguments
 from model.utils import isclose, display_as
 from natu.units import t, km, ha
 
@@ -19,7 +19,7 @@ class SupplyZone:
 
     Assume that fields are small and everywhere so it has uniform repartition.
     One crop per year is subject to straw collection for sale.
-    Only a fraction of the fields are collected and sold, also uniform
+    The fraction of the fields that are collected and sold is also uniform.
     """
 
     def __init__(self,
@@ -93,11 +93,9 @@ class SupplyChain:
 
     def __init__(self,
                  zones,
-                 straw_production,
-                 average_straw_yield):
+                 straw_production):
         self.zones = zones
         self.straw_production = straw_production
-        self.average_straw_yield = average_straw_yield
 
     def fit(self, target_quantity):
         """Return a copy of the supply chain adjusted to sell exactly  target_quantity.
@@ -108,8 +106,7 @@ class SupplyChain:
 
         i = 0
         collected = SupplyChain([copy(self.zones[0])],
-                                straw_production=self.straw_production,
-                                average_straw_yield=self.average_straw_yield)
+                                straw_production=self.straw_production)
         while collected.straw_sold() < target_quantity:
             i += 1
             collected.zones.append(copy(self.zones[i]))

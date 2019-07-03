@@ -41,15 +41,7 @@ class Farmer(Investment, Emitter):
         self.parameter = farmer_parameter
         self.quantity = after_invest(supply_chain.straw_sold(), self.parameter.time_horizon)
 
-        print("Supply chain area: ", supply_chain.area())
-        print("Supply chain ricegrowing area: ", supply_chain.ricegrowing_area())
-        print("Supply chain collected area: ", supply_chain.collected_area())
-
-        fa = supply_chain.straw_sold() / supply_chain.average_straw_yield
-        display_as(fa, "km*km")
-        print("Winder use area: ", fa)
-        self.winder_use_area = after_invest(
-            supply_chain.straw_sold() / supply_chain.average_straw_yield,
+        self.winder_use_area = after_invest(supply_chain.collected_area(),
             self.parameter.time_horizon)
 
         # Does not work with MD1 because the vector collapse to scalar.
