@@ -9,7 +9,7 @@
 
 from copy import copy
 
-# pylint: disable=wrong-import-order
+# pylint: disable=wrong-import-order,too-many-arguments
 from model.utils import isclose, display_as
 from natu.units import t, km, ha
 
@@ -22,11 +22,13 @@ class SupplyZone:
 
     def __init__(self,
                  shape,
-                 straw_density,
+                 rice_density,
+                 residue_to_product_ratio,
                  tortuosity_factor,
                  sold_fraction):
         self.shape = shape
-        self.straw_density = display_as(straw_density, 't/km2')
+        self.straw_density = rice_density * residue_to_product_ratio
+        self.straw_density = display_as(self.straw_density, 't/km2')
         self.tortuosity_factor = tortuosity_factor
         self.sold_fraction = sold_fraction
 

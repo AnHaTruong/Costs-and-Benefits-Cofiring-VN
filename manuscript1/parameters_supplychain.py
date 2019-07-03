@@ -24,23 +24,27 @@ from model.shape import Semiannulus, Disk
 _sold_fraction = 0.5 * 0.79
 
 # Reference ???
-residue_to_product_ratio = 1.0
+_residue_to_product_ratio = 1.0
+
+# Reference ???
+_tortuosity_factor = 1.5
 
 df = pd.read_excel('Data/Rice_production_2014_GSO.xlsx', index_col=0)
 
-df['straw yield'] = df['Rice yield (ton/ha)'] * residue_to_product_ratio * t / ha
+df['rice yield'] = df['Rice yield (ton/ha)'] * t / ha
+df['rice density'] = df['rice yield'] * df['Cultivation area (ha)'] / df['Total area (ha)']
 
-df['straw density'] = (df['straw yield'] * df['Cultivation area (ha)']
-                       / df['Total area (ha)'])
+df['straw yield'] = df['Rice yield (ton/ha)'] * _residue_to_product_ratio * t / ha
 
-df['straw production'] = df['rice production (ton)'] * residue_to_product_ratio * t
+df['straw production'] = df['rice production (ton)'] * _residue_to_product_ratio * t
 
 #%%
 
 supply_zone_NB = SupplyZone(
     shape=Disk(50 * km),
-    straw_density=df.loc['Ninh Binh', 'straw density'],
-    tortuosity_factor=1.5,
+    rice_density=df.loc['Ninh Binh', 'rice density'],
+    residue_to_product_ratio=_residue_to_product_ratio,
+    tortuosity_factor=_tortuosity_factor,
     sold_fraction=_sold_fraction)
 
 supply_chain_NB = SupplyChain(
@@ -53,8 +57,9 @@ supply_chain_NB = SupplyChain(
 
 supply_zone_1_MD = SupplyZone(
     shape=Semiannulus(0 * km, 50 * km),
-    straw_density=df.loc['Quang Ninh', 'straw density'],
-    tortuosity_factor=1.5,
+    rice_density=df.loc['Quang Ninh', 'rice density'],
+    residue_to_product_ratio=_residue_to_product_ratio,
+    tortuosity_factor=_tortuosity_factor,
     sold_fraction=_sold_fraction)
 
 
@@ -63,14 +68,15 @@ adjacent_provinces = ['Bac Giang', 'Hai Duong', 'Hai Phong']
 area_adjacent = {province: df.loc[province, 'Total area (ha)']
                  for province in adjacent_provinces}
 
-straw_density_around_MD = fsum(
-    [df.loc[province, 'straw density'] * area_adjacent[province]
+rice_density_around_MD = fsum(
+    [df.loc[province, 'rice density'] * area_adjacent[province]
      for province in adjacent_provinces]) / sum(area_adjacent.values())
 
 supply_zone_2_MD = SupplyZone(
     shape=Semiannulus(50 * km, 100 * km),
-    straw_density=straw_density_around_MD,
-    tortuosity_factor=1.5,
+    rice_density=rice_density_around_MD,
+    residue_to_product_ratio=_residue_to_product_ratio,
+    tortuosity_factor=_tortuosity_factor,
     sold_fraction=_sold_fraction)
 
 
