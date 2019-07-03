@@ -12,9 +12,10 @@ from collections import namedtuple
 import pandas as pd
 import numpy as np
 
-from natu.units import ha
+from natu.units import ha, t
 
 from model.utils import after_invest, display_as, USD, kUSD
+
 from model.emitter import Emitter, Activity
 from model.investment import Investment
 
@@ -42,31 +43,18 @@ class Farmer(Investment, Emitter):
         self.quantity = after_invest(supply_chain.straw_sold(), self.parameter.time_horizon)
 
         self.winder_use_area = after_invest(supply_chain.collected_area(),
-            self.parameter.time_horizon)
+                                            self.parameter.time_horizon)
 
-        # Does not work with MD1 because the vector collapse to scalar.
-        # Works with NB
-        # ?????
-        a = supply_chain.straw_available() * farmer_parameter.straw_burn_rate
+        # reference emissions are one crop, in the zone
+        # straw_burned = supply_chain.straw_available() * farmer_parameter.straw_burn_rate / t
 
-        field_burning_before = Activity(
-            name='Straw',
-            level=np.ones(self.parameter.time_horizon + 1) * a,
-            emission_factor=self.parameter.emission_factor['straw'])
-
-        print(a)
-        print('Quantity - Field burning before level', field_burning_before.level)
-
-        # Current version -- works but is not what we want
-        # We want to get rid of straw_production altogether
-        a = supply_chain.straw_production * farmer_parameter.straw_burn_rate
+        # reference is for one year (2 crops) and all involved provinces
+        straw_burned = supply_chain.straw_production * farmer_parameter.straw_burn_rate / t
 
         field_burning_before = Activity(
             name='Straw',
-            level=np.ones(self.parameter.time_horizon + 1) * a,
+            level=np.ones(self.parameter.time_horizon + 1) * straw_burned * t,
             emission_factor=self.parameter.emission_factor['straw'])
-
-        print('Straw Production - Field burning before level', field_burning_before.level)
 
         self.emissions_exante = Emitter(field_burning_before).emissions(total=False)
 
