@@ -8,30 +8,57 @@ Transportation cost                     2.32 USD/t              0.76 USD/t
 Cost field side                           37.26 USD/t             37.26 USD/t
 
 Mong Duong 1 Supply chain
-quantity = 225127 t
-Collection_radius = 71.0001 km
+
+Area:                      7918.4 km2
+Rice growing area:         986.384 km2
+Collected area:            389.622 km2
+Straw available:           569941 t
+Straw sold:                225127 t
+Transport      :           1.97428e+07 km*t
+Collection_radius:         71.0001 km
 Supply zone
  Shape: Semiannulus. Half of the Annulus with inner radius 0 km, outer radius 50 km, area 3926.99 km2
- Straw density produced: 13.8119 t/km2
- Straw density sold: 5.45569 t/km2
- quantity = 21424.4 t
- Tortuosity: 1.5
- Activity to transport all = 1.07122e+06 km*t
+ Straw density produced*:   13.8119 t/km2
+ Straw density sold*:       5.45569 t/km2
+ Area:                      392699 ha
+ Rice growing area:         11069.2 ha
+ Collected area:            4372.33 ha
+ Straw available:           54239.1 t
+ Straw sold:                21424.4 t
+ Tortuosity:                1.5
+ Activity to transport all: 1.07122e+06 km*t
+     Note:  *legacy code
 Supply zone
  Shape: Semiannulus. Half of the Annulus with inner radius 50 km, outer radius 71.0001 km, area 3991.41 km(2)
- Straw density produced: 129.203 t/km2
- Straw density sold: 51.0352 t/km2
- quantity = 203702 t
- Tortuosity: 1.5
- Activity to transport all = 1.86716e+07 km*t
+ Straw density produced*:   129.203 t/km2
+ Straw density sold*:       51.0352 t/km2
+ Area:                      399141 ha
+ Rice growing area:         87569.2 ha
+ Collected area:            34589.8 ha
+ Straw available:           515702 t
+ Straw sold:                203702 t
+ Tortuosity:                1.5
+ Activity to transport all: 1.86716e+07 km*t
+     Note:  *legacy code
 
 Ninh Binh Supply chain
-quantity = 39673.4 t
-Collection_radius = 13.2317 km
+
+Area:                      550.02 km2
+Rice growing area:         166.842 km2
+Collected area:            65.9026 km2
+Straw available:           100439 t
+Straw sold:                39673.4 t
+Transport      :           524945 km*t
+Collection_radius:         13.2317 km
 Supply zone
  Shape: Disk with radius 13.2317 km, area 550.02 km2
- Straw density produced: 182.61 t/km2
- Straw density sold: 72.1308 t/km2
- quantity = 39673.4 t
- Tortuosity: 1.5
- Activity to transport all = 524945 km*t
+ Straw density produced*:   182.61 t/km2
+ Straw density sold*:       72.1308 t/km2
+ Area:                      55002 ha
+ Rice growing area:         16684.2 ha
+ Collected area:            6590.26 ha
+ Straw available:           100439 t
+ Straw sold:                39673.4 t
+ Tortuosity:                1.5
+ Activity to transport all: 524945 km*t
+     Note:  *legacy code

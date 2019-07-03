@@ -22,12 +22,8 @@ from model.shape import Semiannulus, Disk
 
 # Leinonen and Nguyen 2013 : 50% of straw is collected and 79% of collected straw is sold
 _sold_fraction = 0.5 * 0.79
-
-# Reference ???
-_residue_to_product_ratio = 1.0
-
-# Reference ???
-_tortuosity_factor = 1.5
+_residue_to_product_ratio = 1.0   # Reference ???
+_tortuosity_factor = 1.5          # Reference ???
 
 df = pd.read_excel('Data/Rice_production_2014_GSO.xlsx', index_col=0)
 

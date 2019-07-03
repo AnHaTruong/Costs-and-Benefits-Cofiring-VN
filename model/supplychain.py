@@ -42,12 +42,17 @@ class SupplyZone:
         straw_density = display_as(straw_density, 't/km2')
         return ("Supply zone"
                 + "\n Shape: " + str(self.shape)
-                + "\n Straw density produced: " + str(straw_density)
-                + "\n Straw density sold: " + str(straw_density * self.sold_fraction)
-                + "\n quantity = " + str(self.straw_sold())
-                + "\n Tortuosity: " + str(self.tortuosity_factor)
-                + "\n Activity to transport all = " + str(self.transport_tkm())
-                )
+                + "\n Straw density produced*:   " + str(straw_density)
+                + "\n Straw density sold*:       " + str(straw_density * self.sold_fraction)
+                + "\n Area:                      " + str(self.area())
+                + "\n Rice growing area:         " + str(self.ricegrowing_area())
+                + "\n Collected area:            " + str(self.collected_area())
+                + "\n Straw available:           " + str(self.straw_available())
+                + "\n Straw sold:                " + str(self.straw_sold())
+                + "\n Tortuosity:                " + str(self.tortuosity_factor)
+                + "\n Activity to transport all: " + str(self.transport_tkm())
+                + "\n     Note:  *legacy code"
+                + "\n")
 
     def area(self):
         surface = self.shape.area()
@@ -118,11 +123,17 @@ class SupplyChain:
         return collected
 
     def __str__(self):
-        result = "Supply chain\n"
-        result += "quantity = " + str(self.straw_sold()) + "\n"
-        result += "Collection_radius = " + str(self.collection_radius()) + "\n"
+        result = ("Supply chain\n"
+                  + "\nArea:                      " + str(self.area())
+                  + "\nRice growing area:         " + str(self.ricegrowing_area())
+                  + "\nCollected area:            " + str(self.collected_area())
+                  + "\nStraw available:           " + str(self.straw_available())
+                  + "\nStraw sold:                " + str(self.straw_sold())
+                  + "\nTransport      :           " + str(self.transport_tkm())
+                  + "\nCollection_radius:         " + str(self.collection_radius())
+                  + "\n")
         for zone in self.zones:
-            result += str(zone) + "\n"
+            result += str(zone)
         return result
 
     def area(self):
