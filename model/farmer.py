@@ -39,23 +39,23 @@ class Farmer(Investment, Emitter):
 
     def __init__(self, supply_chain, farmer_parameter):
         self.parameter = farmer_parameter
-        self.quantity = after_invest(supply_chain.quantity_sold(), self.parameter.time_horizon)
+        self.quantity = after_invest(supply_chain.straw_sold(), self.parameter.time_horizon)
 
         print("Supply chain area: ", supply_chain.area())
-        print("Supply chain cultivated area: ", supply_chain.cultivated_area())
+        print("Supply chain ricegrowing area: ", supply_chain.ricegrowing_area())
         print("Supply chain collected area: ", supply_chain.collected_area())
 
-        fa = supply_chain.quantity_sold() / supply_chain.average_straw_yield
+        fa = supply_chain.straw_sold() / supply_chain.average_straw_yield
         display_as(fa, "km*km")
         print("Winder use area: ", fa)
         self.winder_use_area = after_invest(
-            supply_chain.quantity_sold() / supply_chain.average_straw_yield,
+            supply_chain.straw_sold() / supply_chain.average_straw_yield,
             self.parameter.time_horizon)
 
         # Does not work with MD1 because the vector collapse to scalar.
         # Works with NB
         # ?????
-        a = supply_chain.quantity() * farmer_parameter.straw_burn_rate
+        a = supply_chain.straw_available() * farmer_parameter.straw_burn_rate
 
         field_burning_before = Activity(
             name='Straw',

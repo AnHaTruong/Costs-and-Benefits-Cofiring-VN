@@ -54,7 +54,7 @@ class Transporter(Investment, Emitter):
         self.parameter = transport_parameter
         self.activity_level = after_invest(supply_chain.transport_tkm(),
                                            self.parameter.time_horizon)
-        self.quantity = after_invest(supply_chain.quantity_sold(), self.parameter.time_horizon)
+        self.quantity = after_invest(supply_chain.straw_sold(), self.parameter.time_horizon)
         self.collection_radius = supply_chain.collection_radius()
 
         self.truck_trips = self.quantity / self.parameter.truck_load
