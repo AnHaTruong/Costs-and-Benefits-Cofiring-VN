@@ -39,8 +39,7 @@ supply_zone_NB = SupplyZone(
     sold_fraction=_sold_fraction)
 
 supply_chain_NB = SupplyChain(
-    zones=[supply_zone_NB],
-    straw_production=df.loc['Ninh Binh', 'rice production (ton)'] * _residue_to_product_ratio * t)
+    zones=[supply_zone_NB])
 
 
 #%%
@@ -65,7 +64,7 @@ cultivation_area_around_MD = fsum([
     df.loc[province, 'Cultivation area (ha)']
     for province in provinces_around])
 
-#  yield in the zone is a weighted average of yield in the provices
+#  Yield in the zone is a weighted average of yield in the provices
 #  Yield is per crop, production is per year - and there are multiple crops per year.
 #  So  yield * area  is not same as  production
 rice_yield_around_MD = fsum([
@@ -83,12 +82,5 @@ supply_zone_2_MD = SupplyZone(
     sold_fraction=_sold_fraction)
 
 
-all_provinces = provinces_around + ['Quang Ninh']
-
-straw_production_MD = fsum([
-    df.loc[province, 'rice production (ton)'] * _residue_to_product_ratio * t
-    for province in all_provinces])
-
 supply_chain_MD1 = SupplyChain(
-    zones=[supply_zone_1_MD, supply_zone_2_MD],
-    straw_production=straw_production_MD)
+    zones=[supply_zone_1_MD, supply_zone_2_MD])

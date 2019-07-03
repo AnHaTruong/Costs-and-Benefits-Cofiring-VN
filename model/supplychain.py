@@ -17,7 +17,7 @@ from natu.units import t, km, ha
 class SupplyZone:
     """A zone from wich biomass is collected.
 
-    Assume that fields are small and everywhere so it has uniform repartition.
+    Assume uniform repartition of biomass - fields are small and everywhere.
     One crop per year is subject to straw collection for sale.
     The fraction of the fields that are collected and sold is also uniform.
     """
@@ -91,11 +91,8 @@ class SupplyChain:
     Not vectorized, the supply chain does not vary with time.
     """
 
-    def __init__(self,
-                 zones,
-                 straw_production):
+    def __init__(self, zones):
         self.zones = zones
-        self.straw_production = straw_production
 
     def fit(self, target_quantity):
         """Return a copy of the supply chain adjusted to sell exactly  target_quantity.
@@ -105,8 +102,7 @@ class SupplyChain:
         assert target_quantity <= self.straw_sold(), 'Not enough biomass in supply chain: '
 
         i = 0
-        collected = SupplyChain([copy(self.zones[0])],
-                                straw_production=self.straw_production)
+        collected = SupplyChain([copy(self.zones[0])])
         while collected.straw_sold() < target_quantity:
             i += 1
             collected.zones.append(copy(self.zones[i]))
