@@ -1,9 +1,9 @@
                            CO2          NOx         PM10          SO2
 6b_coal        5.08601e+06 t/y  48763.5 t/y  474.631 t/y   560.78 t/y
 Conveyor belt            0 t/y        0 t/y        0 t/y        0 t/y
-Straw          1.86585e+06 t/y  4237.79 t/y    16914 t/y  334.562 t/y
+Straw               514927 t/y  1169.52 t/y  4667.82 t/y  92.3305 t/y
 
                          CO2          NOx         PM10          SO2
 4b_coal           896195 t/y  7749.95 t/y  89.8995 t/y  4951.36 t/y
 Barge transport  12227.7 t/y  69.9218 t/y  4.39508 t/y  2.75554 t/y
-Straw             437552 t/y  993.784 t/y  3966.42 t/y  78.4566 t/y
+Straw              90744 t/y  206.101 t/y  822.595 t/y  16.2711 t/y

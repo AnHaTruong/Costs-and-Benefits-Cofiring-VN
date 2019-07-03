@@ -46,10 +46,10 @@ class Farmer(Investment, Emitter):
                                             self.parameter.time_horizon)
 
         # reference emissions are one crop, in the zone
-        # straw_burned = supply_chain.straw_available() * farmer_parameter.straw_burn_rate / t
+        straw_burned = supply_chain.straw_available() * farmer_parameter.straw_burn_rate / t
 
         # reference is for one year (2 crops) and all involved provinces
-        straw_burned = supply_chain.straw_production * farmer_parameter.straw_burn_rate / t
+        # straw_burned = supply_chain.straw_production * farmer_parameter.straw_burn_rate / t
 
         field_burning_before = Activity(
             name='Straw',
