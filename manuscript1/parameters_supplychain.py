@@ -31,8 +31,7 @@ _tortuosity_factor = 1.5
 
 df = pd.read_excel('Data/Rice_production_2014_GSO.xlsx', index_col=0)
 
-df['rice yield'] = df['Rice yield (ton/ha)'] * t / ha
-df['rice density'] = df['rice yield'] * df['Cultivation area (ha)'] / df['Total area (ha)']
+df['rice land fraction'] = df['Cultivation area (ha)'] / df['Total area (ha)']
 
 df['straw yield'] = df['Rice yield (ton/ha)'] * _residue_to_product_ratio * t / ha
 
@@ -42,7 +41,8 @@ df['straw production'] = df['rice production (ton)'] * _residue_to_product_ratio
 
 supply_zone_NB = SupplyZone(
     shape=Disk(50 * km),
-    rice_density=df.loc['Ninh Binh', 'rice density'],
+    rice_yield_per_crop=df.loc['Ninh Binh', 'Rice yield (ton/ha)'] * t / ha,
+    rice_land_fraction=df.loc['Ninh Binh', 'rice land fraction'],
     residue_to_product_ratio=_residue_to_product_ratio,
     tortuosity_factor=_tortuosity_factor,
     sold_fraction=_sold_fraction)
@@ -50,48 +50,61 @@ supply_zone_NB = SupplyZone(
 supply_chain_NB = SupplyChain(
     zones=[supply_zone_NB],
     straw_production=df.loc['Ninh Binh', 'straw production'],
-    average_straw_yield=df.loc['Ninh Binh', 'straw yield'])
+    average_straw_yield=(df.loc['Ninh Binh', 'Rice yield (ton/ha)'] * t / ha *
+                         _residue_to_product_ratio))
 
 
 #%%
 
 supply_zone_1_MD = SupplyZone(
     shape=Semiannulus(0 * km, 50 * km),
-    rice_density=df.loc['Quang Ninh', 'rice density'],
+    rice_yield_per_crop=df.loc['Quang Ninh', 'Rice yield (ton/ha)'] * t / ha,
+    rice_land_fraction=df.loc['Quang Ninh', 'rice land fraction'],
     residue_to_product_ratio=_residue_to_product_ratio,
     tortuosity_factor=_tortuosity_factor,
     sold_fraction=_sold_fraction)
 
 
-adjacent_provinces = ['Bac Giang', 'Hai Duong', 'Hai Phong']
+provinces_around = ['Bac Giang', 'Hai Duong', 'Hai Phong']
 
-area_adjacent = {province: df.loc[province, 'Total area (ha)']
-                 for province in adjacent_provinces}
+total_area_around_MD = fsum([
+    df.loc[province, 'Total area (ha)']
+    for province in provinces_around])
 
-rice_density_around_MD = fsum(
-    [df.loc[province, 'rice density'] * area_adjacent[province]
-     for province in adjacent_provinces]) / sum(area_adjacent.values())
+cultivation_area_around_MD = fsum([
+    df.loc[province, 'Cultivation area (ha)']
+    for province in provinces_around])
+
+#  Yield is per crop, production is per year - and there are two crops per year.
+#  So  yield * area  is not same as  production
+rice_production_around_MD = fsum([
+    df.loc[province, 'Rice yield (ton/ha)'] * df.loc[province, 'Cultivation area (ha)']
+    for province in provinces_around])
+
 
 supply_zone_2_MD = SupplyZone(
     shape=Semiannulus(50 * km, 100 * km),
-    rice_density=rice_density_around_MD,
+    rice_yield_per_crop=rice_production_around_MD / cultivation_area_around_MD * t / ha,
+    rice_land_fraction=cultivation_area_around_MD / total_area_around_MD,
     residue_to_product_ratio=_residue_to_product_ratio,
     tortuosity_factor=_tortuosity_factor,
     sold_fraction=_sold_fraction)
 
 
-all_provinces = adjacent_provinces + ['Quang Ninh']
+all_provinces = provinces_around + ['Quang Ninh']
 
-straw_production_MD = fsum(
-    [df.loc[province, 'straw production']
-     for province in all_provinces])
+straw_production_MD = fsum([
+    df.loc[province, 'straw production']
+    for province in all_provinces])
 
-area_all = {province: df.loc[province, 'Total area (ha)']
-            for province in all_provinces}
+area_all_MD = fsum([
+    df.loc[province, 'Total area (ha)']
+    for province in all_provinces])
 
-straw_yield_MD = fsum(
-    [df.loc[province, 'straw yield'] * area_all[province]
-     for province in all_provinces]) / sum(area_all.values())
+straw_yield_MD = fsum([
+    df.loc[province, 'Rice yield (ton/ha)'] * _residue_to_product_ratio * t / ha *
+    df.loc[province, 'Total area (ha)']
+    for province in all_provinces]) / area_all_MD
 
 
 supply_chain_MD1 = SupplyChain(

@@ -22,12 +22,14 @@ class SupplyZone:
 
     def __init__(self,
                  shape,
-                 rice_density,
+                 rice_yield_per_crop,
+                 rice_land_fraction,
                  residue_to_product_ratio,
                  tortuosity_factor,
                  sold_fraction):
         self.shape = shape
-        self.straw_density = rice_density * residue_to_product_ratio
+        self.rice_land_fraction = rice_land_fraction
+        self.straw_density = rice_yield_per_crop * rice_land_fraction * residue_to_product_ratio
         self.straw_density = display_as(self.straw_density, 't/km2')
         self.tortuosity_factor = tortuosity_factor
         self.sold_fraction = sold_fraction
@@ -44,6 +46,14 @@ class SupplyZone:
 
     def area(self):
         surface = self.shape.area()
+        return display_as(surface, 'ha')
+
+    def cultivated_area(self):
+        surface = self.area() * self.rice_land_fraction
+        return display_as(surface, 'ha')
+
+    def collected_area(self):
+        surface = self.cultivated_area() * self.sold_fraction
         return display_as(surface, 'ha')
 
     def quantity(self):
@@ -69,7 +79,6 @@ class SupplyChain:
     """A collection of supply zones.
 
     Not vectorized, the supply chain does not vary with time.
-    The straw production
     """
 
     def __init__(self,
@@ -115,6 +124,18 @@ class SupplyChain:
         surface = 0 * ha
         for zone in self.zones:
             surface += zone.area()
+        return display_as(surface, 'km2')
+
+    def cultivated_area(self):
+        surface = 0 * ha
+        for zone in self.zones:
+            surface += zone.cultivated_area()
+        return display_as(surface, 'km2')
+
+    def collected_area(self):
+        surface = 0 * ha
+        for zone in self.zones:
+            surface += zone.collected_area()
         return display_as(surface, 'km2')
 
     def quantity(self):

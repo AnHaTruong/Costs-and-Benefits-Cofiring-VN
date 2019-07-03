@@ -33,12 +33,12 @@ class System:
     """
 
     # pylint: disable=too-many-arguments
-    def __init__(self, plant_parameter, cofire_parameter, supply_chain, price,
+    def __init__(self, plant_parameter, cofire_parameter, supply_chain_potential, price,
                  farm_parameter, transport_parameter, mining_parameter):
         """Instantiate the system actors."""
         self.plant = PowerPlant(plant_parameter)
         self.cofiring_plant = CofiringPlant(plant_parameter, cofire_parameter)
-        self.supply_chain = supply_chain.fit(self.cofiring_plant.biomass_used[1])
+        self.supply_chain = supply_chain_potential.fit(self.cofiring_plant.biomass_used[1])
         self.farmer = Farmer(self.supply_chain, farm_parameter)
         self.transporter = Transporter(self.supply_chain, transport_parameter)
         self.mining_parameter = mining_parameter
