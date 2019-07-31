@@ -54,7 +54,8 @@ confidence=
 
 #bad-continuation:  see pylint bug report https://github.com/PyCQA/pylint/issues/747 and 638 about where the closing ) should go
 #no-name-in-module:  the  natu/units  module is too smart, it loads units dynamically
-disable=bad-continuation,no-name-in-module,invalid-name
+#invalid-slice-index:  See bug PyCQA#1534, closed in Pylint around june 2018
+disable=bad-continuation,no-name-in-module,invalid-name,invalid-slice-index
 
 # Enable the message, report, category or checker with the given id(s). You can
 # either give multiple identifier separated by comma (,) or put this option
