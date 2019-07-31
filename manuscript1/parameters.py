@@ -74,7 +74,7 @@ coal_4b = Fuel(
     transport_mean='Barge transport')
 
 straw = Fuel(
-    name='straw',
+    name='straw_boiler',
     heat_value=11.7 * MJ / kg,  # numerical value also used in emission_factor
     transport_distance='Endogenous',
     transport_mean='Road transport')
@@ -119,12 +119,17 @@ emission_factor['Barge transport'] = {
     'NOx': 50.75 * g / kg * (8 * g / t / km),    # idem
     'PM10': 3.19 * g / kg * (8 * g / t / km)}    # idem
 
-emission_factor['straw'] = {
-    'CO2': 0.0858 * kg / MJ * 11.7 * MJ / kg,  # (Shafie & 2013)
-    'SO2': 0.18 * kg / t,                      # (Hoang & 2013)
-    'NOx': 2.28 * kg / t,                      # idem
-    'PM10': 9.1 * kg / t}                      # idem
+emission_factor['straw_open'] = {
+    'CO2': 1177 * kg / t,                 # (Kim Oanh & 2011) for open burning
+    'SO2': 0.51 * kg / t,                 # (Kim Oanh & 2015) for open burning
+    'NOx': 0.49 * kg / t,                 # (Kim Oanh & 2011) for open burning
+    'PM10': 9.4 * kg / t}                 # (Kim Oanh & 2011) for open burning
 
+emission_factor['straw_boiler'] = {
+    'CO2': 1674 * kg / t,           # (Cao & 2008) from experiments
+    'SO2': 0.18 * kg / t,           # idem
+    'NOx': 3.43 * kg / t,           # idem
+    'PM10': 6.28 * kg / t}          # idem
 
 # hourly wage calculated from base salary defined in governmental regulations
 farm_parameter = FarmerParameter(

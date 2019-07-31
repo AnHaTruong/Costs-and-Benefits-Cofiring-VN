@@ -51,14 +51,14 @@ class Farmer(Investment, Emitter):
         field_burning_before = Activity(
             name='Straw',
             level=np.ones(self.parameter.time_horizon + 1) * straw_burned * t,
-            emission_factor=self.parameter.emission_factor['straw'])
+            emission_factor=self.parameter.emission_factor['straw_open'])
 
         self.emissions_exante = Emitter(field_burning_before).emissions(total=False)
 
         field_burning = Activity(
             name='Straw',
             level=field_burning_before.level - self.quantity,
-            emission_factor=self.parameter.emission_factor['straw'])
+            emission_factor=self.parameter.emission_factor['straw_open'])
 
         winder_use = Activity(
             name='diesel',
