@@ -25,7 +25,7 @@ _sold_fraction = 0.5 * 0.79
 _residue_to_product_ratio = 1.0   # Reference ???
 _tortuosity_factor = 1.5          # Reference ???
 
-df = pd.read_excel('Data/Rice_production_2014_GSO.xlsx', index_col=0)
+df = pd.read_excel('Data/Rice_production_2017_GSO.xlsx', index_col=0)
 
 #%%
 
