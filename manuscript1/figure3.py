@@ -47,8 +47,8 @@ def case(system, price_ref, p_fieldside, p_plantgate):
 
 
 dataA, labelA = case(NinhBinhSystem, price_NB, 30 * USD / t, 37.3 * USD / t)
-dataB, labelB = case(NinhBinhSystem, price_NB, 10 * USD / t, 12 * USD / t)
-dataC, labelC = case(NinhBinhSystem, price_NB, 10 * USD / t, 36 * USD / t)
+dataB, labelB = case(NinhBinhSystem, price_NB, 15 * USD / t, 17 * USD / t)
+dataC, labelC = case(NinhBinhSystem, price_NB, 15 * USD / t, 36 * USD / t)
 title = 'Cofiring 5% straw in ' + str(NinhBinhSystem.plant.name) + ' power plant'
 
 index = np.arange(6)
