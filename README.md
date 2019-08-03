@@ -12,7 +12,7 @@ Would that technology be relevant in Vietnam, a middle income country? Here we s
 ## Installation
 
 The model is written in  Python 3.
-It uses pandas, pytest, SALib and other python dependencies listed in the file `requirement.txt`.
+It uses pandas, pytest, SALib and other python dependencies listed in the file `requirements.txt`.
 
 Installation should be   ***pip3 install -r requirements.txt***
 and then ***sudo apt install pylint3, pycodestyle, pydocstyle***
