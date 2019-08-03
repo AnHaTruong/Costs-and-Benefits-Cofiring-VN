@@ -1,0 +1,8 @@
+pandas
+pytest
+SALib
+pytest-cov
+pytest-regtest
+xlrd
+#natu>=0.2
+git+https://github.com/kdavies4/natu.git
