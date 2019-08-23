@@ -92,19 +92,22 @@ width = 0.1
 ind1 = ind + 0.15
 ind2 = ind + 0.3
 ind3 = ind + 0.45
+ind4 = ind + 0.6
 inda = np.array([0, 0.15, 0.3])
 color1 = ['salmon', 'mistyrose', 'darkred']
 color2 = ['#4572a7', '#89a54e', '#4198af']
-index1 = [ind, ind1, ind2, ind3]
-index2 = [inda, inda + 0.5, inda + 1, inda + 1.5]
+index1 = [ind, ind1, ind2, ind3, ind4]
+index2 = [inda, inda + 0.5, inda + 1, inda + 1.5, inda + 2]
 xlabel = ['Coal', 'Coal', 'Coal',
           'Gas', 'Gas', 'Gas',
           'Solar', 'Solar', 'Solar',
-          'Wind', 'Wind', 'Wind']
+          'Wind onshore', 'Wind onshore', 'Wind onshore',
+          'Wind offshore', 'Wind offshore', 'Wind offshore']
 xlabel2 = ['Coal 2020', 'Coal 2030', 'Coal 2050',
            'Gas 2020', 'Gas 2030', 'Gas 2050',
            'Solar 2020', 'Solar 2030', 'Solar 2050',
-           'Wind 2020', 'Wind 2030', 'Wind 2050']
+           'Wind onshore 2020', 'Wind onshore 2030', 'Wind onshore 2050',
+           'Wind offshore 2020', 'Wind offshore 2030', 'Wind offshore 2050']
 
 
 def plot_lcoe(x, plant, color):
@@ -140,6 +143,7 @@ def plot_lcoe_figure(index, ff_scenarios, re_scenarios, color, text):
     plot_lcoe(index[1], lcoe_CCGT.loc[ff_scenarios, :], color)
     plot_lcoe_re(index[2], lcoe_PV.loc[re_scenarios, :], color)
     plot_lcoe_re(index[3], lcoe_wind_onshore.loc[re_scenarios, :], color)
+    plot_lcoe_re(index[4], lcoe_wind_offshore.loc[re_scenarios, :], color)
 
     plt.xticks(np.concatenate(index), (xlabel), rotation=45)
     legend_capital = mpatches.Patch(color=color[0], label='Capital cost')
