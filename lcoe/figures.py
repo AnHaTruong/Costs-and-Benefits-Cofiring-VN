@@ -94,7 +94,7 @@ ind2 = ind + 0.3
 ind3 = ind + 0.45
 ind4 = ind + 0.6
 inda = np.array([0, 0.15, 0.3])
-color1 = ['salmon', 'mistyrose', 'darkred']
+color1 = ['#4C7FA6', '#92C5EB', '#0F90C0']
 color2 = ['#4572a7', '#89a54e', '#4198af']
 index1 = [ind, ind1, ind2, ind3, ind4]
 index2 = [inda, inda + 0.5, inda + 1, inda + 1.5, inda + 2]
@@ -118,7 +118,8 @@ def plot_lcoe(x, plant, color):
     plt.bar(x, plant['lcoe fuel'], width,
             bottom=plant['lcoe capital'] + plant['lcoe OM'],
             color=color[2], edgecolor='none',
-            yerr=[plant['lower error'], plant['upper error']], ecolor='r')
+            yerr=[plant['lower error'], plant['upper error']],
+            ecolor='#A62621')
 
 
 def plot_lcoe_re(x, plant, color):
