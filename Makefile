@@ -43,7 +43,10 @@ classes.dot packages.dot:
 
 install-pre-commit: .git/hooks/pre-commit
 
-.PHONY:  archive test regtest-reset lint docstyle codestyle install clean cleaner
+install:
+	pip3 install -r requirements.txt
+
+.PHONY:  archive test regtest-reset lint docstyle codestyle install install-pre-commit clean cleaner
 
 distName:=CofiringEconomics-$(shell date --iso-8601)
 dirs=$(distName) $(distName)/$(SOURCEDIRS) $(distName)/Data
@@ -51,6 +54,7 @@ dirs=$(distName) $(distName)/$(SOURCEDIRS) $(distName)/Data
 archive:
 	-@rm -rf $(distName) 2>/dev/null
 	mkdir $(distName)
+	cp stable-requirements.txt $(distName)
 	cp requirements.txt $(distName)
 	cp Makefile $(distName)
 	cp pylintrc $(distName)
