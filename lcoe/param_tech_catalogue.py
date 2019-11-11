@@ -88,11 +88,12 @@ fuel_price_data = pd.read_excel("Data/Fuel prices_LCOE.xlsx",
 # Duval, Alice, and Benjamin Vandenbusche. 2018. EDDE Master thesis "Projet de Modélisation :
 # Diversifier le Secteur Électrique Vietnamien Par plus de Gaz Peut Il Réduire l’exposition
 # Au Risque-Prix Des Combustibles Fossiles ?"
+# see file Data/prices_international_past_EIA.ods
 
 coal_price_IEA = 55.71 * USD / t  # historical coal price (IEA) 20 year average
 coal_price_2std = 18.16 * USD / t  # 2 standard deviation of historical coal price (IEA)
 gas_price_IEA = natural_gas.heat_value * 4.08 * USD / GJ  # historical gas price (IEA) 20y average
-gas_price_2std = natural_gas.heat_value * 2.69 * USD / GJ  # 2std of historical gas price (IEA)
+gas_price_2std = natural_gas.heat_value * 2.54 * USD / GJ  # 2std of historical gas price (IEA)
 
 fuel_price = dict()
 

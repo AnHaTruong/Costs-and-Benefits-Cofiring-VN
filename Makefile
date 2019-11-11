@@ -91,7 +91,7 @@ clean:
 
 cleaner: clean .git/hooks/pre-commit
 	find . -type f -name '*.pyc' -delete
-	rm -rf __pycache__
+	rm -rf __pycache__ .pytest_cache
 	rm -rf classes.dot packages.dot
 	rm -rf .coverage coverage.xml htmlcov
 
