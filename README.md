@@ -21,6 +21,7 @@ Failing that, here are installation notes:
 + We don't test compatibility with Python 2.
 + `pandas` can be installed from Ubuntu package `python3-pandas`, but the pip version is likely more up to date.
 +  `xlrd` can be installed from Ubuntu package  `python3-xlrd`
++ `pylint3` can be installed from Ubuntu package  `pylint3`
 + `pytest` can be installed from the Ubuntu package `python3-pytest` but DON'T. That is an old version.
 + `pytest-cov` can be installed from the Ubuntu package `python3-coverage`
 + `SALib can be installed `sudo pip3 install salib` . The sensitivity analysis code was removed in 2019-06, so it should no really be necessary.
@@ -62,12 +63,24 @@ pip3 install -e .
 Doing that will make static code analysis tools like lint cry a lot. Exclude the subdirectory `natu/` from their search path.
 
 
-## Developer's tips
+## For new developpers
 
-The source files are organised in directories. From Python's point of view, the modules are organised in packages. Modules must be run from the root directory, not from the directory they are in. 
+Reminder: there are differences between a python source file and a python module.
 
-+ In a terminal, to run the file `manuscript1/figure2.py` the command is `python3 -m manuscript1.figure2`. The module name is the filename, without the `.py` extension. The package name is the directory name. The separator is a dot, since the slanted bar is OS specific.
++ The module name is the filename, without the `.py` extension.
++ A python source file can sometimes define a script, not a module.
+
+From the filesystem point of view, source files are organised in directories. But from Python's point of view, modules are organised in packages.
+
++ The package name is the same as directory name.
++ The separator is a dot, since the slanted bar is OS specific.
+
+Modules must be run from the root directory, not from the directory they are in. Otherwise Python does not know the root of the package hierarchy.
+
++ In a terminal, to run the file `manuscript1/figure2.py` the command is `python3 -m manuscript1.figure2`. 
 + A graphical environment may also need to be told to run modules from the project root directory. Start Spyder3 from the project root directory. When it opens the dialog box "Run settings for X" when you run a file X.py for the first time. In the `Working directory setting`, choose `The current working directory`. 
+
+## For developpers
 
 Import common.utils before importing natu, to have a chance to disable it if needed.
 
