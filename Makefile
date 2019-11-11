@@ -41,7 +41,9 @@ classes.dot packages.dot:
 .git/hooks/pre-commit: pre-commit
 	cp $^ $@
 
-.PHONY:  archive test regtest-reset lint docstyle codestyle clean cleaner
+install-pre-commit: .git/hooks/pre-commit
+
+.PHONY:  archive test regtest-reset lint docstyle codestyle install clean cleaner
 
 distName:=CofiringEconomics-$(shell date --iso-8601)
 dirs=$(distName) $(distName)/$(SOURCEDIRS) $(distName)/Data
@@ -49,6 +51,7 @@ dirs=$(distName) $(distName)/$(SOURCEDIRS) $(distName)/Data
 archive:
 	-@rm -rf $(distName) 2>/dev/null
 	mkdir $(distName)
+	cp requirements.txt $(distName)
 	cp Makefile $(distName)
 	cp pylintrc $(distName)
 	cp setup.cfg $(distName)
@@ -89,7 +92,7 @@ clean:
 	rm -f $(tables)
 	rm -f $(figures-lcoe) $(figures-manuscript1)
 
-cleaner: clean .git/hooks/pre-commit
+cleaner: clean
 	find . -type f -name '*.pyc' -delete
 	rm -rf __pycache__ .pytest_cache
 	rm -rf classes.dot packages.dot

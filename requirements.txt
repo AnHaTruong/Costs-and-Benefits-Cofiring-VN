@@ -3,5 +3,11 @@ xlrd
 pytest
 pytest-cov
 pytest-regtest
+matplotlib
+scimath
+sh
+traits
+nose
 #natu>=0.2
 git+https://github.com/kdavies4/natu.git
+# -e git+git@github.com:kdavies4/natu.git#egg=natumatplotlib
