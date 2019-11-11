@@ -26,6 +26,7 @@ Failing that, here are installation notes:
 + `pytest-cov` can be installed from the Ubuntu package `python3-coverage`
 + `SALib can be installed `sudo pip3 install salib` . The sensitivity analysis code was removed in 2019-06, so it should no really be necessary.
 + `natu` version 1.2 is required with Python 3, not in Pypi as of 2017/11, so we install from GitHub
++ `traits` requires Ubuntu package  `python3-dev`.
 + If necessary the makefile will install  `.git/hook/pre-commit`  script when doing `make cleaner`. Making it executable is up to you.
 
 ## Usage
