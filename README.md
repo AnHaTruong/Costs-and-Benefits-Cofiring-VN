@@ -12,22 +12,21 @@ Would that technology be relevant in Vietnam, a middle income country? Here we s
 ## Installation
 
 The model is written in  Python 3.
-It uses pandas, pytest, SALib and other python dependencies listed in the file `requirements.txt`.
+It uses pandas, pytest and other python dependencies listed in the file `requirements.txt`.
 
-Installation should be   ***pip3 install -r requirements.txt***
-and then ***sudo apt install pylint3, pycodestyle, pydocstyle***
+Installation should be   ***pip3 install -r requirements.txt***.
+For developing you also need to install ***sudo apt install pylint3, pycodestyle, pydocstyle***
 
 Failing that, here are installation notes:
 + We don't test compatibility with Python 2.
 + `pandas` can be installed from Ubuntu package `python3-pandas`, but the pip version is likely more up to date.
-+  `xlrd` can be installed from Ubuntu package  `python3-xlrd`
-+ `pylint3` can be installed from Ubuntu package  `pylint3`
++  `xlrd` can be installed from Ubuntu package  `python3-xlrd`, or from pip.
 + `pytest` can be installed from the Ubuntu package `python3-pytest` but DON'T. That is an old version.
-+ `pytest-cov` can be installed from the Ubuntu package `python3-coverage`
-+ `SALib can be installed `sudo pip3 install salib` . The sensitivity analysis code was removed in 2019-06, so it should no really be necessary.
-+ `natu` version 1.2 is required with Python 3, not in Pypi as of 2017/11, so we install from GitHub
-+ `traits` requires Ubuntu package  `python3-dev`.
-+ If necessary the makefile will install  `.git/hook/pre-commit`  script when doing `make cleaner`. Making it executable is up to you.
++ `pytest-cov` can be installed from the Ubuntu package `python3-coverage`, or from pip
++ `natu` version 1.2 is required with Python 3, it not in Pypi as of 2017/11, so we install from GitHub
++ `pylint3` can be installed from Ubuntu package  `pylint3`
++ `traits` requires header files in the Ubuntu package  `python3-dev`.
++ If necessary the makefile will install  `.git/hook/pre-commit`  script when doing `make install-pre-commit`. Making it executable is up to you.
 
 ## Usage
 
