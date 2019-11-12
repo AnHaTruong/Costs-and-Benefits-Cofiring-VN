@@ -34,7 +34,7 @@ discount_rate = 0.087771
 depreciation_period = 10
 tax_rate = 0.25               # Corporate tax in Vietnam
 
-coal_import_price = 73 * USD / t
+coal_import_price = 112 * USD / t
 
 external_cost_SKC = pd.Series({
     'CO2': 1 * USD / t,  # Sakulniyomporn, Kubaha, and Chullabodhi (2011) RSER 15
@@ -179,7 +179,7 @@ cofire_MD1 = CofiringParameter(
     biomass=straw,
     boiler_efficiency_loss=lambda r: 0.0044 * r**2 + 0.0055 * r,  # Tillman (2000) r mass ratio
     OM_hour_MWh=0.12 * hr / MWh,  # working hour for OM per MWh
-    wage_operation_maintenance=1.67 * USD / hr)
+    wage_operation_maintenance=2.7 * USD / hr)  # A 2015 job opening
 
 price_MD1 = Price(
     biomass_plantgate=45.13575 * USD / t,
