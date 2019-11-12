@@ -20,7 +20,7 @@ from manuscript1.parameters import (MongDuong1System, NinhBinhSystem,
                                     external_cost, external_cost_SKC, external_cost_ZWY,
                                     external_cost_HAS)
 
-from model.tables import (emission_reductions, balance_jobs,
+from model.tables import (emission_reductions, balance_jobs, straw_supply,
                           emission_reductions_by_activity, emission_reductions_benefits)
 from model.utils import display_as
 
@@ -90,6 +90,15 @@ print("Coal import price: ", display_as(coal_import_price, "USD / t"), "\n")
 
 print(MongDuong1System.coal_saved_benefits(coal_import_price) + "\n")
 print(NinhBinhSystem.coal_saved_benefits(coal_import_price))
+
+
+
+#%%
+print(table_separator)
+
+print("Table: Straw supply.\n")
+
+print(straw_supply(MongDuong1System, NinhBinhSystem))
 
 
 #%%

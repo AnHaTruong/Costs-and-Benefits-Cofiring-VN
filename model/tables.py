@@ -29,8 +29,8 @@ def emission_reductions_by_activity(system_a, system_b, external_cost):
         reductions_b['Plant'] / (t / y),
         reductions_b['Transport'] / (t / y),
         reductions_b['Field'] / (t / y)]
-    headers = ["Plant", "Transport", "Field",
-               "Plant", "Transport", "Field"]
+    headers = ["Plant " + system_a.plant.parameter.name, "Transport", "Field",
+               "Plant " + system_b.plant.parameter.name, "Transport", "Field"]
     table = pd.DataFrame(
         data=contents,
         index=headers)
@@ -127,7 +127,7 @@ def energy_costs(system_a, system_b):
 
 def straw_supply(system_a, system_b):
     """Tabulate the straw requires and straw costs."""
-    table = ["\nTable 5. Straw required and straw cost estimation\n"]
+    table = [""]
 
     col3 = system_a.cofiring_plant.biomass_used[1]
     col4 = system_b.cofiring_plant.biomass_used[1]
