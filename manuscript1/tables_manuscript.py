@@ -92,7 +92,6 @@ print(MongDuong1System.coal_saved_benefits(coal_import_price) + "\n")
 print(NinhBinhSystem.coal_saved_benefits(coal_import_price))
 
 
-
 #%%
 print(table_separator)
 
