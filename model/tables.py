@@ -12,7 +12,7 @@ import pandas as pd
 
 # pylint: disable=wrong-import-order
 from model.utils import display_as, isclose, USD, kUSD, FTE, year_1
-from natu.units import y, t
+from natu.units import y, t, hr
 
 
 #%%
@@ -31,11 +31,11 @@ def emission_reductions_by_activity(system_a, system_b, external_cost):
         reductions_b['Field'] / (t / y)]
     headers = ["Plant", "Transport", "Field",
                "Plant", "Transport", "Field"]
-    df = pd.DataFrame(
+    table = pd.DataFrame(
         data=contents,
         index=headers)
-    df["Unit"] = ["t/y", "t/y", "t/y", "t/y", "t/y", "t/y"]
-    return df[["Unit", "CO2", "SO2", "PM10", "NOx"]]
+    table["Unit"] = ["t/y", "t/y", "t/y", "t/y", "t/y", "t/y"]
+    return table[["Unit", "CO2", "SO2", "PM10", "NOx"]]
 
 #%%
 
@@ -53,11 +53,11 @@ def emission_reductions_benefits(system_a, system_b, external_cost):
         reductions_b['Benefit'] / (kUSD / y)]
     headers = [" Quantity", "Percent", "Value",
                " Quantity", "Percent", "Value"]
-    df = pd.DataFrame(
+    table = pd.DataFrame(
         data=contents,
         index=headers)
-    df["Unit"] = ["t/y", "%", "kUSD/y", "t/y", "%", "kUSD/y"]
-    return df[["CO2", "SO2", "PM10", "NOx"]].T
+    table["Unit"] = ["t/y", "%", "kUSD/y", "t/y", "%", "kUSD/y"]
+    return table[["CO2", "SO2", "PM10", "NOx"]].T
 
 
 #%%
@@ -74,11 +74,11 @@ def emission_reductions(system_a, system_b, external_cost):
     headers = ['Specific cost',
                " Quantity", "Value",
                " Quantity", "Value"]
-    df = pd.DataFrame(
+    table = pd.DataFrame(
         data=contents,
         index=headers)
-    df["Unit"] = ["USD/t", "t/y", "kUSD/y", "t/y", "kUSD/y"]
-    return df[["Unit", "CO2", "SO2", "PM10", "NOx"]].T
+    table["Unit"] = ["USD/t", "t/y", "kUSD/y", "t/y", "kUSD/y"]
+    return table[["Unit", "CO2", "SO2", "PM10", "NOx"]].T
 
 #%%
 
@@ -172,6 +172,14 @@ def balance_jobs(system_a, system_b):
                 'Plant O & M',
                 '- Mining']
 
+    rates = pd.Series(
+        data=[system_a.farmer.parameter.wage_bm_collect,
+              system_a.transporter.parameter.wage_bm_loading,
+              system_a.transporter.parameter.wage_bm_transport,
+              system_a.cofiring_plant.cofire_parameter.wage_operation_maintenance,
+              system_a.mining_parameter.wage],
+        index=headings)
+
     def work(system):
         return pd.Series(
             data=[system.farmer.labor()[1],
@@ -191,13 +199,14 @@ def balance_jobs(system_a, system_b):
             index=headings)
 
     contents = [
-        wages(system_a) / (1000 * USD), work(system_a) / FTE,
-        wages(system_b) / (1000 * USD), work(system_b) / FTE]
-    headers = ["Value", "Jobs",
-               "Value", "Jobs"]
-    df = pd.DataFrame(
+        rates / (USD / hr),
+        work(system_a) / FTE, wages(system_a) / (1000 * USD),
+        work(system_b) / FTE, wages(system_b) / (1000 * USD)]
+    headers = ["Base salary", "Jobs", "Value",
+               "Jobs", "Value"]
+    table = pd.DataFrame(
         data=contents,
         index=headers)
-    df["= Net change"] = df.sum(axis=1)
-    df["Unit"] = ['kUSD', 'FTE', 'kUSD', 'FTE']
-    return df[["Unit"] + headings + ["= Net change"]].T
+    table["= Net change"] = table.sum(axis=1)
+    table["Unit"] = ['USD/hr', 'FTE', 'kUSD', 'FTE', 'kUSD']
+    return table[["Unit"] + headings + ["= Net change"]].T
