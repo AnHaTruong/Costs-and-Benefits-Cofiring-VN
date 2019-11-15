@@ -65,7 +65,9 @@ plt.yticks(index + 0.2, ('Trader profit',
                          'Workers wages\n(harvest, transport, O&M)',
                          'CO2 emission reduction\nvalued at 1$/tCO2',
                          'Local air quality\nmostly dust reduction'))
-plt.legend(bbox_to_anchor=(0.98, 0.4), prop={'size': 12}, frameon=False)
+plt.legend(bbox_to_anchor=(0.98, 0.4),
+           prop={'size': 12},
+           frameon=False)
 plt.tight_layout()
 
-plt.savefig("figure3.png")
+plt.savefig("figure_benefits.png")

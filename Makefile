@@ -15,18 +15,18 @@ tables = tables_manuscript.txt feasibility.txt
 figures-lcoe =  LCOE-4tech-3years-catalogue.png LCOE-4tech-3years-IEAfuelcosts.png\
                 LCOE-4tech-2020-catalogueextremes.png LCOE-4tech-2050-catalogueextremes.png\
                 LCOE-asDEA2019.png
-figures-manuscript1 = figure2.png figure3.png
+figures-manuscript1 = figure_emissions.png figure_benefits.png
 
 all: $(tables) $(figures-lcoe) $(figures-manuscript1)
  
 feasibility.txt: manuscript1/feasibility.py manuscript1/parameters.py
 	$(PYTHON) -m manuscript1.feasibility > $@
 
-figure2.png: manuscript1/figure2.py manuscript1/parameters.py
-	$(PYTHON) -m manuscript1.figure2 > $@
+figure_emissions.png: manuscript1/figure_emissions.py manuscript1/parameters.py
+	$(PYTHON) -m manuscript1.figure_emissions > $@
 
-figure3.png: manuscript1/figure3.py manuscript1/parameters.py
-	$(PYTHON) -m manuscript1.figure3 > $@
+figure_benefits.png: manuscript1/figure_benefits.py manuscript1/parameters.py
+	$(PYTHON) -m manuscript1.figure_benefits > $@
 
 $(figures-lcoe): lcoe/figures.py
 	$(PYTHON) -m lcoe.figures
