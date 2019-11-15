@@ -70,4 +70,4 @@ plt.legend(bbox_to_anchor=(0.98, 0.4),
            frameon=False)
 plt.tight_layout()
 
-plt.savefig("figure_benefits.png")
+plt.savefig("figure_benefits.svg")

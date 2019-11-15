@@ -13,7 +13,7 @@ SOURCEDIRS = model manuscript1 lcoe tests
 figures-lcoe =  LCOE-4tech-3years-catalogue.png LCOE-4tech-3years-IEAfuelcosts.png\
                 LCOE-4tech-2020-catalogueextremes.png LCOE-4tech-2050-catalogueextremes.png\
                 LCOE-asDEA2019.png
-figures-manuscript1 = figure_emissions.png figure_benefits.png
+figures-manuscript1 = figure_emissions.svg figure_benefits.svg figure_economics.svg
 tables-manuscript1 = tables_manuscript.txt table_jobs.txt table_feasibility.txt table_emissionreduction.txt table_parameters.txt
 
 all: $(tables) $(figures-lcoe) $(figures-manuscript1) $(tables-manuscript1)
@@ -21,7 +21,7 @@ all: $(tables) $(figures-lcoe) $(figures-manuscript1) $(tables-manuscript1)
 feasibility.txt: manuscript1/feasibility.py manuscript1/parameters.py
 	$(PYTHON) -m manuscript1.feasibility > $@
 
-figure_%.png: manuscript1/figure_%.py manuscript1/parameters.py
+figure_%.svg: manuscript1/figure_%.py manuscript1/parameters.py
 	$(PYTHON) -m manuscript1.figure_$* > $@
 
 $(figures-lcoe): lcoe/figures.py

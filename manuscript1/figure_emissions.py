@@ -77,4 +77,4 @@ plot_emissions(MongDuong1System, AXESS[0])
 plot_emissions(NinhBinhSystem, AXESS[1])
 FIGURE.tight_layout()
 
-plt.savefig('figure_emissions.png')
+plt.savefig('figure_emissions.svg')

@@ -1,6 +1,7 @@
 *.pyc
 *~
 *.png
+*.svg
 table*.txt
 table*.diff
 *.test
