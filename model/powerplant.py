@@ -149,10 +149,13 @@ class PowerPlant(Investment, Emitter):
         description["Boiler technology"] = self.parameter.boiler_technology
         description["Installed capacity"] = self.parameter.capacity
         description["Capacity factor"] = self.parameter.capacity_factor
-        description["Coal consumption"] = self.coal_used[1]
-        description["Heat value of coal"] = self.parameter.coal.heat_value
         description["Plant efficiency"] = self.plant_efficiency[1]
         description["Boiler efficiency"] = self.parameter.boiler_efficiency_new
+        description["Coal consumption"] = self.coal_used[1]
+        description["Coal type"] = self.parameter.coal.name
+        description["Coal heat value"] = self.parameter.coal.heat_value
+        description["Coal transport distance"] = self.parameter.coal.transport_distance
+        description["Coal transport mean"] = self.parameter.coal.transport_mean
         return description
 
     def lcoe_statement(self, discount_rate, tax_rate, depreciation_period):

@@ -14,7 +14,7 @@ figures-lcoe =  LCOE-4tech-3years-catalogue.png LCOE-4tech-3years-IEAfuelcosts.p
                 LCOE-4tech-2020-catalogueextremes.png LCOE-4tech-2050-catalogueextremes.png\
                 LCOE-asDEA2019.png
 figures-manuscript1 = figure_emissions.png figure_benefits.png
-tables-manuscript1 = tables_manuscript.txt table_jobs.txt table_feasibility.txt
+tables-manuscript1 = tables_manuscript.txt table_jobs.txt table_feasibility.txt table_emissionreduction.txt table_parameters.txt
 
 all: $(tables) $(figures-lcoe) $(figures-manuscript1) $(tables-manuscript1)
  

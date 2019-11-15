@@ -20,7 +20,7 @@ from manuscript1.parameters import (MongDuong1System, NinhBinhSystem,
                                     external_cost, external_cost_SKC, external_cost_ZWY,
                                     external_cost_HAS)
 
-from model.tables import (emission_reductions, straw_supply,
+from model.tables import (straw_supply,
                           emission_reductions_by_activity, emission_reductions_benefits)
 from model.utils import display_as
 
@@ -51,20 +51,6 @@ table = (
     "\n\n" +
     str(emission_reductions_benefits(MongDuong1System, NinhBinhSystem, external_cost_HAS))
 )
-
-print(table)
-
-
-#%%
-print(table_separator)
-
-pd.options.display.float_format = '{:,.0f}'.format
-
-table = """Table: Emission reductions and associated benefits from the two projects
-(external cost SKC)
-
-                    Mong Duong 1      Ninh Binh
-""" + str(emission_reductions(MongDuong1System, NinhBinhSystem, external_cost))
 
 print(table)
 
@@ -145,19 +131,3 @@ pd.options.display.float_format = '{:,.1f}'.format
 pd.set_option('display.width', 200)
 
 print(str(table))
-
-
-#%%
-print(table_separator)
-
-print('Table: Technical parameters\n')
-
-table = pd.concat(
-    [MongDuong1System.plant.characteristics(),
-     NinhBinhSystem.plant.characteristics()],
-    axis=1)
-
-pd.options.display.float_format = '{:,.2f}'.format
-
-print(str(table))
-#%%
