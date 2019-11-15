@@ -20,7 +20,7 @@ from manuscript1.parameters import (MongDuong1System, NinhBinhSystem,
                                     external_cost, external_cost_SKC, external_cost_ZWY,
                                     external_cost_HAS)
 
-from model.tables import (emission_reductions, balance_jobs, straw_supply,
+from model.tables import (emission_reductions, straw_supply,
                           emission_reductions_by_activity, emission_reductions_benefits)
 from model.utils import display_as
 
@@ -67,18 +67,6 @@ table = """Table: Emission reductions and associated benefits from the two proje
 """ + str(emission_reductions(MongDuong1System, NinhBinhSystem, external_cost))
 
 print(table)
-
-
-#%%
-print(table_separator)
-
-pd.options.display.float_format = '{:,.1f}'.format
-
-print("""Table: Job creation and destruction in the co-firing scenario.
-
-                             Mong Duong 1  Ninh Binh""")
-
-print(balance_jobs(MongDuong1System, NinhBinhSystem))
 
 
 #%%

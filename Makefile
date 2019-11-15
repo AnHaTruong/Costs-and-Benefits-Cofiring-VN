@@ -10,30 +10,28 @@ PYTEST = python3 -m pytest
 PYLINT = pylint3
 SOURCEDIRS = model manuscript1 lcoe tests
 
-tables = tables_manuscript.txt feasibility.txt
-
 figures-lcoe =  LCOE-4tech-3years-catalogue.png LCOE-4tech-3years-IEAfuelcosts.png\
                 LCOE-4tech-2020-catalogueextremes.png LCOE-4tech-2050-catalogueextremes.png\
                 LCOE-asDEA2019.png
 figures-manuscript1 = figure_emissions.png figure_benefits.png
+tables-manuscript1 = tables_manuscript.txt table_jobs.txt table_feasibility.txt
 
-all: $(tables) $(figures-lcoe) $(figures-manuscript1)
+all: $(tables) $(figures-lcoe) $(figures-manuscript1) $(tables-manuscript1)
  
 feasibility.txt: manuscript1/feasibility.py manuscript1/parameters.py
 	$(PYTHON) -m manuscript1.feasibility > $@
 
-figure_emissions.png: manuscript1/figure_emissions.py manuscript1/parameters.py
-	$(PYTHON) -m manuscript1.figure_emissions > $@
-
-figure_benefits.png: manuscript1/figure_benefits.py manuscript1/parameters.py
-	$(PYTHON) -m manuscript1.figure_benefits > $@
+figure_%.png: manuscript1/figure_%.py manuscript1/parameters.py
+	$(PYTHON) -m manuscript1.figure_$* > $@
 
 $(figures-lcoe): lcoe/figures.py
 	$(PYTHON) -m lcoe.figures
 
+table_%.txt: manuscript1/table_%.py manuscript1/parameters.py
+	$(PYTHON) -m manuscript1.table_$* > $@
+
 tables_manuscript.txt: manuscript1/tables_manuscript.py manuscript1/parameters.py
 	$(PYTHON) -m manuscript1.tables_manuscript > $@
-
 
 classes.dot packages.dot:
 	pyreverse3 *py */*.py
@@ -93,8 +91,7 @@ codestyle:
 
 
 clean:
-	rm -f $(tables)
-	rm -f $(figures-lcoe) $(figures-manuscript1)
+	rm -f $(figures-lcoe) $(figures-manuscript1) $(tables-manuscript1)
 
 cleaner: clean
 	find . -type f -name '*.pyc' -delete
