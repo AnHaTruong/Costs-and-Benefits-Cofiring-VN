@@ -38,7 +38,7 @@ def create_LCOE_df(plant, base_price, upper_price, lower_price):
         lcoe_base.append(plant[year][base_price].lcoe(*lcoe_arg) / unit)
         lcoe_upper.append(plant[year][upper_price].lcoe(*lcoe_arg) / unit)
         lcoe_lower.append(plant[year][lower_price].lcoe(*lcoe_arg) / unit)
-        lcoe_capital.append(plant[year][base_price].capital /
+        lcoe_capital.append(plant[year][base_price].amount_invested /
                             npv(discount_rate, plant[year][base_price].power_generation) / unit)
         lcoe_fuel.append(npv(discount_rate, plant[year][base_price].fuel_cost()) /
                          npv(discount_rate, plant[year][base_price].power_generation) / unit)
@@ -67,7 +67,7 @@ def create_RELCOE_df(plant):
     lcoe_OM = []
     for year in ['2020', '2030', '2050', 'Lower20', 'Upper20', 'Lower50', 'Upper50']:
         lcoe_RE.append(plant[year].lcoe(*lcoe_arg) / unit)
-        lcoe_capital.append(plant[year].capital /
+        lcoe_capital.append(plant[year].amount_invested /
                             npv(discount_rate, plant[year].power_generation) / unit)
         lcoe_fuel.append(npv(discount_rate, plant[year].fuel_cost()) /
                          npv(discount_rate, plant[year].power_generation) / unit)

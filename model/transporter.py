@@ -134,4 +134,5 @@ class Transporter(Investment, Emitter):
         display_as(a.loc['fuel_cost_per_hour_loading'], "USD / hr")
         display_as(a.loc['rental_cost_per_hour'], "USD / hr")
         display_as(a.loc['wage_bm_transport'], "USD / hr")
+        display_as(a.loc['barge_fuel_consumption'], "g / t / km")
         return a
