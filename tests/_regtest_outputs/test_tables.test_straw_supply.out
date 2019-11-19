@@ -16,8 +16,6 @@ Transport      :           2.01507e+07 km*t
 Collection_radius:         72.919 km
 Supply zone
  Shape: Semiannulus. Half of the Annulus with inner radius 0 km, outer radius 50 km, area 3926.99 km2
- Straw density produced*:   12.5793 t/km2
- Straw density sold*:       4.96883 t/km2
  Area:                      392699 ha
  Rice growing area:         10488.1 ha
  Collected area:            4142.79 ha
@@ -25,11 +23,8 @@ Supply zone
  Straw sold:                19512.5 t
  Tortuosity:                1.5
  Activity to transport all: 975627 km*t
-     Note:  *legacy code
 Supply zone
  Shape: Semiannulus. Half of the Annulus with inner radius 50 km, outer radius 72.919 km, area 4425.21 km(2)
- Straw density produced*:   117.631 t/km2
- Straw density sold*:       46.4643 t/km2
  Area:                      442521 ha
  Rice growing area:         90864.3 ha
  Collected area:            35891.4 ha
@@ -37,7 +32,6 @@ Supply zone
  Straw sold:                205614 t
  Tortuosity:                1.5
  Activity to transport all: 1.91751e+07 km*t
-     Note:  *legacy code
 
 Ninh Binh Supply chain
 
@@ -50,8 +44,6 @@ Transport      :           549698 km*t
 Collection_radius:         13.8556 km
 Supply zone
  Shape: Disk with radius 13.8556 km, area 603.115 km2
- Straw density produced*:   166.534 t/km2
- Straw density sold*:       65.7807 t/km2
  Area:                      60311.5 ha
  Rice growing area:         17871.7 ha
  Collected area:            7059.32 ha
@@ -59,4 +51,3 @@ Supply zone
  Straw sold:                39673.4 t
  Tortuosity:                1.5
  Activity to transport all: 549698 km*t
-     Note:  *legacy code

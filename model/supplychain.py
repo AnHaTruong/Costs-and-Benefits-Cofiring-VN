@@ -19,7 +19,7 @@ class SupplyZone:
 
     Assume uniform repartition of biomass - fields are small and everywhere.
     One crop per year is subject to straw collection for sale.
-    The fraction of the fields that are collected and sold is also uniform.
+    Only a fraction of the fields is collected and sold for bioenergy. Also uniform.
     """
 
     def __init__(self,
@@ -28,22 +28,18 @@ class SupplyZone:
                  rice_land_fraction,
                  straw_to_rice_ratio,
                  tortuosity_factor,
-                 sold_fraction):
+                 collected_sold_fraction):
         self.shape = shape
         self.rice_yield_per_crop = rice_yield_per_crop
         self.rice_land_fraction = rice_land_fraction
         self.straw_to_rice_ratio = straw_to_rice_ratio
         self.straw_yield_per_crop = rice_yield_per_crop * straw_to_rice_ratio
         self.tortuosity_factor = tortuosity_factor
-        self.sold_fraction = sold_fraction
+        self.collected_sold_fraction = collected_sold_fraction
 
     def __str__(self):
-        straw_density = self.straw_yield_per_crop * self.rice_land_fraction
-        straw_density = display_as(straw_density, 't/km2')
         return ("Supply zone"
                 + "\n Shape: " + str(self.shape)
-                + "\n Straw density produced*:   " + str(straw_density)
-                + "\n Straw density sold*:       " + str(straw_density * self.sold_fraction)
                 + "\n Area:                      " + str(self.area())
                 + "\n Rice growing area:         " + str(self.ricegrowing_area())
                 + "\n Collected area:            " + str(self.collected_area())
@@ -51,7 +47,6 @@ class SupplyZone:
                 + "\n Straw sold:                " + str(self.straw_sold())
                 + "\n Tortuosity:                " + str(self.tortuosity_factor)
                 + "\n Activity to transport all: " + str(self.transport_tkm())
-                + "\n     Note:  *legacy code"
                 + "\n")
 
     def area(self):
@@ -62,20 +57,23 @@ class SupplyZone:
         surface = self.area() * self.rice_land_fraction
         return display_as(surface, 'ha')
 
-    def collected_area(self):
-        surface = self.ricegrowing_area() * self.sold_fraction
-        return display_as(surface, 'ha')
-
     def straw_available(self):
         mass = self.ricegrowing_area() * self.straw_yield_per_crop
         return display_as(mass, 't')
 
+    def collected_area(self):
+        surface = self.ricegrowing_area() * self.collected_sold_fraction
+        return display_as(surface, 'ha')
+
     def straw_sold(self):
-        mass = self.straw_available() * self.sold_fraction
+        mass = self.straw_available() * self.collected_sold_fraction
         return display_as(mass, 't')
 
     def transport_tkm(self):
-        activity = (self.straw_yield_per_crop * self.rice_land_fraction * self.sold_fraction
+        """Return the amount of transport activity to collect the zone."""
+        activity = (self.straw_yield_per_crop
+                    * self.rice_land_fraction
+                    * self.collected_sold_fraction
                     * self.shape.first_moment_of_area()
                     * self.tortuosity_factor)
         return display_as(activity, 't * km')

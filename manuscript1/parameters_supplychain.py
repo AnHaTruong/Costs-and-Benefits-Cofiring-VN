@@ -21,7 +21,8 @@ from model.shape import Semiannulus, Disk
 
 
 # Leinonen and Nguyen 2013 : 50% of straw is collected and 79% of collected straw is sold
-_sold_fraction = 0.5 * 0.79
+_collected_fraction = 0.5
+_sold_fraction = 0.79
 _residue_to_product_ratio = 1.0   # Reference ???
 _tortuosity_factor = 1.5          # Reference ???
 
@@ -36,7 +37,7 @@ supply_zone_NB = SupplyZone(
                         df.loc['Ninh Binh', 'Total area (ha)']),
     straw_to_rice_ratio=_residue_to_product_ratio,
     tortuosity_factor=_tortuosity_factor,
-    sold_fraction=_sold_fraction)
+    collected_sold_fraction=_collected_fraction * _sold_fraction)
 
 supply_chain_NB = SupplyChain(
     zones=[supply_zone_NB])
@@ -51,7 +52,7 @@ supply_zone_1_MD = SupplyZone(
                         df.loc['Quang Ninh', 'Total area (ha)']),
     straw_to_rice_ratio=_residue_to_product_ratio,
     tortuosity_factor=_tortuosity_factor,
-    sold_fraction=_sold_fraction)
+    collected_sold_fraction=_collected_fraction * _sold_fraction)
 
 
 provinces_around = ['Bac Giang', 'Hai Duong', 'Hai Phong']
@@ -79,7 +80,7 @@ supply_zone_2_MD = SupplyZone(
     rice_land_fraction=cultivation_area_around_MD / total_area_around_MD,
     straw_to_rice_ratio=_residue_to_product_ratio,
     tortuosity_factor=_tortuosity_factor,
-    sold_fraction=_sold_fraction)
+    collected_sold_fraction=_collected_fraction * _sold_fraction)
 
 
 supply_chain_MD1 = SupplyChain(
