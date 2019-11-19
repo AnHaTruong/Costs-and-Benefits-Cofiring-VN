@@ -18,9 +18,9 @@ from model.utils import USD, kUSD, after_invest, display_as, isclose
 class Investment:
     """Financial project accounting: NPV after revenue, operating expenses, amortization and taxes.
 
-    The capital investment is made in period 0,
+    The investment is made in period 0,
     revenue, operating expenses and taxes occur in subsequent periods
-    Taxes account for linear amortization of the capital starting period 1
+    Taxes account for linear amortization of the amount invested starting period 1
     No salvage value
 
     Virtual class: descendent class should redefine  operating_expense()  to
@@ -50,8 +50,8 @@ class Investment:
     -1 kUSD
     """
 
-    def __init__(self, name, time_horizon, capital=0 * USD):
-        self.capital = display_as(capital, 'kUSD')
+    def __init__(self, name, time_horizon, amount_invested=0 * USD):
+        self.amount_invested = display_as(amount_invested, 'kUSD')
         self.name = name
         self.time_horizon = time_horizon
         self._revenue = None
@@ -75,21 +75,21 @@ class Investment:
         But code outside this module assume it occurs only in  year 0.
         """
         v_invest = 1 - after_invest(1, self.time_horizon)
-        return display_as(v_invest * self.capital / sum(v_invest), 'kUSD')
+        return display_as(v_invest * self.amount_invested / sum(v_invest), 'kUSD')
 
     def operating_expenses(self):
         return display_as(np.zeros(self.time_horizon + 1) * USD, 'kUSD')
 
     def amortization(self, depreciation_period):
         """Return vector of linear amortization amounts."""
-        if not self.capital:
+        if not self.amount_invested:
             return display_as(np.zeros(self.time_horizon + 1) * USD, 'kUSD')
         assert isinstance(depreciation_period, int), "Depreciation period not an integer"
         assert depreciation_period > 0, "Depreciation period negative"
         assert depreciation_period < self.time_horizon - 1, "Depreciation >= timehorizon - 2 year"
         v_cost = np.zeros(self.time_horizon + 1).copy() * USD
         for year in range(1, depreciation_period + 1):
-            v_cost[year] = self.capital / float(depreciation_period)
+            v_cost[year] = self.amount_invested / float(depreciation_period)
         return display_as(v_cost, 'kUSD')
 
     def earning_before_tax(self, depreciation_period=None):

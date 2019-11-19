@@ -36,7 +36,7 @@ PlantParameter = namedtuple("PlantParameter", ['name',
                                                'coal',
                                                'time_horizon'])
 
-CofiringParameter = namedtuple('CofiringParameter', ['capital_cost',
+CofiringParameter = namedtuple('CofiringParameter', ['investment_cost',
                                                      'fix_om_cost',
                                                      'variable_om_cost',
                                                      'OM_hour_MWh',
@@ -54,7 +54,7 @@ class PowerPlant(Investment, Emitter):
                  parameter,
                  emission_factor,
                  derating=None,
-                 capital=0 * USD):
+                 amount_invested=0 * USD):
         """Initialize the power plant, compute the amount of coal used.
 
         The financials (revenue and coal_cost) are not initialized and must be defined later.
@@ -67,7 +67,7 @@ class PowerPlant(Investment, Emitter):
         The capital cost represents the cost of installing cofiring,
         it is zero in this case.
         """
-        Investment.__init__(self, parameter.name, parameter.time_horizon, capital)
+        Investment.__init__(self, parameter.name, parameter.time_horizon, amount_invested)
         self.parameter = parameter
         self.emission_factor = emission_factor
 
@@ -148,10 +148,10 @@ class PowerPlant(Investment, Emitter):
         pd.set_option('display.max_colwidth', 80)
         a = pd.Series(self.parameter, self.parameter._fields)
         a['derating'] = f"{self.derating[0]}, {self.derating[1]:4f}, ..."
-        a['capital'] = self.capital
+        a['amount_invested'] = self.amount_invested
         display_as(a.loc['fix_om_coal'], "USD / kW / y")
         display_as(a.loc['variable_om_coal'], "USD / kWh")
-        display_as(a.loc['capital'], "MUSD")
+        display_as(a.loc['amount_invested'], "MUSD")
         return a
 
     def characteristics(self):
@@ -175,7 +175,7 @@ class PowerPlant(Investment, Emitter):
     def lcoe_statement(self, discount_rate, tax_rate, depreciation_period):
         """Assess the levelized cost of electricity."""
         statement = pd.Series(name=self.name)
-        statement["Investment    (MUSD)"] = self.capital / MUSD
+        statement["Investment    (MUSD)"] = self.amount_invested / MUSD
         statement["Fuel cost     (MUSD)"] = npv(discount_rate, self.fuel_cost()) / MUSD
         statement["  Coal        (MUSD)"] = npv(discount_rate, self.coal_cost) / MUSD
         statement["  Biomass     (MUSD)"] = 0
@@ -225,9 +225,9 @@ class CofiringPlant(PowerPlant):
             plant_parameter,
             emission_factor,
             derating=boiler_efficiency / plant_parameter.boiler_efficiency_new,
-            capital=(cofire_parameter.capital_cost
-                     * plant_parameter.capacity * y
-                     * float(cofire_parameter.biomass_ratio_energy[1])))
+            amount_invested=(cofire_parameter.investment_cost
+                             * plant_parameter.capacity
+                             * float(cofire_parameter.biomass_ratio_energy[1])))
 
         self.name = plant_parameter.name + ' Cofire'
 
@@ -329,7 +329,7 @@ class CofiringPlant(PowerPlant):
         bre0 = self.cofire_parameter.biomass_ratio_energy[0]
         bre1 = self.cofire_parameter.biomass_ratio_energy[1]
         b['biomass_ratio_energy'] = f"{bre0}, {bre1:2f}, ..."
-        display_as(b.loc['capital_cost'], "USD / kW / y")
+        display_as(b.loc['investment_cost'], "USD / kW")
         display_as(b.loc['fix_om_cost'], "USD / kW / y")
         display_as(b.loc['variable_om_cost'], "USD / kWh")
         display_as(b.loc['wage_operation_maintenance'], "USD / hr")

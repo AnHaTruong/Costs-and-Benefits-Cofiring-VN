@@ -169,7 +169,7 @@ plant_parameter_MD1 = PlantParameter(
     time_horizon=20)
 
 cofire_MD1 = CofiringParameter(
-    capital_cost=50 * USD / kW / y,
+    investment_cost=50 * USD / kW,
     fix_om_cost=32.24 * USD / kW / y,
     variable_om_cost=0.006 * USD / kWh,
     OM_hour_MWh=0.12 * hr / MWh,  # working hour for OM per MWh
@@ -209,7 +209,7 @@ plant_parameter_NB = PlantParameter(
     time_horizon=20)
 
 cofire_NB = cofire_MD1._replace(
-    capital_cost=100 * USD / kW / y)
+    investment_cost=100 * USD / kW)
 
 price_NB = Price(
     biomass_plantgate=38.4483 * USD / t,
