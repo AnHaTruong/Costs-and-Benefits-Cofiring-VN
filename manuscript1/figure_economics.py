@@ -55,10 +55,10 @@ def plot_feasibility(system, ax):
     ax.plot([x5, x6], [y5, y6], 'bo-', linewidth=10)
     ax.legend(["Farmer's gain",
                "WTA",
-               "Cost to collect",
+               "Total cost to collect",
                "Plant's gain",
                "WTP",
-               "Transport cost"])
+               "Reseller avg cost"])
 
     ax.set_ylim([y3plant / 2, y0plant / 3])
     ax.spines['left'].set_position(('data', 0))
