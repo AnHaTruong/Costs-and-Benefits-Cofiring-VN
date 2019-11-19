@@ -32,7 +32,6 @@ PlantParameter = namedtuple("PlantParameter", ['name',
                                                'plant_efficiency',
                                                'fix_om_coal',
                                                'variable_om_coal',
-                                               'emission_factor',
                                                'emission_control',
                                                'coal',
                                                'time_horizon'])
@@ -53,6 +52,7 @@ class PowerPlant(Investment, Emitter):
 
     def __init__(self,
                  parameter,
+                 emission_factor,
                  derating=None,
                  capital=0 * USD):
         """Initialize the power plant, compute the amount of coal used.
@@ -69,6 +69,7 @@ class PowerPlant(Investment, Emitter):
         """
         Investment.__init__(self, parameter.name, parameter.time_horizon, capital)
         self.parameter = parameter
+        self.emission_factor = emission_factor
 
         self.power_generation = (np.ones(parameter.time_horizon + 1) *
                                  parameter.capacity * parameter.capacity_factor * y)
@@ -89,7 +90,7 @@ class PowerPlant(Investment, Emitter):
         Emitter.__init__(self,
                          Activity(name=parameter.coal.name,
                                   level=self.coal_used,
-                                  emission_factor=parameter.emission_factor[parameter.coal.name]),
+                                  emission_factor=self.emission_factor[parameter.coal.name]),
                          emission_control=parameter.emission_control)
 
         self._coal_cost = None
@@ -139,11 +140,13 @@ class PowerPlant(Investment, Emitter):
         activity = Activity(
             name=transport_mean,
             level=self.coal_transport_tkm(),
-            emission_factor=self.parameter.emission_factor[transport_mean])
+            emission_factor=self.emission_factor[transport_mean])
         return Emitter(activity)
 
     def characteristics(self):
         """Describe the technical characteristics of the plant."""
+        # Replace with something like
+        # return pd.Series(self.paraneter, self.parameter._fields)
         description = pd.Series(name=self.parameter.name)
         description["Comissioning year"] = self.parameter.commissioning
         description["Boiler technology"] = self.parameter.boiler_technology
@@ -185,7 +188,7 @@ class PowerPlant(Investment, Emitter):
 class CofiringPlant(PowerPlant):
     """A coal-fired power plant which co-fires biomass."""
 
-    def __init__(self, plant_parameter, cofire_parameter):
+    def __init__(self, plant_parameter, cofire_parameter, emission_factor):
         """Initialize the cofiring plant.
 
         1/ Instanciate as a PowerPlant with a lower efficiency and higher capital cost
@@ -209,6 +212,7 @@ class CofiringPlant(PowerPlant):
         PowerPlant.__init__(
             self,
             plant_parameter,
+            emission_factor,
             derating=boiler_efficiency / plant_parameter.boiler_efficiency_new,
             capital=(cofire_parameter.capital_cost
                      * plant_parameter.capacity * y
@@ -229,11 +233,11 @@ class CofiringPlant(PowerPlant):
             Activity(
                 name=plant_parameter.coal.name,
                 level=self.coal_used,
-                emission_factor=plant_parameter.emission_factor[plant_parameter.coal.name]),
+                emission_factor=self.emission_factor[plant_parameter.coal.name]),
             Activity(
                 name='Straw',
                 level=self.biomass_used,
-                emission_factor=plant_parameter.emission_factor[cofire_parameter.biomass.name])]
+                emission_factor=self.emission_factor[cofire_parameter.biomass.name])]
 
         self._biomass_cost = None
 

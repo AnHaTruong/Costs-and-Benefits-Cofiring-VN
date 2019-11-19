@@ -139,7 +139,6 @@ farm_parameter = FarmerParameter(
     wage_bm_collect=3.7 * USD / hr,  # Tran Dang (2019)
     fuel_cost_per_hour=0.5 * USD / hr,
     straw_burn_rate=0.9,
-    emission_factor=emission_factor,
     fuel_use=4.16 * kg / d,
     time_horizon=20)
 
@@ -153,7 +152,6 @@ transport_parameter = TransporterParameter(
     fuel_cost_per_hour_loading=0 * USD / hr,
     rental_cost_per_hour=9.62 * USD / hr,
     wage_bm_transport=2.13 * USD / hr,  # http://vietnamsalary.careerbuilder.vn
-    emission_factor=emission_factor,
     time_horizon=20)
 
 plant_parameter_MD1 = PlantParameter(
@@ -166,7 +164,6 @@ plant_parameter_MD1 = PlantParameter(
     plant_efficiency=38.84 / 100,
     fix_om_coal=29.31 * USD / kW / y,
     variable_om_coal=0.0048 * USD / kWh,
-    emission_factor=emission_factor,
     emission_control={'CO2': 0.0, 'SO2': 0.982, 'NOx': 0.0, 'PM10': 0.996},
     coal=coal_6b,
     time_horizon=20)
@@ -194,7 +191,8 @@ MongDuong1System = System(
     price_MD1,
     farm_parameter,
     transport_parameter,
-    mining_parameter)
+    mining_parameter,
+    emission_factor)
 
 plant_parameter_NB = PlantParameter(
     name='Ninh Binh',
@@ -206,7 +204,6 @@ plant_parameter_NB = PlantParameter(
     plant_efficiency=21.77 / 100,
     fix_om_coal=plant_parameter_MD1.fix_om_coal,
     variable_om_coal=plant_parameter_MD1.variable_om_coal,
-    emission_factor=emission_factor,
     emission_control={'CO2': 0.0, 'SO2': 0.0, 'NOx': 0.0, 'PM10': 0.992},
     coal=coal_4b,
     time_horizon=20)
@@ -227,4 +224,5 @@ NinhBinhSystem = System(
     price_NB,
     farm_parameter,
     transport_parameter,
-    mining_parameter)
+    mining_parameter,
+    emission_factor)

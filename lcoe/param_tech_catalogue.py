@@ -215,7 +215,6 @@ def create_plant(name, tech_data, fuel, year):
                                      plant_efficiency=tech_data[str(year)][3] / 100,
                                      fix_om_coal=tech_data[str(year)][25] * USD / MW / y,
                                      variable_om_coal=tech_data[str(year)][26] * USD / MWh,
-                                     emission_factor=emission_factor,
                                      emission_control={'CO2': 0.0,
                                                        'SO2': tech_data[year][19],
                                                        'NOx': 0.0, 'PM10': 0.996},
@@ -226,7 +225,7 @@ def create_plant(name, tech_data, fuel, year):
     idc = (1 * ((1 + discount_rate) ** construction_time - 1) /
            (discount_rate * construction_time) * (1 + discount_rate / 2) - 1)
     capital_idc = capital_cost * (1 + idc)
-    plant = PowerPlant(plant_parameter, capital=capital_idc)
+    plant = PowerPlant(plant_parameter, emission_factor=emission_factor, capital=capital_idc)
     plant.coal_cost = plant.coal_used * fuel_price[str(fuel.name)][str(year)]
     plant.revenue = after_invest(plant.power_generation[1] * electricity_price,
                                  plant.parameter.time_horizon)
@@ -272,7 +271,6 @@ def create_RE_plant(name, tech_data, year):
                                      plant_efficiency=1.0,
                                      fix_om_coal=tech_data[str(year)][25] * USD / MW / y,
                                      variable_om_coal=tech_data[str(year)][26] * USD / MWh,
-                                     emission_factor=emission_factor,
                                      emission_control={'CO2': 0.0,
                                                        'SO2': 0.0,
                                                        'NOx': 0.0, 'PM10': 0.0},
@@ -283,7 +281,7 @@ def create_RE_plant(name, tech_data, year):
     idc = (1 * ((1 + discount_rate) ** construction_time - 1) /
            (discount_rate * construction_time) * (1 + discount_rate / 2) - 1)
     capital_idc = capital_cost * (1 + idc)
-    plant = PowerPlant(plant_parameter, capital=capital_idc)
+    plant = PowerPlant(plant_parameter, emission_factor=emission_factor, capital=capital_idc)
     plant.coal_used = np.ones(plant.parameter.time_horizon + 1) * 0.0 * t
     plant.coal_cost = plant.coal_used * fuel_price['6b_coal'][str(year)]
     plant.revenue = after_invest(plant.power_generation[1] * electricity_price,

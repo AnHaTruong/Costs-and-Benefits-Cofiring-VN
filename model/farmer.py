@@ -26,7 +26,6 @@ FarmerParameter = namedtuple("FarmerParameter", ['winder_rental_cost',
                                                  'wage_bm_collect',
                                                  'fuel_cost_per_hour',
                                                  'straw_burn_rate',
-                                                 'emission_factor',
                                                  'fuel_use',
                                                  'time_horizon'])
 
@@ -38,8 +37,9 @@ class Farmer(Investment, Emitter):
     The capital is zero, we assume the winder is rented.
     """
 
-    def __init__(self, supply_chain, farmer_parameter):
+    def __init__(self, supply_chain, farmer_parameter, emission_factor):
         self.parameter = farmer_parameter
+        self.emission_factor = emission_factor
         self.quantity = after_invest(supply_chain.straw_sold(), self.parameter.time_horizon)
 
         self.winder_use_area = after_invest(supply_chain.collected_area(),
@@ -51,19 +51,19 @@ class Farmer(Investment, Emitter):
         field_burning_before = Activity(
             name='Straw',
             level=np.ones(self.parameter.time_horizon + 1) * straw_burned * t,
-            emission_factor=self.parameter.emission_factor['straw_open'])
+            emission_factor=self.emission_factor['straw_open'])
 
         self.emissions_exante = Emitter(field_burning_before).emissions(total=False)
 
         field_burning = Activity(
             name='Straw',
             level=field_burning_before.level - self.quantity,
-            emission_factor=self.parameter.emission_factor['straw_open'])
+            emission_factor=self.emission_factor['straw_open'])
 
         winder_use = Activity(
             name='diesel',
             level=self.quantity / (self.parameter.winder_haul / self.parameter.fuel_use),
-            emission_factor=self.parameter.emission_factor['diesel'])
+            emission_factor=self.emission_factor['diesel'])
 
         Emitter.__init__(self, field_burning, winder_use)
 

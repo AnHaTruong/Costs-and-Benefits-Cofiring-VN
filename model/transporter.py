@@ -26,7 +26,6 @@ TransporterParameter = namedtuple("TransporterParameter",
                                    'fuel_cost_per_hour_loading',
                                    'rental_cost_per_hour',
                                    'wage_bm_transport',
-                                   'emission_factor',
                                    'time_horizon'])
 
 
@@ -47,7 +46,7 @@ class Transporter(Investment, Emitter):
     The capital is zero, we assume the trucks are rented.
     """
 
-    def __init__(self, supply_chain, transport_parameter):
+    def __init__(self, supply_chain, transport_parameter, emission_factor):
 
         Investment.__init__(self, "Transporter", transport_parameter.time_horizon)
 
@@ -62,7 +61,7 @@ class Transporter(Investment, Emitter):
         activity = Activity(
             name='Road transport',
             level=self.activity_level,
-            emission_factor=self.parameter.emission_factor['road_transport'])
+            emission_factor=emission_factor['road_transport'])
         Emitter.__init__(self, activity)
 
     def loading_work(self):  # Unloading work is included in om_work
