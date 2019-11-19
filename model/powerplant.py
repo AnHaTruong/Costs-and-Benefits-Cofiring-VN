@@ -226,7 +226,7 @@ class CofiringPlant(PowerPlant):
             emission_factor,
             derating=boiler_efficiency / plant_parameter.boiler_efficiency_new,
             capital=(cofire_parameter.capital_cost
-                     * plant_parameter.capacity * y
+                     * plant_parameter.capacity
                      * float(cofire_parameter.biomass_ratio_energy[1])))
 
         self.name = plant_parameter.name + ' Cofire'
@@ -329,7 +329,7 @@ class CofiringPlant(PowerPlant):
         bre0 = self.cofire_parameter.biomass_ratio_energy[0]
         bre1 = self.cofire_parameter.biomass_ratio_energy[1]
         b['biomass_ratio_energy'] = f"{bre0}, {bre1:2f}, ..."
-        display_as(b.loc['capital_cost'], "USD / kW / y")
+        display_as(b.loc['capital_cost'], "USD / kW")
         display_as(b.loc['fix_om_cost'], "USD / kW / y")
         display_as(b.loc['variable_om_cost'], "USD / kWh")
         display_as(b.loc['wage_operation_maintenance'], "USD / hr")
