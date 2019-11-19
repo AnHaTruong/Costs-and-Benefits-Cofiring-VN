@@ -124,3 +124,14 @@ class Transporter(Investment, Emitter):
         per_trip.columns = ['USD/trip']
 
         return pd.concat([df, per_trip], axis=1)
+
+    def parameters_table(self):
+        """Tabulates the arguments defining the transporter. Returns a Pandas Series."""
+        pd.set_option('display.max_colwidth', 80)
+        a = pd.Series(self.parameter, self.parameter._fields)
+        display_as(a.loc['wage_bm_loading'], "USD / hr")
+        display_as(a.loc['fuel_cost_per_hour_driving'], "USD / hr")
+        display_as(a.loc['fuel_cost_per_hour_loading'], "USD / hr")
+        display_as(a.loc['rental_cost_per_hour'], "USD / hr")
+        display_as(a.loc['wage_bm_transport'], "USD / hr")
+        return a
