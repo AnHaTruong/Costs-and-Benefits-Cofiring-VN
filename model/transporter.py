@@ -126,7 +126,7 @@ class Transporter(Investment, Emitter):
         return pd.concat([df, per_trip], axis=1)
 
     def parameters_table(self):
-        """Tabulates the arguments defining the transporter. Returns a Pandas Series."""
+        """Tabulate the arguments defining the transporter. Return a Pandas Series."""
         pd.set_option('display.max_colwidth', 80)
         a = pd.Series(self.parameter, self.parameter._fields)
         display_as(a.loc['wage_bm_loading'], "USD / hr")

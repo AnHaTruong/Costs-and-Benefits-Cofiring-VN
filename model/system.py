@@ -20,7 +20,7 @@ Price = namedtuple('Price',
                    'biomass_plantgate, biomass_fieldside, coal, electricity')
 
 MiningParameter = namedtuple('MiningParameter',
-                             'productivity_surface, productivity_underground, wage')
+                             'productivity_surface, productivity_underground, wage_mining')
 
 
 #We should pass the parameters as an object
@@ -105,7 +105,7 @@ class System:
 
     @property
     def coal_wages_lost(self):
-        value = self.coal_work_lost * self.mining_parameter.wage
+        value = self.coal_work_lost * self.mining_parameter.wage_mining
         return display_as(value, 'kUSD')
 
     def emissions_baseline(self, total=False):
@@ -171,6 +171,21 @@ class System:
         annual_health_benefit = df.loc['Benefit'].drop('CO2').sum()
         value = npv(discount_rate, annual_health_benefit)
         return display_as(value, 'kUSD')
+
+    def parameters_table(self):
+        """Tabulate arguments defining the system, except supply chain. Return a Pandas Series."""
+        pd.set_option('display.max_colwidth', 80)
+        a = self.farmer.parameters_table()
+        b = self.transporter.parameters_table()
+        c = self.cofiring_plant.parameters_table()
+        d = pd.Series(self.mining_parameter, self.mining_parameter._fields)
+        display_as(d.loc['wage_mining'], "USD / hr")
+        e = pd.Series(self.price, self.price._fields)
+        display_as(e.loc['biomass_plantgate'], "USD / t")
+        display_as(e.loc['biomass_fieldside'], "USD / t")
+        display_as(e.loc['coal'], "USD / t")
+        display_as(e.loc['electricity'], "USD / kWh")
+        return pd.concat([c, e, a, b, d])
 
     def benefits(self, discount_rate, external_cost):
         """Tabulate the present value of various benefits from co-firing."""
@@ -245,6 +260,6 @@ class System:
         lines.append(cols.format('Productivity', self.mining_parameter.productivity_underground))
         lines.append(cols.format('Job lost', self.coal_work_lost[1]))
         lines.append(cols.format('Job lost', display_as(self.coal_work_lost[1], "FTE")))
-        lines.append(cols.format('Wage', display_as(self.mining_parameter.wage, "USD/hr")))
+        lines.append(cols.format('Wage', display_as(self.mining_parameter.wage_mining, "USD/hr")))
         lines.append(cols.format('Wage lost', self.coal_wages_lost[1]))
         return '\n'.join(lines)

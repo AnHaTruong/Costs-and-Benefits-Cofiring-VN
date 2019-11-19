@@ -144,7 +144,7 @@ class PowerPlant(Investment, Emitter):
         return Emitter(activity)
 
     def parameters_table(self):
-        """Tabulates the arguments defining the plant. Returns a Pandas Series."""
+        """Tabulate the arguments defining the plant. Return a Pandas Series."""
         pd.set_option('display.max_colwidth', 80)
         a = pd.Series(self.parameter, self.parameter._fields)
         a['derating'] = f"{self.derating[0]}, {self.derating[1]:4f}, ..."
@@ -322,7 +322,7 @@ class CofiringPlant(PowerPlant):
         return statement
 
     def parameters_table(self):
-        """Tabulates the arguments defining the cofiring plant. Returns a Pandas Series."""
+        """Tabulate the arguments defining the cofiring plant. Return a Pandas Series."""
         a = PowerPlant.parameters_table(self)
         a['name'] = self.name
         b = pd.Series(self.cofire_parameter, self.cofire_parameter._fields)

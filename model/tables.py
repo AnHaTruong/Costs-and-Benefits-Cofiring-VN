@@ -177,7 +177,7 @@ def balance_jobs(system_a, system_b):
               system_a.transporter.parameter.wage_bm_loading,
               system_a.transporter.parameter.wage_bm_transport,
               system_a.cofiring_plant.cofire_parameter.wage_operation_maintenance,
-              system_a.mining_parameter.wage],
+              system_a.mining_parameter.wage_mining],
         index=headings)
 
     def work(system):

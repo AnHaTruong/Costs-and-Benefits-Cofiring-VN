@@ -104,7 +104,7 @@ class Farmer(Investment, Emitter):
         return pd.concat([df, per_ha], axis=1)
 
     def parameters_table(self):
-        """Tabulates the arguments defining the farmer. Returns a Pandas Series."""
+        """Tabulate the arguments defining the farmer. Return a Pandas Series."""
         pd.set_option('display.max_colwidth', 80)
         a = pd.Series(self.parameter, self.parameter._fields)
         display_as(a.loc['winder_rental_cost'], "USD / ha")

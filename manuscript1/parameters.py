@@ -59,7 +59,7 @@ external_cost = external_cost_SKC
 mining_parameter = MiningParameter(
     productivity_surface=8.04 * t / hr,  # www.eia.g
     productivity_underground=2.5 * t / hr,  # ww.eia.gov
-    wage=5.59 * USD / hr)   # Decision 1768/QD-TKV dated 28/9/2018
+    wage_mining=5.59 * USD / hr)   # Decision 1768/QD-TKV dated 28/9/2018
 
 coal_6b = Fuel(
     name="6b_coal",
