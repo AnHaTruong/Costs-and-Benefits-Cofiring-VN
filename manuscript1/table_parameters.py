@@ -30,7 +30,11 @@ table = pd.concat(
      NinhBinhSystem.parameters_table()],
     axis=1)
 
-print(str(table))
+for index, row in table.iterrows():
+    if  row[0] == row[1]:
+        row[1] = 'idem'
+
+print(table)
 
 print('\nEmission factors')
 
@@ -40,7 +44,7 @@ table = pd.concat(
     [data.iloc[[0, 1, 7, 6]] / (kg / t),
      data.iloc[[4, 5]] / (g / (t * km))])
 
-print(str(table))
+print(table)
 
 print('\nExternal costs')
 
@@ -48,7 +52,7 @@ display_as(external_cost["CO2"], "USD/t")
 display_as(external_cost["SO2"], "USD/t")
 display_as(external_cost["PM10"], "USD/t")
 display_as(external_cost["NOx"], "USD/t")
-print(str(external_cost))
+print(external_cost)
 
 print('\nVarious')
 
