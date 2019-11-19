@@ -25,25 +25,25 @@ Fuel = namedtuple('Fuel', 'name, heat_value, transport_distance, transport_mean'
 
 PlantParameter = namedtuple("PlantParameter", ['name',
                                                'capacity',
-                                               'capacity_factor',
                                                'commissioning',
                                                'boiler_technology',
-                                               'boiler_efficiency_new',
+                                               'capacity_factor',
                                                'plant_efficiency',
+                                               'boiler_efficiency_new',
                                                'fix_om_coal',
                                                'variable_om_coal',
                                                'emission_control',
                                                'coal',
                                                'time_horizon'])
 
-CofiringParameter = namedtuple('CofiringParameter', ['biomass_ratio_energy',
-                                                     'capital_cost',
+CofiringParameter = namedtuple('CofiringParameter', ['capital_cost',
                                                      'fix_om_cost',
                                                      'variable_om_cost',
-                                                     'biomass',
-                                                     'boiler_efficiency_loss',
                                                      'OM_hour_MWh',
-                                                     'wage_operation_maintenance'])
+                                                     'wage_operation_maintenance',
+                                                     'biomass_ratio_energy',
+                                                     'biomass',
+                                                     'boiler_efficiency_loss'])
 
 
 #pylint: disable=too-many-instance-attributes
@@ -143,10 +143,21 @@ class PowerPlant(Investment, Emitter):
             emission_factor=self.emission_factor[transport_mean])
         return Emitter(activity)
 
+    def parameters_table(self):
+        """Tabulates the arguments defining the plant. Returns a Pandas Series."""
+        pd.set_option('display.max_colwidth', 80)
+        a = pd.Series(self.parameter, self.parameter._fields)
+        a['derating'] = f"{self.derating[0]}, {self.derating[1]:4f}, ..."
+        a['capital'] = self.capital
+        display_as(a.loc['fix_om_coal'], "USD / kW / y")
+        display_as(a.loc['variable_om_coal'], "USD / kWh")
+        display_as(a.loc['capital'], "MUSD")
+        return a
+
     def characteristics(self):
         """Describe the technical characteristics of the plant."""
-        # Replace with something like
-        # return pd.Series(self.paraneter, self.parameter._fields)
+        # FLAG FOR DELETION.
+        #  AFTER UPDATING tests/test_tables.py
         description = pd.Series(name=self.parameter.name)
         description["Comissioning year"] = self.parameter.commissioning
         description["Boiler technology"] = self.parameter.boiler_technology
@@ -309,3 +320,17 @@ class CofiringPlant(PowerPlant):
         statement["  Biomass     (MUSD)"] = npv(discount_rate, self.biomass_cost) / MUSD
         statement["  O&M biomass (MUSD)"] = npv(discount_rate, self.biomass_om_cost()) / MUSD
         return statement
+
+    def parameters_table(self):
+        """Tabulates the arguments defining the cofiring plant. Returns a Pandas Series."""
+        a = PowerPlant.parameters_table(self)
+        a['name'] = self.name
+        b = pd.Series(self.cofire_parameter, self.cofire_parameter._fields)
+        bre0 = self.cofire_parameter.biomass_ratio_energy[0]
+        bre1 = self.cofire_parameter.biomass_ratio_energy[1]
+        b['biomass_ratio_energy'] = f"{bre0}, {bre1:2f}, ..."
+        display_as(b.loc['capital_cost'], "USD / kW / y")
+        display_as(b.loc['fix_om_cost'], "USD / kW / y")
+        display_as(b.loc['variable_om_cost'], "USD / kWh")
+        display_as(b.loc['wage_operation_maintenance'], "USD / hr")
+        return pd.concat([a, b])

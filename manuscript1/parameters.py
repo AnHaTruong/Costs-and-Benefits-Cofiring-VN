@@ -30,7 +30,7 @@ from natu.units import MJ, kg, t, d, hr, km, MW, ha, kW, y, kWh, MWh, g
 from manuscript1.parameters_supplychain import supply_chain_MD1, supply_chain_NB
 
 
-discount_rate = 0.087771
+discount_rate = 0.087771      # WACC
 depreciation_period = 10
 tax_rate = 0.25               # Corporate tax in Vietnam
 
@@ -157,9 +157,9 @@ transport_parameter = TransporterParameter(
 plant_parameter_MD1 = PlantParameter(
     name='Mong Duong 1',
     capacity=1080 * MW,
-    capacity_factor=0.60,
     commissioning=2015,
     boiler_technology='CFB',
+    capacity_factor=0.60,
     boiler_efficiency_new=87.03 / 100,
     plant_efficiency=38.84 / 100,
     fix_om_coal=29.31 * USD / kW / y,
@@ -169,14 +169,14 @@ plant_parameter_MD1 = PlantParameter(
     time_horizon=20)
 
 cofire_MD1 = CofiringParameter(
-    biomass_ratio_energy=after_invest(0.05, plant_parameter_MD1.time_horizon),
     capital_cost=50 * USD / kW / y,
     fix_om_cost=32.24 * USD / kW / y,
     variable_om_cost=0.006 * USD / kWh,
-    biomass=straw,
-    boiler_efficiency_loss=lambda r: 0.0044 * r**2 + 0.0055 * r,  # Tillman (2000) r mass ratio
     OM_hour_MWh=0.12 * hr / MWh,  # working hour for OM per MWh
-    wage_operation_maintenance=2.7 * USD / hr)  # A 2015 job opening
+    wage_operation_maintenance=2.7 * USD / hr,    # A 2015 job opening
+    biomass_ratio_energy=after_invest(0.05, plant_parameter_MD1.time_horizon),
+    biomass=straw,
+    boiler_efficiency_loss=lambda r: 0.0044 * r**2 + 0.0055 * r)  # Tillman (2000) r mass ratio
 
 price_MD1 = Price(
     biomass_plantgate=45.13575 * USD / t,
@@ -197,11 +197,11 @@ MongDuong1System = System(
 plant_parameter_NB = PlantParameter(
     name='Ninh Binh',
     capacity=100 * MW,
-    capacity_factor=0.64,
     commissioning=1974,
     boiler_technology='PC',
-    boiler_efficiency_new=81.61 / 100,
+    capacity_factor=0.64,
     plant_efficiency=21.77 / 100,
+    boiler_efficiency_new=81.61 / 100,
     fix_om_coal=plant_parameter_MD1.fix_om_coal,
     variable_om_coal=plant_parameter_MD1.variable_om_coal,
     emission_control={'CO2': 0.0, 'SO2': 0.0, 'NOx': 0.0, 'PM10': 0.992},
