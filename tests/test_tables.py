@@ -79,18 +79,32 @@ def test_emissions_cofiring(regtest, systems):
     regtest.write(f(systems, 'emissions_cofiring()'))
 
 
-def test_net_present_value_plant(regtest, systems):
-    regtest.write(f(systems, 'plant.pretty_table(*finance)'))
+def test_plant_business_data(regtest, systems):
+    regtest.write(f(systems, 'plant.business_data(tax_rate, depreciation_period)'))
 
 
-def test_net_present_value_cofiring(regtest, systems):
+def test_cofiring_business_data(regtest, systems):
     regtest.write(
-        f(systems, 'cofiring_plant.pretty_table(*finance)'))
+        f(systems, 'cofiring_plant.business_data(tax_rate, depreciation_period)'))
 
 
-def test_farmer_pretty_table(regtest, systems):
+def test_farmer_business_data(regtest, systems):
     regtest.write(
-        f(systems, 'farmer.pretty_table(*finance)'))
+        f(systems, 'farmer.business_data(tax_rate, depreciation_period)'))
+
+
+def test_plant_net_present_value(regtest, systems):
+    regtest.write(f(systems, 'plant.net_present_value(*finance)'))
+
+
+def test_cofiring_net_present_value(regtest, systems):
+    regtest.write(
+        f(systems, 'cofiring_plant.net_present_value(*finance)'))
+
+
+def test_farmer_net_present_value(regtest, systems):
+    regtest.write(
+        f(systems, 'farmer.net_present_value(*finance)'))
 
 
 def test_coal_saved(regtest, systems):

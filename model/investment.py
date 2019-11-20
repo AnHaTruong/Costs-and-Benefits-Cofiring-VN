@@ -131,42 +131,29 @@ class Investment:
     def payback_period(self):
         pass
 
-    def table(self, tax_rate=0.25, depreciation_period=10):
-        """Tabulate the characteristics of the investment, returning an np.array."""
-        result = np.array([self.revenue,
-                          self.investment(),
-                          self.amortization(depreciation_period),
-                          self.costs_of_goods_sold,
-                          self.operating_expenses(),
-                          self.earning_before_tax(depreciation_period),
-                          self.income_tax(tax_rate, depreciation_period),
-                          self.cash_out(tax_rate, depreciation_period),
-                          self.net_cash_flow(tax_rate, depreciation_period)])
+    def business_data(self, tax_rate=0.25, depreciation_period=10):
+        """Return a DataFrame with all cash flowss."""
+        result = pd.DataFrame([
+            self.revenue,
+            self.investment(),
+            self.amortization(depreciation_period),
+            self.costs_of_goods_sold,
+            self.operating_expenses(),
+            self.earning_before_tax(depreciation_period),
+            self.income_tax(tax_rate, depreciation_period),
+            self.cash_out(tax_rate, depreciation_period),
+            self.net_cash_flow(tax_rate, depreciation_period)],
+            index=[
+                "Revenue",
+                "Investment",
+                "Amortization",
+                "Cost of goods",
+                "Op. Expense",
+                "Earn. B. Tax",
+                "Income tax",
+                "Cash out",
+                "Net cashflow"])
         return result
-
-    def pretty_table(self, discount_rate, tax_rate, depreciation_period):
-        """Tabulate the characteristics of the investment, returning a multiline string."""
-        lines = [self.name]
-        lines.append("NPV  = " + str(self.net_present_value(discount_rate,
-                                                            tax_rate,
-                                                            depreciation_period)))
-        table = self.table(tax_rate, depreciation_period)
-        table = np.transpose(table)
-        labels = ["Revenue",
-                  "Investment",
-                  "Amortization",
-                  "Cost of goods",
-                  "Op. Expense",
-                  "Earn. B. Tax",
-                  "Income tax",
-                  "Cash out",
-                  "Net cashflow"
-                  ]
-        result = pd.DataFrame(table, columns=labels)
-        pd.set_option('display.max_columns', 10)
-        pd.set_option('display.width', 150)
-        lines.append(str(result))
-        return '\n'.join(lines)
 
     def earning_before_tax_detail(self):
         """Tabulate the earning before taxes (there are no interests)."""
