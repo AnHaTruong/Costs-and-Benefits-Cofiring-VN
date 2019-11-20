@@ -1,109 +1,21 @@
-                   0             1             2             3             4   \
-Revenue        0 kUSD  8388.22 kUSD  8388.22 kUSD  8388.22 kUSD  8388.22 kUSD   
-Investment     0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD   
-Amortization   0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD   
-Cost of goods  0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD   
-Op. Expense    0 kUSD   2752.7 kUSD   2752.7 kUSD   2752.7 kUSD   2752.7 kUSD   
-Earn. B. Tax   0 kUSD  5635.52 kUSD  5635.52 kUSD  5635.52 kUSD  5635.52 kUSD   
-Income tax     0 kUSD  1408.88 kUSD  1408.88 kUSD  1408.88 kUSD  1408.88 kUSD   
-Cash out       0 kUSD  4161.58 kUSD  4161.58 kUSD  4161.58 kUSD  4161.58 kUSD   
-Net cashflow   0 kUSD  4226.64 kUSD  4226.64 kUSD  4226.64 kUSD  4226.64 kUSD   
+                   0             1             2             3             4             5             6             7             8             9             10            11            12            13            14            15            16            17            18            19            20
+Revenue        0 kUSD  8388.22 kUSD  8388.22 kUSD  8388.22 kUSD  8388.22 kUSD  8388.22 kUSD  8388.22 kUSD  8388.22 kUSD  8388.22 kUSD  8388.22 kUSD  8388.22 kUSD  8388.22 kUSD  8388.22 kUSD  8388.22 kUSD  8388.22 kUSD  8388.22 kUSD  8388.22 kUSD  8388.22 kUSD  8388.22 kUSD  8388.22 kUSD  8388.22 kUSD
+Investment     0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD
+Amortization   0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD
+Cost of goods  0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD
+Op. Expense    0 kUSD   2752.7 kUSD   2752.7 kUSD   2752.7 kUSD   2752.7 kUSD   2752.7 kUSD   2752.7 kUSD   2752.7 kUSD   2752.7 kUSD   2752.7 kUSD   2752.7 kUSD   2752.7 kUSD   2752.7 kUSD   2752.7 kUSD   2752.7 kUSD   2752.7 kUSD   2752.7 kUSD   2752.7 kUSD   2752.7 kUSD   2752.7 kUSD   2752.7 kUSD
+Earn. B. Tax   0 kUSD  5635.52 kUSD  5635.52 kUSD  5635.52 kUSD  5635.52 kUSD  5635.52 kUSD  5635.52 kUSD  5635.52 kUSD  5635.52 kUSD  5635.52 kUSD  5635.52 kUSD  5635.52 kUSD  5635.52 kUSD  5635.52 kUSD  5635.52 kUSD  5635.52 kUSD  5635.52 kUSD  5635.52 kUSD  5635.52 kUSD  5635.52 kUSD  5635.52 kUSD
+Income tax     0 kUSD  1408.88 kUSD  1408.88 kUSD  1408.88 kUSD  1408.88 kUSD  1408.88 kUSD  1408.88 kUSD  1408.88 kUSD  1408.88 kUSD  1408.88 kUSD  1408.88 kUSD  1408.88 kUSD  1408.88 kUSD  1408.88 kUSD  1408.88 kUSD  1408.88 kUSD  1408.88 kUSD  1408.88 kUSD  1408.88 kUSD  1408.88 kUSD  1408.88 kUSD
+Cash out       0 kUSD  4161.58 kUSD  4161.58 kUSD  4161.58 kUSD  4161.58 kUSD  4161.58 kUSD  4161.58 kUSD  4161.58 kUSD  4161.58 kUSD  4161.58 kUSD  4161.58 kUSD  4161.58 kUSD  4161.58 kUSD  4161.58 kUSD  4161.58 kUSD  4161.58 kUSD  4161.58 kUSD  4161.58 kUSD  4161.58 kUSD  4161.58 kUSD  4161.58 kUSD
+Net cashflow   0 kUSD  4226.64 kUSD  4226.64 kUSD  4226.64 kUSD  4226.64 kUSD  4226.64 kUSD  4226.64 kUSD  4226.64 kUSD  4226.64 kUSD  4226.64 kUSD  4226.64 kUSD  4226.64 kUSD  4226.64 kUSD  4226.64 kUSD  4226.64 kUSD  4226.64 kUSD  4226.64 kUSD  4226.64 kUSD  4226.64 kUSD  4226.64 kUSD  4226.64 kUSD
 
-                         5             6             7             8   \
-Revenue        8388.22 kUSD  8388.22 kUSD  8388.22 kUSD  8388.22 kUSD   
-Investment           0 kUSD        0 kUSD        0 kUSD        0 kUSD   
-Amortization         0 kUSD        0 kUSD        0 kUSD        0 kUSD   
-Cost of goods        0 kUSD        0 kUSD        0 kUSD        0 kUSD   
-Op. Expense     2752.7 kUSD   2752.7 kUSD   2752.7 kUSD   2752.7 kUSD   
-Earn. B. Tax   5635.52 kUSD  5635.52 kUSD  5635.52 kUSD  5635.52 kUSD   
-Income tax     1408.88 kUSD  1408.88 kUSD  1408.88 kUSD  1408.88 kUSD   
-Cash out       4161.58 kUSD  4161.58 kUSD  4161.58 kUSD  4161.58 kUSD   
-Net cashflow   4226.64 kUSD  4226.64 kUSD  4226.64 kUSD  4226.64 kUSD   
-
-                         9             10            11            12  \
-Revenue        8388.22 kUSD  8388.22 kUSD  8388.22 kUSD  8388.22 kUSD   
-Investment           0 kUSD        0 kUSD        0 kUSD        0 kUSD   
-Amortization         0 kUSD        0 kUSD        0 kUSD        0 kUSD   
-Cost of goods        0 kUSD        0 kUSD        0 kUSD        0 kUSD   
-Op. Expense     2752.7 kUSD   2752.7 kUSD   2752.7 kUSD   2752.7 kUSD   
-Earn. B. Tax   5635.52 kUSD  5635.52 kUSD  5635.52 kUSD  5635.52 kUSD   
-Income tax     1408.88 kUSD  1408.88 kUSD  1408.88 kUSD  1408.88 kUSD   
-Cash out       4161.58 kUSD  4161.58 kUSD  4161.58 kUSD  4161.58 kUSD   
-Net cashflow   4226.64 kUSD  4226.64 kUSD  4226.64 kUSD  4226.64 kUSD   
-
-                         13            14            15            16  \
-Revenue        8388.22 kUSD  8388.22 kUSD  8388.22 kUSD  8388.22 kUSD   
-Investment           0 kUSD        0 kUSD        0 kUSD        0 kUSD   
-Amortization         0 kUSD        0 kUSD        0 kUSD        0 kUSD   
-Cost of goods        0 kUSD        0 kUSD        0 kUSD        0 kUSD   
-Op. Expense     2752.7 kUSD   2752.7 kUSD   2752.7 kUSD   2752.7 kUSD   
-Earn. B. Tax   5635.52 kUSD  5635.52 kUSD  5635.52 kUSD  5635.52 kUSD   
-Income tax     1408.88 kUSD  1408.88 kUSD  1408.88 kUSD  1408.88 kUSD   
-Cash out       4161.58 kUSD  4161.58 kUSD  4161.58 kUSD  4161.58 kUSD   
-Net cashflow   4226.64 kUSD  4226.64 kUSD  4226.64 kUSD  4226.64 kUSD   
-
-                         17            18            19            20  
-Revenue        8388.22 kUSD  8388.22 kUSD  8388.22 kUSD  8388.22 kUSD  
-Investment           0 kUSD        0 kUSD        0 kUSD        0 kUSD  
-Amortization         0 kUSD        0 kUSD        0 kUSD        0 kUSD  
-Cost of goods        0 kUSD        0 kUSD        0 kUSD        0 kUSD  
-Op. Expense     2752.7 kUSD   2752.7 kUSD   2752.7 kUSD   2752.7 kUSD  
-Earn. B. Tax   5635.52 kUSD  5635.52 kUSD  5635.52 kUSD  5635.52 kUSD  
-Income tax     1408.88 kUSD  1408.88 kUSD  1408.88 kUSD  1408.88 kUSD  
-Cash out       4161.58 kUSD  4161.58 kUSD  4161.58 kUSD  4161.58 kUSD  
-Net cashflow   4226.64 kUSD  4226.64 kUSD  4226.64 kUSD  4226.64 kUSD  
-
-                   0             1             2             3             4   \
-Revenue        0 kUSD  1478.23 kUSD  1478.23 kUSD  1478.23 kUSD  1478.23 kUSD   
-Investment     0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD   
-Amortization   0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD   
-Cost of goods  0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD   
-Op. Expense    0 kUSD  485.269 kUSD  485.269 kUSD  485.269 kUSD  485.269 kUSD   
-Earn. B. Tax   0 kUSD  992.961 kUSD  992.961 kUSD  992.961 kUSD  992.961 kUSD   
-Income tax     0 kUSD   248.24 kUSD   248.24 kUSD   248.24 kUSD   248.24 kUSD   
-Cash out       0 kUSD  733.509 kUSD  733.509 kUSD  733.509 kUSD  733.509 kUSD   
-Net cashflow   0 kUSD  744.721 kUSD  744.721 kUSD  744.721 kUSD  744.721 kUSD   
-
-                         5             6             7             8   \
-Revenue        1478.23 kUSD  1478.23 kUSD  1478.23 kUSD  1478.23 kUSD   
-Investment           0 kUSD        0 kUSD        0 kUSD        0 kUSD   
-Amortization         0 kUSD        0 kUSD        0 kUSD        0 kUSD   
-Cost of goods        0 kUSD        0 kUSD        0 kUSD        0 kUSD   
-Op. Expense    485.269 kUSD  485.269 kUSD  485.269 kUSD  485.269 kUSD   
-Earn. B. Tax   992.961 kUSD  992.961 kUSD  992.961 kUSD  992.961 kUSD   
-Income tax      248.24 kUSD   248.24 kUSD   248.24 kUSD   248.24 kUSD   
-Cash out       733.509 kUSD  733.509 kUSD  733.509 kUSD  733.509 kUSD   
-Net cashflow   744.721 kUSD  744.721 kUSD  744.721 kUSD  744.721 kUSD   
-
-                         9             10            11            12  \
-Revenue        1478.23 kUSD  1478.23 kUSD  1478.23 kUSD  1478.23 kUSD   
-Investment           0 kUSD        0 kUSD        0 kUSD        0 kUSD   
-Amortization         0 kUSD        0 kUSD        0 kUSD        0 kUSD   
-Cost of goods        0 kUSD        0 kUSD        0 kUSD        0 kUSD   
-Op. Expense    485.269 kUSD  485.269 kUSD  485.269 kUSD  485.269 kUSD   
-Earn. B. Tax   992.961 kUSD  992.961 kUSD  992.961 kUSD  992.961 kUSD   
-Income tax      248.24 kUSD   248.24 kUSD   248.24 kUSD   248.24 kUSD   
-Cash out       733.509 kUSD  733.509 kUSD  733.509 kUSD  733.509 kUSD   
-Net cashflow   744.721 kUSD  744.721 kUSD  744.721 kUSD  744.721 kUSD   
-
-                         13            14            15            16  \
-Revenue        1478.23 kUSD  1478.23 kUSD  1478.23 kUSD  1478.23 kUSD   
-Investment           0 kUSD        0 kUSD        0 kUSD        0 kUSD   
-Amortization         0 kUSD        0 kUSD        0 kUSD        0 kUSD   
-Cost of goods        0 kUSD        0 kUSD        0 kUSD        0 kUSD   
-Op. Expense    485.269 kUSD  485.269 kUSD  485.269 kUSD  485.269 kUSD   
-Earn. B. Tax   992.961 kUSD  992.961 kUSD  992.961 kUSD  992.961 kUSD   
-Income tax      248.24 kUSD   248.24 kUSD   248.24 kUSD   248.24 kUSD   
-Cash out       733.509 kUSD  733.509 kUSD  733.509 kUSD  733.509 kUSD   
-Net cashflow   744.721 kUSD  744.721 kUSD  744.721 kUSD  744.721 kUSD   
-
-                         17            18            19            20  
-Revenue        1478.23 kUSD  1478.23 kUSD  1478.23 kUSD  1478.23 kUSD  
-Investment           0 kUSD        0 kUSD        0 kUSD        0 kUSD  
-Amortization         0 kUSD        0 kUSD        0 kUSD        0 kUSD  
-Cost of goods        0 kUSD        0 kUSD        0 kUSD        0 kUSD  
-Op. Expense    485.269 kUSD  485.269 kUSD  485.269 kUSD  485.269 kUSD  
-Earn. B. Tax   992.961 kUSD  992.961 kUSD  992.961 kUSD  992.961 kUSD  
-Income tax      248.24 kUSD   248.24 kUSD   248.24 kUSD   248.24 kUSD  
-Cash out       733.509 kUSD  733.509 kUSD  733.509 kUSD  733.509 kUSD  
-Net cashflow   744.721 kUSD  744.721 kUSD  744.721 kUSD  744.721 kUSD  
+                   0             1             2             3             4             5             6             7             8             9             10            11            12            13            14            15            16            17            18            19            20
+Revenue        0 kUSD  1478.23 kUSD  1478.23 kUSD  1478.23 kUSD  1478.23 kUSD  1478.23 kUSD  1478.23 kUSD  1478.23 kUSD  1478.23 kUSD  1478.23 kUSD  1478.23 kUSD  1478.23 kUSD  1478.23 kUSD  1478.23 kUSD  1478.23 kUSD  1478.23 kUSD  1478.23 kUSD  1478.23 kUSD  1478.23 kUSD  1478.23 kUSD  1478.23 kUSD
+Investment     0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD
+Amortization   0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD
+Cost of goods  0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD        0 kUSD
+Op. Expense    0 kUSD  485.269 kUSD  485.269 kUSD  485.269 kUSD  485.269 kUSD  485.269 kUSD  485.269 kUSD  485.269 kUSD  485.269 kUSD  485.269 kUSD  485.269 kUSD  485.269 kUSD  485.269 kUSD  485.269 kUSD  485.269 kUSD  485.269 kUSD  485.269 kUSD  485.269 kUSD  485.269 kUSD  485.269 kUSD  485.269 kUSD
+Earn. B. Tax   0 kUSD  992.961 kUSD  992.961 kUSD  992.961 kUSD  992.961 kUSD  992.961 kUSD  992.961 kUSD  992.961 kUSD  992.961 kUSD  992.961 kUSD  992.961 kUSD  992.961 kUSD  992.961 kUSD  992.961 kUSD  992.961 kUSD  992.961 kUSD  992.961 kUSD  992.961 kUSD  992.961 kUSD  992.961 kUSD  992.961 kUSD
+Income tax     0 kUSD   248.24 kUSD   248.24 kUSD   248.24 kUSD   248.24 kUSD   248.24 kUSD   248.24 kUSD   248.24 kUSD   248.24 kUSD   248.24 kUSD   248.24 kUSD   248.24 kUSD   248.24 kUSD   248.24 kUSD   248.24 kUSD   248.24 kUSD   248.24 kUSD   248.24 kUSD   248.24 kUSD   248.24 kUSD   248.24 kUSD
+Cash out       0 kUSD  733.509 kUSD  733.509 kUSD  733.509 kUSD  733.509 kUSD  733.509 kUSD  733.509 kUSD  733.509 kUSD  733.509 kUSD  733.509 kUSD  733.509 kUSD  733.509 kUSD  733.509 kUSD  733.509 kUSD  733.509 kUSD  733.509 kUSD  733.509 kUSD  733.509 kUSD  733.509 kUSD  733.509 kUSD  733.509 kUSD
+Net cashflow   0 kUSD  744.721 kUSD  744.721 kUSD  744.721 kUSD  744.721 kUSD  744.721 kUSD  744.721 kUSD  744.721 kUSD  744.721 kUSD  744.721 kUSD  744.721 kUSD  744.721 kUSD  744.721 kUSD  744.721 kUSD  744.721 kUSD  744.721 kUSD  744.721 kUSD  744.721 kUSD  744.721 kUSD  744.721 kUSD  744.721 kUSD
