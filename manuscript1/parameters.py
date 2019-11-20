@@ -30,7 +30,7 @@ from natu.units import MJ, kg, t, d, hr, km, MW, ha, kW, y, kWh, MWh, g
 from manuscript1.parameters_supplychain import supply_chain_MD1, supply_chain_NB
 
 
-discount_rate = 0.087771      # WACC
+discount_rate = 0.1
 depreciation_period = 10
 tax_rate = 0.25               # Corporate tax in Vietnam
 

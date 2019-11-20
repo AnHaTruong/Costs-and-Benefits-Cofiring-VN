@@ -1,25 +1,25 @@
 Investment    (MUSD)                0.0
-Fuel cost     (MUSD)            1,414.2
-  Coal        (MUSD)            1,414.2
+Fuel cost     (MUSD)            1,309.4
+  Coal        (MUSD)            1,309.4
   Biomass     (MUSD)                0.0
-O&M cost      (MUSD)              605.4
-  O&M coal    (MUSD)              605.4
+O&M cost      (MUSD)              560.5
+  O&M coal    (MUSD)              560.5
   O&M biomass (MUSD)                0.0
-Tax           (MUSD)              307.0
-Cash_out      (MUSD)            2,326.7
-Electricity produced        58368.1 GWh
+Tax           (MUSD)              284.3
+Cash_out      (MUSD)            2,154.2
+Electricity produced        54040.5 GWh
 LCOE                    39.8623 USD/MWh
 Name: Mong Duong 1, dtype: object
 
 Investment    (MUSD)                0.0
-Fuel cost     (MUSD)              362.7
-  Coal        (MUSD)              362.7
+Fuel cost     (MUSD)              335.8
+  Coal        (MUSD)              335.8
   Biomass     (MUSD)                0.0
-O&M cost      (MUSD)               57.8
-  O&M coal    (MUSD)               57.8
+O&M cost      (MUSD)               53.5
+  O&M coal    (MUSD)               53.5
   O&M biomass (MUSD)                0.0
-Tax           (MUSD)                2.7
-Cash_out      (MUSD)              423.2
-Electricity produced        5764.75 GWh
+Tax           (MUSD)                2.5
+Cash_out      (MUSD)              391.8
+Electricity produced        5337.34 GWh
 LCOE                    73.4031 USD/MWh
 Name: Ninh Binh, dtype: object

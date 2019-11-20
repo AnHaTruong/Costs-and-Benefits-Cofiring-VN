@@ -23,7 +23,7 @@ from model.utils import display_as
 
 #pd.options.display.float_format = '{:,.2f}'.format
 
-print('Parameters: cofiring plant, prices, famer, transporter, mining')
+print('Parameters: cofiring plant, prices, farmer, transporter, mining')
 
 table = pd.concat(
     [MongDuong1System.parameters_table(),
@@ -31,7 +31,7 @@ table = pd.concat(
     axis=1)
 
 for index, row in table.iterrows():
-    if  row[0] == row[1]:
+    if row[0] == row[1]:
         row[1] = 'idem'
 
 print(table)
