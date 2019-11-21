@@ -24,8 +24,8 @@ from natu.units import kt, Mt, y
 
 def plot_emissions(system, axes):
     """Plot to compare atmospheric pollution with and without cofiring."""
-    baseline = system.emissions_baseline(total=True) * y
-    cofiring = system.emissions_cofiring(total=True) * y
+    baseline = system.emissions_baseline() * y
+    cofiring = system.emissions_cofiring() * y
 
     def emis(segment, pollutant='CO2', unit=Mt):
         return np.array([baseline.at['Total_' + segment, pollutant],

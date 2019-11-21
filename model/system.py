@@ -108,31 +108,29 @@ class System:
         value = self.coal_work_lost * self.mining_parameter.wage_mining
         return display_as(value, 'kUSD')
 
-    def emissions_baseline(self, total=False):
+    def emissions_baseline(self):
         """Tabulate system annual atmospheric emissions without cofiring."""
         baseline = pd.DataFrame(columns=['CO2', 'NOx', 'PM10', 'SO2'])
         baseline = baseline.append(year_1(self.plant.emissions()))
         baseline = baseline.append(year_1(self.plant.coal_transporter().emissions()))
         baseline = baseline.append(year_1(self.farmer.emissions_exante))
-        if total:
-            baseline.loc["Total"] = baseline.sum()
-            baseline.loc["Total_plant"] = baseline.iloc[0]
-            baseline.loc["Total_transport"] = baseline.iloc[1]
-            baseline.loc["Total_field"] = baseline.iloc[2]
+        baseline.loc["Total"] = baseline.sum()
+        baseline.loc["Total_plant"] = baseline.iloc[0]
+        baseline.loc["Total_transport"] = baseline.iloc[1]
+        baseline.loc["Total_field"] = baseline.iloc[2]
         return baseline
 
-    def emissions_cofiring(self, total=False):
+    def emissions_cofiring(self):
         """Tabulate system annual atmospheric emissions with cofiring."""
         cofiring = pd.DataFrame(columns=['CO2', 'NOx', 'PM10', 'SO2'])
         cofiring = cofiring.append(year_1(self.cofiring_plant.emissions()))
         cofiring = cofiring.append(year_1(self.cofiring_plant.coal_transporter().emissions()))
         cofiring = cofiring.append(year_1(self.farmer.emissions()))
         cofiring = cofiring.append(year_1(self.transporter.emissions()))
-        if total:
-            cofiring.loc["Total"] = cofiring.sum()
-            cofiring.loc["Total_plant"] = cofiring.iloc[0] + cofiring.iloc[1]
-            cofiring.loc["Total_transport"] = cofiring.iloc[2] + cofiring.iloc[4]
-            cofiring.loc["Total_field"] = cofiring.iloc[3]
+        cofiring.loc["Total"] = cofiring.sum()
+        cofiring.loc["Total_plant"] = cofiring.iloc[0] + cofiring.iloc[1]
+        cofiring.loc["Total_transport"] = cofiring.iloc[2] + cofiring.iloc[4]
+        cofiring.loc["Total_field"] = cofiring.iloc[3]
         return cofiring
 
     def emission_reduction(self, external_cost):
@@ -150,7 +148,7 @@ class System:
 
         total_reduction = plant_reduction + transport_reduction + field_reduction
         total_benefit = total_reduction * external_cost
-        total_emission = self.emissions_baseline(total=True).loc["Total"]
+        total_emission = self.emissions_baseline().loc["Total"]
         relative_reduction = total_reduction / total_emission
         for pollutant in total_benefit:
             display_as(pollutant, 'kUSD')
@@ -202,6 +200,10 @@ class System:
         table.append(row2.format('Trader earnings before tax',
                                  self.transporter.net_present_value(discount_rate)))
         return '\n'.join(table)
+
+#    def externalities(self, discount_rate, external_cost):
+#        """Return a dataframe with the external benefits."""
+#        return "PASS"
 
     def coal_saved_benefits(self, coal_import_price):
         """Tabulate the quantity and value of coal saved by cofiring."""

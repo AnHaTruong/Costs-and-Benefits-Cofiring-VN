@@ -1,10 +1,14 @@
-                            CO2          NOx           PM10             SO2
-6b_coal         4.83441e+06 t/y  46351.3 t/y    451.152 t/y      533.04 t/y
-Straw                376862 t/y  772.185 t/y    5.65518 t/y    0.729411 t/y
-Conveyor belt             0 t/y        0 t/y          0 t/y           0 t/y
-Straw                338764 t/y  141.032 t/y    2705.51 t/y     146.788 t/y
-diesel              457.252 t/y  11.6745 t/y   0.908018 t/y     2.59434 t/y
-Road transport      2216.58 t/y  2.70019 t/y  0.0403014 t/y  0.00302261 t/y
+                             CO2          NOx           PM10             SO2
+6b_coal          4.83441e+06 t/y  46351.3 t/y    451.152 t/y      533.04 t/y
+Straw                 376862 t/y  772.185 t/y    5.65518 t/y    0.729411 t/y
+Conveyor belt              0 t/y        0 t/y          0 t/y           0 t/y
+Straw                 338764 t/y  141.032 t/y    2705.51 t/y     146.788 t/y
+diesel               457.252 t/y  11.6745 t/y   0.908018 t/y     2.59434 t/y
+Road transport       2216.58 t/y  2.70019 t/y  0.0403014 t/y  0.00302261 t/y
+Total            5.55271e+06 t/y  47278.9 t/y    3163.27 t/y     683.155 t/y
+Total_plant      5.21127e+06 t/y  47123.5 t/y    456.808 t/y     533.769 t/y
+Total_transport      457.252 t/y  11.6745 t/y   0.908018 t/y     2.59434 t/y
+Total_field           338764 t/y  141.032 t/y    2705.51 t/y     146.788 t/y
 
                          CO2            NOx           PM10              SO2
 4b_coal           851953 t/y    7367.36 t/y    85.4614 t/y      4706.93 t/y
@@ -13,3 +17,7 @@ Barge transport  11624.1 t/y      66.47 t/y    4.17811 t/y      2.61951 t/y
 Straw            59699.4 t/y    24.8536 t/y    476.784 t/y       25.868 t/y
 diesel           80.5801 t/y    2.05736 t/y   0.160017 t/y     0.457192 t/y
 Road transport   60.4668 t/y  0.0736596 t/y  0.0010994 t/y  8.24547e-05 t/y
+Total             989831 t/y     7596.9 t/y    568.577 t/y      4743.01 t/y
+Total_plant       918366 t/y    7503.44 t/y    87.4546 t/y      4714.07 t/y
+Total_transport  11704.6 t/y    68.5274 t/y    4.33813 t/y       3.0767 t/y
+Total_field      59699.4 t/y    24.8536 t/y    476.784 t/y       25.868 t/y

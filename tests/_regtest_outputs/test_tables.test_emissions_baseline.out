@@ -1,9 +1,17 @@
-                           CO2          NOx         PM10          SO2
-6b_coal        5.08601e+06 t/y  48763.5 t/y  474.631 t/y   560.78 t/y
-Conveyor belt            0 t/y        0 t/y        0 t/y        0 t/y
-Straw               603739 t/y  251.344 t/y   4821.7 t/y  261.603 t/y
+                             CO2          NOx         PM10          SO2
+6b_coal          5.08601e+06 t/y  48763.5 t/y  474.631 t/y   560.78 t/y
+Conveyor belt              0 t/y        0 t/y        0 t/y        0 t/y
+Straw                 603739 t/y  251.344 t/y   4821.7 t/y  261.603 t/y
+Total            5.68974e+06 t/y  49014.8 t/y  5296.33 t/y  822.383 t/y
+Total_plant      5.08601e+06 t/y  48763.5 t/y  474.631 t/y   560.78 t/y
+Total_transport            0 t/y        0 t/y        0 t/y        0 t/y
+Total_field           603739 t/y  251.344 t/y   4821.7 t/y  261.603 t/y
 
-                         CO2          NOx         PM10          SO2
-4b_coal           896195 t/y  7749.95 t/y  89.8995 t/y  4951.36 t/y
-Barge transport  12227.7 t/y  69.9218 t/y  4.39508 t/y  2.75554 t/y
-Straw             106395 t/y  44.2936 t/y  849.713 t/y  46.1015 t/y
+                             CO2          NOx         PM10          SO2
+4b_coal               896195 t/y  7749.95 t/y  89.8995 t/y  4951.36 t/y
+Barge transport      12227.7 t/y  69.9218 t/y  4.39508 t/y  2.75554 t/y
+Straw                 106395 t/y  44.2936 t/y  849.713 t/y  46.1015 t/y
+Total            1.01482e+06 t/y  7864.17 t/y  944.008 t/y  5000.22 t/y
+Total_plant           896195 t/y  7749.95 t/y  89.8995 t/y  4951.36 t/y
+Total_transport      12227.7 t/y  69.9218 t/y  4.39508 t/y  2.75554 t/y
+Total_field           106395 t/y  44.2936 t/y  849.713 t/y  46.1015 t/y
