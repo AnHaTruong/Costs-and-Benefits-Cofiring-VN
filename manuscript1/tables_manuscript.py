@@ -17,11 +17,11 @@ import pandas as pd
 from manuscript1.parameters import (MongDuong1System, NinhBinhSystem,
                                     discount_rate, tax_rate, depreciation_period,
                                     coal_import_price,
-                                    external_cost, external_cost_SKC, external_cost_ZWY,
+                                    external_cost_SKC, external_cost_ZWY,
                                     external_cost_HAS)
 
 from model.tables import (straw_supply,
-                          emission_reductions_by_activity, emission_reductions_benefits)
+                          emission_reductions_by_activity, emissions_reduction_ICERE)
 from model.utils import display_as
 
 
@@ -34,7 +34,7 @@ pd.options.display.float_format = '{:,.1f}'.format
 table = """
 ICERE 2018 Table 1: Emission reductions by activity
 
-""" + str(emission_reductions_by_activity(MongDuong1System, NinhBinhSystem, external_cost))
+""" + str(emission_reductions_by_activity(MongDuong1System, NinhBinhSystem))
 
 print(table)
 
@@ -45,11 +45,11 @@ print(table_separator)
 table = (
     "ICERE 2018 Table 2: Emission reductions benefits (external costs SKC, ZWY, HAS)\n\n" +
     "       Mong Duong 1                 Ninh Binh\n" +
-    str(emission_reductions_benefits(MongDuong1System, NinhBinhSystem, external_cost_SKC)) +
+    str(emissions_reduction_ICERE(MongDuong1System, NinhBinhSystem, external_cost_SKC)) +
     "\n\n" +
-    str(emission_reductions_benefits(MongDuong1System, NinhBinhSystem, external_cost_ZWY)) +
+    str(emissions_reduction_ICERE(MongDuong1System, NinhBinhSystem, external_cost_ZWY)) +
     "\n\n" +
-    str(emission_reductions_benefits(MongDuong1System, NinhBinhSystem, external_cost_HAS))
+    str(emissions_reduction_ICERE(MongDuong1System, NinhBinhSystem, external_cost_HAS))
 )
 
 print(table)

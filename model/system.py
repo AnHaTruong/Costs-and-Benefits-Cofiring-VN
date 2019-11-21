@@ -109,7 +109,7 @@ class System:
         return display_as(value, 'kUSD')
 
     def emissions_baseline(self):
-        """Tabulate system annual atmospheric emissions without cofiring."""
+        """Tabulate system atmospheric emissions in year 1 ex ante (no cofiring)."""
         baseline = pd.DataFrame(columns=['CO2', 'NOx', 'PM10', 'SO2'])
         baseline = baseline.append(year_1(self.plant.emissions()))
         baseline = baseline.append(year_1(self.plant.coal_transporter().emissions()))
@@ -121,7 +121,7 @@ class System:
         return baseline
 
     def emissions_cofiring(self):
-        """Tabulate system annual atmospheric emissions with cofiring."""
+        """Tabulate system atmospheric emissions in year 1 ex post (with cofiring)."""
         cofiring = pd.DataFrame(columns=['CO2', 'NOx', 'PM10', 'SO2'])
         cofiring = cofiring.append(year_1(self.cofiring_plant.emissions()))
         cofiring = cofiring.append(year_1(self.cofiring_plant.coal_transporter().emissions()))
@@ -133,40 +133,73 @@ class System:
         cofiring.loc["Total_field"] = cofiring.iloc[3]
         return cofiring
 
-    def emission_reduction(self, external_cost):
-        """Tabulate reductions of annual atmospheric emissions with cofiring."""
-        plant_reduction = (self.plant.emissions(total=True)['Total']
-                           - self.cofiring_plant.emissions(total=True)['Total'])
+    def emissions_exante(self):
+        """Tabulate atmospheric emissions ex ante.
 
-        transport_reduction = (
-            self.plant.coal_transporter().emissions(total=True)['Total']
-            - self.cofiring_plant.coal_transporter().emissions(total=True)['Total']
-            - self.transporter.emissions(total=True)['Total'])
+        Return a dataframe of time series, indexed by segment and pollutant.
+        """
+        plant_emissions = self.plant.emissions(total=True)['Total']
+        ship_coal_emissions = self.plant.coal_transporter().emissions(total=True)['Total']
+        field_emissions = self.farmer.emissions_exante['Straw']
+        transport_emissions = field_emissions * 0  # No logistics
+        total_emissions = plant_emissions + ship_coal_emissions + field_emissions
+        return pd.DataFrame(
+            [plant_emissions, ship_coal_emissions, transport_emissions, field_emissions,
+             total_emissions],
+            index=['Plant', 'Ship coal', 'Transport', 'Field', 'Total'])
 
-        field_reduction = (self.farmer.emissions_exante['Straw']
-                           - self.farmer.emissions(total=True)['Total'])
+    def emissions_expost(self):
+        """Tabulate atmospheric emissions ex post.
 
-        total_reduction = plant_reduction + transport_reduction + field_reduction
-        total_benefit = total_reduction * external_cost
-        total_emission = self.emissions_baseline().loc["Total"]
-        relative_reduction = total_reduction / total_emission
-        for pollutant in total_benefit:
+        Return a dataframe of time series, indexed by segment and pollutant.
+        """
+        plant_emissions = self.cofiring_plant.emissions(total=True)['Total']
+        ship_coal_emissions = self.cofiring_plant.coal_transporter().emissions(total=True)['Total']
+        transport_emissions = self.transporter.emissions(total=True)['Total']
+        field_emissions = self.farmer.emissions(total=True)['Total']
+        total_emissions = (
+            plant_emissions
+            + ship_coal_emissions
+            + transport_emissions
+            + field_emissions)
+        return pd.DataFrame(
+            [plant_emissions, ship_coal_emissions, transport_emissions, field_emissions,
+             total_emissions],
+            index=['Plant', 'Ship coal', 'Transport', 'Field', 'Total'])
+
+    def emissions_reduction(self):
+        """Tabulate atmospheric emissions reductions.
+
+        Return a dataframe of time series, indexed by segment and pollutant.
+        """
+        return self.emissions_exante() - self.emissions_expost()
+
+    def emissions_reduction_benefit(self, external_cost):
+        """Tabulate external benefits of reducing atmospheric emissions from cofiring.
+
+        Return a dataframe of time series, indexed by segment and pollutant.
+        """
+        baseline = self.emissions_exante().loc["Total"]
+        reduction = self.emissions_reduction().loc["Total"]
+        relative = reduction / baseline
+        benefit = reduction * external_cost
+        for pollutant in benefit:
             display_as(pollutant, 'kUSD')
-        list_of_series = [plant_reduction, transport_reduction, field_reduction,
-                          total_reduction, total_benefit, relative_reduction]
-        row = ['Plant', 'Transport', 'Field', 'Total', 'Benefit', 'Relative']
-        reduction = pd.DataFrame(list_of_series, index=row)
-        return reduction
+        for pollutant in external_cost:
+            display_as(pollutant, 'USD / t')
+        return pd.DataFrame(
+            [baseline, reduction, relative, benefit],
+            index=["Baseline", "Reduction", "Relative reduction", "Value"])
 
     def mitigation_npv(self, discount_rate, external_cost):
-        df = self.emission_reduction(external_cost)
-        annual_mitigation_value = df.loc['Benefit', 'CO2']
+        df = self.emissions_reduction_benefit(external_cost)
+        annual_mitigation_value = df.loc['Value', 'CO2']
         value = npv(discount_rate, annual_mitigation_value)
         return display_as(value, 'kUSD')
 
     def health_npv(self, discount_rate, external_cost):
-        df = self.emission_reduction(external_cost)
-        annual_health_benefit = df.loc['Benefit'].drop('CO2').sum()
+        df = self.emissions_reduction_benefit(external_cost)
+        annual_health_benefit = df.loc['Value'].drop('CO2').sum()
         value = npv(discount_rate, annual_health_benefit)
         return display_as(value, 'kUSD')
 
@@ -200,10 +233,6 @@ class System:
         table.append(row2.format('Trader earnings before tax',
                                  self.transporter.net_present_value(discount_rate)))
         return '\n'.join(table)
-
-#    def externalities(self, discount_rate, external_cost):
-#        """Return a dataframe with the external benefits."""
-#        return "PASS"
 
     def coal_saved_benefits(self, coal_import_price):
         """Tabulate the quantity and value of coal saved by cofiring."""

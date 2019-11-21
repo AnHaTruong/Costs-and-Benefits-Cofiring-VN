@@ -16,7 +16,8 @@ from manuscript1.parameters import discount_rate, tax_rate, depreciation_period
 # pylint: disable=unused-import
 # Spyder3 does not see that  coal_import_price, mining_parameter  are used within an eval string
 from manuscript1.parameters import external_cost, coal_import_price, mining_parameter
-from model.tables import energy_costs, straw_supply, emission_reductions
+from model.tables import (energy_costs, straw_supply,
+                          emissions_reduction_benefit, emissions_reduction_ICERE)
 
 # pylint and pytest known compatibility bug
 # pylint: disable=redefined-outer-name
@@ -37,8 +38,12 @@ def test_energy_costs(regtest, systems):
     regtest.write(energy_costs(*systems))
 
 
+def test_emissions_reduction_benefit(regtest, systems):
+    regtest.write(str(emissions_reduction_benefit(*systems, external_cost, discount_rate)))
+
+
 def test_emission_reductions(regtest, systems):
-    regtest.write(str(emission_reductions(*systems, external_cost)))
+    regtest.write(str(emissions_reduction_ICERE(*systems, external_cost)))
 
 
 def test_straw_supply(regtest, systems):

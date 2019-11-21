@@ -15,15 +15,14 @@ An Ha Truong, Minh Ha-Duong
 import pandas as pd
 
 from manuscript1.parameters import MongDuong1System, NinhBinhSystem, external_cost
-from model.tables import emission_reductions
+from model.tables import emissions_reduction_ICERE
 
 
 pd.options.display.float_format = '{:,.0f}'.format
 
-table = """Emission reductions and associated benefits from the two projects
-(external cost SKC)
+table = """Emission reductions from the two projects
 
                     Mong Duong 1      Ninh Binh
-""" + str(emission_reductions(MongDuong1System, NinhBinhSystem, external_cost))
+""" + str(emissions_reduction_ICERE(MongDuong1System, NinhBinhSystem, external_cost))
 
 print(table)

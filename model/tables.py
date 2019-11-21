@@ -6,22 +6,28 @@
 #     Creative Commons Attribution-ShareAlike 4.0 International
 #
 #
-"""Define the result tables."""
+"""Define result tables.
 
+In the model classes we return time series.
+Methods defined here summarize the vectors.
+"""
+
+import numpy as np
 import pandas as pd
 
 # pylint: disable=wrong-import-order
-from model.utils import display_as, isclose, USD, kUSD, FTE, year_1
+from model.utils import display_as, isclose, USD, FTE, year_1
 from natu.units import y, t, hr
+from natu.numpy import npv
 
 
 #%%
 
 
-def emission_reductions_by_activity(system_a, system_b, external_cost):
-    """Summarize the emissions reduction in mass and value."""
-    reductions_a = year_1(system_a.emission_reduction(external_cost))
-    reductions_b = year_1(system_b.emission_reduction(external_cost))
+def emission_reductions_by_activity(system_a, system_b):
+    """Summarize the emissions reduction in mass."""
+    reductions_a = year_1(system_a.emissions_reduction())
+    reductions_b = year_1(system_b.emissions_reduction())
     contents = [
         reductions_a['Plant'] / (t / y),
         reductions_a['Transport'] / (t / y),
@@ -40,45 +46,43 @@ def emission_reductions_by_activity(system_a, system_b, external_cost):
 #%%
 
 
-def emission_reductions_benefits(system_a, system_b, external_cost):
-    """Summarize the emissions reduction in mass and value."""
-    reductions_a = year_1(system_a.emission_reduction(external_cost))
-    reductions_b = year_1(system_b.emission_reduction(external_cost))
+def summarize(sequence, discount_rate):
+    """Summarize a sequence, verify it is a steady state.
+
+    Return first element, second element, and NPV of everything.
+    """
+    is_constant = (len(np.unique(sequence[1:])) == 1)
+    assert is_constant, "Error: expecting everything constant after first year."
+    return [sequence[0], sequence[1], npv(discount_rate, sequence)]
+
+
+def emissions_reduction_benefit(system_a, system_b, external_cost, discount_rate):
+    """Tabulate the external value of emissions reduction.
+
+    Summarize the time series as [x0, x1, npv(x0, x1, ...)].
+    """
+    reductions_a = system_a.emissions_reduction_benefit(external_cost)
+    reductions_b = system_b.emissions_reduction_benefit(external_cost)
     contents = [
-        reductions_a['Total'] / (t / y),
-        reductions_a['Relative'] * 100,
-        reductions_a['Benefit'] / (kUSD / y),
-        reductions_b['Total'] / (t / y),
-        reductions_a['Relative'] * 100,
-        reductions_b['Benefit'] / (kUSD / y)]
-    headers = [" Quantity", "Percent", "Value",
-               " Quantity", "Percent", "Value"]
-    table = pd.DataFrame(
-        data=contents,
-        index=headers)
-    table["Unit"] = ["t/y", "%", "kUSD/y", "t/y", "%", "kUSD/y"]
-    return table[["CO2", "SO2", "PM10", "NOx"]].T
-
-
-#%%
-
-
-def emission_reductions(system_a, system_b, external_cost):
-    """Summarize the emissions reduction in mass and value."""
-    reductions_a = year_1(system_a.emission_reduction(external_cost))
-    reductions_b = year_1(system_b.emission_reduction(external_cost))
-    contents = [
-        external_cost / (USD / t),
-        reductions_a['Total'] / (t / y), reductions_a['Benefit'] / (kUSD / y),
-        reductions_b['Total'] / (t / y), reductions_b['Benefit'] / (kUSD / y)]
-    headers = ['Specific cost',
-               " Quantity", "Value",
+        reductions_a.loc['Reduction'], reductions_a.loc['Value'],
+        reductions_b.loc['Reduction'], reductions_b.loc['Value']]
+    headers = [" Quantity", "Value",
                " Quantity", "Value"]
     table = pd.DataFrame(
         data=contents,
         index=headers)
-    table["Unit"] = ["USD/t", "t/y", "kUSD/y", "t/y", "kUSD/y"]
-    return table[["Unit", "CO2", "SO2", "PM10", "NOx"]].T
+    table = table.applymap(lambda x: summarize(x, discount_rate))
+    return table[["CO2", "SO2", "PM10", "NOx"]].T
+
+#%%
+
+
+def emissions_reduction_ICERE(system_a, system_b, external_cost):
+    """Tabulate emission reductions amount and value in year 1."""
+    table = emissions_reduction_benefit(system_a, system_b, external_cost, discount_rate=0)
+    table = table.applymap(lambda sequence: sequence[1])
+    table.insert(loc=0, column="Specific cost", value=external_cost)
+    return table
 
 #%%
 

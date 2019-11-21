@@ -1,6 +1,5 @@
-     Specific cost  Quantity    Value  Quantity   Value
-Unit         USD/t       t/y   kUSD/y       t/y  kUSD/y
-CO2            1.0 137,032.4    137.0  24,987.0    25.0
-SO2        3,767.0     139.2    524.5     257.2   968.9
-PM10       5,883.0   2,133.1 12,548.8     375.4 2,208.7
-NOx          286.0   1,736.0    496.5     267.3    76.4
+     Specific cost   Quantity         Value   Quantity         Value
+CO2        1 USD/t   137032 t  137.032 kUSD    24987 t   24.987 kUSD
+SO2     3767 USD/t  139.229 t  524.474 kUSD  257.203 t  968.883 kUSD
+PM10    5883 USD/t  2133.07 t  12548.8 kUSD   375.43 t  2208.66 kUSD
+NOx      286 USD/t  1735.98 t  496.491 kUSD   267.27 t  76.4392 kUSD
