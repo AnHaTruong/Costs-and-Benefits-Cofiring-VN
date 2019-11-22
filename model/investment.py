@@ -55,7 +55,7 @@ class Investment:
         self.name = name
         self.time_horizon = time_horizon
         self._revenue = None
-        self.costs_of_goods_sold = display_as(np.zeros(self.time_horizon + 1) * USD, 'kUSD')
+        self.merchandise = display_as(np.zeros(self.time_horizon + 1) * USD, 'kUSD')
         self.expenses = []
         self.expenses_index = []
 
@@ -93,12 +93,12 @@ class Investment:
         return display_as(v_cost, 'kUSD')
 
     def earning_before_tax(self, depreciation_period=None):
-        """Return  EBT vector."""
-        earning = (self.revenue
-                   - self.costs_of_goods_sold
-                   - self.operating_expenses()
-                   - self.amortization(depreciation_period))
-        return display_as(earning, 'kUSD')
+        """Return  EBT time series."""
+        ebt = (self.revenue
+               - self.merchandise
+               - self.operating_expenses()
+               - self.amortization(depreciation_period))
+        return display_as(ebt, 'kUSD')
 
     def income_tax(self, tax_rate, depreciation_period):
         assert 0 <= tax_rate <= 1, "Tax rate not in [0, 1["
@@ -106,10 +106,16 @@ class Investment:
         tax = tax_rate * self.earning_before_tax(depreciation_period)
         return display_as(tax, 'kUSD')
 
+    def earning_after_tax(self, tax_rate, depreciation_period=None):
+        """Return  EAT  time series."""
+        eat = (self.earning_before_tax(depreciation_period)
+               - self.income_tax(tax_rate, depreciation_period))
+        return display_as(eat, 'kUSD')
+
     def cash_out(self, tax_rate, depreciation_period):
-        """Return cash out vector."""
+        """Return cash out time series."""
         flow = (self.investment()
-                + self.costs_of_goods_sold
+                + self.merchandise
                 + self.operating_expenses()
                 + self.income_tax(tax_rate, depreciation_period))
         return display_as(flow, 'kUSD')
@@ -132,28 +138,44 @@ class Investment:
         pass
 
     def business_data(self, tax_rate=0.25, depreciation_period=10):
-        """Return a DataFrame with all cash flowss."""
-        result = pd.DataFrame([
-            self.revenue,
-            self.investment(),
-            self.amortization(depreciation_period),
-            self.costs_of_goods_sold,
-            self.operating_expenses(),
-            self.earning_before_tax(depreciation_period),
-            self.income_tax(tax_rate, depreciation_period),
-            self.cash_out(tax_rate, depreciation_period),
-            self.net_cash_flow(tax_rate, depreciation_period)],
-            index=[
-                "Revenue",
-                "Investment",
-                "Amortization",
-                "Cost of goods",
-                "Op. Expense",
-                "Earn. B. Tax",
-                "Income tax",
-                "Cash out",
-                "Net cashflow"])
-        return result
+        """Return a pair of DataFrame with economic result and cash flow result.
+
+        The economic result amortizes the investment over N periods.
+        The cash flow result assumes the investment is paid in full in year 0.
+        """
+        data_economic = [
+            self.revenue / kUSD,
+            self.amortization(depreciation_period) / kUSD,
+            self.merchandise / kUSD,
+            self.operating_expenses() / kUSD,
+            self.earning_before_tax(depreciation_period) / kUSD,
+            self.income_tax(tax_rate, depreciation_period) / kUSD,
+            self.earning_after_tax(tax_rate, depreciation_period) / kUSD]
+        index_economic = [
+            "Revenue (kUSD)",
+            "- Expense, Amortization",
+            "- Expense, Merchandise",
+            "- Expense, Operating",
+            "= Earnings Before Tax",
+            "- Income tax " + str(round(100 * tax_rate)) + '%',
+            "= Earnings after tax"]
+        result_economic = pd.DataFrame(data_economic, index=index_economic)
+        data_cash = [
+            self.revenue / kUSD,
+            self.investment() / kUSD,
+            self.merchandise / kUSD,
+            self.operating_expenses() / kUSD,
+            self.income_tax(tax_rate, depreciation_period) / kUSD,
+            self.net_cash_flow(tax_rate, depreciation_period) / kUSD]
+        index_cash = [
+            "Revenue (kUSD)",
+            "- Expense, Investment",
+            "- Expense, Merchandise",
+            "- Expense, Operating",
+            "- Expense, Income tax",
+            "= Net cashflow"]
+        result_cash = pd.DataFrame(data_cash, index=index_cash)
+        return result_economic, result_cash
 
     def earning_before_tax_detail(self):
         """Tabulate the earning before taxes (there are no interests)."""
@@ -161,9 +183,9 @@ class Investment:
         cash_flows = sales.append(- pd.Series(self.expenses, self.expenses_index))
         df = pd.DataFrame(data=[cash_flows / kUSD], index=["kUSD"])
         df["= Earning Before Tax"] = df.sum(axis=1)
-
+        print(df.T)
         a = self.earning_before_tax()[1] / kUSD
         b = df.loc["kUSD", "= Earning Before Tax"]
-        assert isclose(a, b), "Inconsistent EBT estimates"
+        assert isclose(a, b), f"Inconsistent EBT estimates {round(a)} and {round(b)} kUSD"
 
         return df.T

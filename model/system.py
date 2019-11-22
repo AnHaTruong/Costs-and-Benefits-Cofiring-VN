@@ -65,7 +65,7 @@ class System:
         # Transaction  at the field side
         payment_fieldside = self.cofiring_plant.biomass_used * price.biomass_fieldside
         display_as(payment_fieldside, "kUSD")
-        self.farmer.revenue = self.transporter.costs_of_goods_sold = payment_fieldside
+        self.farmer.revenue = self.transporter.merchandise = payment_fieldside
 
     @property
     def transport_cost_per_t(self):
