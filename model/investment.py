@@ -10,9 +10,11 @@
 #
 """Provide financial project management accounting."""
 
+from abc import abstractmethod
+
 import pandas as pd
 import natu.numpy as np
-from model.utils import USD, kUSD, after_invest, display_as, isclose
+from model.utils import USD, kUSD, after_invest, display_as
 
 
 class Investment:
@@ -138,10 +140,11 @@ class Investment:
         pass
 
     def business_data(self, tax_rate=0.25, depreciation_period=10):
-        """Return a pair of DataFrame with economic result and cash flow result.
+        """Return a sequence of  DataFrames  detailing the business data, by year.
 
-        The economic result amortizes the investment over N periods.
-        The cash flow result assumes the investment is paid in full in year 0.
+        The first dataframe is the economic result, it amortizes the investment over N periods.
+        The second dataframe is the cash flow result, assumes investment is paid in full in year 0.
+        The third dataframe is the detail of operating expenses: fuel, labor, tools.
         """
         data_economic = [
             self.revenue / kUSD,
@@ -175,17 +178,9 @@ class Investment:
             "- Expense, Income tax",
             "= Net cashflow"]
         result_cash = pd.DataFrame(data_cash, index=index_cash)
-        return result_economic, result_cash
+        return result_economic, result_cash, self.operating_expenses_detail()
 
-    def earning_before_tax_detail(self):
-        """Tabulate the earning before taxes (there are no interests)."""
-        sales = pd.Series([self.revenue[1]], ['Sales revenue'])
-        cash_flows = sales.append(- pd.Series(self.expenses, self.expenses_index))
-        df = pd.DataFrame(data=[cash_flows / kUSD], index=["kUSD"])
-        df["= Earning Before Tax"] = df.sum(axis=1)
-        print(df.T)
-        a = self.earning_before_tax()[1] / kUSD
-        b = df.loc["kUSD", "= Earning Before Tax"]
-        assert isclose(a, b), f"Inconsistent EBT estimates {round(a)} and {round(b)} kUSD"
-
-        return df.T
+    @abstractmethod
+    def operating_expenses_detail(self):
+        """Virtual method. Return a dataframe detailing the operating expenses."""
+        return "operating_expenses_detail not implemented by child class."

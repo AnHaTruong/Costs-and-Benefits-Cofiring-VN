@@ -12,9 +12,9 @@ from collections import namedtuple
 import pandas as pd
 import numpy as np
 
-from natu.units import ha, t
+from natu.units import t
 
-from model.utils import after_invest, display_as, USD, kUSD
+from model.utils import after_invest, display_as, kUSD
 
 from model.emitter import Emitter, Activity
 from model.investment import Investment
@@ -92,16 +92,17 @@ class Farmer(Investment, Emitter):
         expenses = self.labor_cost() + self.rental_cost() + self.fuel_cost()
         return display_as(expenses, 'kUSD')
 
-    def earning_before_tax_detail(self):
-        """Tabulate the annual net income before taxes in the farming segment."""
-        self.expenses = [self.rental_cost()[1], self.fuel_cost()[1], self.labor_cost()[1]]
-        self.expenses_index = ['- Winder rental', '- Winder fuel', '- Collection work']
-        df = Investment.earning_before_tax_detail(self)
-
-        per_ha = df / (self.winder_use_area[1] / ha) * kUSD / USD
-        per_ha.columns = ['USD/ha']
-
-        return pd.concat([df, per_ha], axis=1)
+    def operating_expenses_detail(self):
+        """Tabulate the annual operating expenses."""
+        expenses_data = [self.rental_cost() / kUSD,
+                         self.fuel_cost() / kUSD,
+                         self.labor_cost() / kUSD]
+        expenses_index = ['Winder rental',
+                          'Winder fuel',
+                          'Collection work']
+        df = pd.DataFrame(data=expenses_data, index=expenses_index)
+        df.loc['= Operating expenses (kUSD)'] = df.sum()
+        return df
 
     def parameters_table(self):
         """Tabulate the arguments defining the farmer. Return a Pandas Series."""

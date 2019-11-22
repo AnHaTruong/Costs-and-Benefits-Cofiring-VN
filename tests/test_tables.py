@@ -69,14 +69,6 @@ def test_technical_parameters(regtest, systems):
     regtest.write(f(systems, 'plant.characteristics()'))
 
 
-def test_income_farmer(regtest, systems):
-    regtest.write(f(systems, 'farmer.earning_before_tax_detail()'))
-
-
-def test_income_transporter(regtest, systems):
-    regtest.write(f(systems, 'transporter.earning_before_tax_detail()'))
-
-
 def test_emissions_baseline(regtest, systems):
     regtest.write(f(systems, 'emissions_baseline()'))
 
@@ -97,6 +89,11 @@ def test_cofiring_business_data(regtest, systems):
 def test_farmer_business_data(regtest, systems):
     regtest.write(
         f(systems, 'farmer.business_data(tax_rate, depreciation_period)'))
+
+
+def test_transporter_business_data(regtest, systems):
+    regtest.write(
+        f(systems, 'transporter.business_data(tax_rate, depreciation_period)'))
 
 
 def test_plant_net_present_value(regtest, systems):

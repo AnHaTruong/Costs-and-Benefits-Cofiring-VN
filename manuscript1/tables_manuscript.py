@@ -94,8 +94,8 @@ print()
 print('Farmers             Mong Duong 1     Ninh Binh')
 
 table = pd.concat(
-    [MongDuong1System.farmer.earning_before_tax_detail(),
-     NinhBinhSystem.farmer.earning_before_tax_detail()],
+    [MongDuong1System.farmer.business_data()[1],
+     NinhBinhSystem.farmer.business_data()[1]],
     axis=1)
 
 print(str(table))
@@ -104,8 +104,8 @@ print("""
 Transporters        Mong Duong 1      Ninh Binh""")
 
 table = pd.concat(
-    [MongDuong1System.transporter.earning_before_tax_detail(),
-     NinhBinhSystem.transporter.earning_before_tax_detail()],
+    [MongDuong1System.transporter.business_data()[1],
+     NinhBinhSystem.transporter.business_data()[1]],
     axis=1)
 
 print(str(table))

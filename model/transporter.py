@@ -11,7 +11,7 @@ from collections import namedtuple
 
 import pandas as pd
 
-from model.utils import after_invest, display_as, USD, kUSD
+from model.utils import after_invest, display_as, kUSD
 
 from model.emitter import Emitter, Activity
 from model.investment import Investment
@@ -101,29 +101,23 @@ class Transporter(Investment, Emitter):
         amount = self.labor_cost() + self.fuel_cost() + self.rental_cost()
         return display_as(amount, 'kUSD')
 
+    def operating_expenses_detail(self):
+        """Tabulate the annual operating expenses."""
+        expenses_data = [self.rental_cost() / kUSD,
+                         self.fuel_cost() / kUSD,
+                         self.loading_wages() / kUSD,
+                         self.driving_wages() / kUSD]
+        expenses_index = ['Truck rental',
+                          'Truck fuel',
+                          'Handling work',
+                          'Driving work']
+        df = pd.DataFrame(data=expenses_data, index=expenses_index)
+        df.loc['= Operating expenses (kUSD)'] = df.sum()
+        return df
+
     def max_trip_time(self):
         time = self.collection_radius / self.parameter.truck_velocity
         return display_as(time, 'hr')
-
-    def earning_before_tax_detail(self):
-        """Tabulate the annual net income before taxes in the transporting segment."""
-        self.expenses = [self.merchandise[1],
-                         self.rental_cost()[1],
-                         self.fuel_cost()[1],
-                         self.loading_wages()[1],
-                         self.driving_wages()[1]]
-        self.expenses_index = ['- Buying straw',
-                               '- Truck rental',
-                               '- Truck fuel',
-                               '- Handling work',
-                               '- Driving work']
-
-        df = Investment.earning_before_tax_detail(self)
-
-        per_trip = df / self.truck_trips[1] * kUSD / USD
-        per_trip.columns = ['USD/trip']
-
-        return pd.concat([df, per_trip], axis=1)
 
     def parameters_table(self):
         """Tabulate the arguments defining the transporter. Return a Pandas Series."""
