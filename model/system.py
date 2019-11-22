@@ -11,7 +11,7 @@ from collections import namedtuple
 import pandas as pd
 from natu.numpy import npv
 
-from model.utils import year_1, display_as, safe_divide
+from model.utils import year_1, display_as, safe_divide, t
 from model.powerplant import PowerPlant, CofiringPlant
 from model.farmer import Farmer
 from model.transporter import Transporter
@@ -172,7 +172,10 @@ class System:
 
         Return a dataframe of time series, indexed by segment and pollutant.
         """
-        return self.emissions_exante() - self.emissions_expost()
+        reduction = self.emissions_exante() - self.emissions_expost()
+        is_null_year0 = reduction.applymap(lambda sequence: sequence[0] == 0 * t)
+        assert is_null_year0.all(axis=None), "Expecting zero emission reduction in year 0"
+        return reduction
 
     def emissions_reduction_benefit(self, external_cost):
         """Tabulate external benefits of reducing atmospheric emissions from cofiring.

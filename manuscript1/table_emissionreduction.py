@@ -5,24 +5,19 @@
 # minh.haduong@gmail.com
 # Creative Commons Attribution-ShareAlike 4.0 International
 #
-"""Print the tables for manuscript 'Costs and benefits of co-firing'.
+"""Print the results table showing emissions reduction and external benefit.
 
 Costs and benefits of co-firing rice straw in two Vietnamese coal power plants
 An Ha Truong, Minh Ha-Duong
 2017-2019
 """
 
-import pandas as pd
-
 from manuscript1.parameters import MongDuong1System, NinhBinhSystem, external_cost
 from model.tables import emissions_reduction_ICERE
 
 
-pd.options.display.float_format = '{:,.0f}'.format
+print("""Emission reductions from the two projects
 
-table = """Emission reductions from the two projects
+                    Mong Duong 1      Ninh Binh""")
 
-                    Mong Duong 1      Ninh Binh
-""" + str(emissions_reduction_ICERE(MongDuong1System, NinhBinhSystem, external_cost))
-
-print(table)
+print(emissions_reduction_ICERE(MongDuong1System, NinhBinhSystem, external_cost))
