@@ -14,29 +14,48 @@ An Ha Truong, Minh Ha-Duong
 
 import pandas as pd
 
-from manuscript1.parameters import (MongDuong1System, NinhBinhSystem,
-                                    discount_rate, tax_rate, depreciation_period,
-                                    coal_import_price)
-from model.utils import display_as
+from manuscript1.parameters import MongDuong1System, NinhBinhSystem
+from model.powerplant import Fuel
 
 #pd.options.display.float_format = '{:,.2f}'.format
 
-print('Parameters: cofiring plant, prices, farmer, transporter, mining')
 
-table = pd.concat(
-    [MongDuong1System.parameters_table(),
-     NinhBinhSystem.parameters_table()],
-    axis=1)
+def dict_to_df(stem, dictionary):
+    """Cast a dictionary into DataFrame, stemming the keys."""
+    stemmed_keys = [stem + '_' + key for key in dictionary.keys()]
+    data = dictionary.values()
+    return pd.DataFrame(data, index=stemmed_keys)
 
-for index, row in table.iterrows():
-    if row[0] == row[1]:
-        row[1] = 'idem'
+
+def fuel_to_df(stem, fuel):
+    """Cast a Fuel namedtuple into DataFrame, stemming the keys."""
+    return dict_to_df(stem, fuel._asdict())
+
+
+def scalar_to_df(index, value):
+    """Cast a scalar into a DataFrame."""
+    if index == 'boiler_efficiency_loss':
+        value = '0.0044 r^2 + 0.0055 r'
+    return pd.DataFrame([value], index=[index])
+
+
+def flatten(serie):
+    """Flatten a parameter table so that the dictionary and namedtuples get one line per value."""
+    df = pd.DataFrame()
+    for index, value in serie.iteritems():
+        if isinstance(value, dict):
+            df = df.append(dict_to_df(index, value))
+        else:
+            if isinstance(value, Fuel):
+                df = df.append(fuel_to_df(index, value))
+            else:
+                df = df.append(scalar_to_df(index, value))
+    return df
+
+
+tableMD1 = flatten(MongDuong1System.parameters_table())
+tableNB = flatten(NinhBinhSystem.parameters_table())
+
+table = pd.concat([tableMD1, tableNB], axis=1)
 
 print(table)
-
-print('\nVarious')
-
-print('Discount rate         ', discount_rate)
-print('Tax rate              ', tax_rate)
-print('Depreciation period   ', depreciation_period)
-print('Coal import price     ', display_as(coal_import_price, "USD/t"))
