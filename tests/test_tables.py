@@ -91,11 +91,6 @@ def test_farmer_business_data(regtest, systems):
         f(systems, 'farmer.business_data(tax_rate, depreciation_period)'))
 
 
-def test_transporter_business_data(regtest, systems):
-    regtest.write(
-        f(systems, 'transporter.business_data(tax_rate, depreciation_period)'))
-
-
 def test_plant_net_present_value(regtest, systems):
     regtest.write(f(systems, 'plant.net_present_value(*finance)'))
 
