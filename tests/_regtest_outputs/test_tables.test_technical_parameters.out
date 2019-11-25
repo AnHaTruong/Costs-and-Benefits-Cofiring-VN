@@ -8,7 +8,7 @@ Coal consumption           2.70908e+06 t
 Coal type                        6b_coal
 Coal heat value            19.4347 MJ/kg
 Coal transport distance             0 km
-Coal transport mean        Conveyor belt
+Coal transport mean        conveyor_belt
 Name: Mong Duong 1, dtype: object
 
 Comissioning year                     1974
@@ -21,5 +21,5 @@ Coal consumption                  430553 t
 Coal type                          4b_coal
 Coal heat value              21.5476 MJ/kg
 Coal transport distance             200 km
-Coal transport mean        Barge transport
+Coal transport mean        barge_transport
 Name: Ninh Binh, dtype: object
