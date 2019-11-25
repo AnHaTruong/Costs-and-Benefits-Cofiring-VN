@@ -65,19 +65,19 @@ coal_6b = Fuel(
     name="6b_coal",
     heat_value=19.43468 * MJ / kg,  # numerical value also used in emission_factor
     transport_distance=0 * km,
-    transport_mean='Conveyor belt')
+    transport_mean='conveyor_belt')
 
 coal_4b = Fuel(
     name="4b_coal",
     heat_value=21.5476 * MJ / kg,  # numerical value also used in emission_factor
     transport_distance=200 * km,
-    transport_mean='Barge transport')
+    transport_mean='barge_transport')
 
 straw = Fuel(
     name='straw_boiler',
     heat_value=11.7 * MJ / kg,  # numerical value also used in emission_factor
     transport_distance='Endogenous',
-    transport_mean='Road transport')
+    transport_mean='road_transport')
 
 _diesel_heat_value = 45.5 * MJ / kg   # ACEA
 
@@ -101,7 +101,7 @@ emission_factor['diesel'] = {
     'NOx': 0.0018 * kg / MJ * _diesel_heat_value,    # EPA AP-42, VolI, 3,3
     'PM10': 0.00014 * kg / MJ * _diesel_heat_value}  # EPA AP-42, VolI, 3,3
 
-emission_factor['Conveyor belt'] = {
+emission_factor['conveyor_belt'] = {
     'CO2': 0 * kg / t / km,
     'SO2': 0 * kg / t / km,
     'NOx': 0 * kg / t / km,
@@ -113,7 +113,7 @@ emission_factor['road_transport'] = {
     'NOx': 2.68 * g / (20 * t) / km,     # idem
     'PM10': 0.04 * g / (20 * t) / km}    # idem
 
-emission_factor['Barge transport'] = {
+emission_factor['barge_transport'] = {
     'CO2': 0.071 * kg / t / km,                  # Binh & Tuan (2016)
     'SO2': 2 * g / kg * (8 * g / t / km),        # Van Dingenen et al. (2016)
     'NOx': 50.75 * g / kg * (8 * g / t / km),    # idem
