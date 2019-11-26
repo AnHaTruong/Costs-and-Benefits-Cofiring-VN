@@ -57,5 +57,7 @@ tableMD1 = flatten(MongDuong1System.parameters_table())
 tableNB = flatten(NinhBinhSystem.parameters_table())
 
 table = pd.concat([tableMD1, tableNB], axis=1)
+table.columns = table.loc['name']
+table = table.drop('name')
 
 print(table)

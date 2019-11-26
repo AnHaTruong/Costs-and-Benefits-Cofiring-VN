@@ -221,17 +221,22 @@ class System:
     def parameters_table(self):
         """Tabulate arguments defining the system, except supply chain. Return a Pandas Series."""
         pd.set_option('display.max_colwidth', 80)
+        legend_a = pd.Series("----------", index=["*** Farmer ***"])
         a = self.farmer.parameters_table()
+        legend_b = pd.Series("----------", index=["*** Reseller***"])
         b = self.transporter.parameters_table()
+        legend_c = pd.Series("----------", index=["*** Cofiring plant ***"])
         c = self.cofiring_plant.parameters_table()
+        legend_d = pd.Series("----------", index=["*** Mining ***"])
         d = pd.Series(self.mining_parameter, self.mining_parameter._fields)
         display_as(d.loc['wage_mining'], "USD / hr")
+        legend_e = pd.Series("----------", index=["*** Prices ***"])
         e = pd.Series(self.price, self.price._fields)
         display_as(e.loc['biomass_plantgate'], "USD / t")
         display_as(e.loc['biomass_fieldside'], "USD / t")
         display_as(e.loc['coal'], "USD / t")
         display_as(e.loc['electricity'], "USD / kWh")
-        return pd.concat([c, e, a, b, d])
+        return pd.concat([legend_c, c, legend_a, a, legend_b, b, legend_d, d, legend_e, e])
 
     def benefits(self, discount_rate, external_cost):
         """Tabulate the present value of various benefits from co-firing."""
