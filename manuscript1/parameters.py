@@ -179,8 +179,8 @@ cofire_MD1 = CofiringParameter(
     boiler_efficiency_loss=lambda r: 0.0044 * r**2 + 0.0055 * r)  # Tillman (2000) r mass ratio
 
 price_MD1 = Price(
-    biomass_plantgate=45.13575 * USD / t,
-    biomass_fieldside=37.26 * USD / t,
+    biomass_plantgate=22 * USD / t,
+    biomass_fieldside=16 * USD / t,
     coal=1131400 * VND / t,
     electricity=1239.17 * VND / kWh)
 
@@ -212,8 +212,8 @@ cofire_NB = cofire_MD1._replace(
     investment_cost=100 * USD / kW)
 
 price_NB = Price(
-    biomass_plantgate=38.4483 * USD / t,
-    biomass_fieldside=37.26 * USD / t,
+    biomass_plantgate=32 * USD / t,
+    biomass_fieldside=19 * USD / t,
     coal=1825730 * VND / t,                 # Includes transport
     electricity=1665.6 * VND / kWh)
 
