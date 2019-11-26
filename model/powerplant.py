@@ -246,9 +246,9 @@ class CofiringPlant(PowerPlant):
         self.biomass_used = biomass_heat / cofire_parameter.biomass.heat_value
         display_as(self.biomass_used, 't')
 
-        self.coal_saved = biomass_heat / plant_parameter.coal.heat_value
-
-        self.coal_used -= self.coal_saved
+        # Warning: avoided coal at the cofiring plant is not same as ex post - ex ante saved coal
+        # because the plant efficiencies differ
+        self.coal_used -= biomass_heat / plant_parameter.coal.heat_value
 
         self.activities = [
             Activity(

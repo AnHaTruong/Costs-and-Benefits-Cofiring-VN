@@ -96,7 +96,8 @@ class System:
 
     @property
     def coal_saved(self):
-        return display_as(self.cofiring_plant.coal_saved, 'kt')
+        mass = self.plant.coal_used - self.cofiring_plant.coal_used
+        return display_as(mass, 'kt')
 
     @property
     def coal_work_lost(self):
@@ -194,6 +195,17 @@ class System:
             [baseline, reduction, relative, benefit],
             index=["Baseline", "Reduction", "Relative reduction", "Value"])
 
+    def coal_saved_benefits(self, coal_import_price):
+        """Tabulate the quantity and value of coal saved by cofiring."""
+        col1 = self.coal_saved[1]
+        col2 = display_as(col1 * coal_import_price, 'MUSD')
+
+        row = '{:35}{:23.1f}'
+        table = ['Coal saved at ' + str(self.cofiring_plant.name)]
+        table.append(row.format('Amount of coal saved from co-firing', col1))
+        table.append(row.format('Maximum benefit for trade balance', col2))
+        return '\n'.join(table)
+
     def mitigation_npv(self, discount_rate, external_cost):
         df = self.emissions_reduction_benefit(external_cost)
         annual_mitigation_value = df.loc['Value', 'CO2']
@@ -235,17 +247,6 @@ class System:
                                  self.farmer.net_present_value(discount_rate)))
         table.append(row2.format('Trader earnings before tax',
                                  self.transporter.net_present_value(discount_rate)))
-        return '\n'.join(table)
-
-    def coal_saved_benefits(self, coal_import_price):
-        """Tabulate the quantity and value of coal saved by cofiring."""
-        col1 = self.coal_saved[1]
-        col2 = display_as(col1 * coal_import_price, 'MUSD')
-
-        row = '{:35}{:23.1f}'
-        table = ['Coal saved at ' + str(self.cofiring_plant.name)]
-        table.append(row.format('Amount of coal saved from co-firing', col1))
-        table.append(row.format('Maximum benefit for trade balance', col2))
         return '\n'.join(table)
 
     # Code really smell, will change result to DataFrame now.
