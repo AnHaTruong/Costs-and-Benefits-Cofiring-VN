@@ -16,7 +16,6 @@ import pandas as pd
 
 from manuscript1.parameters import (MongDuong1System, NinhBinhSystem,
                                     discount_rate, tax_rate, depreciation_period,
-                                    coal_import_price,
                                     external_cost_SKC, external_cost_ZWY,
                                     external_cost_HAS)
 
@@ -53,17 +52,6 @@ table = (
 )
 
 print(table)
-
-
-#%%
-print(table_separator)
-
-print("Table: Coal saved the co-firing scenario.\n")
-
-print("Coal import price: ", display_as(coal_import_price, "USD / t"), "\n")
-
-print(MongDuong1System.coal_saved_benefits(coal_import_price) + "\n")
-print(NinhBinhSystem.coal_saved_benefits(coal_import_price))
 
 
 #%%

@@ -197,14 +197,14 @@ class System:
 
     def coal_saved_benefits(self, coal_import_price):
         """Tabulate the quantity and value of coal saved by cofiring."""
-        col1 = self.coal_saved[1]
-        col2 = display_as(col1 * coal_import_price, 'MUSD')
-
-        row = '{:35}{:23.1f}'
-        table = ['Coal saved at ' + str(self.cofiring_plant.name)]
-        table.append(row.format('Amount of coal saved from co-firing', col1))
-        table.append(row.format('Maximum benefit for trade balance', col2))
-        return '\n'.join(table)
+        baseline = self.plant.coal_used
+        reduction = self.coal_saved
+        relative = reduction / baseline
+        benefit = reduction * coal_import_price
+        display_as(benefit, 'MUSD')
+        return pd.DataFrame(
+            [baseline, reduction, relative, benefit],
+            index=["Baseline", "Reduction", "Relative reduction", "Value"])
 
     def mitigation_npv(self, discount_rate, external_cost):
         df = self.emissions_reduction_benefit(external_cost)

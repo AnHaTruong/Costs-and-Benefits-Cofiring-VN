@@ -21,7 +21,7 @@ Units thread into arrays from the right but not from the left
 from natu import config
 # config.use_quantities = False
 
-from natu.numpy import array
+from natu.numpy import array, npv, unique
 from natu.units import hr, t, y
 from natu import units
 from natu.core import ScalarUnit
@@ -79,6 +79,16 @@ def year_1(df):
         assert list(vector)[1:] == [scalar] * (len(vector) - 1)
         return scalar / y
     return df.applymap(projector).T
+
+
+def summarize(sequence, discount_rate):
+    """Summarize a sequence, verify it is a steady state.
+
+    Return first element, second element, and NPV of everything.
+    """
+    is_constant = (len(unique(sequence[1:])) == 1)
+    assert is_constant, "Error: expecting everything constant after first year."
+    return [sequence[0], sequence[1], npv(discount_rate, sequence)]
 
 
 def display_as(qty, unit):

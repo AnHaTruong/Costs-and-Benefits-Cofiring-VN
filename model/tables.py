@@ -6,19 +6,20 @@
 #     Creative Commons Attribution-ShareAlike 4.0 International
 #
 #
-"""Define result tables.
+"""Define result tables, showing two systems at a time.
 
-In the model classes we return time series.
-Methods defined here summarize the vectors.
+Methods defined in class System we return complete time series (21 years).
+
+Functions defined here summarize the vectors.
+Since we have steady state after year 1, all series matching pattern   s = (a, b, b, b, ..., b)
+are better shown as   (a, b, npv(s))
 """
 
-import numpy as np
 import pandas as pd
 
 # pylint: disable=wrong-import-order
-from model.utils import display_as, isclose, USD, FTE, year_1
+from model.utils import display_as, isclose, USD, FTE, year_1, summarize
 from natu.units import y, t, hr
-from natu.numpy import npv
 
 
 #%%
@@ -46,16 +47,6 @@ def emission_reductions_by_activity(system_a, system_b):
 #%%
 
 
-def summarize(sequence, discount_rate):
-    """Summarize a sequence, verify it is a steady state.
-
-    Return first element, second element, and NPV of everything.
-    """
-    is_constant = (len(np.unique(sequence[1:])) == 1)
-    assert is_constant, "Error: expecting everything constant after first year."
-    return [sequence[0], sequence[1], npv(discount_rate, sequence)]
-
-
 def emissions_reduction_benefit(system_a, system_b, external_cost, discount_rate):
     """Tabulate the external value of emissions reduction.
 
@@ -73,6 +64,22 @@ def emissions_reduction_benefit(system_a, system_b, external_cost, discount_rate
         index=headers)
     table = table.applymap(lambda x: summarize(x, discount_rate))
     return table[["CO2", "SO2", "PM10", "NOx"]].T
+
+
+def coal_saved_benefit(system_a, system_b, coal_import_price, discount_rate):
+    """Tabulate the external value of coal use reduction.
+
+    Summarize the time series as [x0, x1, npv(x0, x1, ...)].
+    """
+    cols = ['Reduction', 'Value']
+    data_a = system_a.coal_saved_benefits(coal_import_price).loc[cols]
+    data_a = data_a.apply(lambda x: summarize(x, discount_rate), axis=1)
+    data_b = system_b.coal_saved_benefits(coal_import_price).loc[cols]
+    data_b = data_b.apply(lambda x: summarize(x, discount_rate), axis=1)
+    index = [system_a.plant.name, system_b.plant.name]
+    df = pd.DataFrame([data_a, data_b], index=index)
+    return df.T
+
 
 #%%
 
@@ -125,6 +132,13 @@ def energy_costs(system_a, system_b):
         + str(system_b.cofiring_plant.biomass_energy_cost()[1]))
 
     return '\n'.join(lines)
+
+#%%
+
+
+#def coal_saved_benefits(system, coal_import_price):
+#    """Tabulate the quantity and value of coal saved by cofiring."""
+
 
 #%%
 
