@@ -88,7 +88,7 @@ def summarize(sequence, discount_rate):
     """
     is_constant = (len(unique(sequence[1:])) == 1)
     assert is_constant, "Error: expecting everything constant after first year."
-    return [sequence[0], sequence[1], npv(discount_rate, sequence)]
+    return sequence[0], sequence[1], npv(discount_rate, sequence)
 
 
 def display_as(qty, unit):

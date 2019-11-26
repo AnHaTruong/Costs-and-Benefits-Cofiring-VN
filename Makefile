@@ -17,7 +17,8 @@ figures-manuscript1 = figure_emissions.svg figure_benefits.svg figure_economics.
 tables-manuscript1 = tables_manuscript.txt\
                      table_jobs.txt\
                      table_feasibility.txt\
-                     table_emissionreduction.txt\
+                     table_emission_reduction.txt\
+                     table_business_value.txt\
                      table_coal_saved.txt\
                      table_parameters.txt\
                      table_parameters_economics.txt\
