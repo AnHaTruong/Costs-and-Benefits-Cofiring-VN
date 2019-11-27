@@ -7,8 +7,8 @@
 
 PYTHON = python3
 PYTEST = python3 -m pytest
-PYLINT = pylint3
-SOURCEDIRS = model manuscript1 lcoe tests
+PYLINT = pylint3 -j 0
+SOURCEDIRS = model manuscript1 lcoe tests manuscript1/table  manuscript1/figure
 
 figures-lcoe =  LCOE-4tech-3years-catalogue.png LCOE-4tech-3years-IEAfuelcosts.png\
                 LCOE-4tech-2020-catalogueextremes.png LCOE-4tech-2050-catalogueextremes.png\
@@ -20,26 +20,26 @@ tables-manuscript1 = tables_manuscript.txt\
                      table_emission_reduction.txt\
                      table_business_value.txt\
                      table_coal_saved.txt\
-                     table_parameters.txt\
-                     table_parameters_economics.txt\
-                     table_parameters_emission_factors.txt
+                     table_parameter_systems.txt\
+                     table_parameter_economics.txt\
+                     table_parameter_emission_factors.txt
 
 all: $(tables) $(figures-lcoe) $(figures-manuscript1) $(tables-manuscript1)
- 
-feasibility.txt: manuscript1/feasibility.py manuscript1/parameters.py
-	$(PYTHON) -m manuscript1.feasibility > $@
 
-figure_%.svg: manuscript1/figure_%.py manuscript1/parameters.py
-	$(PYTHON) -m manuscript1.figure_$* > $@
+feasibility.txt: manuscript1/table/feasibility.py manuscript1/parameters.py
+	$(PYTHON) -m manuscript1.table.feasibility > $@
 
 $(figures-lcoe): lcoe/figures.py
 	$(PYTHON) -m lcoe.figures
 
-table_%.txt: manuscript1/table_%.py manuscript1/parameters.py
-	$(PYTHON) -m manuscript1.table_$* > $@
+figure_%.svg: manuscript1/figure/%.py manuscript1/parameters.py
+	$(PYTHON) -m manuscript1.figure.$* > $@
 
-tables_manuscript.txt: manuscript1/tables_manuscript.py manuscript1/parameters.py
-	$(PYTHON) -m manuscript1.tables_manuscript > $@
+table_%.txt: manuscript1/table/%.py manuscript1/parameters.py
+	$(PYTHON) -m manuscript1.table.$* > $@
+
+tables_manuscript.txt: manuscript1/table/manuscript.py manuscript1/parameters.py
+	$(PYTHON) -m manuscript1.table.manuscript > $@
 
 classes.dot packages.dot:
 	pyreverse3 *py */*.py
@@ -88,8 +88,11 @@ codacy-update: coverage.xml
 regtest-reset:
 	$(PYTEST) --regtest-reset
 
+#lint:
+#	$(PYLINT) */*.py manuscript1/*/*.py
+#
 lint:
-	$(PYLINT) */*.py
+	$(PYLINT) $(SOURCEDIRS)
 
 docstyle:
 	pydocstyle $(SOURCEDIRS)

@@ -14,7 +14,7 @@ An Ha Truong, Minh Ha-Duong
 
 from model.utils import display_as, USD, t
 
-from model.feasibility import farmer_wta, plant_wtp
+from model.wtawtp import farmer_wta, plant_wtp
 from manuscript1.parameters import MongDuong1System, NinhBinhSystem
 from manuscript1.parameters import discount_rate, tax_rate, depreciation_period
 

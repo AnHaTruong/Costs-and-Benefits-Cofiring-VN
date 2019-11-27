@@ -14,7 +14,7 @@ An Ha Truong, Minh Ha-Duong
 import matplotlib.pyplot as plt
 
 from model.utils import USD, MUSD, t, isclose
-from model.feasibility import farmer_gain, farmer_wta, plant_gain, plant_wtp
+from model.wtawtp import farmer_gain, farmer_wta, plant_gain, plant_wtp
 
 from manuscript1.parameters import MongDuong1System, NinhBinhSystem
 from manuscript1.parameters import discount_rate, tax_rate, depreciation_period
