@@ -12,13 +12,11 @@ An Ha Truong, Minh Ha-Duong
 2017-2019
 """
 import pandas as pd
-import natu.numpy as np
-
 from manuscript1.parameters import (MongDuong1System, NinhBinhSystem,
                                     discount_rate, tax_rate, depreciation_period,
                                     price_MD1, price_NB)
 
-from model.utils import display_as, kUSD
+from model.utils import display_as
 
 
 print("Business value of cofiring for the three segments")
@@ -42,8 +40,8 @@ print()
 
 def result_table(systema_segment, systemb_segment):
     """Return a DataFrame with the NPV accounts of a segment in two systems."""
-    table_a = systema_segment.npv_table(discount_rate, tax_rate, depreciation_period)
-    table_b = systemb_segment.npv_table(discount_rate, tax_rate, depreciation_period)
+    table_a = systema_segment.npv_cash(discount_rate, tax_rate, depreciation_period)
+    table_b = systemb_segment.npv_cash(discount_rate, tax_rate, depreciation_period)
     return pd.concat([table_a, table_b], axis=1)
 
 
@@ -59,28 +57,11 @@ print(result_table(MongDuong1System.plant, NinhBinhSystem.plant), '\n')
 
 #%%
 
+table_i = MongDuong1System.plant_npv_cash_change(discount_rate, tax_rate, depreciation_period)
+table_i_details = MongDuong1System.plant_npv_opex_change(discount_rate)
 
-def plant_cash_change(system):
-    """Return the cofiring project evaluation NPV tables, table that detail OPEX."""
-    _, cash_exante, opex_exante = system.plant.business_data(tax_rate, depreciation_period)
-    _, cash_expost, opex_expost = system.cofiring_plant.business_data(tax_rate, depreciation_period)
-    npv_exante = cash_exante.apply((lambda x: np.npv(discount_rate, x)), axis=1)
-    npv_expost = cash_expost.apply((lambda x: np.npv(discount_rate, x)), axis=1)
-    df = pd.DataFrame(npv_expost - npv_exante)
-    df.columns = [system.plant.name]
-
-    npv_opex_exante = opex_exante.apply((lambda x: np.npv(discount_rate, x)), axis=1)
-    npv_opex_expost = opex_expost.apply((lambda x: np.npv(discount_rate, x)), axis=1)
-    df_opex = pd.DataFrame(npv_opex_expost)
-    df_opex.loc['Fuel cost, coal'] -= npv_opex_exante.loc['Fuel cost, coal']
-    df_opex.loc['O&M, coal'] -= npv_opex_exante.loc['Operation & Maintenance']
-    df_opex.loc['= Operating expenses (kUSD)'] -= npv_opex_exante.loc['= Operating expenses (kUSD)']
-    df_opex.columns = [system.plant.name]
-    return df, df_opex
-
-
-table_i, table_i_details = plant_cash_change(MongDuong1System)
-table_j, table_j_details = plant_cash_change(NinhBinhSystem)
+table_j = NinhBinhSystem.plant_npv_cash_change(discount_rate, tax_rate, depreciation_period)
+table_j_details = NinhBinhSystem.plant_npv_opex_change(discount_rate)
 
 print(pd.concat([table_i, table_j], axis=1))
 print()
@@ -88,48 +69,10 @@ print()
 print(pd.concat([table_i_details, table_j_details], axis=1))
 print()
 
+
 #%%
 
-
-def table_business_value(system):
-    """Tabulate cofiring business value:  technical costs vs. value of coal saved."""
-    data = [
-        np.npv(discount_rate, system.farmer.operating_expenses()),
-        np.npv(discount_rate, system.transporter.operating_expenses()),
-        np.npv(discount_rate, system.cofiring_plant.investment())]
-
-    df, df_opex = plant_cash_change(system)
-    extra_OM = df_opex.loc['O&M, coal'] + df_opex.loc['O&M, biomass']
-    data.append(display_as(extra_OM[0] * kUSD, 'kUSD'))
-
-    technical_cost = np.sum(data)
-    data.append(technical_cost)
-
-    coal_saved = np.npv(discount_rate, system.coal_saved)
-    coal_price = display_as(system.price.coal, "USD/t")
-    savings = display_as(coal_saved * coal_price, "kUSD")
-    data.append(coal_saved)
-    data.append(coal_price)
-    data.append(savings)
-
-    data.append(savings - technical_cost)
-
-    index = [
-        "Farmer opex",
-        "Transporter opex",
-        "Investment",
-        "Extra O&M",
-        "Total technical costs",
-        "Coal saved",
-        "Coal price",
-        "Value of coal saved",
-        "Business value of cofiring"]
-    df = pd.DataFrame(data, index=index)
-    df.columns = [system.plant.name]
-    return df
-
-
-table_k = table_business_value(MongDuong1System)
-table_l = table_business_value(NinhBinhSystem)
+table_k = MongDuong1System.table_business_value(discount_rate, tax_rate, depreciation_period)
+table_l = NinhBinhSystem.table_business_value(discount_rate, tax_rate, depreciation_period)
 
 print(pd.concat([table_k, table_l], axis=1))

@@ -9,9 +9,9 @@
 from collections import namedtuple
 
 import pandas as pd
-from natu.numpy import npv
+import natu.numpy as np
 
-from model.utils import year_1, display_as, safe_divide, t
+from model.utils import year_1, display_as, safe_divide, t, kUSD
 from model.powerplant import PowerPlant, CofiringPlant
 from model.farmer import Farmer
 from model.transporter import Transporter
@@ -23,8 +23,13 @@ MiningParameter = namedtuple('MiningParameter',
                              'productivity_surface, productivity_underground, wage_mining')
 
 
-#We should pass the parameters as an object
+# We should pass the parameters as an object
 #pylint: disable=too-many-instance-attributes
+#
+# Refectoring needed:
+# We should split the class into a  System  that knows only about one type of plant,
+# and a comparison class that holds a system_ex_ante and a system_ex_post
+#pylint: disable=R0904
 class System:
     """The system model of the cofiring economic sector.
 
@@ -91,7 +96,7 @@ class System:
         return display_as(amount, 'kUSD')
 
     def wages_npv(self, discount_rate):
-        amount = npv(discount_rate, self.wages)
+        amount = np.npv(discount_rate, self.wages)
         return display_as(amount, 'kUSD')
 
     @property
@@ -209,13 +214,13 @@ class System:
     def mitigation_npv(self, discount_rate, external_cost):
         df = self.emissions_reduction_benefit(external_cost)
         annual_mitigation_value = df.loc['Value', 'CO2']
-        value = npv(discount_rate, annual_mitigation_value)
+        value = np.npv(discount_rate, annual_mitigation_value)
         return display_as(value, 'kUSD')
 
     def health_npv(self, discount_rate, external_cost):
         df = self.emissions_reduction_benefit(external_cost)
         annual_health_benefit = df.loc['Value'].drop('CO2').sum()
-        value = npv(discount_rate, annual_health_benefit)
+        value = np.npv(discount_rate, annual_health_benefit)
         return display_as(value, 'kUSD')
 
     def parameters_table(self):
@@ -253,6 +258,72 @@ class System:
         table.append(row2.format('Trader earnings before tax',
                                  self.transporter.net_present_value(discount_rate)))
         return '\n'.join(table)
+
+    def plant_npv_cash_change(self, discount_rate, tax_rate, depreciation_period):
+        """Return the NPV change table for the power plant.
+
+        Cofiring profit is positive if its benefits (reducing the operating expenses)
+        exceeds its costs (the investment).
+        """
+        name = self.plant.name
+        exante = self.plant.npv_cash(discount_rate, tax_rate, depreciation_period, name)
+        expost = self.cofiring_plant.npv_cash(discount_rate, tax_rate, depreciation_period, name)
+        return expost - exante
+
+    def plant_npv_opex_change(self, discount_rate):
+        """Return the Operating expenses changes for the power plant.
+
+        Ex post compared to ex ante:
+            the coal costs are lower
+            the biomass costs are higher
+            the total Operations and Maintenance are higher
+        and if the biomass is cheap enough, then the operating expenses decrease.
+        """
+        name = self.plant.name
+        npv_opex_exante = self.plant.npv_opex(discount_rate, name)
+        df = self.cofiring_plant.npv_opex(discount_rate, name)
+        df.loc['Fuel cost, coal'] -= npv_opex_exante.loc['Fuel cost, coal']
+        df.loc['O&M, coal'] -= npv_opex_exante.loc['Operation & Maintenance']
+        df.loc['= Operating expenses (kUSD)'] -= npv_opex_exante.loc['= Operating expenses (kUSD)']
+        return df
+
+    def table_business_value(self, discount_rate, tax_rate, depreciation_period):
+        """Tabulate cofiring business value:  technical costs vs. value of coal saved."""
+        data = [
+            np.npv(discount_rate, self.farmer.operating_expenses()),
+            np.npv(discount_rate, self.transporter.operating_expenses()),
+            np.npv(discount_rate, self.cofiring_plant.investment())]
+
+        df = self.plant_npv_cash_change(discount_rate, tax_rate, depreciation_period)
+        df_opex = self.plant_npv_opex_change(discount_rate)
+        extra_OM = df_opex.loc['O&M, coal'] + df_opex.loc['O&M, biomass']
+        data.append(display_as(extra_OM[0] * kUSD, 'kUSD'))
+
+        technical_cost = np.sum(data)
+        data.append(technical_cost)
+
+        coal_saved = np.npv(discount_rate, self.coal_saved)
+        coal_price = display_as(self.price.coal, "USD/t")
+        savings = display_as(coal_saved * coal_price, "kUSD")
+        data.append(coal_saved)
+        data.append(coal_price)
+        data.append(savings)
+
+        data.append(savings - technical_cost)
+
+        index = [
+            "Farmer opex",
+            "Transporter opex",
+            "Investment",
+            "Extra O&M",
+            "Total technical costs",
+            "Coal saved",
+            "Coal price",
+            "Value of coal saved",
+            "Business value of cofiring"]
+        df = pd.DataFrame(data, index=index)
+        df.columns = [self.plant.name]
+        return df
 
     # Code really smell, will change result to DataFrame now.
     # pylint: disable=too-many-locals

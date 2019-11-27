@@ -182,12 +182,26 @@ class Investment:
                 self.result_cash(tax_rate, depreciation_period),
                 self.operating_expenses_detail())
 
-    def npv_table(self, discount_rate, tax_rate, depreciation_period):
-        """Tabulate net present value of cash flow result account."""
+    def npv_cash(self, discount_rate, tax_rate, depreciation_period, label=""):
+        """Return a DataFrame with one column: net present value of cash flow result account."""
         cash_result = self.result_cash(tax_rate, depreciation_period)
         data = cash_result.apply((lambda x: np.npv(discount_rate, x)), axis=1)
         df = pd.DataFrame(data)
-        df.columns = [self.name]
+        if label == "":
+            df.columns = [self.name]
+        else:
+            df.columns = [label]
+        return df
+
+    def npv_opex(self, discount_rate, label=""):
+        """Return a DataFrame with one column: net present value of operating expenses account."""
+        opex = self.operating_expenses_detail()
+        data = opex.apply((lambda x: np.npv(discount_rate, x)), axis=1)
+        df = pd.DataFrame(data)
+        if label == "":
+            df.columns = [self.name]
+        else:
+            df.columns = [label]
         return df
 
     def net_present_value(self, discount_rate, tax_rate=0, depreciation_period=1):
@@ -204,5 +218,10 @@ class Investment:
 
     @abstractmethod
     def operating_expenses_detail(self):
-        """Virtual method. Return a dataframe detailing the operating expenses."""
-        return "operating_expenses_detail not implemented by child class."
+        """Return a dataframe detailing the operating expenses.
+
+        This is a virtual method since each child class has different kind of OPEX.
+        Declared abstract so that PyLint does not complain about 'lack of self use'.
+        Return an empty DataFrame because PyLint typecheck when we use apply() in npv_opex method.
+        """
+        return pd.DataFrame()

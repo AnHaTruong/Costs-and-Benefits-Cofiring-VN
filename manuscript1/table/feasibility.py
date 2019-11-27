@@ -16,9 +16,9 @@ import pandas as pd
 from model.utils import display_as
 
 from model.wtawtp import farmer_wta, plant_wtp
-from manuscript1.parameters import MongDuong1System, NinhBinhSystem
-from manuscript1.parameters import discount_rate, tax_rate, depreciation_period
-from manuscript1.table.business_value import table_business_value
+
+from manuscript1.parameters import (MongDuong1System, NinhBinhSystem,
+                                    discount_rate, tax_rate, depreciation_period)
 
 
 def feasibility(system):
@@ -52,4 +52,4 @@ table = pd.concat([feasibility(MongDuong1System), feasibility(NinhBinhSystem)], 
 
 print(table)
 
-print(table_business_value(MongDuong1System))
+print(MongDuong1System.table_business_value(discount_rate, tax_rate, depreciation_period))
