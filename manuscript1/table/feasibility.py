@@ -11,39 +11,45 @@ Costs and benefits of co-firing rice straw in two Vietnamese coal power plants
 An Ha Truong, Minh Ha-Duong
 2017
 """
+import pandas as pd
 
-from model.utils import display_as, USD, t
+from model.utils import display_as
 
 from model.wtawtp import farmer_wta, plant_wtp
 from manuscript1.parameters import MongDuong1System, NinhBinhSystem
 from manuscript1.parameters import discount_rate, tax_rate, depreciation_period
+from manuscript1.table.business_value import table_business_value
 
 
 def feasibility(system):
-    """Determine the economic feasibility of cofiring."""
+    """Tabulate the WTA and WTP."""
     wta = farmer_wta(system)
-    display_as(wta, "USD/t")
     wtp = plant_wtp(system, discount_rate, tax_rate, depreciation_period)
-    display_as(wtp, "USD/t")
     transport_cost = system.transport_cost_per_t[1]
-    display_as(transport_cost, "USD/t")
     potential_gain = wtp - wta - transport_cost
-    display_as(potential_gain, "USD/t")
     total_potential = potential_gain * system.cofiring_plant.biomass_used[1]
-    display_as(total_potential, "kUSD")
 
-    print(system.plant.parameter.name)
-    print("WTP = ", wtp)
-    print("WTA = ", wta)
-    print("WTP - WTA = ", wtp - wta)
-    print("Transport cost = ", transport_cost)
-    print("Potential gain = ", potential_gain)
-    print("Total potential = ", total_potential)
+    data = [
+        display_as(wta, "USD/t"),
+        display_as(wtp, "USD/t"),
+        wtp - wta,
+        display_as(transport_cost, "USD/t"),
+        display_as(potential_gain, "USD/t"),
+        display_as(total_potential, "kUSD")]
 
-    return potential_gain > 0 * USD / t
+    index = ['Farmer WTA',
+             'Plant WTP',
+             'Maximum spread WTP - WTA',
+             'Reseller expenses',
+             'Potential gain',
+             'Total business value']
+
+    df = pd.DataFrame(data, index=index, columns=[system.plant.parameter.name])
+    return df
 
 
-feasibility(MongDuong1System)
+table = pd.concat([feasibility(MongDuong1System), feasibility(NinhBinhSystem)], axis=1)
 
-print()
-feasibility(NinhBinhSystem)
+print(table)
+
+print(table_business_value(MongDuong1System))

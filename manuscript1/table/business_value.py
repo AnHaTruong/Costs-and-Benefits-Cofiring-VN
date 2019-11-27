@@ -14,7 +14,8 @@ An Ha Truong, Minh Ha-Duong
 import pandas as pd
 import natu.numpy as np
 
-from manuscript1.parameters import (MongDuong1System, NinhBinhSystem, discount_rate,
+from manuscript1.parameters import (MongDuong1System, NinhBinhSystem,
+                                    discount_rate, tax_rate, depreciation_period,
                                     price_MD1, price_NB)
 
 from model.utils import display_as, kUSD
@@ -39,50 +40,30 @@ print()
 #%%
 
 
-def result(system_segment, name):
-    """Tabulate the effects of cofiring on stakeholder's NPV."""
-    cash_result = system_segment.business_data()[1]
-    data = cash_result.apply((lambda x: np.npv(discount_rate, x)), axis=1)
-    df = pd.DataFrame(data)
-    df.columns = [name]
-    return df
+def result_table(systema_segment, systemb_segment):
+    """Return a DataFrame with the NPV accounts of a segment in two systems."""
+    table_a = systema_segment.npv_table(discount_rate, tax_rate, depreciation_period)
+    table_b = systemb_segment.npv_table(discount_rate, tax_rate, depreciation_period)
+    return pd.concat([table_a, table_b], axis=1)
 
 
 pd.options.display.float_format = '{:,.0f} kUSD'.format
 
 #%%
 
-table_a = result(MongDuong1System.farmer, "MD1 farmer")
-table_b = result(NinhBinhSystem.farmer, 'NB farmer')
-print(pd.concat([table_a, table_b], axis=1))
-print()
+print(result_table(MongDuong1System.farmer, NinhBinhSystem.farmer), '\n')
+print(result_table(MongDuong1System.transporter, NinhBinhSystem.transporter), '\n')
+print(result_table(MongDuong1System.cofiring_plant, NinhBinhSystem.cofiring_plant), '\n')
+print(result_table(MongDuong1System.plant, NinhBinhSystem.plant), '\n')
 
-#%%
-
-table_c = result(MongDuong1System.transporter, "MD1 reseller")
-table_d = result(NinhBinhSystem.transporter, 'NB reseller')
-print(pd.concat([table_c, table_d], axis=1))
-print()
-
-#%%
-
-table_e = result(MongDuong1System.cofiring_plant, "MD1 cofiring plant")
-table_f = result(NinhBinhSystem.cofiring_plant, 'NB cofiring plant')
-# print(pd.concat([table_e, table_f], axis=1))
-
-#%%
-
-table_g = result(MongDuong1System.plant, "MD1 plant")
-table_h = result(NinhBinhSystem.plant, 'NB plant')
-# print(pd.concat([table_g, table_h], axis=1))
 
 #%%
 
 
 def plant_cash_change(system):
     """Return the cofiring project evaluation NPV tables, table that detail OPEX."""
-    _, cash_exante, opex_exante = system.plant.business_data()
-    _, cash_expost, opex_expost = system.cofiring_plant.business_data()
+    _, cash_exante, opex_exante = system.plant.business_data(tax_rate, depreciation_period)
+    _, cash_expost, opex_expost = system.cofiring_plant.business_data(tax_rate, depreciation_period)
     npv_exante = cash_exante.apply((lambda x: np.npv(discount_rate, x)), axis=1)
     npv_expost = cash_expost.apply((lambda x: np.npv(discount_rate, x)), axis=1)
     df = pd.DataFrame(npv_expost - npv_exante)

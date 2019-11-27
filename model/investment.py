@@ -127,6 +127,69 @@ class Investment:
                 - self.cash_out(tax_rate, depreciation_period))
         return display_as(flow, 'kUSD')
 
+    def result_economic(self, tax_rate, depreciation_period):
+        """Return a DataFrame with the annual economic accounts, by year.
+
+        Amortize the investment over N periods.
+        """
+        data = [
+            self.revenue / kUSD,
+            self.amortization(depreciation_period) / kUSD,
+            self.merchandise / kUSD,
+            self.operating_expenses() / kUSD,
+            self.earning_before_tax(depreciation_period) / kUSD,
+            self.income_tax(tax_rate, depreciation_period) / kUSD,
+            self.earning_after_tax(tax_rate, depreciation_period) / kUSD]
+        index = [
+            "Revenue (kUSD)",
+            "- Expense, Amortization",
+            "- Expense, Merchandise",
+            "- Expense, Operating",
+            "= Earnings Before Tax",
+            "- Income tax " + str(round(100 * tax_rate)) + '%',
+            "= Earnings after tax"]
+        return pd.DataFrame(data, index=index)
+
+    def result_cash(self, tax_rate, depreciation_period):
+        """Return a DataFrame detailing the cash flow annual result, by year.
+
+        Assume investment is paid in full in year 0.
+        """
+        data = [
+            self.revenue / kUSD,
+            self.investment() / kUSD,
+            self.merchandise / kUSD,
+            self.operating_expenses() / kUSD,
+            self.income_tax(tax_rate, depreciation_period) / kUSD,
+            self.net_cash_flow(tax_rate, depreciation_period) / kUSD]
+        index = [
+            "Revenue (kUSD)",
+            "- Expense, Investment",
+            "- Expense, Merchandise",
+            "- Expense, Operating",
+            "- Expense, Income tax",
+            "= Net cashflow"]
+        return pd.DataFrame(data, index=index)
+
+    def business_data(self, tax_rate, depreciation_period):
+        """Return a sequence of  DataFrames  detailing the business data, by year.
+
+        The first dataframe is the economic result, it amortizes the investment over N periods.
+        The second dataframe is the cash flow result, assumes investment is paid in full in year 0.
+        The third dataframe is the detail of operating expenses: fuel, labor, tools.
+        """
+        return (self.result_economic(tax_rate, depreciation_period),
+                self.result_cash(tax_rate, depreciation_period),
+                self.operating_expenses_detail())
+
+    def npv_table(self, discount_rate, tax_rate, depreciation_period):
+        """Tabulate net present value of cash flow result account."""
+        cash_result = self.result_cash(tax_rate, depreciation_period)
+        data = cash_result.apply((lambda x: np.npv(discount_rate, x)), axis=1)
+        df = pd.DataFrame(data)
+        df.columns = [self.name]
+        return df
+
     def net_present_value(self, discount_rate, tax_rate=0, depreciation_period=1):
         assert 0 <= discount_rate < 1, "Discount rate not in [0, 1["
         value = np.npv(discount_rate,
@@ -138,47 +201,6 @@ class Investment:
 
     def payback_period(self):
         pass
-
-    def business_data(self, tax_rate=0.25, depreciation_period=10):
-        """Return a sequence of  DataFrames  detailing the business data, by year.
-
-        The first dataframe is the economic result, it amortizes the investment over N periods.
-        The second dataframe is the cash flow result, assumes investment is paid in full in year 0.
-        The third dataframe is the detail of operating expenses: fuel, labor, tools.
-        """
-        data_economic = [
-            self.revenue / kUSD,
-            self.amortization(depreciation_period) / kUSD,
-            self.merchandise / kUSD,
-            self.operating_expenses() / kUSD,
-            self.earning_before_tax(depreciation_period) / kUSD,
-            self.income_tax(tax_rate, depreciation_period) / kUSD,
-            self.earning_after_tax(tax_rate, depreciation_period) / kUSD]
-        index_economic = [
-            "Revenue (kUSD)",
-            "- Expense, Amortization",
-            "- Expense, Merchandise",
-            "- Expense, Operating",
-            "= Earnings Before Tax",
-            "- Income tax " + str(round(100 * tax_rate)) + '%',
-            "= Earnings after tax"]
-        result_economic = pd.DataFrame(data_economic, index=index_economic)
-        data_cash = [
-            self.revenue / kUSD,
-            self.investment() / kUSD,
-            self.merchandise / kUSD,
-            self.operating_expenses() / kUSD,
-            self.income_tax(tax_rate, depreciation_period) / kUSD,
-            self.net_cash_flow(tax_rate, depreciation_period) / kUSD]
-        index_cash = [
-            "Revenue (kUSD)",
-            "- Expense, Investment",
-            "- Expense, Merchandise",
-            "- Expense, Operating",
-            "- Expense, Income tax",
-            "= Net cashflow"]
-        result_cash = pd.DataFrame(data_cash, index=index_cash)
-        return result_economic, result_cash, self.operating_expenses_detail()
 
     @abstractmethod
     def operating_expenses_detail(self):
