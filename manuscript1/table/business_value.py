@@ -72,7 +72,7 @@ print()
 
 #%%
 
-table_k = MongDuong1System.table_business_value(discount_rate, tax_rate, depreciation_period)
-table_l = NinhBinhSystem.table_business_value(discount_rate, tax_rate, depreciation_period)
+table_k = MongDuong1System.table_business_value(discount_rate)
+table_l = NinhBinhSystem.table_business_value(discount_rate)
 
 print(pd.concat([table_k, table_l], axis=1))

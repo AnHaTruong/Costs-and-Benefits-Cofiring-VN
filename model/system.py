@@ -287,14 +287,13 @@ class System:
         df.loc['= Operating expenses (kUSD)'] -= npv_opex_exante.loc['= Operating expenses (kUSD)']
         return df
 
-    def table_business_value(self, discount_rate, tax_rate, depreciation_period):
+    def table_business_value(self, discount_rate):
         """Tabulate cofiring business value:  technical costs vs. value of coal saved."""
         data = [
             np.npv(discount_rate, self.farmer.operating_expenses()),
             np.npv(discount_rate, self.transporter.operating_expenses()),
             np.npv(discount_rate, self.cofiring_plant.investment())]
 
-        df = self.plant_npv_cash_change(discount_rate, tax_rate, depreciation_period)
         df_opex = self.plant_npv_opex_change(discount_rate)
         extra_OM = df_opex.loc['O&M, coal'] + df_opex.loc['O&M, biomass']
         data.append(display_as(extra_OM[0] * kUSD, 'kUSD'))
@@ -321,9 +320,9 @@ class System:
             "Coal price",
             "Value of coal saved",
             "Business value of cofiring"]
-        df = pd.DataFrame(data, index=index)
-        df.columns = [self.plant.name]
-        return df
+        table = pd.Series(data, index=index)
+        table.name = self.plant.name
+        return table
 
     # Code really smell, will change result to DataFrame now.
     # pylint: disable=too-many-locals

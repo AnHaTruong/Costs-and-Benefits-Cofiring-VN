@@ -13,15 +13,18 @@ An Ha Truong, Minh Ha-Duong
 """
 
 import pandas as pd
-from natu.units import km, g, kg, t
+from natu.units import kg, t, g, km
 
 from manuscript1.parameters import emission_factor
 
+pd.options.display.max_colwidth = 40
+pd.options.display.max_columns = 10
+pd.options.display.width = 80
 
 data = pd.DataFrame.from_dict(emission_factor).transpose()
 
-table = pd.concat(
-    [data.iloc[[0, 1, 7, 6]] / (kg / t),
-     data.iloc[[4, 5]] / (g / (t * km))])
+pd.options.display.float_format = '{:9,.1f} kg/t'.format
+print(data.iloc[[0, 1, 7, 6]] / (kg / t))
 
-print(table)
+pd.options.display.float_format = '{:8,.5F} g/tkm'.format
+print(data.iloc[[4, 5]] / (g / t / km))
