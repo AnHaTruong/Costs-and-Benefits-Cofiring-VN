@@ -14,7 +14,7 @@ from abc import abstractmethod
 
 import pandas as pd
 import natu.numpy as np
-from model.utils import USD, kUSD, after_invest, display_as
+from model.utils import USD, kUSD, after_invest, display_as, isclose
 
 
 class Investment:
@@ -191,6 +191,9 @@ class Investment:
             df.columns = [self.name]
         else:
             df.columns = [label]
+        assert isclose(
+            self.net_present_value(discount_rate, tax_rate, depreciation_period),
+            data.loc['= Net cashflow'] * kUSD)
         return df
 
     def npv_opex(self, discount_rate, label=""):

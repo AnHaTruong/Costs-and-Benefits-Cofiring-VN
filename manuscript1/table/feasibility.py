@@ -41,7 +41,6 @@ def feasibility_by_solving(system):
     potential_gain = wtp - wta - transport_cost
 
     q_per_year = system.cofiring_plant.biomass_used[1]
-    assert isclose(q_per_year, system.farmer.quantity[1])
     potential_per_year = potential_gain * q_per_year
     q = np.npv(discount_rate, system.farmer.quantity)
     business_value = potential_gain * q
@@ -65,14 +64,18 @@ def feasibility_direct(system):
     q = np.npv(discount_rate, system.farmer.quantity)
 
     wta = npv_table.loc['Farmer opex'] / q
+    assert isclose(wta, farmer_wta(system))
     minimum_margin = npv_table.loc['Transporter opex'] / q
+    assert isclose(minimum_margin, system.transport_cost_per_t[1])
     investment = npv_table.loc['Investment'] / q
     extra_OM = npv_table.loc['Extra O&M'] / q
     coal_saving = npv_table.loc['Value of coal saved'] / q
     wtp = coal_saving - extra_OM - investment
+    # assert isclose(wtp, plant_wtp(system, discount_rate))
     value_per_t = wtp - wta - minimum_margin
     value = value_per_t * q
     q_per_year = system.cofiring_plant.biomass_used[1]
+    assert isclose(q_per_year, system.farmer.quantity[1])
     potential_per_year = q_per_year * value_per_t
 
     data = [

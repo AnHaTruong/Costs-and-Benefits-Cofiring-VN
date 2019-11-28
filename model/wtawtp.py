@@ -12,6 +12,7 @@ An Ha Truong, Minh Ha-Duong
 2017-2019
 """
 
+# from natu.numpy import npv
 from model.utils import solve_linear, USD, t
 
 
@@ -50,6 +51,9 @@ def plant_gain(system, biomass_price, discount_rate, tax_rate, depreciation_peri
         npv_post = system.cofiring_plant.net_present_value(discount_rate,
                                                            tax_rate,
                                                            depreciation_period)
+#       npv_ante = npv(discount_rate, system.plant.earning_before_tax(depreciation_period))
+#       npv_post = npv(discount_rate, system.cofiring_plant.earning_before_tax(depreciation_period))
+
         profit = npv_post - npv_ante
     finally:
         system.clear_market(original_price)
