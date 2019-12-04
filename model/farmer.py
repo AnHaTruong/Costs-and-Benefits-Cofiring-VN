@@ -14,7 +14,7 @@ import numpy as np
 
 from natu.units import t
 
-from model.utils import after_invest, display_as, kUSD
+from model.utils import after_invest, display_as
 
 from model.emitter import Emitter, Activity
 from model.investment import Investment
@@ -94,14 +94,14 @@ class Farmer(Investment, Emitter):
 
     def operating_expenses_detail(self):
         """Tabulate the annual operating expenses."""
-        expenses_data = [self.rental_cost() / kUSD,
-                         self.fuel_cost() / kUSD,
-                         self.labor_cost() / kUSD]
+        expenses_data = [self.rental_cost(),
+                         self.fuel_cost(),
+                         self.labor_cost()]
         expenses_index = ['Winder rental',
                           'Winder fuel',
                           'Collection work']
         df = pd.DataFrame(data=expenses_data, index=expenses_index)
-        df.loc['= Operating expenses (kUSD)'] = df.sum()
+        df.loc['= Operating expenses'] = df.sum()
         return df
 
     def parameters_table(self):

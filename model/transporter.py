@@ -11,7 +11,7 @@ from collections import namedtuple
 
 import pandas as pd
 
-from model.utils import after_invest, display_as, kUSD
+from model.utils import after_invest, display_as
 
 from model.emitter import Emitter, Activity
 from model.investment import Investment
@@ -103,16 +103,16 @@ class Transporter(Investment, Emitter):
 
     def operating_expenses_detail(self):
         """Tabulate the annual operating expenses."""
-        expenses_data = [self.rental_cost() / kUSD,
-                         self.fuel_cost() / kUSD,
-                         self.loading_wages() / kUSD,
-                         self.driving_wages() / kUSD]
+        expenses_data = [self.rental_cost(),
+                         self.fuel_cost(),
+                         self.loading_wages(),
+                         self.driving_wages()]
         expenses_index = ['Truck rental',
                           'Truck fuel',
                           'Handling work',
                           'Driving work']
         df = pd.DataFrame(data=expenses_data, index=expenses_index)
-        df.loc['= Operating expenses (kUSD)'] = df.sum()
+        df.loc['= Operating expenses'] = df.sum()
         return df
 
     def max_trip_time(self):

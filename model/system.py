@@ -11,7 +11,7 @@ from collections import namedtuple
 import pandas as pd
 import natu.numpy as np
 
-from model.utils import year_1, display_as, safe_divide, t, kUSD
+from model.utils import year_1, display_as, safe_divide, t
 from model.powerplant import PowerPlant, CofiringPlant
 from model.farmer import Farmer
 from model.transporter import Transporter
@@ -284,9 +284,7 @@ class System:
         table = self.cofiring_plant.npv_opex(discount_rate, name)
         table.loc['Fuel cost, coal'] -= npv_opex_exante.loc['Fuel cost, coal']
         table.loc['O&M, coal'] -= npv_opex_exante.loc['Operation & Maintenance']
-        table.loc['= Operating expenses (kUSD)'] = (
-            table.loc['= Operating expenses (kUSD)']
-            - npv_opex_exante.loc['= Operating expenses (kUSD)'])
+        table.loc['= Operating expenses'] -= npv_opex_exante.loc['= Operating expenses']
         return table
 
     def table_business_value(self, discount_rate):
@@ -298,7 +296,7 @@ class System:
 
         table_opex = self.plant_npv_opex_change(discount_rate)
         extra_OM = table_opex.loc['O&M, coal'] + table_opex.loc['O&M, biomass']
-        data.append(display_as(extra_OM * kUSD, 'kUSD'))
+        data.append(display_as(extra_OM, 'kUSD'))
 
         technical_cost = np.sum(data)
         data.append(technical_cost)

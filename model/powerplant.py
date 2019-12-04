@@ -16,7 +16,7 @@ import numpy as np
 from natu.units import y
 from natu.numpy import npv
 
-from model.utils import USD, kUSD, MUSD, display_as, safe_divide
+from model.utils import USD, MUSD, display_as, safe_divide
 from model.investment import Investment
 from model.emitter import Emitter, Activity
 
@@ -111,12 +111,12 @@ class PowerPlant(Investment, Emitter):
 
     def operating_expenses_detail(self):
         """Tabulate the annual operating expenses."""
-        expenses_data = [self.fuel_cost() / kUSD,
-                         self.operation_maintenance_cost() / kUSD]
+        expenses_data = [self.fuel_cost(),
+                         self.operation_maintenance_cost()]
         expenses_index = ['Fuel cost, coal',
                           'Operation & Maintenance']
         df = pd.DataFrame(data=expenses_data, index=expenses_index)
-        df.loc['= Operating expenses (kUSD)'] = df.sum()
+        df.loc['= Operating expenses'] = df.sum()
         return df
 
     def fuel_cost(self):
@@ -326,16 +326,16 @@ class CofiringPlant(PowerPlant):
 
     def operating_expenses_detail(self):
         """Tabulate the annual operating expenses."""
-        expenses_data = [self.coal_cost / kUSD,
-                         self.biomass_cost / kUSD,
-                         self.coal_om_cost() / kUSD,
-                         self.biomass_om_cost() / kUSD]
+        expenses_data = [self.coal_cost,
+                         self.biomass_cost,
+                         self.coal_om_cost(),
+                         self.biomass_om_cost()]
         expenses_index = ['Fuel cost, coal',
                           'Fuel cost, biomass',
                           'O&M, coal',
                           'O&M, biomass']
         df = pd.DataFrame(data=expenses_data, index=expenses_index)
-        df.loc['= Operating expenses (kUSD)'] = df.sum()
+        df.loc['= Operating expenses'] = df.sum()
         return df
 
     def lcoe_statement(self, discount_rate, tax_rate, depreciation_period):
