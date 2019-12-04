@@ -183,29 +183,23 @@ class Investment:
                 self.operating_expenses_detail())
 
     def npv_cash(self, discount_rate, tax_rate, depreciation_period, label=""):
-        """Return a DataFrame with one column: net present value of cash flow result account."""
+        """Return a Series. Cash flow statement, net present value."""
         cash_result = self.result_cash(tax_rate, depreciation_period)
         data = cash_result.apply((lambda x: np.npv(discount_rate, x)), axis=1)
-        df = pd.DataFrame(data)
-        if label == "":
-            df.columns = [self.name]
-        else:
-            df.columns = [label]
+        table = pd.Series(data)
         assert isclose(
             self.net_present_value(discount_rate, tax_rate, depreciation_period),
             data.loc['= Net cashflow'] * kUSD)
-        return df
+        table.name = self.name if label == "" else label
+        return table
 
     def npv_opex(self, discount_rate, label=""):
-        """Return a DataFrame with one column: net present value of operating expenses account."""
+        """Return a Series. Operating expenses statement, net present value."""
         opex = self.operating_expenses_detail()
         data = opex.apply((lambda x: np.npv(discount_rate, x)), axis=1)
-        df = pd.DataFrame(data)
-        if label == "":
-            df.columns = [self.name]
-        else:
-            df.columns = [label]
-        return df
+        table = pd.Series(data)
+        table.name = self.name if label == "" else label
+        return table
 
     def net_present_value(self, discount_rate, tax_rate=0, depreciation_period=1):
         assert 0 <= discount_rate < 1, "Discount rate not in [0, 1["

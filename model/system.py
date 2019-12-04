@@ -281,11 +281,13 @@ class System:
         """
         name = self.plant.name
         npv_opex_exante = self.plant.npv_opex(discount_rate, name)
-        df = self.cofiring_plant.npv_opex(discount_rate, name)
-        df.loc['Fuel cost, coal'] -= npv_opex_exante.loc['Fuel cost, coal']
-        df.loc['O&M, coal'] -= npv_opex_exante.loc['Operation & Maintenance']
-        df.loc['= Operating expenses (kUSD)'] -= npv_opex_exante.loc['= Operating expenses (kUSD)']
-        return df
+        table = self.cofiring_plant.npv_opex(discount_rate, name)
+        table.loc['Fuel cost, coal'] -= npv_opex_exante.loc['Fuel cost, coal']
+        table.loc['O&M, coal'] -= npv_opex_exante.loc['Operation & Maintenance']
+        table.loc['= Operating expenses (kUSD)'] = (
+            table.loc['= Operating expenses (kUSD)']
+            - npv_opex_exante.loc['= Operating expenses (kUSD)'])
+        return table
 
     def table_business_value(self, discount_rate):
         """Tabulate cofiring business value:  technical costs vs. value of coal saved."""
@@ -294,9 +296,9 @@ class System:
             np.npv(discount_rate, self.transporter.operating_expenses()),
             np.npv(discount_rate, self.cofiring_plant.investment())]
 
-        df_opex = self.plant_npv_opex_change(discount_rate)
-        extra_OM = df_opex.loc['O&M, coal'] + df_opex.loc['O&M, biomass']
-        data.append(display_as(extra_OM[0] * kUSD, 'kUSD'))
+        table_opex = self.plant_npv_opex_change(discount_rate)
+        extra_OM = table_opex.loc['O&M, coal'] + table_opex.loc['O&M, biomass']
+        data.append(display_as(extra_OM * kUSD, 'kUSD'))
 
         technical_cost = np.sum(data)
         data.append(technical_cost)
