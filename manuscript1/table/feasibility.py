@@ -19,7 +19,7 @@ from model.utils import display_as, isclose
 from model.wtawtp import farmer_wta, plant_wtp
 
 from manuscript1.parameters import (MongDuong1System,   # NinhBinhSystem,
-                                    discount_rate, tax_rate, depreciation_period)
+                                    discount_rate)
 
 
 row_labels = [
@@ -36,7 +36,7 @@ row_labels = [
 def feasibility_by_solving(system):
     """Tabulate the WTA and WTP, using the micro definition: call code solving Profit(p) == 0."""
     wta = farmer_wta(system)
-    wtp = plant_wtp(system, discount_rate, tax_rate, depreciation_period)
+    wtp = plant_wtp(system, discount_rate)
     transport_cost = system.transport_cost_per_t[1]
     potential_gain = wtp - wta - transport_cost
 
@@ -71,7 +71,7 @@ def feasibility_direct(system):
     extra_OM = npv_table.loc['Extra O&M'] / q
     coal_saving = npv_table.loc['Value of coal saved'] / q
     wtp = coal_saving - extra_OM - investment
-    # assert isclose(wtp, plant_wtp(system, discount_rate))
+    assert isclose(wtp, plant_wtp(system, discount_rate))
     value_per_t = wtp - wta - minimum_margin
     value = value_per_t * q
     q_per_year = system.cofiring_plant.biomass_used[1]

@@ -41,16 +41,16 @@ def farmer_wta(system,
 
 #%%
 
-def plant_gain(system, biomass_price, discount_rate, tax_rate, depreciation_period):
-    """Return plant's project profitability, for a given price of biomass."""
+def plant_gain(system, biomass_price, discount_rate):
+    """Return plant's project profitability before taxes, for a given price of biomass."""
     original_price = system.price
     try:
         new_price = original_price._replace(biomass_plantgate=biomass_price)
         system.clear_market(new_price)
-        npv_ante = system.plant.net_present_value(discount_rate, tax_rate, depreciation_period)
+        npv_ante = system.plant.net_present_value(discount_rate, tax_rate=0, depreciation_period=1)
         npv_post = system.cofiring_plant.net_present_value(discount_rate,
-                                                           tax_rate,
-                                                           depreciation_period)
+                                                           tax_rate=0,
+                                                           depreciation_period=1)
 #       npv_ante = npv(discount_rate, system.plant.earning_before_tax(depreciation_period))
 #       npv_post = npv(discount_rate, system.cofiring_plant.earning_before_tax(depreciation_period))
 
@@ -62,9 +62,9 @@ def plant_gain(system, biomass_price, discount_rate, tax_rate, depreciation_peri
 
 #%%
 
-def plant_wtp(system, discount_rate, tax_rate, depreciation_period,
+def plant_wtp(system, discount_rate,
               starting_range=(0 * USD / t, 50 * USD / t)):
     """Compute and return the plant's willingness to pay for straw."""
     def gain(biomass_price):
-        return plant_gain(system, biomass_price, discount_rate, tax_rate, depreciation_period)
+        return plant_gain(system, biomass_price, discount_rate)
     return solve_linear(gain, starting_range[0], starting_range[1])
