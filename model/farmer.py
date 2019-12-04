@@ -93,7 +93,7 @@ class Farmer(Investment, Emitter):
         return display_as(expenses, 'kUSD')
 
     def operating_expenses_detail(self):
-        """Tabulate the annual operating expenses."""
+        """Return a DataFrame with years in column and annual operating expenses in row."""
         expenses_data = [self.rental_cost(),
                          self.fuel_cost(),
                          self.labor_cost()]

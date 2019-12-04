@@ -14,7 +14,7 @@ from abc import abstractmethod
 
 import pandas as pd
 import natu.numpy as np
-from model.utils import USD, kUSD, after_invest, display_as, isclose
+from model.utils import USD, after_invest, display_as, isclose
 
 
 class Investment:
@@ -133,13 +133,13 @@ class Investment:
         Amortize the investment over N periods.
         """
         data = [
-            self.revenue / kUSD,
-            self.amortization(depreciation_period) / kUSD,
-            self.merchandise / kUSD,
-            self.operating_expenses() / kUSD,
-            self.earning_before_tax(depreciation_period) / kUSD,
-            self.income_tax(tax_rate, depreciation_period) / kUSD,
-            self.earning_after_tax(tax_rate, depreciation_period) / kUSD]
+            self.revenue,
+            self.amortization(depreciation_period),
+            self.merchandise,
+            self.operating_expenses(),
+            self.earning_before_tax(depreciation_period),
+            self.income_tax(tax_rate, depreciation_period),
+            self.earning_after_tax(tax_rate, depreciation_period)]
         index = [
             "Revenue (kUSD)",
             "- Expense, Amortization",
@@ -156,12 +156,12 @@ class Investment:
         Assume investment is paid in full in year 0.
         """
         data = [
-            self.revenue / kUSD,
-            self.investment() / kUSD,
-            self.merchandise / kUSD,
-            self.operating_expenses() / kUSD,
-            self.income_tax(tax_rate, depreciation_period) / kUSD,
-            self.net_cash_flow(tax_rate, depreciation_period) / kUSD]
+            self.revenue,
+            self.investment(),
+            self.merchandise,
+            self.operating_expenses(),
+            self.income_tax(tax_rate, depreciation_period),
+            self.net_cash_flow(tax_rate, depreciation_period)]
         index = [
             "Revenue (kUSD)",
             "- Expense, Investment",
@@ -189,7 +189,7 @@ class Investment:
         table = pd.Series(data)
         assert isclose(
             self.net_present_value(discount_rate, tax_rate, depreciation_period),
-            data.loc['= Net cashflow'] * kUSD)
+            data.loc['= Net cashflow'])
         table.name = self.name if label == "" else label
         return table
 
@@ -215,7 +215,7 @@ class Investment:
 
     @abstractmethod
     def operating_expenses_detail(self):
-        """Return a dataframe detailing the operating expenses.
+        """Return a dataframe detailing the operating expenses (rows) by year (columns).
 
         This is a virtual method since each child class has different kind of OPEX.
         Declared abstract so that PyLint does not complain about 'lack of self use'.
