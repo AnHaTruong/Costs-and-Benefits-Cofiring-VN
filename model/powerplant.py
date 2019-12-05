@@ -10,8 +10,8 @@
 
 from collections import namedtuple
 
-import pandas as pd
-import numpy as np
+from pandas import Series, DataFrame, set_option, concat
+from natu.numpy import ones
 
 from natu.units import y
 from natu.numpy import npv
@@ -71,14 +71,14 @@ class PowerPlant(Investment, Emitter):
         self.parameter = parameter
         self.emission_factor = emission_factor
 
-        self.power_generation = (np.ones(parameter.time_horizon + 1) *
+        self.power_generation = (ones(parameter.time_horizon + 1) *
                                  parameter.capacity * parameter.capacity_factor * y)
         display_as(self.power_generation, 'GWh')
 
         if derating is not None:
             self.derating = derating
         else:
-            self.derating = np.ones(parameter.time_horizon + 1)
+            self.derating = ones(parameter.time_horizon + 1)
         self.plant_efficiency = parameter.plant_efficiency * self.derating
 
         self.gross_heat_input = self.power_generation / self.plant_efficiency
@@ -115,7 +115,7 @@ class PowerPlant(Investment, Emitter):
                          self.operation_maintenance_cost()]
         expenses_index = ['Fuel cost, coal',
                           'Operation & Maintenance']
-        df = pd.DataFrame(data=expenses_data, index=expenses_index)
+        df = DataFrame(data=expenses_data, index=expenses_index)
         df.loc['= Operating expenses'] = df.sum()
         return df
 
@@ -127,7 +127,7 @@ class PowerPlant(Investment, Emitter):
 
     def coal_om_cost(self):
         """Return the vector of operation and maintenance cost."""
-        fixed_om_coal = (np.ones(self.parameter.time_horizon + 1) *
+        fixed_om_coal = (ones(self.parameter.time_horizon + 1) *
                          self.parameter.fix_om_coal * self.parameter.capacity * y)
         variable_om_coal = self.power_generation * self.parameter.variable_om_coal
         cost = fixed_om_coal + variable_om_coal
@@ -155,8 +155,8 @@ class PowerPlant(Investment, Emitter):
 
     def parameters_table(self):
         """Tabulate the arguments defining the plant. Return a Pandas Series."""
-        pd.set_option('display.max_colwidth', 80)
-        a = pd.Series(self.parameter, self.parameter._fields)
+        set_option('display.max_colwidth', 80)
+        a = Series(self.parameter, self.parameter._fields)
         a['derating'] = f"{self.derating[0]}, {self.derating[1]:4f}, ..."
         a['amount_invested'] = self.amount_invested
         display_as(a.loc['fix_om_coal'], "USD / kW / y")
@@ -168,7 +168,7 @@ class PowerPlant(Investment, Emitter):
         """Describe the technical characteristics of the plant."""
         # FLAG FOR DELETION.
         #  AFTER UPDATING tests/test_tables.py
-        description = pd.Series(name=self.parameter.name)
+        description = Series(name=self.parameter.name)
         description["Comissioning year"] = self.parameter.commissioning
         description["Boiler technology"] = self.parameter.boiler_technology
         description["Installed capacity"] = self.parameter.capacity
@@ -184,7 +184,7 @@ class PowerPlant(Investment, Emitter):
 
     def lcoe_statement(self, discount_rate, tax_rate, depreciation_period):
         """Assess the levelized cost of electricity."""
-        statement = pd.Series(name=self.name)
+        statement = Series(name=self.name)
         statement["Investment    (MUSD)"] = self.amount_invested / MUSD
         statement["Fuel cost     (MUSD)"] = npv(discount_rate, self.fuel_cost()) / MUSD
         statement["  Coal        (MUSD)"] = npv(discount_rate, self.coal_cost) / MUSD
@@ -225,7 +225,7 @@ class CofiringPlant(PowerPlant):
                               * plant_parameter.coal.heat_value
                               / cofire_parameter.biomass.heat_value)
 
-        boiler_efficiency = (np.ones(plant_parameter.time_horizon + 1) *
+        boiler_efficiency = (ones(plant_parameter.time_horizon + 1) *
                              plant_parameter.boiler_efficiency_new
                              - cofire_parameter.boiler_efficiency_loss(biomass_ratio_mass))
         boiler_efficiency[0] = plant_parameter.boiler_efficiency_new
@@ -334,7 +334,7 @@ class CofiringPlant(PowerPlant):
                           'Fuel cost, biomass',
                           'O&M, coal',
                           'O&M, biomass']
-        df = pd.DataFrame(data=expenses_data, index=expenses_index)
+        df = DataFrame(data=expenses_data, index=expenses_index)
         df.loc['= Operating expenses'] = df.sum()
         return df
 
@@ -349,7 +349,7 @@ class CofiringPlant(PowerPlant):
         """Tabulate the arguments defining the cofiring plant. Return a Pandas Series."""
         a = PowerPlant.parameters_table(self)
         a['name'] = self.name
-        b = pd.Series(self.cofire_parameter, self.cofire_parameter._fields)
+        b = Series(self.cofire_parameter, self.cofire_parameter._fields)
         bre0 = self.cofire_parameter.biomass_ratio_energy[0]
         bre1 = self.cofire_parameter.biomass_ratio_energy[1]
         b['biomass_ratio_energy'] = f"{bre0}, {bre1:2f}, ..."
@@ -357,4 +357,4 @@ class CofiringPlant(PowerPlant):
         display_as(b.loc['fix_om_cost'], "USD / kW / y")
         display_as(b.loc['variable_om_cost'], "USD / kWh")
         display_as(b.loc['wage_operation_maintenance'], "USD / hr")
-        return pd.concat([a, b])
+        return concat([a, b])

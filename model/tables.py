@@ -15,10 +15,10 @@ Since we have steady state after year 1, all series matching pattern   s = (a, b
 are better shown as   (a, b, npv(s))
 """
 
-import pandas as pd
-
+from pandas import DataFrame, Series, concat
 # pylint: disable=wrong-import-order
 from model.utils import display_as, isclose, USD, FTE, year_1, summarize
+from model.wtawtp import feasibility_by_solving, feasibility_direct
 from natu.units import y, t, hr
 
 
@@ -38,7 +38,7 @@ def emission_reductions_by_activity(system_a, system_b):
         reductions_b['Field'] / (t / y)]
     headers = ["Plant " + system_a.plant.parameter.name, "Transport", "Field",
                "Plant " + system_b.plant.parameter.name, "Transport", "Field"]
-    table = pd.DataFrame(
+    table = DataFrame(
         data=contents,
         index=headers)
     table["Unit"] = ["t/y", "t/y", "t/y", "t/y", "t/y", "t/y"]
@@ -59,7 +59,7 @@ def emissions_reduction_benefit(system_a, system_b, external_cost, discount_rate
         reductions_b.loc['Reduction'], reductions_b.loc['Value']]
     headers = [" Quantity", "Value",
                " Quantity", "Value"]
-    table = pd.DataFrame(
+    table = DataFrame(
         data=contents,
         index=headers)
     table = table.applymap(lambda x: summarize(x, discount_rate))
@@ -77,7 +77,7 @@ def coal_saved_benefit(system_a, system_b, coal_import_price, discount_rate):
     data_b = system_b.coal_saved_benefits(coal_import_price).loc[cols]
     data_b = data_b.apply(lambda x: summarize(x, discount_rate), axis=1)
     index = [system_a.plant.name, system_b.plant.name]
-    df = pd.DataFrame([data_a, data_b], index=index)
+    df = DataFrame([data_a, data_b], index=index)
     return df.T
 
 
@@ -190,7 +190,7 @@ def balance_jobs(system_a, system_b):
                 'Plant O & M',
                 '- Mining']
 
-    rates = pd.Series(
+    rates = Series(
         data=[system_a.farmer.parameter.wage_bm_collect,
               system_a.transporter.parameter.wage_bm_loading,
               system_a.transporter.parameter.wage_bm_transport,
@@ -199,7 +199,7 @@ def balance_jobs(system_a, system_b):
         index=headings)
 
     def work(system):
-        return pd.Series(
+        return Series(
             data=[system.farmer.labor()[1],
                   system.transporter.loading_work()[1],
                   system.transporter.driving_work()[1],
@@ -208,7 +208,7 @@ def balance_jobs(system_a, system_b):
             index=headings)
 
     def wages(system):
-        return pd.Series(
+        return Series(
             data=[system.farmer.labor_cost()[1],
                   system.transporter.loading_wages()[1],
                   system.transporter.driving_wages()[1],
@@ -222,9 +222,27 @@ def balance_jobs(system_a, system_b):
         work(system_b) / FTE, wages(system_b) / (1000 * USD)]
     headers = ["Base salary", "Jobs", "Value",
                "Jobs", "Value"]
-    table = pd.DataFrame(
+    table = DataFrame(
         data=contents,
         index=headers)
     table["= Net change"] = table.sum(axis=1)
     table["Unit"] = ['USD/hr', 'FTE', 'kUSD', 'FTE', 'kUSD']
     return table[["Unit"] + headings + ["= Net change"]].T
+
+#%%
+
+
+def business_value_by_solving(system_a, system_b, discount_rate):
+    """Tabulate the WTA and WTP, using the micro definition: call code solving Profit(p) == 0."""
+    return concat([
+        feasibility_by_solving(system_a, discount_rate),
+        feasibility_by_solving(system_b, discount_rate)],
+        axis=1)
+
+
+def business_value_direct(system_a, system_b, discount_rate):
+    """Tabulate the feasibility, using the theoretical analysis."""
+    return concat([
+        feasibility_direct(system_a, discount_rate),
+        feasibility_direct(system_b, discount_rate)],
+        axis=1)

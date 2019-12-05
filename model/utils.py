@@ -13,8 +13,8 @@ otherwise use_quantities does not work
 
 It is in the manual, but worth reminding:
 Units thread into arrays from the right but not from the left
-  np.array([1, 2]) * m  -->  array([1 m, 2 m], dtype=object)
-  m * np.array([1, 2])   --> [1  2] m
+  array([1, 2]) * m  -->  array([1 m, 2 m], dtype=object)
+  m * array([1, 2])   --> [1  2] m
  So when multiplying a vector by a quantity, put the vector left
 """
 
@@ -139,8 +139,8 @@ def safe_divide(costs, masses):
     """Divide two vectors elementwise, producing NaN instead of error when the divisor is zero.
 
     >>> import natu.numpy as np
-    >>> costs = np.array([100 * USD, 200 * USD])
-    >>> masses = np.array([0 * t, 10 * t])
+    >>> costs = array([100 * USD, 200 * USD])
+    >>> masses = array([0 * t, 10 * t])
 
     >>> safe_divide(costs, masses)
     array([nan USD/t, 20 USD/t], dtype=object)

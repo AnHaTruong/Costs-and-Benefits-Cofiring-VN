@@ -9,14 +9,13 @@
 #
 """Plot LCOE figure as calculated using Vietnam Technology Catalogue parameters."""
 
-import numpy as np
-import pandas as pd
+from pandas import DataFrame
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 # pylint: disable=wrong-import-order
 from model.utils import USD
 from natu.units import MWh
-from natu.numpy import npv
+from natu.numpy import npv, array, arange, concatenate
 from lcoe.param_tech_catalogue import (discount_rate, tax_rate, depreciation_period,
                                        Coal_Supercritical, CCGT,
                                        Solar_PV, Wind_Onshore, Wind_Offshore)
@@ -45,12 +44,12 @@ def create_LCOE_df(plant, base_price, upper_price, lower_price):
         lcoe_OM.append(npv(discount_rate, plant[year][base_price].operation_maintenance_cost()) /
                        npv(discount_rate, plant[year][base_price].power_generation) / unit)
 
-    lcoe = pd.DataFrame({'lcoe': np.array(lcoe_base),
-                         'lcoe capital': np.array(lcoe_capital),
-                         'lcoe fuel': np.array(lcoe_fuel),
-                         'lcoe OM': np.array(lcoe_OM),
-                         'upper error': np.array(lcoe_upper) - np.array(lcoe_base),
-                         'lower error': np.array(lcoe_base) - np.array(lcoe_lower)})
+    lcoe = DataFrame({'lcoe': array(lcoe_base),
+                      'lcoe capital': array(lcoe_capital),
+                      'lcoe fuel': array(lcoe_fuel),
+                      'lcoe OM': array(lcoe_OM),
+                      'upper error': array(lcoe_upper) - array(lcoe_base),
+                      'lower error': array(lcoe_base) - array(lcoe_lower)})
     lcoe.index = (['2020', '2030', '2050', 'Lower20', 'Upper20', 'Lower50', 'Upper50'])
     return lcoe
 
@@ -74,10 +73,10 @@ def create_RELCOE_df(plant):
         lcoe_OM.append(npv(discount_rate, plant[year].operation_maintenance_cost()) /
                        npv(discount_rate, plant[year].power_generation) / unit)
 
-    lcoe = pd.DataFrame({'lcoe': np.array(lcoe_RE),
-                         'lcoe capital': np.array(lcoe_capital),
-                         'lcoe fuel': np.array(lcoe_fuel),
-                         'lcoe OM': np.array(lcoe_OM)})
+    lcoe = DataFrame({'lcoe': array(lcoe_RE),
+                      'lcoe capital': array(lcoe_capital),
+                      'lcoe fuel': array(lcoe_fuel),
+                      'lcoe OM': array(lcoe_OM)})
     lcoe.index = (['2020', '2030', '2050', 'Lower20', 'Upper20', 'Lower50', 'Upper50'])
     return lcoe
 
@@ -87,13 +86,13 @@ lcoe_wind_onshore = create_RELCOE_df(Wind_Onshore)
 lcoe_wind_offshore = create_RELCOE_df(Wind_Offshore)
 
 n = 3
-ind = np.arange(n)
+ind = arange(n)
 width = 0.1
 ind1 = ind + 0.15
 ind2 = ind + 0.3
 ind3 = ind + 0.45
 ind4 = ind + 0.6
-inda = np.array([0, 0.15, 0.3])
+inda = array([0, 0.15, 0.3])
 color1 = ['#4C7FA6', '#92C5EB', '#0F90C0']
 color2 = ['#4572a7', '#89a54e', '#4198af']
 index1 = [ind, ind1, ind2, ind3, ind4]
@@ -146,7 +145,7 @@ def plot_lcoe_figure(index, ff_scenarios, re_scenarios, color, text):
     plot_lcoe_re(index[3], lcoe_wind_onshore.loc[re_scenarios, :], color)
     plot_lcoe_re(index[4], lcoe_wind_offshore.loc[re_scenarios, :], color)
 
-    plt.xticks(np.concatenate(index), (xlabel), rotation=45)
+    plt.xticks(concatenate(index), (xlabel), rotation=45)
     legend_capital = mpatches.Patch(color=color[0], label='Capital cost')
     legend_OM = mpatches.Patch(color=color[1], label='O&M cost')
     legend_fuel = mpatches.Patch(color=color[2], label='Fuel cost')
@@ -166,7 +165,7 @@ plt.clf()
 
 plot_lcoe_figure(index2, ['2020', '2030', '2050'], ['2020', '2030', '2050'], color2,
                  [' ', ' ', ' '])
-plt.xticks(np.concatenate(index2), (xlabel2), rotation=45)
+plt.xticks(concatenate(index2), (xlabel2), rotation=45)
 plt.title('Validation: compare to the VN Energy Outlook 2019 LCOE graph')
 plt.savefig('LCOE-asDEA2019.png')
 plt.clf()

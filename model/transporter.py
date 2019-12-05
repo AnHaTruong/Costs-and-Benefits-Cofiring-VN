@@ -9,7 +9,7 @@
 
 from collections import namedtuple
 
-import pandas as pd
+from pandas import Series, DataFrame, set_option
 
 from model.utils import after_invest, display_as
 
@@ -111,7 +111,7 @@ class Transporter(Investment, Emitter):
                           'Truck fuel',
                           'Handling work',
                           'Driving work']
-        df = pd.DataFrame(data=expenses_data, index=expenses_index)
+        df = DataFrame(data=expenses_data, index=expenses_index)
         df.loc['= Operating expenses'] = df.sum()
         return df
 
@@ -121,8 +121,8 @@ class Transporter(Investment, Emitter):
 
     def parameters_table(self):
         """Tabulate the arguments defining the transporter. Return a Pandas Series."""
-        pd.set_option('display.max_colwidth', 80)
-        a = pd.Series(self.parameter, self.parameter._fields)
+        set_option('display.max_colwidth', 80)
+        a = Series(self.parameter, self.parameter._fields)
         display_as(a.loc['wage_bm_loading'], "USD / hr")
         display_as(a.loc['fuel_cost_per_hour_driving'], "USD / hr")
         display_as(a.loc['fuel_cost_per_hour_loading'], "USD / hr")

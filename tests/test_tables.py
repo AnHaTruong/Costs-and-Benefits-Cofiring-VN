@@ -8,7 +8,7 @@
 """Test the boundary case: cofiring biomass ratio 0% is same as baseline plant."""
 
 import pytest
-import pandas as pd
+from pandas import set_option
 
 from manuscript1.parameters import MongDuong1System, NinhBinhSystem
 from manuscript1.parameters import discount_rate, tax_rate, depreciation_period
@@ -17,14 +17,15 @@ from manuscript1.parameters import discount_rate, tax_rate, depreciation_period
 # Spyder3 does not see that  coal_import_price, mining_parameter  are used within an eval string
 from manuscript1.parameters import external_cost, coal_import_price, mining_parameter
 from model.tables import (energy_costs, straw_supply,
-                          emissions_reduction_benefit, emissions_reduction_ICERE)
+                          emissions_reduction_benefit, emissions_reduction_ICERE,
+                          business_value_by_solving, business_value_direct)
 
 # pylint and pytest known compatibility bug
 # pylint: disable=redefined-outer-name
 
-pd.set_option('display.max_columns', None)
-pd.set_option('display.width', 10000)
-pd.options.display.float_format = '{:,.1f}'.format
+set_option('display.max_columns', None)
+set_option('display.width', 10000)
+set_option('display.float_format', '{:,.1f}'.format)
 
 finance = discount_rate, tax_rate, depreciation_period
 
@@ -48,6 +49,14 @@ def test_emission_reductions(regtest, systems):
 
 def test_straw_supply(regtest, systems):
     regtest.write(straw_supply(*systems))
+
+
+def test_business_value_by_solving(regtest, systems):
+    regtest.write(str(business_value_by_solving(*systems, discount_rate)))
+
+
+def test_business_value_direct(regtest, systems):
+    regtest.write(str(business_value_direct(*systems, discount_rate)))
 
 
 # pylint: disable=eval-used, unused-argument

@@ -9,8 +9,8 @@
 
 from collections import namedtuple
 
-import pandas as pd
-import numpy as np
+from pandas import Series, DataFrame, set_option
+from natu.numpy import ones
 
 from natu.units import t
 
@@ -50,7 +50,7 @@ class Farmer(Investment, Emitter):
 
         field_burning_before = Activity(
             name='Straw',
-            level=np.ones(self.parameter.time_horizon + 1) * straw_burned * t,
+            level=ones(self.parameter.time_horizon + 1) * straw_burned * t,
             emission_factor=self.emission_factor['straw_open'])
 
         self.emissions_exante = Emitter(field_burning_before).emissions(total=False)
@@ -100,14 +100,14 @@ class Farmer(Investment, Emitter):
         expenses_index = ['Winder rental',
                           'Winder fuel',
                           'Collection work']
-        df = pd.DataFrame(data=expenses_data, index=expenses_index)
+        df = DataFrame(data=expenses_data, index=expenses_index)
         df.loc['= Operating expenses'] = df.sum()
         return df
 
     def parameters_table(self):
         """Tabulate the arguments defining the farmer. Return a Pandas Series."""
-        pd.set_option('display.max_colwidth', 80)
-        a = pd.Series(self.parameter, self.parameter._fields)
+        set_option('display.max_colwidth', 80)
+        a = Series(self.parameter, self.parameter._fields)
         display_as(a.loc['winder_rental_cost'], "USD / ha")
         display_as(a.loc['wage_bm_collect'], "USD / hr")
         display_as(a.loc['fuel_cost_per_hour'], "USD / hr")

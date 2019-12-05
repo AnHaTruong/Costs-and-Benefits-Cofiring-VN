@@ -12,7 +12,7 @@ An Ha Truong, Minh Ha-Duong
 2017-2019
 """
 
-import pandas as pd
+from pandas import set_option, concat
 
 from manuscript1.parameters import (MongDuong1System, NinhBinhSystem,
                                     discount_rate, tax_rate, depreciation_period,
@@ -28,7 +28,7 @@ table_separator = '\n=================\n'
 
 #%%
 
-pd.options.display.float_format = '{:,.1f}'.format
+set_option('display.float_format', '{:,.1f}'.format)
 
 table = """
 ICERE 2018 Table 1: Emission reductions by activity
@@ -81,7 +81,7 @@ print(label(MongDuong1System.price) + " in Mong Duong")
 print()
 print('Farmers             Mong Duong 1     Ninh Binh')
 
-table = pd.concat(
+table = concat(
     [MongDuong1System.farmer.result_cash(tax_rate, depreciation_period),
      NinhBinhSystem.farmer.result_cash(tax_rate, depreciation_period)],
     axis=1)
@@ -91,7 +91,7 @@ print(str(table))
 print("""
 Transporters        Mong Duong 1      Ninh Binh""")
 
-table = pd.concat(
+table = concat(
     [MongDuong1System.transporter.result_cash(tax_rate, depreciation_period),
      NinhBinhSystem.transporter.result_cash(tax_rate, depreciation_period)],
     axis=1)
@@ -108,14 +108,14 @@ print("Net present value over", MongDuong1System.plant.parameter.time_horizon,
 print("Tax rate", tax_rate, ", linear capital depreciation over ", depreciation_period, "years")
 print("Coal", MongDuong1System.price.coal, ", straw", MongDuong1System.price.biomass_plantgate)
 print()
-table = pd.concat(
+table = concat(
     [MongDuong1System.plant.lcoe_statement(discount_rate, tax_rate, depreciation_period),
      MongDuong1System.cofiring_plant.lcoe_statement(discount_rate, tax_rate, depreciation_period),
      NinhBinhSystem.plant.lcoe_statement(discount_rate, tax_rate, depreciation_period),
      NinhBinhSystem.cofiring_plant.lcoe_statement(discount_rate, tax_rate, depreciation_period)],
     axis=1)
 
-pd.options.display.float_format = '{:,.1f}'.format
-pd.set_option('display.width', 200)
+set_option('display.float_format', '{:,.1f}'.format)
+set_option('display.width', 200)
 
 print(str(table))

@@ -8,7 +8,7 @@
 """Emitter: this class represents a system which emits pollutants."""
 from collections import namedtuple
 
-import pandas as pd
+from pandas import DataFrame
 
 Activity = namedtuple('Activity', 'name, level, emission_factor')
 
@@ -22,7 +22,8 @@ class Emitter:
     for example a quantity of fuel burned, or a distance traveled by a given mode
 
     Example:
-    >>> pd.options.display.float_format = '{:,.1f}'.format
+    >>> from pandas import set_option
+    >>> set_option('display.float_format', '{:,.1f}'.format)
     >>> a = Activity('Combustion', 1000, {'CO2': 1, 'PM10': 0.0091})
     >>> b = Activity('Transport', 300, {'CO2': 1, 'PM10': 0.02})
     >>> print(Emitter(a, b))
@@ -42,8 +43,8 @@ class Emitter:
 
     Polymorphic: activity level can be a scalar or an array representing a time series
 
-    >>> import numpy as np
-    >>> c = Activity('Combustion', np.array([1000, 110, 0]), {'CO2': 1, 'PM10': 0.001})
+    >>> from natu.numpy import array
+    >>> c = Activity('Combustion', array([1000, 110, 0]), {'CO2': 1, 'PM10': 0.001})
     >>> print(Emitter(c))
                            CO2              PM10
     Combustion  [1000, 110, 0]  [1.0, 0.11, 0.0]
@@ -85,7 +86,7 @@ class Emitter:
         if self.emission_control:
             for pollutant, fraction in self.emission_control.items():
                 control[pollutant] = 1 - fraction
-        result = pd.DataFrame({
+        result = DataFrame({
             activity.name: {
                 pollutant:
                     activity.level * activity.emission_factor[pollutant] * control[pollutant]

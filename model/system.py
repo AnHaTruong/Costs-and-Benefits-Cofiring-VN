@@ -8,8 +8,8 @@
 """Define the class  System  used to instantiate a run of the model."""
 from collections import namedtuple
 
-import pandas as pd
-import natu.numpy as np
+from pandas import Series, DataFrame, set_option, concat
+from natu.numpy import npv, sum as np_sum
 
 from model.utils import year_1, display_as, safe_divide, t
 from model.powerplant import PowerPlant, CofiringPlant
@@ -96,7 +96,7 @@ class System:
         return display_as(amount, 'kUSD')
 
     def wages_npv(self, discount_rate):
-        amount = np.npv(discount_rate, self.wages)
+        amount = npv(discount_rate, self.wages)
         return display_as(amount, 'kUSD')
 
     @property
@@ -116,7 +116,7 @@ class System:
 
     def emissions_baseline(self):
         """Tabulate system atmospheric emissions in year 1 ex ante (no cofiring)."""
-        baseline = pd.DataFrame(columns=['CO2', 'NOx', 'PM10', 'SO2'])
+        baseline = DataFrame(columns=['CO2', 'NOx', 'PM10', 'SO2'])
         baseline = baseline.append(year_1(self.plant.emissions()))
         baseline = baseline.append(year_1(self.plant.coal_transporter().emissions()))
         baseline = baseline.append(year_1(self.farmer.emissions_exante))
@@ -128,7 +128,7 @@ class System:
 
     def emissions_cofiring(self):
         """Tabulate system atmospheric emissions in year 1 ex post (with cofiring)."""
-        cofiring = pd.DataFrame(columns=['CO2', 'NOx', 'PM10', 'SO2'])
+        cofiring = DataFrame(columns=['CO2', 'NOx', 'PM10', 'SO2'])
         cofiring = cofiring.append(year_1(self.cofiring_plant.emissions()))
         cofiring = cofiring.append(year_1(self.cofiring_plant.coal_transporter().emissions()))
         cofiring = cofiring.append(year_1(self.farmer.emissions()))
@@ -149,7 +149,7 @@ class System:
         field_emissions = self.farmer.emissions_exante['Straw']
         transport_emissions = field_emissions * 0  # No logistics
         total_emissions = plant_emissions + ship_coal_emissions + field_emissions
-        return pd.DataFrame(
+        return DataFrame(
             [plant_emissions, ship_coal_emissions, transport_emissions, field_emissions,
              total_emissions],
             index=['Plant', 'Ship coal', 'Transport', 'Field', 'Total'])
@@ -168,7 +168,7 @@ class System:
             + ship_coal_emissions
             + transport_emissions
             + field_emissions)
-        return pd.DataFrame(
+        return DataFrame(
             [plant_emissions, ship_coal_emissions, transport_emissions, field_emissions,
              total_emissions],
             index=['Plant', 'Ship coal', 'Transport', 'Field', 'Total'])
@@ -196,7 +196,7 @@ class System:
             display_as(pollutant, 'kUSD')
         for pollutant in external_cost:
             display_as(pollutant, 'USD / t')
-        return pd.DataFrame(
+        return DataFrame(
             [baseline, reduction, relative, benefit],
             index=["Baseline", "Reduction", "Relative reduction", "Value"])
 
@@ -207,41 +207,41 @@ class System:
         relative = reduction / baseline
         benefit = reduction * coal_import_price
         display_as(benefit, 'MUSD')
-        return pd.DataFrame(
+        return DataFrame(
             [baseline, reduction, relative, benefit],
             index=["Baseline", "Reduction", "Relative reduction", "Value"])
 
     def mitigation_npv(self, discount_rate, external_cost):
         df = self.emissions_reduction_benefit(external_cost)
         annual_mitigation_value = df.loc['Value', 'CO2']
-        value = np.npv(discount_rate, annual_mitigation_value)
+        value = npv(discount_rate, annual_mitigation_value)
         return display_as(value, 'kUSD')
 
     def health_npv(self, discount_rate, external_cost):
         df = self.emissions_reduction_benefit(external_cost)
         annual_health_benefit = df.loc['Value'].drop('CO2').sum()
-        value = np.npv(discount_rate, annual_health_benefit)
+        value = npv(discount_rate, annual_health_benefit)
         return display_as(value, 'kUSD')
 
     def parameters_table(self):
         """Tabulate arguments defining the system, except supply chain. Return a Pandas Series."""
-        pd.set_option('display.max_colwidth', 80)
-        legend_a = pd.Series("----------", index=["*** Farmer ***"])
+        set_option('display.max_colwidth', 80)
+        legend_a = Series("----------", index=["*** Farmer ***"])
         a = self.farmer.parameters_table()
-        legend_b = pd.Series("----------", index=["*** Reseller***"])
+        legend_b = Series("----------", index=["*** Reseller***"])
         b = self.transporter.parameters_table()
-        legend_c = pd.Series("----------", index=["*** Cofiring plant ***"])
+        legend_c = Series("----------", index=["*** Cofiring plant ***"])
         c = self.cofiring_plant.parameters_table()
-        legend_d = pd.Series("----------", index=["*** Mining ***"])
-        d = pd.Series(self.mining_parameter, self.mining_parameter._fields)
+        legend_d = Series("----------", index=["*** Mining ***"])
+        d = Series(self.mining_parameter, self.mining_parameter._fields)
         display_as(d.loc['wage_mining'], "USD / hr")
-        legend_e = pd.Series("----------", index=["*** Prices ***"])
-        e = pd.Series(self.price, self.price._fields)
+        legend_e = Series("----------", index=["*** Prices ***"])
+        e = Series(self.price, self.price._fields)
         display_as(e.loc['biomass_plantgate'], "USD / t")
         display_as(e.loc['biomass_fieldside'], "USD / t")
         display_as(e.loc['coal'], "USD / t")
         display_as(e.loc['electricity'], "USD / kWh")
-        return pd.concat([legend_c, c, legend_a, a, legend_b, b, legend_d, d, legend_e, e])
+        return concat([legend_c, c, legend_a, a, legend_b, b, legend_d, d, legend_e, e])
 
     def benefits(self, discount_rate, external_cost):
         """Tabulate the present value of various benefits from co-firing."""
@@ -290,18 +290,18 @@ class System:
     def table_business_value(self, discount_rate):
         """Tabulate cofiring business value:  technical costs vs. value of coal saved."""
         data = [
-            np.npv(discount_rate, self.farmer.operating_expenses()),
-            np.npv(discount_rate, self.transporter.operating_expenses()),
-            np.npv(discount_rate, self.cofiring_plant.investment())]
+            npv(discount_rate, self.farmer.operating_expenses()),
+            npv(discount_rate, self.transporter.operating_expenses()),
+            npv(discount_rate, self.cofiring_plant.investment())]
 
         table_opex = self.plant_npv_opex_change(discount_rate)
         extra_OM = table_opex.loc['O&M, coal'] + table_opex.loc['O&M, biomass']
         data.append(display_as(extra_OM, 'kUSD'))
 
-        technical_cost = np.sum(data)
+        technical_cost = np_sum(data)
         data.append(technical_cost)
 
-        coal_saved = np.npv(discount_rate, self.coal_saved)
+        coal_saved = npv(discount_rate, self.coal_saved)
         coal_price = display_as(self.price.coal, "USD/t")
         savings = display_as(coal_saved * coal_price, "kUSD")
         data.append(coal_saved)
@@ -320,7 +320,7 @@ class System:
             "Coal price",
             "Value of coal saved",
             "Business value of cofiring"]
-        table = pd.Series(data, index=index)
+        table = Series(data, index=index)
         table.name = self.plant.name
         return table
 

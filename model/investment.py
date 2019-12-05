@@ -12,8 +12,8 @@
 
 from abc import abstractmethod
 
-import pandas as pd
-import natu.numpy as np
+from pandas import Series, DataFrame
+from natu.numpy import zeros, npv
 from model.utils import USD, after_invest, display_as, isclose
 
 
@@ -47,7 +47,7 @@ class Investment:
            3 kUSD, 3 kUSD, 3 kUSD, 3 kUSD, 3 kUSD], dtype=object)
 
     >>> i = Investment("test", 20, 1000*USD)
-    >>> i.revenue = np.zeros(21) * USD
+    >>> i.revenue = zeros(21) * USD
     >>> i.net_present_value(0, 0, 10)
     -1 kUSD
     """
@@ -57,7 +57,7 @@ class Investment:
         self.name = name
         self.time_horizon = time_horizon
         self._revenue = None
-        self.merchandise = display_as(np.zeros(self.time_horizon + 1) * USD, 'kUSD')
+        self.merchandise = display_as(zeros(self.time_horizon + 1) * USD, 'kUSD')
         self.expenses = []
         self.expenses_index = []
 
@@ -80,16 +80,16 @@ class Investment:
         return display_as(v_invest * self.amount_invested / sum(v_invest), 'kUSD')
 
     def operating_expenses(self):
-        return display_as(np.zeros(self.time_horizon + 1) * USD, 'kUSD')
+        return display_as(zeros(self.time_horizon + 1) * USD, 'kUSD')
 
     def amortization(self, depreciation_period):
         """Return vector of linear amortization amounts."""
         if not self.amount_invested:
-            return display_as(np.zeros(self.time_horizon + 1) * USD, 'kUSD')
+            return display_as(zeros(self.time_horizon + 1) * USD, 'kUSD')
         assert isinstance(depreciation_period, int), "Depreciation period not an integer"
         assert depreciation_period > 0, "Depreciation period negative"
         assert depreciation_period < self.time_horizon - 1, "Depreciation >= timehorizon - 2 year"
-        v_cost = np.zeros(self.time_horizon + 1).copy() * USD
+        v_cost = zeros(self.time_horizon + 1).copy() * USD
         for year in range(1, depreciation_period + 1):
             v_cost[year] = self.amount_invested / float(depreciation_period)
         return display_as(v_cost, 'kUSD')
@@ -148,7 +148,7 @@ class Investment:
             "= Earnings Before Tax",
             "- Income tax " + str(round(100 * tax_rate)) + '%',
             "= Earnings after tax"]
-        return pd.DataFrame(data, index=index)
+        return DataFrame(data, index=index)
 
     def result_cash(self, tax_rate, depreciation_period):
         """Return a DataFrame detailing the cash flow annual result, by year.
@@ -169,7 +169,7 @@ class Investment:
             "- Expense, Operating",
             "- Expense, Income tax",
             "= Net cashflow"]
-        return pd.DataFrame(data, index=index)
+        return DataFrame(data, index=index)
 
     def business_data(self, tax_rate, depreciation_period):
         """Return a sequence of  DataFrames  detailing the business data, by year.
@@ -185,8 +185,8 @@ class Investment:
     def npv_cash(self, discount_rate, tax_rate, depreciation_period, label=""):
         """Return a Series. Cash flow statement, net present value."""
         cash_result = self.result_cash(tax_rate, depreciation_period)
-        data = cash_result.apply((lambda x: np.npv(discount_rate, x)), axis=1)
-        table = pd.Series(data)
+        data = cash_result.apply((lambda x: npv(discount_rate, x)), axis=1)
+        table = Series(data)
         assert isclose(
             self.net_present_value(discount_rate, tax_rate, depreciation_period),
             data.loc['= Net cashflow'])
@@ -196,15 +196,15 @@ class Investment:
     def npv_opex(self, discount_rate, label=""):
         """Return a Series. Operating expenses statement, net present value."""
         opex = self.operating_expenses_detail()
-        data = opex.apply((lambda x: np.npv(discount_rate, x)), axis=1)
-        table = pd.Series(data)
+        data = opex.apply((lambda x: npv(discount_rate, x)), axis=1)
+        table = Series(data)
         table.name = self.name if label == "" else label
         return table
 
     def net_present_value(self, discount_rate, tax_rate=0, depreciation_period=1):
         assert 0 <= discount_rate < 1, "Discount rate not in [0, 1["
-        value = np.npv(discount_rate,
-                       self.net_cash_flow(tax_rate, depreciation_period))
+        value = npv(discount_rate,
+                    self.net_cash_flow(tax_rate, depreciation_period))
         return display_as(value, 'kUSD')
 
     def internal_rate_of_return(self):
@@ -221,4 +221,4 @@ class Investment:
         Declared abstract so that PyLint does not complain about 'lack of self use'.
         Return an empty DataFrame because PyLint typecheck when we use apply() in npv_opex method.
         """
-        return pd.DataFrame()
+        return DataFrame()

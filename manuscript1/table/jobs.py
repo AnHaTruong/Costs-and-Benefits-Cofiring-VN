@@ -12,13 +12,13 @@ An Ha Truong, Minh Ha-Duong
 2017-2019
 """
 
-import pandas as pd
+from pandas import set_option
 
 from manuscript1.parameters import MongDuong1System, NinhBinhSystem
 from model.tables import balance_jobs
 
 
-pd.options.display.float_format = '{:,.1f}'.format
+set_option('display.float_format', '{:,.1f}'.format)
 
 print("""Jobs creation and destruction in the co-firing scenario.
 

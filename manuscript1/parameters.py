@@ -15,7 +15,7 @@ except those defined in the parameters_supplychain module
 """
 
 
-import pandas as pd
+from pandas import Series
 
 # pylint: disable=wrong-import-order
 from model.utils import USD, VND, after_invest
@@ -36,19 +36,19 @@ tax_rate = 0.25               # Corporate tax in Vietnam
 
 coal_import_price = 112 * USD / t
 
-external_cost_SKC = pd.Series({
+external_cost_SKC = Series({
     'CO2': 1 * USD / t,  # Sakulniyomporn, Kubaha, and Chullabodhi (2011) RSER 15
     'SO2': 3767 * USD / t,
     'PM10': 5883 * USD / t,
     'NOx': 286 * USD / t})
 
-external_cost_ZWY = pd.Series({
+external_cost_ZWY = Series({
     'CO2': 1 * USD / t,  # Zhang Q, Weili T, Yumei W, et al. (2007) Energy Policy 35
     'SO2': 3680 * USD / t,
     'PM10': 2625 * USD / t,
     'NOx': 2438 * USD / t})
 
-external_cost_HAS = pd.Series({
+external_cost_HAS = Series({
     'CO2': 1 * USD / t,  # Hainoun A, Almoustafa A, Seif Aldin M. (2010) Energy 35
     'SO2': 1134 * USD / t,
     'PM10': 2496 * USD / t,

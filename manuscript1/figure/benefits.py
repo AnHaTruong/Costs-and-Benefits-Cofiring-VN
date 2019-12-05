@@ -11,7 +11,7 @@
 """Draw a figure showing the cumulative costs/benefits for different groups."""
 import matplotlib.pyplot as plt
 
-import numpy as np
+from natu.numpy import array, arange
 
 from model.utils import MUSD, USD, t, display_as
 from manuscript1.parameters import discount_rate, tax_rate, depreciation_period, external_cost
@@ -28,8 +28,8 @@ def benefit_array(system):
     farmer_benefit = system.farmer.net_present_value(discount_rate) / MUSD
     health_benefit = system.health_npv(discount_rate, external_cost) / MUSD
     climate_benefit = system.mitigation_npv(discount_rate, external_cost) / MUSD
-    return np.array([transporter_benefit, plant_benefit, farmer_benefit,
-                     job_benefit, climate_benefit, health_benefit])
+    return array([transporter_benefit, plant_benefit, farmer_benefit,
+                  job_benefit, climate_benefit, health_benefit])
 
 
 def case(system, price_ref, p_fieldside, p_plantgate):
@@ -51,7 +51,7 @@ dataB, labelB = case(NinhBinhSystem, price_NB, 15 * USD / t, 17 * USD / t)
 dataC, labelC = case(NinhBinhSystem, price_NB, 15 * USD / t, 36 * USD / t)
 title = 'Cofiring 5% straw in ' + str(NinhBinhSystem.plant.name) + ' power plant'
 
-index = np.arange(6)
+index = arange(6)
 width = 0.3
 plt.figure(figsize=(10, 5))
 plt.barh(index + 2 * width, dataA, width, edgecolor='none', label=labelA, color='#ff4500')

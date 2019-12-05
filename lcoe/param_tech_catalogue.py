@@ -10,12 +10,12 @@
 """Reproduce LCOE as calculated by DEA in EOR19 using parameter from VN Technology Catalogue."""
 
 from collections import namedtuple
-import pandas as pd
-import numpy as np
+from pandas import read_excel
 # pylint: disable=wrong-import-order
 from model.utils import USD, after_invest
 from model.powerplant import PowerPlant, PlantParameter
 from natu.units import MJ, kg, hr, MW, y, MUSD, MWh, GJ, t, kWh
+from natu.numpy import array, ones
 from manuscript1.parameters import emission_factor
 
 discount_rate = 0.1
@@ -28,11 +28,11 @@ depreciation_period = 10
 
 def read_tech_data(sheetname):
     """Read xlsx data sheet from Vietnam Technology Catalogue and return a pandas dataframe."""
-    df = pd.read_excel("Data/data_sheets_for_vietnam_technology_catalogue_-_english.xlsx",
-                       sheet_name=sheetname,
-                       header=0, skiprows=4, nrows=38, usecols='B:I',
-                       names=['Parameter', '2020', '2030', '2050', 'Lower20', 'Upper20',
-                              'Lower50', 'Upper50'])
+    df = read_excel("Data/data_sheets_for_vietnam_technology_catalogue_-_english.xlsx",
+                    sheet_name=sheetname,
+                    header=0, skiprows=4, nrows=38, usecols='B:I',
+                    names=['Parameter', '2020', '2030', '2050', 'Lower20', 'Upper20',
+                           'Lower50', 'Upper50'])
     return df
 
 
@@ -45,11 +45,11 @@ Wind_onshore_data = read_tech_data('5 Wind onshore')
 Wind_offshore_data = read_tech_data('5 Wind offshore')
 
 # Coal subcritical sheet has extra column
-CoalSub_data = pd.read_excel("Data/data_sheets_for_vietnam_technology_catalogue_-_english.xlsx",
-                             sheet_name='1 Coal subcritical',
-                             header=0, skiprows=4, nrows=38, usecols='B, D:J',
-                             names=['Parameter', '2020', '2030', '2050', 'Lower20', 'Upper20',
-                                    'Lower50', 'Upper50'])
+CoalSub_data = read_excel("Data/data_sheets_for_vietnam_technology_catalogue_-_english.xlsx",
+                          sheet_name='1 Coal subcritical',
+                          header=0, skiprows=4, nrows=38, usecols='B, D:J',
+                          names=['Parameter', '2020', '2030', '2050', 'Lower20', 'Upper20',
+                                 'Lower50', 'Upper50'])
 full_load_hour = {'coal subcritical': 6000 * hr,
                   'coal supercritical': 6000 * hr,
                   'coal USC': 6000 * hr,
@@ -78,10 +78,10 @@ gas_IEA_lower = Fuel(name='gas_IEA_lower', heat_value=47.1 * MJ / kg)
 
 # %%
 
-fuel_price_data = pd.read_excel("Data/Fuel prices_LCOE.xlsx",
-                                sheet_name='FuelPrices',
-                                header=0, usecols='A, K, L', index_col=0,
-                                names=['Year', 'Avg_coal', 'Avg_gas'])
+fuel_price_data = read_excel("Data/Fuel prices_LCOE.xlsx",
+                             sheet_name='FuelPrices',
+                             header=0, usecols='A, K, L', index_col=0,
+                             names=['Year', 'Avg_coal', 'Avg_gas'])
 
 # %%
 
@@ -97,11 +97,11 @@ gas_price_2std = natural_gas.heat_value * 2.54 * USD / GJ  # 2std of historical 
 
 fuel_price = dict()
 
-fuel_price['6b_coal'] = {'2020': (np.array(fuel_price_data.loc['2020':'2050', 'Avg_coal'] *
+fuel_price['6b_coal'] = {'2020': (array(fuel_price_data.loc['2020':'2050', 'Avg_coal'] *
                                   coal_6b.heat_value * USD / GJ)),
-                         'Lower20': (np.array(fuel_price_data.loc['2020':'2050', 'Avg_coal'] *
+                         'Lower20': (array(fuel_price_data.loc['2020':'2050', 'Avg_coal'] *
                                      coal_6b.heat_value * USD / GJ)),
-                         'Upper20': (np.array(fuel_price_data.loc['2020':'2050', 'Avg_coal'] *
+                         'Upper20': (array(fuel_price_data.loc['2020':'2050', 'Avg_coal'] *
                                      coal_6b.heat_value * USD / GJ)),
                          '2030': (coal_6b.heat_value *
                                   float(fuel_price_data['Avg_coal'][2030]) * USD / GJ),
@@ -136,11 +136,11 @@ fuel_price['coal_IEA_lower'] = {}
 for key in fuel_price['coal_IEA']:
     fuel_price['coal_IEA_lower'][key] = fuel_price['coal_IEA'][key] - coal_price_2std
 
-fuel_price['natural_gas'] = {'2020': (np.array(fuel_price_data.loc['2020':'2050', 'Avg_gas'] *
+fuel_price['natural_gas'] = {'2020': (array(fuel_price_data.loc['2020':'2050', 'Avg_gas'] *
                                       natural_gas.heat_value * USD / GJ)),
-                             'Lower20': (np.array(fuel_price_data.loc['2020':'2050', 'Avg_gas'] *
+                             'Lower20': (array(fuel_price_data.loc['2020':'2050', 'Avg_gas'] *
                                          natural_gas.heat_value * USD / GJ)),
-                             'Upper20': (np.array(fuel_price_data.loc['2020':'2050', 'Avg_gas'] *
+                             'Upper20': (array(fuel_price_data.loc['2020':'2050', 'Avg_gas'] *
                                          natural_gas.heat_value * USD / GJ)),
                              '2030': (natural_gas.heat_value *
                                       float(fuel_price_data['Avg_gas'][2030]) * USD / GJ),
@@ -286,7 +286,7 @@ def create_RE_plant(name, tech_data, year):
     plant = PowerPlant(plant_parameter,
                        emission_factor=emission_factor,
                        amount_invested=capital_idc)
-    plant.coal_used = np.ones(plant.parameter.time_horizon + 1) * 0.0 * t
+    plant.coal_used = ones(plant.parameter.time_horizon + 1) * 0.0 * t
     plant.coal_cost = plant.coal_used * fuel_price['6b_coal'][str(year)]
     plant.revenue = after_invest(plant.power_generation[1] * electricity_price,
                                  plant.parameter.time_horizon)

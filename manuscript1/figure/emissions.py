@@ -13,11 +13,10 @@
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 
-import numpy as np
-
 # pylint: disable=wrong-import-order
 from manuscript1.parameters import MongDuong1System, NinhBinhSystem
 from natu.units import kt, Mt, y
+from natu.numpy import array, concatenate
 
 #%%
 
@@ -28,11 +27,11 @@ def plot_emissions(system, axes):
     cofiring = system.emissions_cofiring() * y
 
     def emis(segment, pollutant='CO2', unit=Mt):
-        return np.array([baseline.at['Total_' + segment, pollutant],
-                         cofiring.at['Total_' + segment, pollutant]]) / unit
+        return array([baseline.at['Total_' + segment, pollutant],
+                      cofiring.at['Total_' + segment, pollutant]]) / unit
 
     def emis3(segment):
-        return np.concatenate(
+        return concatenate(
             [emis(segment, 'SO2', kt), emis(segment, 'PM10', kt), emis(segment, 'NOx', kt)])
 
     def barhstack(axes, bottom, width, height=0.48, xlabel=None):
@@ -56,10 +55,10 @@ def plot_emissions(system, axes):
               [emis3('plant'), emis3('transport'), emis3('field')],
               xlabel='Air pollutant Emission (kt/y)')
 
-    plt.yticks(np.concatenate((bot1, bot2)), ('CO2 Baseline', 'CO2 Cofire',
-                                              'SO2 Baseline', 'SO2 Cofire',
-                                              'PM10 Baseline', 'PM10 Cofire',
-                                              'NOx Baseline', 'NOx Cofire'))
+    plt.yticks(concatenate(
+        (bot1, bot2)),
+        ('CO2 Baseline', 'CO2 Cofire', 'SO2 Baseline', 'SO2 Cofire',
+         'PM10 Baseline', 'PM10 Cofire', 'NOx Baseline', 'NOx Cofire'))
 
     legend_plant = mpatches.Patch(color='darkred', label='Plant emissions')
     legend_transport = mpatches.Patch(color='mistyrose', label='Transport emissions')

@@ -16,10 +16,10 @@ figures-lcoe =  LCOE-4tech-3years-catalogue.png LCOE-4tech-3years-IEAfuelcosts.p
 figures-manuscript1 = figure_emissions.svg figure_benefits.svg figure_economics.svg
 tables-manuscript1 = tables_manuscript.txt\
                      table_jobs.txt\
-                     table_feasibility.txt\
                      table_emission_reduction.txt\
                      table_business_value.txt\
                      table_coal_saved.txt\
+                     table_opex_details.txt\
                      table_parameter_systems.txt\
                      table_parameter_economics.txt\
                      table_parameter_emission_factors.txt

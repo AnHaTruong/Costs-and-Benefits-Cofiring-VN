@@ -12,19 +12,17 @@ An Ha Truong, Minh Ha-Duong
 2017-2019
 """
 
-import pandas as pd
+from pandas import DataFrame, concat
 
 from manuscript1.parameters import MongDuong1System, NinhBinhSystem
 from model.powerplant import Fuel
-
-#pd.options.display.float_format = '{:,.2f}'.format
 
 
 def dict_to_df(stem, dictionary):
     """Cast a dictionary into DataFrame, stemming the keys."""
     stemmed_keys = [stem + '_' + key for key in dictionary.keys()]
     data = dictionary.values()
-    return pd.DataFrame(data, index=stemmed_keys)
+    return DataFrame(data, index=stemmed_keys)
 
 
 def fuel_to_df(stem, fuel):
@@ -36,12 +34,12 @@ def scalar_to_df(index, value):
     """Cast a scalar into a DataFrame."""
     if index == 'boiler_efficiency_loss':
         value = '0.0044 r^2 + 0.0055 r'
-    return pd.DataFrame([value], index=[index])
+    return DataFrame([value], index=[index])
 
 
 def flatten(serie):
     """Flatten a parameter table so that the dictionary and namedtuples get one line per value."""
-    df = pd.DataFrame()
+    df = DataFrame()
     for index, value in serie.iteritems():
         if isinstance(value, dict):
             df = df.append(dict_to_df(index, value))
@@ -56,7 +54,7 @@ def flatten(serie):
 tableMD1 = flatten(MongDuong1System.parameters_table())
 tableNB = flatten(NinhBinhSystem.parameters_table())
 
-table = pd.concat([tableMD1, tableNB], axis=1)
+table = concat([tableMD1, tableNB], axis=1)
 table.columns = table.loc['name']
 table = table.drop('name')
 
