@@ -77,10 +77,10 @@ row_labels = [
     'Reseller expenses',
     'Plant WTP',
     'Potential gain',
-    'Biomass used per year',
-    'Business value per year',
     'Biomass used total',
-    'Business value of cofiring']
+    'Business value of cofiring',
+    'Biomass used per year',
+    'Business value per year']
 
 
 def feasibility_by_solving(system, discount_rate):
@@ -89,21 +89,21 @@ def feasibility_by_solving(system, discount_rate):
     wtp = plant_wtp(system, discount_rate)
     transport_cost = system.transport_cost_per_t[1]
     potential_gain = wtp - wta - transport_cost
+    q = npv(discount_rate, system.farmer.quantity)
+    business_value = potential_gain * q
 
     q_per_year = system.cofiring_plant.biomass_used[1]
     potential_per_year = potential_gain * q_per_year
-    q = npv(discount_rate, system.farmer.quantity)
-    business_value = potential_gain * q
 
     data = [
         display_as(wta, "USD/t"),
         display_as(transport_cost, "USD/t"),
         display_as(wtp, "USD/t"),
         display_as(potential_gain, "USD/t"),
-        q_per_year,                  # Changing the display format has too many side effects
-        display_as(potential_per_year, "kUSD"),
         q,                           # Changing the display format has too many side effects
-        display_as(business_value, "kUSD")]
+        display_as(business_value, "kUSD"),
+        q_per_year,                  # Changing the display format has too many side effects
+        display_as(potential_per_year, "kUSD")]
 
     return Series(data, index=row_labels, name=system.plant.name + ' by solve')
 
@@ -122,8 +122,10 @@ def feasibility_direct(system, discount_rate):
     coal_saving = npv_table.loc['Value of coal saved'] / q
     wtp = coal_saving - extra_OM - investment
     assert isclose(wtp, plant_wtp(system, discount_rate))
+
     value_per_t = wtp - wta - minimum_margin
     value = value_per_t * q
+
     q_per_year = system.cofiring_plant.biomass_used[1]
     assert isclose(q_per_year, system.farmer.quantity[1])
     potential_per_year = q_per_year * value_per_t
@@ -133,9 +135,9 @@ def feasibility_direct(system, discount_rate):
         display_as(minimum_margin, "USD/t"),
         display_as(wtp, "USD/t"),
         display_as(value_per_t, 'USD/t'),
-        q_per_year,
-        display_as(potential_per_year, 'kUSD'),
         q,
-        display_as(value, "kUSD")]
+        display_as(value, "kUSD"),
+        q_per_year,
+        display_as(potential_per_year, 'kUSD')]
 
     return Series(data, index=row_labels, name=system.plant.name + ' direct')
