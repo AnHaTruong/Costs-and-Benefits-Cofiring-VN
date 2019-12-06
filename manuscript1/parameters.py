@@ -22,7 +22,7 @@ from model.utils import USD, VND, after_invest
 from model.system import System, Price
 from model.powerplant import Fuel, PlantParameter, CofiringParameter
 from model.farmer import FarmerParameter
-from model.reseller import TransporterParameter
+from model.reseller import ResellerParameter
 from model.system import MiningParameter
 
 from natu.units import MJ, kg, t, d, hr, km, MW, ha, kW, y, kWh, MWh, g
@@ -142,7 +142,7 @@ farm_parameter = FarmerParameter(
     fuel_use=4.16 * kg / d,
     time_horizon=20)
 
-transport_parameter = TransporterParameter(
+transport_parameter = ResellerParameter(
     barge_fuel_consumption=8 * g / t / km,  # Van Dingenen & 2016
     truck_loading_time=2.7 / 60 * hr / t,  # Ovaskainen & Lundberg (2016)
     wage_bm_loading=1.11 * USD / hr,

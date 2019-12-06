@@ -115,7 +115,7 @@ def feasibility_direct(system, discount_rate):
 
     wta = npv_table.loc['Farmer opex'] / q
     assert isclose(wta, farmer_wta(system))
-    minimum_margin = npv_table.loc['Transporter opex'] / q
+    minimum_margin = npv_table.loc['Reseller opex'] / q
     assert isclose(minimum_margin, system.transport_cost_per_t[1])
     investment = npv_table.loc['Investment'] / q
     extra_OM = npv_table.loc['Extra O&M'] / q

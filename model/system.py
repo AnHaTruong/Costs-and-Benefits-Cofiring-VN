@@ -14,7 +14,7 @@ from natu.numpy import npv, sum as np_sum
 from model.utils import year_1, display_as, safe_divide, t
 from model.powerplant import PowerPlant, CofiringPlant
 from model.farmer import Farmer
-from model.reseller import Transporter
+from model.reseller import Reseller
 
 Price = namedtuple('Price',
                    'biomass_plantgate, biomass_fieldside, coal, electricity')
@@ -45,7 +45,7 @@ class System:
         self.cofiring_plant = CofiringPlant(plant_parameter, cofire_parameter, emission_factor)
         self.supply_chain = supply_chain_potential.fit(self.cofiring_plant.biomass_used[1])
         self.farmer = Farmer(self.supply_chain, farm_parameter, emission_factor)
-        self.reseller = Transporter(self.supply_chain, transport_parameter, emission_factor)
+        self.reseller = Reseller(self.supply_chain, transport_parameter, emission_factor)
         self.mining_parameter = mining_parameter
         self.clear_market(price)
 
@@ -312,7 +312,7 @@ class System:
 
         index = [
             "Farmer opex",
-            "Transporter opex",
+            "Reseller opex",
             "Investment",
             "Extra O&M",
             "Total technical costs",

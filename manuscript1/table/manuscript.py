@@ -89,7 +89,7 @@ table = concat(
 print(str(table))
 
 print("""
-Transporters        Mong Duong 1      Ninh Binh""")
+Resellers        Mong Duong 1      Ninh Binh""")
 
 table = concat(
     [MongDuong1System.reseller.result_cash(tax_rate, depreciation_period),

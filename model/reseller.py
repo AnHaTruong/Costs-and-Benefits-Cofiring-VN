@@ -16,21 +16,21 @@ from model.utils import after_invest, display_as
 from model.emitter import Emitter, Activity
 from model.investment import Investment
 
-TransporterParameter = namedtuple("TransporterParameter",
-                                  ['barge_fuel_consumption',
-                                   'truck_loading_time',
-                                   'wage_bm_loading',
-                                   'truck_load',
-                                   'truck_velocity',
-                                   'fuel_cost_per_hour_driving',
-                                   'fuel_cost_per_hour_loading',
-                                   'rental_cost_per_hour',
-                                   'wage_bm_transport',
-                                   'time_horizon'])
+ResellerParameter = namedtuple("ResellerParameter",
+                               ['barge_fuel_consumption',
+                                'truck_loading_time',
+                                'wage_bm_loading',
+                                'truck_load',
+                                'truck_velocity',
+                                'fuel_cost_per_hour_driving',
+                                'fuel_cost_per_hour_loading',
+                                'rental_cost_per_hour',
+                                'wage_bm_transport',
+                                'time_horizon'])
 
 
 #pylint: disable=too-many-instance-attributes
-class Transporter(Investment, Emitter):
+class Reseller(Investment, Emitter):
     """The reseller segment of the system.
 
     Members:
@@ -48,7 +48,7 @@ class Transporter(Investment, Emitter):
 
     def __init__(self, supply_chain, transport_parameter, emission_factor):
 
-        Investment.__init__(self, "Transporter", transport_parameter.time_horizon)
+        Investment.__init__(self, "Reseller", transport_parameter.time_horizon)
 
         self.parameter = transport_parameter
         self.activity_level = after_invest(supply_chain.transport_tkm(),
