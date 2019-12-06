@@ -5,7 +5,7 @@
 # minh.haduong@gmail.com
 # Creative Commons Attribution-ShareAlike 4.0 International
 #
-"""Represent the collective of transporters."""
+"""Represent the collective of resellers."""
 
 from collections import namedtuple
 
@@ -31,7 +31,7 @@ TransporterParameter = namedtuple("TransporterParameter",
 
 #pylint: disable=too-many-instance-attributes
 class Transporter(Investment, Emitter):
-    """The transporter segment of the system.
+    """The reseller segment of the system.
 
     Members:
         activity_level:  total  tkm  of transport services provided
@@ -120,7 +120,7 @@ class Transporter(Investment, Emitter):
         return display_as(time, 'hr')
 
     def parameters_table(self):
-        """Tabulate the arguments defining the transporter. Return a Pandas Series."""
+        """Tabulate the arguments defining the reseller. Return a Pandas Series."""
         set_option('display.max_colwidth', 80)
         a = Series(self.parameter, self.parameter._fields)
         display_as(a.loc['wage_bm_loading'], "USD / hr")

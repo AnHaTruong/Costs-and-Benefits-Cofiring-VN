@@ -24,11 +24,11 @@ def benefit_array(system):
     plant_benefit = (
         system.cofiring_plant.net_present_value(discount_rate, tax_rate, depreciation_period) -
         system.plant.net_present_value(discount_rate, tax_rate, depreciation_period)) / MUSD
-    transporter_benefit = system.transporter.net_present_value(discount_rate) / MUSD
+    reseller_benefit = system.reseller.net_present_value(discount_rate) / MUSD
     farmer_benefit = system.farmer.net_present_value(discount_rate) / MUSD
     health_benefit = system.health_npv(discount_rate, external_cost) / MUSD
     climate_benefit = system.mitigation_npv(discount_rate, external_cost) / MUSD
-    return array([transporter_benefit, plant_benefit, farmer_benefit,
+    return array([reseller_benefit, plant_benefit, farmer_benefit,
                   job_benefit, climate_benefit, health_benefit])
 
 

@@ -53,7 +53,7 @@ print(result_table(MongDuong1System.farmer, NinhBinhSystem.farmer))
 print()
 #%%
 print('For reseller, the ex ante is null everywhere as well. Displaying only ex post:')
-print(result_table(MongDuong1System.transporter, NinhBinhSystem.transporter))
+print(result_table(MongDuong1System.reseller, NinhBinhSystem.reseller))
 print()
 #%%
 print('For power plant, the ex ante is no cofiring:')

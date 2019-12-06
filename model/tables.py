@@ -192,8 +192,8 @@ def balance_jobs(system_a, system_b):
 
     rates = Series(
         data=[system_a.farmer.parameter.wage_bm_collect,
-              system_a.transporter.parameter.wage_bm_loading,
-              system_a.transporter.parameter.wage_bm_transport,
+              system_a.reseller.parameter.wage_bm_loading,
+              system_a.reseller.parameter.wage_bm_transport,
               system_a.cofiring_plant.cofire_parameter.wage_operation_maintenance,
               system_a.mining_parameter.wage_mining],
         index=headings)
@@ -201,8 +201,8 @@ def balance_jobs(system_a, system_b):
     def work(system):
         return Series(
             data=[system.farmer.labor()[1],
-                  system.transporter.loading_work()[1],
-                  system.transporter.driving_work()[1],
+                  system.reseller.loading_work()[1],
+                  system.reseller.driving_work()[1],
                   system.cofiring_plant.biomass_om_work()[1],
                   - system.coal_work_lost[1]],
             index=headings)
@@ -210,8 +210,8 @@ def balance_jobs(system_a, system_b):
     def wages(system):
         return Series(
             data=[system.farmer.labor_cost()[1],
-                  system.transporter.loading_wages()[1],
-                  system.transporter.driving_wages()[1],
+                  system.reseller.loading_wages()[1],
+                  system.reseller.driving_wages()[1],
                   system.cofiring_plant.biomass_om_wages()[1],
                   - system.coal_wages_lost[1]],
             index=headings)

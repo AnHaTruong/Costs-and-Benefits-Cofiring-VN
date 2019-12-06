@@ -22,7 +22,7 @@ from model.utils import USD, VND, after_invest
 from model.system import System, Price
 from model.powerplant import Fuel, PlantParameter, CofiringParameter
 from model.farmer import FarmerParameter
-from model.transporter import TransporterParameter
+from model.reseller import TransporterParameter
 from model.system import MiningParameter
 
 from natu.units import MJ, kg, t, d, hr, km, MW, ha, kW, y, kWh, MWh, g

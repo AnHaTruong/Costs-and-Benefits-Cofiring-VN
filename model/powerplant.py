@@ -144,7 +144,7 @@ class PowerPlant(Investment, Emitter):
     def coal_transport_tkm(self):
         return self.coal_used * 2 * self.parameter.coal.transport_distance   # Return trip inputed
 
-    def coal_transporter(self):
+    def coal_reseller(self):
         """Return an Emitter object to access emissions from coal transport."""
         transport_mean = self.parameter.coal.transport_mean
         activity = Activity(

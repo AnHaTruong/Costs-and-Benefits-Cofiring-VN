@@ -14,7 +14,7 @@ from natu.numpy import npv, sum as np_sum
 from model.utils import year_1, display_as, safe_divide, t
 from model.powerplant import PowerPlant, CofiringPlant
 from model.farmer import Farmer
-from model.transporter import Transporter
+from model.reseller import Transporter
 
 Price = namedtuple('Price',
                    'biomass_plantgate, biomass_fieldside, coal, electricity')
@@ -33,7 +33,7 @@ MiningParameter = namedtuple('MiningParameter',
 class System:
     """The system model of the cofiring economic sector.
 
-    Instance variables: plant, cofiring plant, supply_chain, transporter, farmer.
+    Instance variables: plant, cofiring plant, supply_chain, reseller, farmer.
     The class is designed immutable, don't change the members after initialization.
     """
 
@@ -45,7 +45,7 @@ class System:
         self.cofiring_plant = CofiringPlant(plant_parameter, cofire_parameter, emission_factor)
         self.supply_chain = supply_chain_potential.fit(self.cofiring_plant.biomass_used[1])
         self.farmer = Farmer(self.supply_chain, farm_parameter, emission_factor)
-        self.transporter = Transporter(self.supply_chain, transport_parameter, emission_factor)
+        self.reseller = Transporter(self.supply_chain, transport_parameter, emission_factor)
         self.mining_parameter = mining_parameter
         self.clear_market(price)
 
@@ -65,23 +65,23 @@ class System:
         # Transaction  at the plant gate
         payment_plantgate = self.cofiring_plant.biomass_used * price.biomass_plantgate
         display_as(payment_plantgate, "kUSD")
-        self.cofiring_plant.biomass_cost = self.transporter.revenue = payment_plantgate
+        self.cofiring_plant.biomass_cost = self.reseller.revenue = payment_plantgate
 
         # Transaction  at the field side
         payment_fieldside = self.cofiring_plant.biomass_used * price.biomass_fieldside
         display_as(payment_fieldside, "kUSD")
-        self.farmer.revenue = self.transporter.merchandise = payment_fieldside
+        self.farmer.revenue = self.reseller.merchandise = payment_fieldside
 
     @property
     def transport_cost_per_t(self):
         """Return technical cost to transport the straw, including labor, fuel and truck rental."""
-        return safe_divide(self.transporter.operating_expenses(), self.cofiring_plant.biomass_used)
+        return safe_divide(self.reseller.operating_expenses(), self.cofiring_plant.biomass_used)
 
     @property
     def labor(self):
         """Return total work time created from co-firing."""
         time = (self.farmer.labor()
-                + self.transporter.labor()
+                + self.reseller.labor()
                 + self.cofiring_plant.biomass_om_work()
                 - self.coal_work_lost)
         return display_as(time, 'hr')
@@ -90,7 +90,7 @@ class System:
     def wages(self):
         """Return total benefit from job creation from biomass co-firing."""
         amount = (self.farmer.labor_cost()
-                  + self.transporter.labor_cost()
+                  + self.reseller.labor_cost()
                   + self.cofiring_plant.biomass_om_wages()
                   - self.coal_wages_lost)
         return display_as(amount, 'kUSD')
@@ -118,7 +118,7 @@ class System:
         """Tabulate system atmospheric emissions in year 1 ex ante (no cofiring)."""
         baseline = DataFrame(columns=['CO2', 'NOx', 'PM10', 'SO2'])
         baseline = baseline.append(year_1(self.plant.emissions()))
-        baseline = baseline.append(year_1(self.plant.coal_transporter().emissions()))
+        baseline = baseline.append(year_1(self.plant.coal_reseller().emissions()))
         baseline = baseline.append(year_1(self.farmer.emissions_exante))
         baseline.loc["Total"] = baseline.sum()
         baseline.loc["Total_plant"] = baseline.iloc[0]
@@ -130,9 +130,9 @@ class System:
         """Tabulate system atmospheric emissions in year 1 ex post (with cofiring)."""
         cofiring = DataFrame(columns=['CO2', 'NOx', 'PM10', 'SO2'])
         cofiring = cofiring.append(year_1(self.cofiring_plant.emissions()))
-        cofiring = cofiring.append(year_1(self.cofiring_plant.coal_transporter().emissions()))
+        cofiring = cofiring.append(year_1(self.cofiring_plant.coal_reseller().emissions()))
         cofiring = cofiring.append(year_1(self.farmer.emissions()))
-        cofiring = cofiring.append(year_1(self.transporter.emissions()))
+        cofiring = cofiring.append(year_1(self.reseller.emissions()))
         cofiring.loc["Total"] = cofiring.sum()
         cofiring.loc["Total_plant"] = cofiring.iloc[0] + cofiring.iloc[1]
         cofiring.loc["Total_transport"] = cofiring.iloc[2] + cofiring.iloc[4]
@@ -145,7 +145,7 @@ class System:
         Return a dataframe of time series, indexed by segment and pollutant.
         """
         plant_emissions = self.plant.emissions(total=True)['Total']
-        ship_coal_emissions = self.plant.coal_transporter().emissions(total=True)['Total']
+        ship_coal_emissions = self.plant.coal_reseller().emissions(total=True)['Total']
         field_emissions = self.farmer.emissions_exante['Straw']
         transport_emissions = field_emissions * 0  # No logistics
         total_emissions = plant_emissions + ship_coal_emissions + field_emissions
@@ -160,8 +160,8 @@ class System:
         Return a dataframe of time series, indexed by segment and pollutant.
         """
         plant_emissions = self.cofiring_plant.emissions(total=True)['Total']
-        ship_coal_emissions = self.cofiring_plant.coal_transporter().emissions(total=True)['Total']
-        transport_emissions = self.transporter.emissions(total=True)['Total']
+        ship_coal_emissions = self.cofiring_plant.coal_reseller().emissions(total=True)['Total']
+        transport_emissions = self.reseller.emissions(total=True)['Total']
         field_emissions = self.farmer.emissions(total=True)['Total']
         total_emissions = (
             plant_emissions
@@ -229,7 +229,7 @@ class System:
         legend_a = Series("----------", index=["*** Farmer ***"])
         a = self.farmer.parameters_table()
         legend_b = Series("----------", index=["*** Reseller***"])
-        b = self.transporter.parameters_table()
+        b = self.reseller.parameters_table()
         legend_c = Series("----------", index=["*** Cofiring plant ***"])
         c = self.cofiring_plant.parameters_table()
         legend_d = Series("----------", index=["*** Mining ***"])
@@ -256,7 +256,7 @@ class System:
         table.append(row2.format('Farmer earnings before tax',
                                  self.farmer.net_present_value(discount_rate)))
         table.append(row2.format('Trader earnings before tax',
-                                 self.transporter.net_present_value(discount_rate)))
+                                 self.reseller.net_present_value(discount_rate)))
         return '\n'.join(table)
 
     def plant_npv_cash_change(self, discount_rate, tax_rate, depreciation_period):
@@ -291,7 +291,7 @@ class System:
         """Tabulate cofiring business value:  technical costs vs. value of coal saved."""
         data = [
             npv(discount_rate, self.farmer.operating_expenses()),
-            npv(discount_rate, self.transporter.operating_expenses()),
+            npv(discount_rate, self.reseller.operating_expenses()),
             npv(discount_rate, self.cofiring_plant.investment())]
 
         table_opex = self.plant_npv_opex_change(discount_rate)
@@ -335,10 +335,10 @@ class System:
 
         row7 = self.farmer.labor()[1]
         row1 = self.farmer.labor_cost()[1]
-        row8 = self.transporter.driving_work()[1]
-        row2 = self.transporter.driving_wages()[1]
-        row11 = self.transporter.loading_work()[1]
-        row12 = self.transporter.loading_wages()[1]
+        row8 = self.reseller.driving_work()[1]
+        row2 = self.reseller.driving_wages()[1]
+        row11 = self.reseller.loading_work()[1]
+        row12 = self.reseller.loading_wages()[1]
         row9 = self.cofiring_plant.biomass_om_work()[1]
         row3 = self.cofiring_plant.biomass_om_wages()[1]
         row6 = - self.coal_work_lost[1]
@@ -362,8 +362,8 @@ class System:
         lines.append('')
         lines.append(cols.format('Area collected', self.supply_chain.area()))
         lines.append(cols.format('Collection radius', self.supply_chain.collection_radius()))
-        lines.append(cols.format('Maximum transport time', self.transporter.max_trip_time()))
-        lines.append(cols.format('Number of truck trips', self.transporter.truck_trips[1]))
+        lines.append(cols.format('Maximum transport time', self.reseller.max_trip_time()))
+        lines.append(cols.format('Number of truck trips', self.reseller.truck_trips[1]))
         lines.append('')
         lines.append('Mining job lost from co-firing at ' + self.plant.name + '\n')
         lines.append(cols.format('Coal saved', self.coal_saved[1]))

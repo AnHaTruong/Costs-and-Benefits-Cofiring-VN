@@ -92,8 +92,8 @@ print("""
 Transporters        Mong Duong 1      Ninh Binh""")
 
 table = concat(
-    [MongDuong1System.transporter.result_cash(tax_rate, depreciation_period),
-     NinhBinhSystem.transporter.result_cash(tax_rate, depreciation_period)],
+    [MongDuong1System.reseller.result_cash(tax_rate, depreciation_period),
+     NinhBinhSystem.reseller.result_cash(tax_rate, depreciation_period)],
     axis=1)
 
 print(str(table))
