@@ -11,7 +11,7 @@ from collections import namedtuple
 from pandas import Series, DataFrame, set_option, concat
 from natu.numpy import npv, sum as np_sum
 
-from model.utils import year_1, display_as, safe_divide, t
+from model.utils import year_1, display_as, safe_divide, t, after_invest, isclose_all
 from model.powerplant import PowerPlant, CofiringPlant
 from model.farmer import Farmer
 from model.reseller import Reseller
@@ -43,7 +43,14 @@ class System:
         """Instantiate the system actors."""
         self.plant = PowerPlant(plant_parameter, emission_factor)
         self.cofiring_plant = CofiringPlant(plant_parameter, cofire_parameter, emission_factor)
+        self.quantity_plantgate = self.cofiring_plant.biomass_used
         self.supply_chain = supply_chain_potential.fit(self.cofiring_plant.biomass_used[1])
+
+        self.quantity_fieldside = after_invest(self.supply_chain.straw_sold(),
+                                               farm_parameter.time_horizon)
+        # Transport losses negligible
+        assert isclose_all(self.quantity_fieldside, self.quantity_plantgate)
+
         self.farmer = Farmer(self.supply_chain, farm_parameter, emission_factor)
         self.reseller = Reseller(self.supply_chain, transport_parameter, emission_factor)
         self.mining_parameter = mining_parameter

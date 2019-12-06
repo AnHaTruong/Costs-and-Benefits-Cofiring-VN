@@ -127,12 +127,25 @@ def isclose(qty_a, qty_b, rel_tol=1e-09, abs_tol=0.0):
     >>> isclose(.1 + .1 + .1, .3)
     True
 
-    This version works with natu quantities
+    This version works with natu quantities.
     The versions in standard library math or even in natu.math package do not (bug in natu ?)
+    Absolute tolerance can be ommited, but if provided must have the correct dimension
     >>> isclose(0 * VND, 0 * USD)
+    True
+    >>> isclose(.1 * t+ .1 * t + .1 * t, .3 * t, abs_tol = 0 * t)
     True
     """
     return abs(qty_a - qty_b) <= max(rel_tol * max(abs(qty_a), abs(qty_b)), abs_tol)
+
+
+def isclose_all(qty_a, qty_b, rel_tol=1e-09, abs_tol=0.0):
+    """Compare two lists of numbers or quantities for almost-equality according to PEP 485.
+
+    It needs the corectly dimensioned abs_tol:
+    >>> isclose_all([1 * t, 2 * t], [3/3 * t, 2*t], abs_tol = 0 *t)
+    True
+    """
+    return all(isclose(a, b, rel_tol, abs_tol) for a, b in zip(qty_a, qty_b))
 
 
 def safe_divide(costs, masses):
