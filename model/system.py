@@ -44,7 +44,7 @@ class System:
         self.plant = PowerPlant(plant_parameter, emission_factor)
         self.cofiring_plant = CofiringPlant(plant_parameter, cofire_parameter, emission_factor)
         self.quantity_plantgate = self.cofiring_plant.biomass_used
-        self.supply_chain = supply_chain_potential.fit(self.cofiring_plant.biomass_used[1])
+        self.supply_chain = supply_chain_potential.fit(self.quantity_plantgate[1])
 
         self.quantity_fieldside = after_invest(self.supply_chain.straw_sold(),
                                                farm_parameter.time_horizon)
@@ -70,19 +70,19 @@ class System:
         self.cofiring_plant.coal_cost = self.cofiring_plant.coal_used * price.coal
 
         # Transaction  at the plant gate
-        payment_plantgate = self.cofiring_plant.biomass_used * price.biomass_plantgate
+        payment_plantgate = self.quantity_plantgate * price.biomass_plantgate
         display_as(payment_plantgate, "kUSD")
         self.cofiring_plant.biomass_cost = self.reseller.revenue = payment_plantgate
 
         # Transaction  at the field side
-        payment_fieldside = self.cofiring_plant.biomass_used * price.biomass_fieldside
+        payment_fieldside = self.quantity_fieldside * price.biomass_fieldside
         display_as(payment_fieldside, "kUSD")
         self.farmer.revenue = self.reseller.merchandise = payment_fieldside
 
     @property
     def transport_cost_per_t(self):
         """Return technical cost to transport the straw, including labor, fuel and truck rental."""
-        return safe_divide(self.reseller.operating_expenses(), self.cofiring_plant.biomass_used)
+        return safe_divide(self.reseller.operating_expenses(), self.quantity_fieldside)
 
     @property
     def labor(self):

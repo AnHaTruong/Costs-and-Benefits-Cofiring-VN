@@ -92,7 +92,7 @@ def feasibility_by_solving(system, discount_rate):
     q = npv(discount_rate, system.farmer.quantity)
     business_value = potential_gain * q
 
-    q_per_year = system.cofiring_plant.biomass_used[1]
+    q_per_year = system.quantity_plantgate[1]
     potential_per_year = potential_gain * q_per_year
 
     data = [
@@ -126,7 +126,7 @@ def feasibility_direct(system, discount_rate):
     value_per_t = wtp - wta - minimum_margin
     value = value_per_t * q
 
-    q_per_year = system.cofiring_plant.biomass_used[1]
+    q_per_year = system.quantity_plantgate[1]
     assert isclose(q_per_year, system.farmer.quantity[1])
     potential_per_year = q_per_year * value_per_t
 

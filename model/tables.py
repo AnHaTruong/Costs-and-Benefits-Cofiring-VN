@@ -133,12 +133,6 @@ def energy_costs(system_a, system_b):
 
     return '\n'.join(lines)
 
-#%%
-
-
-#def coal_saved_benefits(system, coal_import_price):
-#    """Tabulate the quantity and value of coal saved by cofiring."""
-
 
 #%%
 
@@ -147,8 +141,8 @@ def straw_supply(system_a, system_b):
     """Tabulate the straw requires and straw costs."""
     table = [""]
 
-    col3 = system_a.cofiring_plant.biomass_used[1]
-    col4 = system_b.cofiring_plant.biomass_used[1]
+    col3 = system_a.quantity_fieldside[1]
+    col4 = system_b.quantity_fieldside[1]
 
     col5 = system_a.cofiring_plant.biomass_cost_per_t()[1]
     col6 = system_b.cofiring_plant.biomass_cost_per_t()[1]
