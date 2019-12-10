@@ -57,12 +57,12 @@ def plot_emissions(system, axes):
 
     plt.yticks(concatenate(
         (bot1, bot2)),
-        ('CO2 Baseline', 'CO2 Cofire', 'SO2 Baseline', 'SO2 Cofire',
-         'PM10 Baseline', 'PM10 Cofire', 'NOx Baseline', 'NOx Cofire'))
+        ('CO2 ex ante', 'CO2 ex post', 'SO2  ex ante', 'SO2 ex post',
+         'PM10 ex ante', 'PM10 ex post', 'NOx  ex ante', 'NOx ex post'))
 
-    legend_plant = mpatches.Patch(color='darkred', label='Plant emissions')
-    legend_transport = mpatches.Patch(color='mistyrose', label='Transport emissions')
-    legend_field = mpatches.Patch(color='salmon', label='Field emissions')
+    legend_plant = mpatches.Patch(color='darkred', label='Plant')
+    legend_transport = mpatches.Patch(color='mistyrose', label='Reseller')
+    legend_field = mpatches.Patch(color='salmon', label='Farmers')
     axes.legend(handles=[legend_plant, legend_transport, legend_field],
                 bbox_to_anchor=(0.98, 0.8),
                 prop={'size': 9},

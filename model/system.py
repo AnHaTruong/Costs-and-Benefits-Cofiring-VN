@@ -277,8 +277,18 @@ class System:
         expost = self.cofiring_plant.npv_cash(discount_rate, tax_rate, depreciation_period, name)
         return expost - exante
 
+#    def plant_opex_change(self):
+#        """Return change in Operating expenses for the power plant, DataFrame with year in cols."""
+#        result = self.cofiring_plant.operating_expenses_detail()
+#        result.name = self.plant.name
+#        opex_exante = self.plant.operating_expenses_detail()
+#        result.loc['Fuel cost, coal'] -= opex_exante.loc['Fuel cost, coal']
+#        result.loc['O&M, coal'] -= opex_exante.loc['Operation & Maintenance']
+#        result.loc['= Operating expenses'] -= opex_exante.loc['= Operating expenses']
+#        return result
+
     def plant_npv_opex_change(self, discount_rate):
-        """Return the Operating expenses changes for the power plant.
+        """Return the Operating expenses changes for the power plant, as NPV.
 
         Ex post compared to ex ante:
             the coal costs are lower
@@ -293,6 +303,8 @@ class System:
         table.loc['O&M, coal'] -= npv_opex_exante.loc['Operation & Maintenance']
         table.loc['= Operating expenses'] -= npv_opex_exante.loc['= Operating expenses']
         return table
+#        df = self.plant_opex_change()
+#        return df.apply(lambda s: npv(discount_rate, s), axis=1)
 
     def table_business_value(self, discount_rate):
         """Tabulate cofiring business value:  technical costs vs. value of coal saved."""
