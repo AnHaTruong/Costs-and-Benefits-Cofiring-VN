@@ -13,7 +13,7 @@ SOURCEDIRS = model manuscript1 lcoe tests manuscript1/table  manuscript1/figure
 figures-lcoe =  LCOE-4tech-3years-catalogue.png LCOE-4tech-3years-IEAfuelcosts.png\
                 LCOE-4tech-2020-catalogueextremes.png LCOE-4tech-2050-catalogueextremes.png\
                 LCOE-asDEA2019.png
-figures-manuscript1 = figure_emissions.svg figure_benefits.svg figure_economics.svg
+figures-manuscript1 = figure_emissions.svg figure_economics.svg figure_cba.svg
 tables-manuscript1 = tables_manuscript.txt\
                      table_jobs.txt\
                      table_emission_reduction.txt\
