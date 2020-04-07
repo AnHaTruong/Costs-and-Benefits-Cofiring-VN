@@ -11,7 +11,7 @@ from collections import namedtuple
 from pandas import Series, DataFrame, set_option, concat
 from natu.numpy import npv, sum as np_sum
 
-from model.utils import year_1, display_as, safe_divide, t, after_invest, isclose_all
+from model.utils import year_1, display_as, safe_divide, t, kt, after_invest, isclose_all
 from model.powerplant import PowerPlant, CofiringPlant
 from model.farmer import Farmer
 from model.reseller import Reseller
@@ -109,6 +109,7 @@ class System:
     @property
     def coal_saved(self):
         mass = self.plant.coal_used - self.cofiring_plant.coal_used
+        _ = kt    # Quiet pylint and the spyder codechecker
         return display_as(mass, 'kt')
 
     @property

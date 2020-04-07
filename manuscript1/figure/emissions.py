@@ -13,9 +13,8 @@
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 
-# pylint: disable=wrong-import-order
 from manuscript1.parameters import MongDuong1System, NinhBinhSystem
-from natu.units import kt, Mt, y
+from model.utils import kt, Mt, y
 from natu.numpy import array, concatenate
 
 #%%

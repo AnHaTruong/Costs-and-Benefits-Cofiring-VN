@@ -26,10 +26,18 @@ from natu.units import hr, t, y
 from natu import units
 from natu.core import ScalarUnit
 
-# Allow other modules to use
-#   from natu.units import kt, Mt
-# pylint: disable=protected-access
-t._prefixable = True
+
+# Define kt and Mt units
+# The t unit is not prefixable in natu.py , and making it so may have side effects.
+if config.use_quantities:
+    kt = ScalarUnit(1E6, 'M', 'kg')
+    units.kt = kt
+
+    Mt = ScalarUnit(1E9, 'M', 'kg')
+    units.Mt = Mt
+else:
+    kt = 1E6
+    Mt = 1E9
 
 
 # Semantic overloading: we reuse the "amount" dimension to mean "value"
