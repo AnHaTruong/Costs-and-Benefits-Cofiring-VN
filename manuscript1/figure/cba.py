@@ -24,7 +24,6 @@ from natu.units import kUSD
 # pylint: disable=too-many-locals
 def plot_cba(system, axes):
     """Plot to compare costs and benefits of cofiring."""
-
     axes.set_title(system.plant.name)
     axes.set_ylabel('kUSD/y')
 
