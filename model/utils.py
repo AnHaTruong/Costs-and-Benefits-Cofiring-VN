@@ -8,8 +8,9 @@
 # Creative Commons Attribution-ShareAlike 4.0 International
 """Common init file for all modules in the directory.
 
-This file should be imported before any "import natu ..."
-otherwise use_quantities does not work
+No other module should import things from natu.
+Another module can import config from natu in order to set   config.use_quantities = False ,
+this must be done before calling this module.
 
 It is in the manual, but worth reminding:
 Units thread into arrays from the right but not from the left
@@ -22,16 +23,24 @@ from natu import config
 # config.use_quantities = False
 
 from natu.numpy import array, npv, unique
-from natu.units import m, km, ha, g, kg, t, hr, d, y, MJ, GJ, kWh, MWh, kW, MW
+from natu.numpy import arange, ones, zeros, concatenate, cumsum, roll, sum as np_sum
+from natu.math import fsum, sqrt, pi
+from natu.units import t, hr, d, y
+from natu.units import m, km, ha, g, kg, MJ, GJ, kWh, MWh, kW, MW
 from natu import units
 from natu.core import ScalarUnit
 
 # Quiet pylint "unused-import" warning , they are for re-export.
 _ = m, km, ha, g, kg, d, MJ, GJ, kWh, MWh, kW, MW
+_ = arange, ones, zeros, concatenate, np_sum, cumsum, roll
+_ = fsum, sqrt, pi
+
+use_quantities = config.use_quantities
+use_floats = not use_quantities
 
 # Define kt and Mt units
 # The t unit is not prefixable in natu.py , and making it so may have side effects.
-if config.use_quantities:
+if use_quantities:
     kt = ScalarUnit(1E6, 'M', 'kg')
     units.kt = kt
 
@@ -44,7 +53,7 @@ else:
 
 # Semantic overloading: we reuse the "amount" dimension to mean "value"
 
-if config.use_quantities:
+if use_quantities:
     VND = ScalarUnit(1 / 22270, 'N', 'mol', prefixable=True)
     units.VND = VND
 
@@ -71,6 +80,9 @@ def after_invest(qty, time_horizon):
     Return  natu.numpy.array([0, qty, ..., qty]).
     The dtype=object might be a performance cost when "use_quantities = False" (untested).
 
+    >>> import pytest
+    >>> if use_floats:
+    ...     pytest.skip('This doctests uses units.')
     >>> after_invest(3 * t, 20)
     array([0 t, 3 t, 3 t, ..., 3 t, 3 t, 3 t], dtype=object)
     """
@@ -107,6 +119,9 @@ def display_as(qty, unit):
     This function is more robust than using  qty.display_unit =  in the code directly,
     because when  use_quantities = False  it is transparent instead of producing an error
 
+    >>> import pytest
+    >>> if use_floats:
+    ...     pytest.skip('This doctests uses units.')
     >>> display_as(2 * hr, 's')
     7200 s
 
@@ -119,7 +134,7 @@ def display_as(qty, unit):
     >>> display_as(v, 'd')
     [2 d, 365.25 d]
     """
-    if config.use_quantities:
+    if use_quantities:
         if hasattr(qty, '__iter__'):
             for element in qty:
                 element.display_unit = unit
@@ -161,6 +176,9 @@ def isclose_all(qty_a, qty_b, rel_tol=1e-09, abs_tol=0.0):
 def safe_divide(costs, masses):
     """Divide two vectors elementwise, producing NaN instead of error when the divisor is zero.
 
+    >>> import pytest
+    >>> if use_floats:
+    ...     pytest.skip('This doctests uses units.')
     >>> import natu.numpy as np
     >>> costs = array([100 * USD, 200 * USD])
     >>> masses = array([0 * t, 10 * t])
@@ -175,10 +193,21 @@ def safe_divide(costs, masses):
     """
     result = costs.copy()
     for i, mass in enumerate(masses):
-        if mass.__nonzero__():
-            result[i] /= mass
+        # More pythonic, but pytest gives a warning
+        # try:
+        #     result[i] /= mass
+        # except ZeroDivisionError:
+        #     result[i] = display_as(float('NaN') * USD / t, 'USD/t')
+        if use_quantities:
+            if mass.__nonzero__():
+                result[i] /= mass
+            else:
+                result[i] = display_as(float('NaN') * USD / t, 'USD/t')
         else:
-            result[i] = display_as(float('NaN') * USD / t, 'USD/t')
+            if mass != 0:
+                result[i] /= mass
+            else:
+                result[i] = display_as(float('NaN') * USD / t, 'USD/t')
     return display_as(result, 'USD/t')
 
 

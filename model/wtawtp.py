@@ -12,8 +12,8 @@ An Ha Truong, Minh Ha-Duong
 2017-2019
 """
 from pandas import Series
-from natu.numpy import npv
-from model.utils import solve_linear, USD, t, display_as, isclose
+
+from model.utils import npv, solve_linear, USD, t, display_as, isclose
 
 
 #%%

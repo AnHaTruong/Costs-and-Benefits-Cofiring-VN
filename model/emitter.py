@@ -43,7 +43,7 @@ class Emitter:
 
     Polymorphic: activity level can be a scalar or an array representing a time series
 
-    >>> from natu.numpy import array
+    >>> from model.utils import array
     >>> c = Activity('Combustion', array([1000, 110, 0]), {'CO2': 1, 'PM10': 0.001})
     >>> print(Emitter(c))
                            CO2              PM10

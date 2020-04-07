@@ -11,9 +11,7 @@
 """Draw a figure showing the cumulative costs/benefits for different groups."""
 import matplotlib.pyplot as plt
 
-from natu.numpy import array, arange
-
-from model.utils import MUSD, USD, t, display_as
+from model.utils import MUSD, USD, t, display_as, array, arange
 from manuscript1.parameters import discount_rate, tax_rate, depreciation_period, external_cost
 from manuscript1.parameters import NinhBinhSystem, price_NB
 

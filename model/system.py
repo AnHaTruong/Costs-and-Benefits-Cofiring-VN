@@ -9,9 +9,9 @@
 from collections import namedtuple
 
 from pandas import Series, DataFrame, set_option, concat
-from natu.numpy import npv, sum as np_sum
 
-from model.utils import year_1, display_as, safe_divide, t, kt, after_invest, isclose_all
+from model.utils import t, kt, npv, np_sum
+from model.utils import year_1, display_as, safe_divide, after_invest, isclose_all
 from model.powerplant import PowerPlant, CofiringPlant
 from model.farmer import Farmer
 from model.reseller import Reseller

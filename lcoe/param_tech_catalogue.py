@@ -11,11 +11,9 @@
 
 from collections import namedtuple
 from pandas import read_excel
-# pylint: disable=wrong-import-order
-from model.utils import USD, after_invest
-from model.utils import MJ, kg, hr, MW, y, MUSD, MWh, GJ, t, kWh
+
+from model.utils import USD, after_invest, array, ones, MJ, kg, hr, MW, y, MUSD, MWh, GJ, t, kWh
 from model.powerplant import PowerPlant, PlantParameter
-from natu.numpy import array, ones
 from manuscript1.parameters import emission_factor
 
 discount_rate = 0.1

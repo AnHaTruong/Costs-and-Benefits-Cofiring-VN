@@ -9,8 +9,7 @@
 #
 """Define geometric shapes: Disk, Annulus (ring), Semiannulus (half a ring)."""
 
-from natu.math import sqrt, pi
-from model.utils import m
+from model.utils import m, sqrt, pi
 
 
 class Shape:
@@ -79,6 +78,10 @@ class Annulus(Shape):
     def shrink(self, factor):
         """Return a new Annulus, with same inner radius and total area scaled by factor.
 
+        >>> import pytest
+        >>> from model.utils import use_floats
+        >>> if use_floats:
+        ...     pytest.skip('This doctests uses units.')
         >>> a = Annulus(1 * m, 30 * m)
         >>> print(a)
         Annulus with inner radius 1 m, outer radius 30 m, area 2824.29 m2

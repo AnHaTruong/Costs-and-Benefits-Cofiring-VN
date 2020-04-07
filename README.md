@@ -82,6 +82,8 @@ Modules must be run from the root directory, not from the directory they are in.
 
 ## For developpers
 
-Import common.utils before importing natu, to have a chance to disable it if needed.
+All imports from natu have to go through model.utils. Import nothing from natu directly.
+If a module needs something from natu.units, natu.math or natu.numpy : first import it into model.utils and then get it from there.
+This is because we need a single point to control natu.
 
 The precommit hook script is fragile to `git mv` commands. In this case do the tests manually, then commit with -n option.

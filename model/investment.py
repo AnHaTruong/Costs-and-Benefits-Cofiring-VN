@@ -13,8 +13,7 @@
 from abc import abstractmethod
 
 from pandas import Series, DataFrame
-from natu.numpy import zeros, npv
-from model.utils import USD, after_invest, display_as, isclose
+from model.utils import USD, after_invest, display_as, isclose, zeros, npv
 
 
 class Investment:
@@ -33,6 +32,10 @@ class Investment:
         This is so because the code that set the revenue can also
         set it as an expense to another object.
 
+    >>> import pytest
+    >>> from model.utils import use_floats
+    >>> if use_floats:
+    ...     pytest.skip('This doctests uses units.')
     >>> i = Investment('test', 20)
     >>> i.revenue()
     Traceback (most recent call last):

@@ -13,10 +13,9 @@ Assume that within a province, the straw production is uniform.
 """
 
 from pandas import read_excel
-from model.utils import ha, t, km
+from model.utils import ha, t, km, fsum
 from model.supplychain import SupplyChain, SupplyZone
 from model.shape import Semiannulus, Disk
-from natu.math import fsum
 
 
 # Leinonen and Nguyen 2013 : 50% of straw is collected and 79% of collected straw is sold

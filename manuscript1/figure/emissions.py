@@ -14,8 +14,7 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 
 from manuscript1.parameters import MongDuong1System, NinhBinhSystem
-from model.utils import kt, Mt, y
-from natu.numpy import array, concatenate
+from model.utils import kt, Mt, y, array, concatenate
 
 #%%
 

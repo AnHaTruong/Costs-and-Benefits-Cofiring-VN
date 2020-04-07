@@ -12,11 +12,10 @@
 
 import matplotlib.pyplot as plt
 
-# pylint: disable=wrong-import-order
 from manuscript1.parameters import (MongDuong1System, NinhBinhSystem, depreciation_period,
                                     external_cost)
-from natu.numpy import array, cumsum, roll
-from model.utils import kUSD
+
+from model.utils import kUSD, array, cumsum, roll
 
 #%%
 

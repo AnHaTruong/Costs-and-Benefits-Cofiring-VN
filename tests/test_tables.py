@@ -5,20 +5,25 @@
 # minh.haduong@gmail.com
 # Creative Commons Attribution-ShareAlike 4.0 International
 #
-"""Test the boundary case: cofiring biomass ratio 0% is same as baseline plant."""
+"""Regression testing. Did results change?"""
 
 import pytest
+
 from pandas import set_option
 
 from manuscript1.parameters import MongDuong1System, NinhBinhSystem
 from manuscript1.parameters import discount_rate, tax_rate, depreciation_period
-# We are using them inside an eval string
-# pylint: disable=unused-import
-# Spyder3 does not see that  coal_import_price, mining_parameter  are used within an eval string
 from manuscript1.parameters import external_cost, coal_import_price, mining_parameter
 from model.tables import (energy_costs, straw_supply,
                           emissions_reduction_benefit, emissions_reduction_ICERE,
                           business_value_by_solving, business_value_direct)
+
+from model.utils import use_floats
+pytestmark = pytest.mark.skipif(use_floats, reason="Using floats, units disabled.")
+
+
+# Quiet unused-import warning from pylint and spyder, we use them inside an eval string
+_ = coal_import_price, mining_parameter
 
 # pylint and pytest known compatibility bug
 # pylint: disable=redefined-outer-name
