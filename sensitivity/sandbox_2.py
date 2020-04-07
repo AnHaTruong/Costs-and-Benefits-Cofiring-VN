@@ -1,48 +1,46 @@
-# Sandbox 2. :  Accelerating.
-# Decrease runtime for 50 iterations from 26.5 to 10.8 seconds,
-#  by using numerical constants instead of symbolic representation of the units.
+# encoding: utf-8
+# Economic of co-firing in two power plants in Vietnam
+#
+# Sandbox 2
+#
+# (c) Minh Ha-Duong, An Ha Truong 2016-2019
+# minh.haduong@gmail.com
+# Creative Commons Attribution-ShareAlike 4.0 International
+"""Accelerating the model run, for sensitivity analysis.
+
+Use numerical constants instead of symbolic representation of the units.
+Decrease runtime for 50 iterations from 26.5 to 10.8 seconds.
+"""
+
+import time
 
 from SALib.sample import saltelli
 from SALib.analyze import sobol
 import numpy as np
-import time
 
-### Here is the acceleration setting
-#from natu import config
-#config.use_quantities = False
+# Here is the acceleration setting
+# from natu import config
+# config.use_quantities = False
 
-from model.utils import USD
+from sensitivity.blackbox import business_value as f
+from sensitivity.blackbox import toy_uncertainty as problem
 
-from manuscript1.parameters import MongDuong1System  #, NinhBinhSystem
-
-# Define the model inputs
-problem = {
-    'num_vars': 2,
-    'names': ['discount_rate', 'tax_rate'],
-    'bounds': [[0.03, 0.15],    # Discount rate
-               [0, 0.4]]        # Tax rate
-}
 
 # Generate samples
 # The number of samples generated is   saltelli_parameter * (2 num_vars + 2)
-  
+
 saltelli_parameter = 10
 
 param_values = saltelli.sample(problem, saltelli_parameter)
 
 #%% Run
 
-def business_value(discount_rate, tax_rate):
-    result = MongDuong1System.table_business_value(discount_rate)[-1] / USD
-    print('.', end='')
-    return result
-
 t1 = time.perf_counter()
 
 Y = np.zeros([param_values.shape[0]])
 
 for i, X in enumerate(param_values):
-    Y[i] = business_value(*X)
+    Y[i] = f(*X)
 
 print()
 print()

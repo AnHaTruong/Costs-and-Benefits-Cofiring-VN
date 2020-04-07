@@ -1,7 +1,8 @@
+"""Copied from the doc."""
+
 from SALib.sample import saltelli
 from SALib.analyze import sobol
 from SALib.test_functions import Ishigami
-import numpy as np
 
 # Define the model inputs
 problem = {
