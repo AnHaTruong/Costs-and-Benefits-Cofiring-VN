@@ -10,7 +10,7 @@
 """Define geometric shapes: Disk, Annulus (ring), Semiannulus (half a ring)."""
 
 from natu.math import sqrt, pi
-from natu.units import m
+from model.utils import m
 
 
 class Shape:

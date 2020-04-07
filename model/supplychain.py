@@ -9,9 +9,8 @@
 
 from copy import copy
 
-# pylint: disable=wrong-import-order,too-many-arguments
-from model.utils import isclose, display_as
-from natu.units import t, km, ha
+# pylint: disable=too-many-arguments
+from model.utils import isclose, display_as, t, km, ha
 
 
 class SupplyZone:

@@ -16,7 +16,7 @@ import matplotlib.pyplot as plt
 from manuscript1.parameters import (MongDuong1System, NinhBinhSystem, depreciation_period,
                                     external_cost)
 from natu.numpy import array, cumsum, roll
-from natu.units import kUSD
+from model.utils import kUSD
 
 #%%
 

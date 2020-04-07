@@ -13,8 +13,7 @@ from pandas import DataFrame
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 # pylint: disable=wrong-import-order
-from model.utils import USD
-from natu.units import MWh
+from model.utils import MWh, USD
 from natu.numpy import npv, array, arange, concatenate
 from lcoe.param_tech_catalogue import (discount_rate, tax_rate, depreciation_period,
                                        Coal_Supercritical, CCGT,

@@ -22,10 +22,12 @@ from natu import config
 # config.use_quantities = False
 
 from natu.numpy import array, npv, unique
-from natu.units import hr, t, y
+from natu.units import m, km, ha, g, kg, t, hr, d, y, MJ, GJ, kWh, MWh, kW, MW
 from natu import units
 from natu.core import ScalarUnit
 
+# Quiet pylint "unused-import" warning , they are for re-export.
+_ = m, km, ha, g, kg, d, MJ, GJ, kWh, MWh, kW, MW
 
 # Define kt and Mt units
 # The t unit is not prefixable in natu.py , and making it so may have side effects.

@@ -17,15 +17,13 @@ except those defined in the parameters_supplychain module
 
 from pandas import Series
 
-# pylint: disable=wrong-import-order
 from model.utils import USD, VND, after_invest
+from model.utils import MJ, kg, t, d, hr, km, MW, ha, kW, y, kWh, MWh, g
 from model.system import System, Price
 from model.powerplant import Fuel, PlantParameter, CofiringParameter
 from model.farmer import FarmerParameter
 from model.reseller import ResellerParameter
 from model.system import MiningParameter
-
-from natu.units import MJ, kg, t, d, hr, km, MW, ha, kW, y, kWh, MWh, g
 
 from manuscript1.parameters_supplychain import supply_chain_MD1, supply_chain_NB
 

@@ -13,10 +13,9 @@ from collections import namedtuple
 from pandas import Series, DataFrame, set_option, concat
 from natu.numpy import ones
 
-from natu.units import y
 from natu.numpy import npv
 
-from model.utils import USD, MUSD, display_as, safe_divide
+from model.utils import y, USD, MUSD, display_as, safe_divide
 from model.investment import Investment
 from model.emitter import Emitter, Activity
 

@@ -17,9 +17,8 @@ are better shown as   (a, b, npv(s))
 
 from pandas import DataFrame, Series, concat
 # pylint: disable=wrong-import-order
-from model.utils import display_as, isclose, USD, FTE, year_1, summarize
+from model.utils import display_as, isclose, y, t, hr, USD, FTE, year_1, summarize
 from model.wtawtp import feasibility_by_solving, feasibility_direct
-from natu.units import y, t, hr
 
 
 #%%

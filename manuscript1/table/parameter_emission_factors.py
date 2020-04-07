@@ -13,7 +13,7 @@ An Ha Truong, Minh Ha-Duong
 """
 
 from pandas import DataFrame, set_option
-from natu.units import kg, t, g, km
+from model.utils import kg, t, g, km
 
 from manuscript1.parameters import emission_factor
 

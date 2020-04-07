@@ -12,9 +12,7 @@ from collections import namedtuple
 from pandas import Series, DataFrame, set_option
 from natu.numpy import ones
 
-from natu.units import t
-
-from model.utils import after_invest, display_as
+from model.utils import t, after_invest, display_as
 
 from model.emitter import Emitter, Activity
 from model.investment import Investment
