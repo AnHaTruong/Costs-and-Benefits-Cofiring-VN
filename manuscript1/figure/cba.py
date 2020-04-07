@@ -71,7 +71,6 @@ def plot_cba(system, axes):
     legend_benefit(texts[2] + '\n', 3, mid_benefits[3])
     legend_benefit(texts[3] + '\n', 4, mid_benefits[4])
 
-
     #%% Costs
 
     extra_om = (
@@ -109,7 +108,6 @@ def plot_cba(system, axes):
     legend_cost('Invest ', 2)
     legend_cost('Operate ', 3)
 
-
     #%% Business value
 
     business_value = benefits[0] - top_costs[-1]
@@ -131,7 +129,6 @@ def plot_cba(system, axes):
         xytext=(0.30, top_costs[-1] + business_value),
         arrowprops=dict(arrowstyle='-'),
         horizontalalignment='right', verticalalignment='bottom')
-
 
     #%% Externalities
 
@@ -156,6 +153,7 @@ def plot_cba(system, axes):
         horizontalalignment='right', verticalalignment='bottom')
 
     # End of plot definition
+
 
 # noinspection PyTypeChecker
 FIGURE, AXESS = plt.subplots(nrows=1, ncols=2, figsize=[12, 6])
