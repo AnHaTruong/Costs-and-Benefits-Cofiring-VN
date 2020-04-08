@@ -8,11 +8,13 @@
 # Creative Commons Attribution-ShareAlike 4.0 International
 """Common init file for all modules in the directory.
 
-No other module should import things from natu.
-Another module can import config from natu in order to set   config.use_quantities = False ,
-this must be done before calling this module.
+For 10x acceleration, run these two lines BEFORE imporing this module:
+    from natu import config
+    config.use_quantities = False
 
-It is in the manual, but worth reminding:
+Besides that, no module should import objects from natu.
+
+It¨ is in the manual, but worth reminding:
 Units thread into arrays from the right but not from the left
   array([1, 2]) * m  -->  array([1 m, 2 m], dtype=object)
   m * array([1, 2])   --> [1  2] m
@@ -20,7 +22,6 @@ Units thread into arrays from the right but not from the left
 """
 
 from natu import config
-# config.use_quantities = False
 
 from natu.numpy import array, npv, unique
 from natu.numpy import arange, ones, zeros, concatenate, cumsum, roll, sum as np_sum
@@ -35,33 +36,31 @@ _ = m, km, ha, g, kg, d, MJ, GJ, kWh, MWh, kW, MW
 _ = arange, ones, zeros, concatenate, np_sum, cumsum, roll
 _ = fsum, sqrt, pi
 
-use_quantities = config.use_quantities
-use_floats = not use_quantities
+use_floats = not config.use_quantities
 
 # Define kt and Mt units
 # The t unit is not prefixable in natu.py , and making it so may have side effects.
-if use_quantities:
+if use_floats:
+    kt = 1E6
+    Mt = 1E9
+else:
     kt = ScalarUnit(1E6, 'M', 'kg')
     units.kt = kt
 
     Mt = ScalarUnit(1E9, 'M', 'kg')
     units.Mt = Mt
-else:
-    kt = 1E6
-    Mt = 1E9
-
 
 # Semantic overloading: we reuse the "amount" dimension to mean "value"
 
-if use_quantities:
+if use_floats:
+    USD = 1
+    VND = USD / 22270
+else:
     VND = ScalarUnit(1 / 22270, 'N', 'mol', prefixable=True)
     units.VND = VND
 
     USD = ScalarUnit(1, 'N', 'mol', prefixable=True)
     units.USD = USD
-else:
-    USD = 1
-    VND = USD / 22270
 
 kUSD = 1000 * USD
 MUSD = 1000 * kUSD
@@ -134,7 +133,7 @@ def display_as(qty, unit):
     >>> display_as(v, 'd')
     [2 d, 365.25 d]
     """
-    if use_quantities:
+    if not use_floats:
         if hasattr(qty, '__iter__'):
             for element in qty:
                 element.display_unit = unit
@@ -198,16 +197,17 @@ def safe_divide(costs, masses):
         #     result[i] /= mass
         # except ZeroDivisionError:
         #     result[i] = display_as(float('NaN') * USD / t, 'USD/t')
-        if use_quantities:
-            if mass.__nonzero__():
-                result[i] /= mass
-            else:
-                result[i] = display_as(float('NaN') * USD / t, 'USD/t')
-        else:
+        if use_floats:
             if mass != 0:
                 result[i] /= mass
             else:
                 result[i] = display_as(float('NaN') * USD / t, 'USD/t')
+        else:
+            if mass.__nonzero__():
+                result[i] /= mass
+            else:
+                result[i] = display_as(float('NaN') * USD / t, 'USD/t')
+
     return display_as(result, 'USD/t')
 
 
