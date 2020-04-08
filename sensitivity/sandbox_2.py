@@ -19,7 +19,7 @@ from SALib.analyze import sobol
 import numpy as np
 
 from natu import config
-config.use_quantities = True
+config.use_quantities = False
 
 from sensitivity.blackbox import business_value as f
 from sensitivity.blackbox import toy_uncertainty as problem
@@ -39,8 +39,35 @@ t1 = time.perf_counter()
 Y = np.zeros([param_values.shape[0]])
 
 for i, X in enumerate(param_values):
-    print('.', end='')
+    # print('.', end='')
     Y[i] = f(*X)
+
+print()
+print()
+print('Time elapsed ', round(time.perf_counter() - t1, 1), 's')
+print()
+
+#%% Run faster, and comprehension looks less pedestrian than the loop
+
+t1 = time.perf_counter()
+
+Y_list = [f(*x) for x in param_values]
+
+Y = np.array(Y_list)
+
+print()
+print()
+print('Time elapsed ', round(time.perf_counter() - t1, 1), 's')
+print()
+
+#%% Run even faster.
+# Optimizing the main outer loop does not brings much, but looks hard to read.
+
+t1 = time.perf_counter()
+
+Y_iterable = (f(*x) for x in param_values)
+
+Y = np.fromiter(Y_iterable, float, count=len(param_values))
 
 print()
 print()
