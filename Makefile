@@ -73,7 +73,7 @@ archive:
 	rm -rf $(distName)
 
 test: cleaner
-	$(PYTEST) --doctest-modules
+	$(PYTEST) --doctest-modules --ignore=sensitivity
 
 coverage: coverage.xml
 	python3.5-coverage html
@@ -102,7 +102,7 @@ codestyle:
 
 
 clean:
-	rm -f $(figures-lcoe) $(figures-manuscript1) $(tables-manuscript1)
+	rm -f $(figures-lcoe) $(figures-manuscript1) $(tables-manuscript1) run_profile
 
 cleaner: clean
 	find . -type f -name '*.pyc' -delete

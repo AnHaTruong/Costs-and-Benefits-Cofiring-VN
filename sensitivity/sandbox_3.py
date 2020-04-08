@@ -17,10 +17,11 @@ from SALib.sample import saltelli
 from SALib.analyze import sobol
 import numpy as np
 
-# import cProfile
+import cProfile
+import os
 
-# from natu import config
-# config.use_quantities = False
+from natu import config
+config.use_quantities = False
 
 from sensitivity.blackbox import business_value as f
 from sensitivity.blackbox import toy_uncertainty as problem
@@ -28,7 +29,7 @@ from sensitivity.blackbox import toy_uncertainty as problem
 # Generate samples
 # The number of samples generated is   saltelli_parameter * (2 num_vars + 2)
 
-saltelli_parameter = 5
+saltelli_parameter = 50
 
 param_values = saltelli.sample(problem, saltelli_parameter)
 
@@ -51,9 +52,10 @@ def do_runs(parameter_values):
     return runtime
 
 
-do_runs(param_values)
+cProfile.run("do_runs(param_values)", 'run_profile')
 
-# cProfile.run("do_runs(param_values)", 'run_profile')
+# Assuming  snakeviz  is installed
+os.system('snakeviz run_profile')
 
 #%% Perform analysis
 # S1 is first order sensitivity index
