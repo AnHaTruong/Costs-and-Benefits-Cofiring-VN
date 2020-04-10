@@ -45,7 +45,7 @@ Code quality is promoted with these practices:
 5. Compliance with Python in-code documentation is enforced with  pydocstyle  (aka pep257) before each commit
 6. Static code analysis quality is enforced with  pylint  before each commit
 7. Coherence of computations with respect to physical units is enforced with the  natu  package
-
+8. Format code with `black`.
 
 ## Bugs
 Known bugs and workarounds:
