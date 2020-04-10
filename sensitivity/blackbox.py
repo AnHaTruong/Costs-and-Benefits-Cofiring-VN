@@ -25,7 +25,7 @@ toy_uncertainty = {
 
 # We know the tax rate does not matter, but we want to check that the sensitivity computes to 0
 # pylint: disable=unused-argument
-def business_value(discount_rate, tax_rate):
+def toy_business_value(discount_rate, tax_rate):
     """Return for Y the business value of cofiring."""
     result = MongDuong1System.table_business_value(discount_rate)[-1] / USD
     return result
