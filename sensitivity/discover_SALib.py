@@ -22,6 +22,7 @@ from SALib.sample import saltelli
 from SALib.analyze import sobol
 
 from natu import config
+
 config.use_quantities = False
 
 from sensitivity.blackbox import toy_business_value as f
@@ -51,7 +52,7 @@ print()
 Si = sobol.analyze(problem, Y, print_to_console=True)
 
 # Print the first-order sensitivity indices
-print(Si['S1'])
+print(Si["S1"])
 
 
 #%% Timed run
@@ -66,7 +67,7 @@ for i, X in enumerate(param_values):
 
 print()
 print()
-print('Time elapsed ', round(time.perf_counter() - t1, 1), 's')
+print("Time elapsed ", round(time.perf_counter() - t1, 1), "s")
 print()
 
 #%% Run faster, and comprehension looks less pedestrian than the loop
@@ -79,7 +80,7 @@ Y = np.array(Y_list)
 
 print()
 print()
-print('Time elapsed ', round(time.perf_counter() - t1, 1), 's')
+print("Time elapsed ", round(time.perf_counter() - t1, 1), "s")
 print()
 
 #%% Run even faster.
@@ -93,7 +94,7 @@ Y = np.fromiter(Y_iterable, float, count=len(param_values))
 
 print()
 print()
-print('Time elapsed ', round(time.perf_counter() - t1, 1), 's')
+print("Time elapsed ", round(time.perf_counter() - t1, 1), "s")
 print()
 
 
@@ -101,21 +102,22 @@ print()
 
 Y = np.zeros([param_values.shape[0]])
 
+
 def do_runs(parameter_values):
     """Perform the Monte Carlo analysis."""
     t1 = time.perf_counter()
     for i, X in enumerate(parameter_values):
         Y[i] = f(*X)
-        print('.', end='')
+        print(".", end="")
     print()
     runtime = round(time.perf_counter() - t1, 1)
     print()
-    print('Time elapsed ', runtime, 's')
+    print("Time elapsed ", runtime, "s")
     print()
     return runtime
 
 
-cProfile.run("do_runs(param_values)", 'run_profile')
+cProfile.run("do_runs(param_values)", "run_profile")
 
 # Assuming  snakeviz  is installed
-os.system('snakeviz run_profile')
+os.system("snakeviz run_profile")
