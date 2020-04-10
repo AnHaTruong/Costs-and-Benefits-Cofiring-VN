@@ -10,7 +10,7 @@ from collections import namedtuple
 
 from pandas import DataFrame
 
-Activity = namedtuple('Activity', 'name, level, emission_factor')
+Activity = namedtuple("Activity", "name, level, emission_factor")
 
 
 # pylint: disable=too-few-public-methods
@@ -86,12 +86,17 @@ class Emitter:
         if self.emission_control:
             for pollutant, fraction in self.emission_control.items():
                 control[pollutant] = 1 - fraction
-        result = DataFrame({
-            activity.name: {
-                pollutant:
-                    activity.level * activity.emission_factor[pollutant] * control[pollutant]
-                for pollutant in pollutants}
-            for activity in self.activities})
+        result = DataFrame(
+            {
+                activity.name: {
+                    pollutant: activity.level
+                    * activity.emission_factor[pollutant]
+                    * control[pollutant]
+                    for pollutant in pollutants
+                }
+                for activity in self.activities
+            }
+        )
         if total:
-            result['Total'] = result.sum(axis=1)  # Should return this directly
+            result["Total"] = result.sum(axis=1)  # Should return this directly
         return result

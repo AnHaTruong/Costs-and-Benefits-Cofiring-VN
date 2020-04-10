@@ -97,9 +97,11 @@ lint:
 docstyle:
 	pydocstyle $(SOURCEDIRS)
 
+#format:
+#	black $(SOURCEDIRS)
+
 codestyle:
 	pycodestyle
-
 
 clean:
 	rm -f $(figures-lcoe) $(figures-manuscript1) $(tables-manuscript1) run_profile

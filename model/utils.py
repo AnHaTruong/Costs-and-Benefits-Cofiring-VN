@@ -41,13 +41,13 @@ use_floats = not config.use_quantities
 # Define kt and Mt units
 # The t unit is not prefixable in natu.py , and making it so may have side effects.
 if use_floats:
-    kt = 1E6
-    Mt = 1E9
+    kt = 1e6
+    Mt = 1e9
 else:
-    kt = ScalarUnit(1E6, 'M', 'kg')
+    kt = ScalarUnit(1e6, "M", "kg")
     units.kt = kt
 
-    Mt = ScalarUnit(1E9, 'M', 'kg')
+    Mt = ScalarUnit(1e9, "M", "kg")
     units.Mt = Mt
 
 # Semantic overloading: we reuse the "amount" dimension to mean "value"
@@ -56,10 +56,10 @@ if use_floats:
     USD = 1
     VND = USD / 22270
 else:
-    VND = ScalarUnit(1 / 22270, 'N', 'mol', prefixable=True)
+    VND = ScalarUnit(1 / 22270, "N", "mol", prefixable=True)
     units.VND = VND
 
-    USD = ScalarUnit(1, 'N', 'mol', prefixable=True)
+    USD = ScalarUnit(1, "N", "mol", prefixable=True)
     units.USD = USD
 
 kUSD = 1000 * USD
@@ -85,7 +85,7 @@ def after_invest(qty, time_horizon):
     >>> after_invest(3 * t, 20)
     array([0 t, 3 t, 3 t, ..., 3 t, 3 t, 3 t], dtype=object)
     """
-    assert not hasattr(qty, '__iter__'), "Vectorize only scalar arguments."
+    assert not hasattr(qty, "__iter__"), "Vectorize only scalar arguments."
     return array([0 * qty] + [qty] * time_horizon, dtype=object)
 
 
@@ -95,10 +95,12 @@ def year_1(df):
     Object  y  denotes the unit symbol for "year".
     This assumes that investment occured in period 0, then steady state from period 1 onwards.
     """
+
     def projector(vector):
         scalar = vector[1]
         assert list(vector)[1:] == [scalar] * (len(vector) - 1)
         return scalar / y
+
     return df.applymap(projector).T
 
 
@@ -107,7 +109,7 @@ def summarize(sequence, discount_rate):
 
     Return first element, second element, and NPV of everything.
     """
-    is_constant = (len(unique(sequence[1:])) == 1)
+    is_constant = len(unique(sequence[1:])) == 1
     assert is_constant, "Error: expecting everything constant after first year."
     return sequence[0], sequence[1], npv(discount_rate, sequence)
 
@@ -134,7 +136,7 @@ def display_as(qty, unit):
     [2 d, 365.25 d]
     """
     if not use_floats:
-        if hasattr(qty, '__iter__'):
+        if hasattr(qty, "__iter__"):
             for element in qty:
                 element.display_unit = unit
         else:
@@ -201,14 +203,14 @@ def safe_divide(costs, masses):
             if mass != 0:
                 result[i] /= mass
             else:
-                result[i] = display_as(float('NaN') * USD / t, 'USD/t')
+                result[i] = display_as(float("NaN") * USD / t, "USD/t")
         else:
             if mass.__nonzero__():
                 result[i] /= mass
             else:
-                result[i] = display_as(float('NaN') * USD / t, 'USD/t')
+                result[i] = display_as(float("NaN") * USD / t, "USD/t")
 
-    return display_as(result, 'USD/t')
+    return display_as(result, "USD/t")
 
 
 def solve_linear(f, x0, x1):
@@ -222,8 +224,8 @@ def solve_linear(f, x0, x1):
     -2.0
     """
     assert not isclose(x1, x0), "Starting points are too close."
-    y0 = f(x0)                         # y0 = a x0 + b
-    y1 = f(x1)                         # y1 = a x1 + b
+    y0 = f(x0)  # y0 = a x0 + b
+    y1 = f(x1)  # y1 = a x1 + b
     a = (y1 - y0) / (x1 - x0)
     b = y0 - a * x0
-    return - b / a
+    return -b / a

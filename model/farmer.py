@@ -17,14 +17,19 @@ from model.emitter import Emitter, Activity
 from model.investment import Investment
 
 
-FarmerParameter = namedtuple("FarmerParameter", ['winder_rental_cost',
-                                                 'winder_haul',
-                                                 'work_hour_day',
-                                                 'wage_bm_collect',
-                                                 'fuel_cost_per_hour',
-                                                 'straw_burn_rate',
-                                                 'fuel_use',
-                                                 'time_horizon'])
+FarmerParameter = namedtuple(
+    "FarmerParameter",
+    [
+        "winder_rental_cost",
+        "winder_haul",
+        "work_hour_day",
+        "wage_bm_collect",
+        "fuel_cost_per_hour",
+        "straw_burn_rate",
+        "fuel_use",
+        "time_horizon",
+    ],
+)
 
 
 class Farmer(Investment, Emitter):
@@ -37,30 +42,39 @@ class Farmer(Investment, Emitter):
     def __init__(self, supply_chain, farmer_parameter, emission_factor):
         self.parameter = farmer_parameter
         self.emission_factor = emission_factor
-        self.quantity = after_invest(supply_chain.straw_sold(), self.parameter.time_horizon)
+        self.quantity = after_invest(
+            supply_chain.straw_sold(), self.parameter.time_horizon
+        )
 
-        self.winder_use_area = after_invest(supply_chain.collected_area(),
-                                            self.parameter.time_horizon)
+        self.winder_use_area = after_invest(
+            supply_chain.collected_area(), self.parameter.time_horizon
+        )
 
         # ex-ante baseline emissions are one crop, in the supply zone
-        straw_burned = supply_chain.straw_available() * farmer_parameter.straw_burn_rate / t
+        straw_burned = (
+            supply_chain.straw_available() * farmer_parameter.straw_burn_rate / t
+        )
 
         field_burning_before = Activity(
-            name='Straw',
+            name="Straw",
             level=ones(self.parameter.time_horizon + 1) * straw_burned * t,
-            emission_factor=self.emission_factor['straw_open'])
+            emission_factor=self.emission_factor["straw_open"],
+        )
 
         self.emissions_exante = Emitter(field_burning_before).emissions(total=False)
 
         field_burning = Activity(
-            name='Straw',
+            name="Straw",
             level=field_burning_before.level - self.quantity,
-            emission_factor=self.emission_factor['straw_open'])
+            emission_factor=self.emission_factor["straw_open"],
+        )
 
         winder_use = Activity(
-            name='diesel',
-            level=self.quantity / (self.parameter.winder_haul / self.parameter.fuel_use),
-            emission_factor=self.emission_factor['diesel'])
+            name="diesel",
+            level=self.quantity
+            / (self.parameter.winder_haul / self.parameter.fuel_use),
+            emission_factor=self.emission_factor["diesel"],
+        )
 
         Emitter.__init__(self, field_burning, winder_use)
 
@@ -70,42 +84,38 @@ class Farmer(Investment, Emitter):
         """Work time needed to collect straw for co-firing per year."""
         t_per_hr = self.parameter.winder_haul / self.parameter.work_hour_day
         time = self.quantity / t_per_hr
-        return display_as(time, 'hr')
+        return display_as(time, "hr")
 
     def labor_cost(self):
         """Benefit from job creation from biomass collection."""
         amount = self.labor() * self.parameter.wage_bm_collect
-        return display_as(amount, 'kUSD')
+        return display_as(amount, "kUSD")
 
     def fuel_cost(self):
         amount = self.labor() * self.parameter.fuel_cost_per_hour
-        return display_as(amount, 'kUSD')
+        return display_as(amount, "kUSD")
 
     def rental_cost(self):
         amount = self.winder_use_area * self.parameter.winder_rental_cost
-        return display_as(amount, 'kUSD')
+        return display_as(amount, "kUSD")
 
     def operating_expenses(self):
         expenses = self.labor_cost() + self.rental_cost() + self.fuel_cost()
-        return display_as(expenses, 'kUSD')
+        return display_as(expenses, "kUSD")
 
     def operating_expenses_detail(self):
         """Return a DataFrame with years in column and annual operating expenses in row."""
-        expenses_data = [self.rental_cost(),
-                         self.fuel_cost(),
-                         self.labor_cost()]
-        expenses_index = ['Winder rental',
-                          'Winder fuel',
-                          'Collection work']
+        expenses_data = [self.rental_cost(), self.fuel_cost(), self.labor_cost()]
+        expenses_index = ["Winder rental", "Winder fuel", "Collection work"]
         df = DataFrame(data=expenses_data, index=expenses_index)
-        df.loc['= Operating expenses'] = df.sum()
+        df.loc["= Operating expenses"] = df.sum()
         return df
 
     def parameters_table(self):
         """Tabulate the arguments defining the farmer. Return a Pandas Series."""
-        set_option('display.max_colwidth', 80)
+        set_option("display.max_colwidth", 80)
         a = Series(self.parameter, self.parameter._fields)
-        display_as(a.loc['winder_rental_cost'], "USD / ha")
-        display_as(a.loc['wage_bm_collect'], "USD / hr")
-        display_as(a.loc['fuel_cost_per_hour'], "USD / hr")
+        display_as(a.loc["winder_rental_cost"], "USD / ha")
+        display_as(a.loc["wage_bm_collect"], "USD / hr")
+        display_as(a.loc["fuel_cost_per_hour"], "USD / hr")
         return a

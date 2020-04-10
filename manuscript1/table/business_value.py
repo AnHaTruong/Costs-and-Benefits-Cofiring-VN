@@ -17,18 +17,30 @@ from manuscript1.parameters import MongDuong1System, NinhBinhSystem, discount_ra
 
 from model.wtawtp import feasibility_direct
 
-print('Business value of cofiring, from project NPVs.\n')
-print(concat([
-    MongDuong1System.table_business_value(discount_rate),
-    NinhBinhSystem.table_business_value(discount_rate)],
-    axis=1))
+print("Business value of cofiring, from project NPVs.\n")
+print(
+    concat(
+        [
+            MongDuong1System.table_business_value(discount_rate),
+            NinhBinhSystem.table_business_value(discount_rate),
+        ],
+        axis=1,
+    )
+)
 
-print("""
+print(
+    """
 
 Business value of cofiring, from WTA, WTP and other per t values.
-""")
+"""
+)
 
-print(concat([
-    feasibility_direct(MongDuong1System, discount_rate),
-    feasibility_direct(NinhBinhSystem, discount_rate)],
-    axis=1))
+print(
+    concat(
+        [
+            feasibility_direct(MongDuong1System, discount_rate),
+            feasibility_direct(NinhBinhSystem, discount_rate),
+        ],
+        axis=1,
+    )
+)

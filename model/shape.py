@@ -39,11 +39,11 @@ class Disk(Shape):
         return "Disk with radius " + str(self.radius) + ", area " + str(self.area())
 
     def area(self):
-        return pi * self.radius**2
+        return pi * self.radius ** 2
 
     def first_moment_of_area(self):
         """Return first momement with respect to the center."""
-        return 2 * pi * self.radius**3 / 3
+        return 2 * pi * self.radius ** 3 / 3
 
     def shrink(self, factor):
         """Return a new homotetic disk, changing the area by factor."""
@@ -63,17 +63,21 @@ class Annulus(Shape):
         self.outer_radius = outer_radius
 
     def __str__(self):
-        return ("Annulus with inner radius " + str(self.inner_radius)
-                + ", outer radius " + str(self.outer_radius)
-                + ", area " + str(self.area())
-                )
+        return (
+            "Annulus with inner radius "
+            + str(self.inner_radius)
+            + ", outer radius "
+            + str(self.outer_radius)
+            + ", area "
+            + str(self.area())
+        )
 
     def area(self):
-        return pi * (self.outer_radius**2 - self.inner_radius**2)
+        return pi * (self.outer_radius ** 2 - self.inner_radius ** 2)
 
     def first_moment_of_area(self):
         """Return first moment with respect to the centroid."""
-        return 2 * pi * (self.outer_radius**3 - self.inner_radius**3) / 3
+        return 2 * pi * (self.outer_radius ** 3 - self.inner_radius ** 3) / 3
 
     def shrink(self, factor):
         """Return a new Annulus, with same inner radius and total area scaled by factor.
@@ -90,7 +94,9 @@ class Annulus(Shape):
         """
         assert factor >= 0
         new_outer_radius = sqrt(
-            self.inner_radius**2 + factor * (self.outer_radius**2 - self.inner_radius**2))
+            self.inner_radius ** 2
+            + factor * (self.outer_radius ** 2 - self.inner_radius ** 2)
+        )
         return Annulus(self.inner_radius, new_outer_radius)
 
     def max_radius(self):
@@ -116,5 +122,7 @@ class Semiannulus(Annulus):
         """Return a new Semiannulus, with same inner radius and total area scaled by factor."""
         assert factor >= 0
         new_outer_radius = sqrt(
-            self.inner_radius**2 + factor * (self.outer_radius**2 - self.inner_radius**2))
+            self.inner_radius ** 2
+            + factor * (self.outer_radius ** 2 - self.inner_radius ** 2)
+        )
         return Semiannulus(self.inner_radius, new_outer_radius)

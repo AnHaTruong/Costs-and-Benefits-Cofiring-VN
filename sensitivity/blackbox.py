@@ -38,6 +38,7 @@ toy_uncertainty = {
     "bounds": [[0.03, 0.15], [0, 0.4]],  # Discount rate  # Tax rate
 }
 
+
 # We know the tax rate does not matter, but we want to check that the sensitivity computes to 0
 # pylint: disable=unused-argument
 def toy_business_value(discount_rate, tax_rate):

@@ -21,13 +21,15 @@ class SupplyZone:
     Only a fraction of the fields is collected and sold for bioenergy. Also uniform.
     """
 
-    def __init__(self,
-                 shape,
-                 rice_yield_per_crop,
-                 rice_land_fraction,
-                 straw_to_rice_ratio,
-                 tortuosity_factor,
-                 collected_sold_fraction):
+    def __init__(
+        self,
+        shape,
+        rice_yield_per_crop,
+        rice_land_fraction,
+        straw_to_rice_ratio,
+        tortuosity_factor,
+        collected_sold_fraction,
+    ):
         self.shape = shape
         self.rice_yield_per_crop = rice_yield_per_crop
         self.rice_land_fraction = rice_land_fraction
@@ -37,45 +39,57 @@ class SupplyZone:
         self.collected_sold_fraction = collected_sold_fraction
 
     def __str__(self):
-        return ("Supply zone"
-                + "\n Shape: " + str(self.shape)
-                + "\n Area:                      " + str(self.area())
-                + "\n Rice growing area:         " + str(self.ricegrowing_area())
-                + "\n Collected area:            " + str(self.collected_area())
-                + "\n Straw available:           " + str(self.straw_available())
-                + "\n Straw sold:                " + str(self.straw_sold())
-                + "\n Tortuosity:                " + str(self.tortuosity_factor)
-                + "\n Activity to transport all: " + str(self.transport_tkm())
-                + "\n")
+        return (
+            "Supply zone"
+            + "\n Shape: "
+            + str(self.shape)
+            + "\n Area:                      "
+            + str(self.area())
+            + "\n Rice growing area:         "
+            + str(self.ricegrowing_area())
+            + "\n Collected area:            "
+            + str(self.collected_area())
+            + "\n Straw available:           "
+            + str(self.straw_available())
+            + "\n Straw sold:                "
+            + str(self.straw_sold())
+            + "\n Tortuosity:                "
+            + str(self.tortuosity_factor)
+            + "\n Activity to transport all: "
+            + str(self.transport_tkm())
+            + "\n"
+        )
 
     def area(self):
         surface = self.shape.area()
-        return display_as(surface, 'ha')
+        return display_as(surface, "ha")
 
     def ricegrowing_area(self):
         surface = self.area() * self.rice_land_fraction
-        return display_as(surface, 'ha')
+        return display_as(surface, "ha")
 
     def straw_available(self):
         mass = self.ricegrowing_area() * self.straw_yield_per_crop
-        return display_as(mass, 't')
+        return display_as(mass, "t")
 
     def collected_area(self):
         surface = self.ricegrowing_area() * self.collected_sold_fraction
-        return display_as(surface, 'ha')
+        return display_as(surface, "ha")
 
     def straw_sold(self):
         mass = self.straw_available() * self.collected_sold_fraction
-        return display_as(mass, 't')
+        return display_as(mass, "t")
 
     def transport_tkm(self):
         """Return the amount of transport activity to collect the zone."""
-        activity = (self.straw_yield_per_crop
-                    * self.rice_land_fraction
-                    * self.collected_sold_fraction
-                    * self.shape.first_moment_of_area()
-                    * self.tortuosity_factor)
-        return display_as(activity, 't * km')
+        activity = (
+            self.straw_yield_per_crop
+            * self.rice_land_fraction
+            * self.collected_sold_fraction
+            * self.shape.first_moment_of_area()
+            * self.tortuosity_factor
+        )
+        return display_as(activity, "t * km")
 
     def shrink(self, factor):
         self.shape = self.shape.shrink(factor)
@@ -96,7 +110,9 @@ class SupplyChain:
 
         Disgard unused zone(s) and shrink the last one.
         """
-        assert target_quantity <= self.straw_sold(), 'Not enough biomass in supply chain: '
+        assert (
+            target_quantity <= self.straw_sold()
+        ), "Not enough biomass in supply chain: "
 
         i = 0
         collected = SupplyChain([copy(self.zones[0])])
@@ -113,15 +129,24 @@ class SupplyChain:
         return collected
 
     def __str__(self):
-        result = ("Supply chain\n"
-                  + "\nArea:                      " + str(self.area())
-                  + "\nRice growing area:         " + str(self.ricegrowing_area())
-                  + "\nCollected area:            " + str(self.collected_area())
-                  + "\nStraw available:           " + str(self.straw_available())
-                  + "\nStraw sold:                " + str(self.straw_sold())
-                  + "\nTransport      :           " + str(self.transport_tkm())
-                  + "\nCollection_radius:         " + str(self.collection_radius())
-                  + "\n")
+        result = (
+            "Supply chain\n"
+            + "\nArea:                      "
+            + str(self.area())
+            + "\nRice growing area:         "
+            + str(self.ricegrowing_area())
+            + "\nCollected area:            "
+            + str(self.collected_area())
+            + "\nStraw available:           "
+            + str(self.straw_available())
+            + "\nStraw sold:                "
+            + str(self.straw_sold())
+            + "\nTransport      :           "
+            + str(self.transport_tkm())
+            + "\nCollection_radius:         "
+            + str(self.collection_radius())
+            + "\n"
+        )
         for zone in self.zones:
             result += str(zone)
         return result
@@ -130,37 +155,37 @@ class SupplyChain:
         surface = 0 * ha
         for zone in self.zones:
             surface += zone.area()
-        return display_as(surface, 'km2')
+        return display_as(surface, "km2")
 
     def ricegrowing_area(self):
         surface = 0 * ha
         for zone in self.zones:
             surface += zone.ricegrowing_area()
-        return display_as(surface, 'km2')
+        return display_as(surface, "km2")
 
     def collected_area(self):
         surface = 0 * ha
         for zone in self.zones:
             surface += zone.collected_area()
-        return display_as(surface, 'km2')
+        return display_as(surface, "km2")
 
     def straw_available(self):
         mass = 0 * t
         for zone in self.zones:
             mass += zone.straw_available()
-        return display_as(mass, 't')
+        return display_as(mass, "t")
 
     def straw_sold(self):
         mass = 0 * t
         for zone in self.zones:
             mass += zone.straw_sold()
-        return display_as(mass, 't')
+        return display_as(mass, "t")
 
     def transport_tkm(self):
         activity = 0 * t * km
         for zone in self.zones:
             activity += zone.transport_tkm()
-        return display_as(activity, 't * km')
+        return display_as(activity, "t * km")
 
     def collection_radius(self):
         return self.zones[-1].shape.max_radius()

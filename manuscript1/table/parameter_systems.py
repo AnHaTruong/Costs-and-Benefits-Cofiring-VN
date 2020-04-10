@@ -20,7 +20,7 @@ from model.powerplant import Fuel
 
 def dict_to_df(stem, dictionary):
     """Cast a dictionary into DataFrame, stemming the keys."""
-    stemmed_keys = [stem + '_' + key for key in dictionary.keys()]
+    stemmed_keys = [stem + "_" + key for key in dictionary.keys()]
     data = dictionary.values()
     return DataFrame(data, index=stemmed_keys)
 
@@ -32,8 +32,8 @@ def fuel_to_df(stem, fuel):
 
 def scalar_to_df(index, value):
     """Cast a scalar into a DataFrame."""
-    if index == 'boiler_efficiency_loss':
-        value = '0.0044 r^2 + 0.0055 r'
+    if index == "boiler_efficiency_loss":
+        value = "0.0044 r^2 + 0.0055 r"
     return DataFrame([value], index=[index])
 
 
@@ -55,7 +55,7 @@ tableMD1 = flatten(MongDuong1System.parameters_table())
 tableNB = flatten(NinhBinhSystem.parameters_table())
 
 table = concat([tableMD1, tableNB], axis=1)
-table.columns = table.loc['name']
-table = table.drop('name')
+table.columns = table.loc["name"]
+table = table.drop("name")
 
 print(table)

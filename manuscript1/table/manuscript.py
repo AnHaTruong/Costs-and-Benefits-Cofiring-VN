@@ -14,26 +14,37 @@ An Ha Truong, Minh Ha-Duong
 
 from pandas import set_option, concat
 
-from manuscript1.parameters import (MongDuong1System, NinhBinhSystem,
-                                    discount_rate, tax_rate, depreciation_period,
-                                    external_cost_SKC, external_cost_ZWY,
-                                    external_cost_HAS)
+from manuscript1.parameters import (
+    MongDuong1System,
+    NinhBinhSystem,
+    discount_rate,
+    tax_rate,
+    depreciation_period,
+    external_cost_SKC,
+    external_cost_ZWY,
+    external_cost_HAS,
+)
 
-from model.tables import (straw_supply,
-                          emission_reductions_by_activity, emissions_reduction_ICERE)
+from model.tables import (
+    straw_supply,
+    emission_reductions_by_activity,
+    emissions_reduction_ICERE,
+)
 from model.utils import display_as
 
 
-table_separator = '\n=================\n'
+table_separator = "\n=================\n"
 
 #%%
 
-set_option('display.float_format', '{:,.1f}'.format)
+set_option("display.float_format", "{:,.1f}".format)
 
 table = """
 ICERE 2018 Table 1: Emission reductions by activity
 
-""" + str(emission_reductions_by_activity(MongDuong1System, NinhBinhSystem))
+""" + str(
+    emission_reductions_by_activity(MongDuong1System, NinhBinhSystem)
+)
 
 print(table)
 
@@ -42,13 +53,19 @@ print(table)
 print(table_separator)
 
 table = (
-    "ICERE 2018 Table 2: Emission reductions benefits (external costs SKC, ZWY, HAS)\n\n" +
-    "       Mong Duong 1                 Ninh Binh\n" +
-    str(emissions_reduction_ICERE(MongDuong1System, NinhBinhSystem, external_cost_SKC)) +
-    "\n\n" +
-    str(emissions_reduction_ICERE(MongDuong1System, NinhBinhSystem, external_cost_ZWY)) +
-    "\n\n" +
-    str(emissions_reduction_ICERE(MongDuong1System, NinhBinhSystem, external_cost_HAS))
+    "ICERE 2018 Table 2: Emission reductions benefits (external costs SKC, ZWY, HAS)\n\n"
+    + "       Mong Duong 1                 Ninh Binh\n"
+    + str(
+        emissions_reduction_ICERE(MongDuong1System, NinhBinhSystem, external_cost_SKC)
+    )
+    + "\n\n"
+    + str(
+        emissions_reduction_ICERE(MongDuong1System, NinhBinhSystem, external_cost_ZWY)
+    )
+    + "\n\n"
+    + str(
+        emissions_reduction_ICERE(MongDuong1System, NinhBinhSystem, external_cost_HAS)
+    )
 )
 
 print(table)
@@ -68,33 +85,46 @@ print(table_separator)
 
 def label(price):
     """Return a string with the straw price at field side and plant gate."""
-    display_as(price.biomass_plantgate, 'USD/t')
-    display_as(price.biomass_fieldside, 'USD/t')
-    display_as(price.coal, 'USD/t')
-    return ('Straw ' + str(price.biomass_fieldside) + ' field side, ' +
-            str(price.biomass_plantgate) + ' plant gate')
+    display_as(price.biomass_plantgate, "USD/t")
+    display_as(price.biomass_fieldside, "USD/t")
+    display_as(price.coal, "USD/t")
+    return (
+        "Straw "
+        + str(price.biomass_fieldside)
+        + " field side, "
+        + str(price.biomass_plantgate)
+        + " plant gate"
+    )
 
 
-print('Table: Supply chain earnings before taxes in the co-firing scenario.')
+print("Table: Supply chain earnings before taxes in the co-firing scenario.")
 print(label(NinhBinhSystem.price) + " in Ninh Binh")
 print(label(MongDuong1System.price) + " in Mong Duong")
 print()
-print('Farmers             Mong Duong 1     Ninh Binh')
+print("Farmers             Mong Duong 1     Ninh Binh")
 
 table = concat(
-    [MongDuong1System.farmer.result_cash(tax_rate, depreciation_period),
-     NinhBinhSystem.farmer.result_cash(tax_rate, depreciation_period)],
-    axis=1)
+    [
+        MongDuong1System.farmer.result_cash(tax_rate, depreciation_period),
+        NinhBinhSystem.farmer.result_cash(tax_rate, depreciation_period),
+    ],
+    axis=1,
+)
 
 print(str(table))
 
-print("""
-Resellers        Mong Duong 1      Ninh Binh""")
+print(
+    """
+Resellers        Mong Duong 1      Ninh Binh"""
+)
 
 table = concat(
-    [MongDuong1System.reseller.result_cash(tax_rate, depreciation_period),
-     NinhBinhSystem.reseller.result_cash(tax_rate, depreciation_period)],
-    axis=1)
+    [
+        MongDuong1System.reseller.result_cash(tax_rate, depreciation_period),
+        NinhBinhSystem.reseller.result_cash(tax_rate, depreciation_period),
+    ],
+    axis=1,
+)
 
 print(str(table))
 
@@ -102,20 +132,46 @@ print(str(table))
 #%%
 print(table_separator)
 
-print('Table: Results of profitability assessment')
-print("Net present value over", MongDuong1System.plant.parameter.time_horizon,
-      "years at discount rate =", discount_rate)
-print("Tax rate", tax_rate, ", linear capital depreciation over ", depreciation_period, "years")
-print("Coal", MongDuong1System.price.coal, ", straw", MongDuong1System.price.biomass_plantgate)
+print("Table: Results of profitability assessment")
+print(
+    "Net present value over",
+    MongDuong1System.plant.parameter.time_horizon,
+    "years at discount rate =",
+    discount_rate,
+)
+print(
+    "Tax rate",
+    tax_rate,
+    ", linear capital depreciation over ",
+    depreciation_period,
+    "years",
+)
+print(
+    "Coal",
+    MongDuong1System.price.coal,
+    ", straw",
+    MongDuong1System.price.biomass_plantgate,
+)
 print()
 table = concat(
-    [MongDuong1System.plant.lcoe_statement(discount_rate, tax_rate, depreciation_period),
-     MongDuong1System.cofiring_plant.lcoe_statement(discount_rate, tax_rate, depreciation_period),
-     NinhBinhSystem.plant.lcoe_statement(discount_rate, tax_rate, depreciation_period),
-     NinhBinhSystem.cofiring_plant.lcoe_statement(discount_rate, tax_rate, depreciation_period)],
-    axis=1)
+    [
+        MongDuong1System.plant.lcoe_statement(
+            discount_rate, tax_rate, depreciation_period
+        ),
+        MongDuong1System.cofiring_plant.lcoe_statement(
+            discount_rate, tax_rate, depreciation_period
+        ),
+        NinhBinhSystem.plant.lcoe_statement(
+            discount_rate, tax_rate, depreciation_period
+        ),
+        NinhBinhSystem.cofiring_plant.lcoe_statement(
+            discount_rate, tax_rate, depreciation_period
+        ),
+    ],
+    axis=1,
+)
 
-set_option('display.float_format', '{:,.1f}'.format)
-set_option('display.width', 200)
+set_option("display.float_format", "{:,.1f}".format)
+set_option("display.width", 200)
 
 print(str(table))

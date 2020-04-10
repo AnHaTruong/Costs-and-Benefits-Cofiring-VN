@@ -13,8 +13,12 @@ An Ha Truong, Minh Ha-Duong
 """
 
 
-from manuscript1.parameters import (MongDuong1System, NinhBinhSystem,
-                                    discount_rate, coal_import_price)
+from manuscript1.parameters import (
+    MongDuong1System,
+    NinhBinhSystem,
+    discount_rate,
+    coal_import_price,
+)
 
 from model.tables import coal_saved_benefit
 from model.utils import display_as
@@ -24,4 +28,8 @@ from model.utils import display_as
 
 print("Coal import price: ", display_as(coal_import_price, "USD / t"), "\n")
 
-print(coal_saved_benefit(MongDuong1System, NinhBinhSystem, coal_import_price, discount_rate))
+print(
+    coal_saved_benefit(
+        MongDuong1System, NinhBinhSystem, coal_import_price, discount_rate
+    )
+)

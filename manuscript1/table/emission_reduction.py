@@ -16,8 +16,10 @@ from manuscript1.parameters import MongDuong1System, NinhBinhSystem, external_co
 from model.tables import emissions_reduction_ICERE
 
 
-print("""Emission reductions from the two projects
+print(
+    """Emission reductions from the two projects
 
-                    Mong Duong 1      Ninh Binh""")
+                    Mong Duong 1      Ninh Binh"""
+)
 
 print(emissions_reduction_ICERE(MongDuong1System, NinhBinhSystem, external_cost))

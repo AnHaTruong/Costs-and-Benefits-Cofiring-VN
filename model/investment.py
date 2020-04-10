@@ -56,19 +56,22 @@ class Investment:
     """
 
     def __init__(self, name, time_horizon, amount_invested=0 * USD):
-        self.amount_invested = display_as(amount_invested, 'kUSD')
+        self.amount_invested = display_as(amount_invested, "kUSD")
         self.name = name
         self.time_horizon = time_horizon
         self._revenue = None
-        self.merchandise = display_as(zeros(self.time_horizon + 1) * USD, 'kUSD')
+        self.merchandise = display_as(zeros(self.time_horizon + 1) * USD, "kUSD")
         self.expenses = []
         self.expenses_index = []
 
     @property
     def revenue(self):
+        """Return the revenue. Decorator @property means it is a getter method."""
         if self._revenue is None:
-            raise AttributeError('Accessing  Investment.revenue  value before it is set')
-        return display_as(self._revenue, 'kUSD')
+            raise AttributeError(
+                "Accessing  Investment.revenue  value before it is set"
+            )
+        return display_as(self._revenue, "kUSD")
 
     @revenue.setter
     def revenue(self, value):
@@ -80,55 +83,63 @@ class Investment:
         But code outside this module assume it occurs only in  year 0.
         """
         v_invest = 1 - after_invest(1, self.time_horizon)
-        return display_as(v_invest * self.amount_invested / sum(v_invest), 'kUSD')
+        return display_as(v_invest * self.amount_invested / sum(v_invest), "kUSD")
 
     def operating_expenses(self):
-        return display_as(zeros(self.time_horizon + 1) * USD, 'kUSD')
+        return display_as(zeros(self.time_horizon + 1) * USD, "kUSD")
 
     def amortization(self, depreciation_period):
         """Return vector of linear amortization amounts."""
         if not self.amount_invested:
-            return display_as(zeros(self.time_horizon + 1) * USD, 'kUSD')
-        assert isinstance(depreciation_period, int), "Depreciation period not an integer"
+            return display_as(zeros(self.time_horizon + 1) * USD, "kUSD")
+        assert isinstance(
+            depreciation_period, int
+        ), "Depreciation period not an integer"
         assert depreciation_period > 0, "Depreciation period negative"
-        assert depreciation_period < self.time_horizon - 1, "Depreciation >= timehorizon - 2 year"
+        assert (
+            depreciation_period < self.time_horizon - 1
+        ), "Depreciation >= timehorizon - 2 year"
         v_cost = zeros(self.time_horizon + 1).copy() * USD
         for year in range(1, depreciation_period + 1):
             v_cost[year] = self.amount_invested / float(depreciation_period)
-        return display_as(v_cost, 'kUSD')
+        return display_as(v_cost, "kUSD")
 
     def earning_before_tax(self, depreciation_period=None):
         """Return  EBT time series."""
-        ebt = (self.revenue
-               - self.merchandise
-               - self.operating_expenses()
-               - self.amortization(depreciation_period))
-        return display_as(ebt, 'kUSD')
+        ebt = (
+            self.revenue
+            - self.merchandise
+            - self.operating_expenses()
+            - self.amortization(depreciation_period)
+        )
+        return display_as(ebt, "kUSD")
 
     def income_tax(self, tax_rate, depreciation_period):
         assert 0 <= tax_rate <= 1, "Tax rate not in [0, 1["
         # Allows tax credits in lossy periods
         tax = tax_rate * self.earning_before_tax(depreciation_period)
-        return display_as(tax, 'kUSD')
+        return display_as(tax, "kUSD")
 
     def earning_after_tax(self, tax_rate, depreciation_period=None):
         """Return  EAT  time series."""
-        eat = (self.earning_before_tax(depreciation_period)
-               - self.income_tax(tax_rate, depreciation_period))
-        return display_as(eat, 'kUSD')
+        eat = self.earning_before_tax(depreciation_period) - self.income_tax(
+            tax_rate, depreciation_period
+        )
+        return display_as(eat, "kUSD")
 
     def cash_out(self, tax_rate, depreciation_period):
         """Return cash out time series."""
-        flow = (self.investment()
-                + self.merchandise
-                + self.operating_expenses()
-                + self.income_tax(tax_rate, depreciation_period))
-        return display_as(flow, 'kUSD')
+        flow = (
+            self.investment()
+            + self.merchandise
+            + self.operating_expenses()
+            + self.income_tax(tax_rate, depreciation_period)
+        )
+        return display_as(flow, "kUSD")
 
     def net_cash_flow(self, tax_rate, depreciation_period):
-        flow = (self.revenue
-                - self.cash_out(tax_rate, depreciation_period))
-        return display_as(flow, 'kUSD')
+        flow = self.revenue - self.cash_out(tax_rate, depreciation_period)
+        return display_as(flow, "kUSD")
 
     def result_economic(self, tax_rate, depreciation_period):
         """Return a DataFrame with the annual economic accounts, by year.
@@ -142,15 +153,17 @@ class Investment:
             self.operating_expenses(),
             self.earning_before_tax(depreciation_period),
             self.income_tax(tax_rate, depreciation_period),
-            self.earning_after_tax(tax_rate, depreciation_period)]
+            self.earning_after_tax(tax_rate, depreciation_period),
+        ]
         index = [
             "Revenue (kUSD)",
             "- Expense, Amortization",
             "- Expense, Merchandise",
             "- Expense, Operating",
             "= Earnings Before Tax",
-            "- Income tax " + str(round(100 * tax_rate)) + '%',
-            "= Earnings after tax"]
+            "- Income tax " + str(round(100 * tax_rate)) + "%",
+            "= Earnings after tax",
+        ]
         return DataFrame(data, index=index)
 
     def result_cash(self, tax_rate, depreciation_period):
@@ -164,14 +177,16 @@ class Investment:
             self.merchandise,
             self.operating_expenses(),
             self.income_tax(tax_rate, depreciation_period),
-            self.net_cash_flow(tax_rate, depreciation_period)]
+            self.net_cash_flow(tax_rate, depreciation_period),
+        ]
         index = [
             "Revenue (kUSD)",
             "- Expense, Investment",
             "- Expense, Merchandise",
             "- Expense, Operating",
             "- Expense, Income tax",
-            "= Net cashflow"]
+            "= Net cashflow",
+        ]
         return DataFrame(data, index=index)
 
     def business_data(self, tax_rate, depreciation_period):
@@ -181,9 +196,11 @@ class Investment:
         The second dataframe is the cash flow result, assumes investment is paid in full in year 0.
         The third dataframe is the detail of operating expenses: fuel, labor, tools.
         """
-        return (self.result_economic(tax_rate, depreciation_period),
-                self.result_cash(tax_rate, depreciation_period),
-                self.operating_expenses_detail())
+        return (
+            self.result_economic(tax_rate, depreciation_period),
+            self.result_cash(tax_rate, depreciation_period),
+            self.operating_expenses_detail(),
+        )
 
     def npv_cash(self, discount_rate, tax_rate, depreciation_period, label=""):
         """Return a Series. Cash flow statement, net present value."""
@@ -192,7 +209,8 @@ class Investment:
         table = Series(data)
         assert isclose(
             self.net_present_value(discount_rate, tax_rate, depreciation_period),
-            data.loc['= Net cashflow'])
+            data.loc["= Net cashflow"],
+        )
         table.name = self.name if label == "" else label
         return table
 
@@ -206,9 +224,8 @@ class Investment:
 
     def net_present_value(self, discount_rate, tax_rate=0, depreciation_period=1):
         assert 0 <= discount_rate < 1, "Discount rate not in [0, 1["
-        value = npv(discount_rate,
-                    self.net_cash_flow(tax_rate, depreciation_period))
-        return display_as(value, 'kUSD')
+        value = npv(discount_rate, self.net_cash_flow(tax_rate, depreciation_period))
+        return display_as(value, "kUSD")
 
     def internal_rate_of_return(self):
         pass

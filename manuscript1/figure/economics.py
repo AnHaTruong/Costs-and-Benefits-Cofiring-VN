@@ -47,26 +47,30 @@ def plot_feasibility(system, ax):
     x6 = x4 + transport_cost / 2
     y5 = y6 = 0.01
 
-    ax.plot([x0, x3], [y0farmer, y3farmer], 'g-')
-    ax.plot(x1, y1farmer, 'go')
-    ax.plot(x0, y0farmer, 'gs')
-    ax.plot([x0, x3], [y0plant, y3plant], 'r-')
-    ax.plot(x2, y2plant, 'ro')
-    ax.plot([x5, x6], [y5, y6], 'bo-', linewidth=10)
-    ax.legend(["Farmer's gain",
-               "WTA",
-               "Total cost to collect",
-               "Plant's gain",
-               "WTP",
-               "Reseller avg cost"])
+    ax.plot([x0, x3], [y0farmer, y3farmer], "g-")
+    ax.plot(x1, y1farmer, "go")
+    ax.plot(x0, y0farmer, "gs")
+    ax.plot([x0, x3], [y0plant, y3plant], "r-")
+    ax.plot(x2, y2plant, "ro")
+    ax.plot([x5, x6], [y5, y6], "bo-", linewidth=10)
+    ax.legend(
+        [
+            "Farmer's gain",
+            "WTA",
+            "Total cost to collect",
+            "Plant's gain",
+            "WTP",
+            "Reseller avg cost",
+        ]
+    )
 
     ax.set_ylim([y3plant / 2, y0plant / 3])
-    ax.spines['left'].set_position(('data', 0))
-    ax.spines['bottom'].set_position(('data', 0))
-    ax.spines['top'].set_visible(False)
-    ax.spines['right'].set_visible(False)
-    ax.set_xlabel('Straw price (USD/t)')
-    ax.set_ylabel('Cofiring benefit (MUSD)')
+    ax.spines["left"].set_position(("data", 0))
+    ax.spines["bottom"].set_position(("data", 0))
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    ax.set_xlabel("Straw price (USD/t)")
+    ax.set_ylabel("Cofiring benefit (MUSD)")
 
     ax.set_title(system.plant.parameter.name)
 

@@ -17,14 +17,14 @@ from model.utils import kg, t, g, km
 
 from manuscript1.parameters import emission_factor
 
-set_option('display.max_colwidth', 40)
-set_option('display.max_columns', 10)
-set_option('display.width', 80)
+set_option("display.max_colwidth", 40)
+set_option("display.max_columns", 10)
+set_option("display.width", 80)
 
 data = DataFrame.from_dict(emission_factor).transpose()
 
-set_option('display.float_format', '{:9,.1f} kg/t'.format)
+set_option("display.float_format", "{:9,.1f} kg/t".format)
 print(data.iloc[[0, 1, 7, 6]] / (kg / t))
 
-set_option('display.float_format', '{:8,.5F} g/tkm'.format)
+set_option("display.float_format", "{:8,.5F} g/tkm".format)
 print(data.iloc[[4, 5]] / (g / t / km))

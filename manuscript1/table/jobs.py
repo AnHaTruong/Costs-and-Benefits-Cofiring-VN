@@ -18,10 +18,12 @@ from manuscript1.parameters import MongDuong1System, NinhBinhSystem
 from model.tables import balance_jobs
 
 
-set_option('display.float_format', '{:,.1f}'.format)
+set_option("display.float_format", "{:,.1f}".format)
 
-print("""Jobs creation and destruction in the co-firing scenario.
+print(
+    """Jobs creation and destruction in the co-firing scenario.
 
-                             Mong Duong 1  Ninh Binh""")
+                             Mong Duong 1  Ninh Binh"""
+)
 
 print(balance_jobs(MongDuong1System, NinhBinhSystem))
