@@ -21,7 +21,7 @@ For deeper analysis, the SALib package implements more complex methods.
 import pandas as pd
 
 from model.utils import display_as, USD
-from sensitivity.blackbox import uncertainty, business_value as f
+from sensitivity.blackbox import uncertainty, multi_objectives, business_value as f
 
 
 #%% Display the parameters
@@ -32,31 +32,45 @@ df = pd.DataFrame(
     columns=["Low bound", "Reference", "High bound"],
 )
 
-result = pd.DataFrame().reindex_like(df)
+result_business_value = pd.DataFrame().reindex_like(df)
+result_business_value2 = pd.DataFrame().reindex_like(df)
+result_external_value = pd.DataFrame().reindex_like(df)
 
 #%% The runs
 
-range_vars = range(uncertainty["num_vars"])
+n_params = uncertainty["num_vars"]
+range_vars = range(n_params)
 
 
-def parameters(index):
+def parameters(levels):
     """Return the list of parameters choosen by the index.
 
     Denoting the model as y=f(x1, x2, .., xn), this function returns  [x1, ..., xn].
-    Denoting the index as [i1, .., in],
-    the value ik = 0, 1 or 2 selects if xi should have its low/reference/high value.
+    Denoting the levels as [i1, .., in],
+    the value ik = 0, 1 or 2 selects if xi should have its low/reference/high level.
     """
-    return [uncertainty["lomidhi"][k][index[k]] for k in range_vars]
+    return [uncertainty["lomidhi"][k][levels[k]] for k in range_vars]
 
 
 # Central case is in-loop, not optimal doing 3 N runs instead of 2 N + 1.
 for var in range_vars:
     for col in [0, 1, 2]:
-        index = [1, 1, 1, 1]
+        index = [1] * n_params
         index[var] = col
         x = parameters(index)
         y = f(*x)
-        result.iloc[var, col] = display_as(y * USD, "MUSD")
+        result_business_value.iloc[var, col] = display_as(y * USD, "MUSD")
+
+
+# Central case is in-loop, not optimal doing 3 N runs instead of 2 N + 1.
+for var in range_vars:
+    for col in [0, 1, 2]:
+        index = [1] * n_params
+        index[var] = col
+        x = parameters(index)
+        y1, y2 = multi_objectives(*x)
+        result_business_value2.iloc[var, col] = display_as(y1 * USD, "MUSD")
+        result_external_value.iloc[var, col] = display_as(y2 * USD, "MUSD")
 
 
 #%% Tabulate
@@ -67,4 +81,10 @@ print("Parameters values for the sensitivity analysis.")
 print(df)
 print()
 print("Result: business value.")
-print(result)
+print(result_business_value)
+print()
+print("Result: business value.")
+print(result_business_value2)
+print()
+print("Result: external value.")
+print(result_external_value)

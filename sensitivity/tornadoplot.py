@@ -20,7 +20,7 @@ We start coding as a specific. Will make abstract/reusable when it works.
 from matplotlib import pyplot as plt
 
 from model.utils import MUSD
-from sensitivity.one_at_a_time import result as data
+from sensitivity.one_at_a_time import result_business_value as data
 
 #%%
 
