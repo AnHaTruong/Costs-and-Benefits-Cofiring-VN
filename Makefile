@@ -73,7 +73,10 @@ archive:
 	rm -rf $(distName)
 
 test: cleaner
-	$(PYTEST) --doctest-modules --ignore=sensitivity
+	$(PYTEST) --doctest-modules
+
+test-new : cleaner
+	$(PYTEST) --doctest-modules sensitivity
 
 coverage: coverage.xml
 	python3.5-coverage html

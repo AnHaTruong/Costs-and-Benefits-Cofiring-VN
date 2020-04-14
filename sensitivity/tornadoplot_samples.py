@@ -5,8 +5,13 @@
 # Posted on Stackoverflow Aug 21 '15 at 10:24
 # https://stackoverflow.com/questions/32132773/a-tornado-chart-and-p10-p90-in-python-matplotlib
 
+import pytest
+
 import numpy as np
 from matplotlib import pyplot as plt
+
+pytest.skip("Skipping tornadoplot_sample module.", allow_module_level=True)
+
 
 ###############################################################################
 # The data (change all of this to your actual data, this is just a mockup)

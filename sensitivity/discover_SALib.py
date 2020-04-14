@@ -11,6 +11,7 @@
 Use numerical constants instead of symbolic representation of the units
 decreases runtime for n=50 from 26.5 s to 2.6 s, and 2.4 s without the progress dots.
 """
+import pytest
 
 import os
 import time
@@ -28,6 +29,7 @@ config.use_quantities = False
 from sensitivity.blackbox import toy_business_value as f
 from sensitivity.blackbox import toy_uncertainty as problem
 
+pytest.skip("Skipping discover_SAlib tutorial module.", allow_module_level=True)
 
 # Generate samples
 # The number of samples generated is   saltelli_parameter * (2 num_vars + 2)
