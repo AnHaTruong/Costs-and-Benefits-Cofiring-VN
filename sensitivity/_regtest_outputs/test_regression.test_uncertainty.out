@@ -1,0 +1,9 @@
+                            Low bound          Baseline         High bound
+discount_rate                     0.0               0.1                0.1
+tax_rate                            0               0.2                0.4
+coal_price              38.1028 USD/t     66.3927 USD/t      102.477 USD/t
+electricity_price   0.0449035 USD/kWh  0.055643 USD/kWh  0.0673552 USD/kWh
+external_cost_CO2           0.1 USD/t           1 USD/t           30 USD/t
+external_cost_SO2         753.4 USD/t        3767 USD/t         7534 USD/t
+external_cost_PM10       1176.6 USD/t        5883 USD/t        11766 USD/t
+external_cost_NOx          57.2 USD/t         286 USD/t          572 USD/t
