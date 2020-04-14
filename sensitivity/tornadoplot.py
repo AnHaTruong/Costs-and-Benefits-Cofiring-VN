@@ -17,12 +17,15 @@ https://stackoverflow.com/questions/32132773/a-tornado-chart-and-p10-p90-in-pyth
 We start coding as a specific. Will make abstract/reusable when it works.
 """
 
+from pandas import DataFrame
 from matplotlib import pyplot as plt
 
 from model.utils import MUSD
-from sensitivity.one_at_a_time import result_business_value as data
+from sensitivity.one_at_a_time import sensitivity_runs
 
 #%%
+
+data = DataFrame(sensitivity_runs["business_value"])
 
 data["Maximum"] = data.max(axis=1)
 maximum = data["Maximum"].max()

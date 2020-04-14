@@ -18,73 +18,33 @@ Sensitivity analysis starts with this method because it is the simplest and clea
 For deeper analysis, the SALib package implements more complex methods.
 """
 
-import pandas as pd
-
-from model.utils import display_as, USD
-from sensitivity.blackbox import uncertainty, multi_objectives, business_value as f
+from sensitivity.blackbox import uncertainty, f
 
 
-#%% Display the parameters
+def one_at_a_time(parameter_space, model):
+    """Run the model 2N+1 times, to perform the one-at-a-time sensitivity analysis.
 
-df = pd.DataFrame(
-    data=uncertainty["lomidhi"],
-    index=uncertainty["names"],
-    columns=["Low bound", "Reference", "High bound"],
-)
-
-result_business_value = pd.DataFrame().reindex_like(df)
-result_business_value2 = pd.DataFrame().reindex_like(df)
-result_external_value = pd.DataFrame().reindex_like(df)
-
-#%% The runs
-
-n_params = uncertainty["num_vars"]
-range_vars = range(n_params)
-
-
-def parameters(levels):
-    """Return the list of parameters choosen by the index.
-
-    Denoting the model as y=f(x1, x2, .., xn), this function returns  [x1, ..., xn].
-    Denoting the levels as [i1, .., in],
-    the value ik = 0, 1 or 2 selects if xi should have its low/reference/high level.
+    Return results in a pair of dict of dict,
+    because trying to store natu quantities in a DataFrame give cryptic errors.
     """
-    return [uncertainty["lomidhi"][k][levels[k]] for k in range_vars]
+    result = {
+        "business_value": parameter_space.to_dict(),
+        "external_value": parameter_space.to_dict(),
+    }
+
+    baseline_x = parameter_space["Baseline"]
+    baseline_business_value, baseline_external_value = model(baseline_x)
+
+    for parameter in parameter_space.index:
+        result["business_value"]["Baseline"][parameter] = baseline_business_value
+        result["external_value"]["Baseline"][parameter] = baseline_external_value
+        for bound in ["Low bound", "High bound"]:
+            x = baseline_x.copy()
+            x[parameter] = parameter_space.loc[parameter, bound]
+            y1, y2 = model(x)
+            result["business_value"][bound][parameter] = y1
+            result["external_value"][bound][parameter] = y2
+    return result
 
 
-# Central case is in-loop, not optimal doing 3 N runs instead of 2 N + 1.
-for var in range_vars:
-    for col in [0, 1, 2]:
-        index = [1] * n_params
-        index[var] = col
-        x = parameters(index)
-        y = f(*x)
-        result_business_value.iloc[var, col] = display_as(y * USD, "MUSD")
-
-
-# Central case is in-loop, not optimal doing 3 N runs instead of 2 N + 1.
-for var in range_vars:
-    for col in [0, 1, 2]:
-        index = [1] * n_params
-        index[var] = col
-        x = parameters(index)
-        y1, y2 = multi_objectives(*x)
-        result_business_value2.iloc[var, col] = display_as(y1 * USD, "MUSD")
-        result_external_value.iloc[var, col] = display_as(y2 * USD, "MUSD")
-
-
-#%% Tabulate
-
-print("Sensitivity analysis, one parameter at a time")
-print()
-print("Parameters values for the sensitivity analysis.")
-print(df)
-print()
-print("Result: business value.")
-print(result_business_value)
-print()
-print("Result: business value.")
-print(result_business_value2)
-print()
-print("Result: external value.")
-print(result_external_value)
+sensitivity_runs = one_at_a_time(uncertainty, f)

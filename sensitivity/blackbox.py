@@ -6,19 +6,18 @@
 # (c) Minh Ha-Duong, An Ha Truong 2016-2019
 # minh.haduong@gmail.com
 # Creative Commons Attribution-ShareAlike 4.0 International
-"""Represents the model as a blackbox, for sensitivity analysis.
+"""Represents the model as a blackbox function for sensitivity analysis.
 
 Sensitivity analysis is based on the representation  Y = f(X1, ..., Xn).
-Y must be a scalar, unitless. For our biomass model can be business_value or the external benefits.
-The Xi are the uncertain parameters.
+    Xi are the uncertain parameters. Each has an uncertainty range and a baseline value.
+    Y is the model result, allowed to be vector here, we do multi objective analysis.
 """
-from pandas import Series
+from pandas import Series, DataFrame
 
-from model.utils import npv, USD, VND, kWh, display_as
+from model.utils import npv, VND, kWh, display_as
 
 from model.system import System, Price
 from manuscript1.parameters import (
-    MongDuong1System,
     discount_rate,
     external_cost,
     tax_rate,
@@ -32,27 +31,10 @@ from manuscript1.parameters import (
     emission_factor,
 )
 
-#%% The toy version
+#%%
 
-toy_uncertainty = {
-    "num_vars": 2,
-    "names": ["discount_rate", "tax_rate"],
-    "bounds": [[0.03, 0.15], [0, 0.4]],  # Discount rate  # Tax rate
-}
-
-
-# We know the tax rate does not matter, but we want to check that the sensitivity computes to 0
-# pylint: disable=unused-argument
-def toy_business_value(discount_rate, tax_rate):
-    """Return the business value of cofiring in USD, as a float."""
-    return MongDuong1System.table_business_value(discount_rate)[-1] / USD
-
-
-#%% The real one
-
-uncertainty = {
-    "num_vars": 8,
-    "names": [
+uncertainty = DataFrame(
+    index=[
         "discount_rate",
         "tax_rate",
         "coal_price",
@@ -62,7 +44,8 @@ uncertainty = {
         "external_cost_PM10",
         "external_cost_NOx",
     ],
-    "lomidhi": [
+    columns=["Low bound", "Baseline", "High bound"],
+    data=[
         [0.03, discount_rate, 0.15],
         [0, tax_rate, 0.4],
         [price_MD1.coal * 0.75, price_MD1.coal, price_MD1.coal * 1.25],
@@ -72,74 +55,39 @@ uncertainty = {
         [external_cost["PM10"] * 0.2, external_cost["PM10"], external_cost["PM10"] * 2],
         [external_cost["NOx"] * 0.2, external_cost["NOx"], external_cost["NOx"] * 2],
     ],
-}
+)
 
-display_as(uncertainty["lomidhi"][2], "USD/t")
-display_as(uncertainty["lomidhi"][3], "VND/kWh")
-display_as(uncertainty["lomidhi"][4], "USD/t")
-display_as(uncertainty["lomidhi"][5], "USD/t")
-display_as(uncertainty["lomidhi"][6], "USD/t")
-display_as(uncertainty["lomidhi"][7], "USD/t")
+display_as(uncertainty.loc["coal_price"], "USD/t")
+display_as(uncertainty.loc["electricity_price"], "USD/kWh")
+display_as(uncertainty.loc["external_cost_CO2"], "USD/t")
+display_as(uncertainty.loc["external_cost_SO2"], "USD/t")
+display_as(uncertainty.loc["external_cost_PM10"], "USD/t")
+display_as(uncertainty.loc["external_cost_NOx"], "USD/t")
 
 #%%
 
 
-def business_value(
-    discount_rate,
-    tax_rate,
-    coal_price,
-    electricity_price,
-    external_cost_CO2,
-    external_cost_SO2,
-    external_cost_PM10,
-    external_cost_NOx,
-):
-    """Return the business value of cofiring in USD, as a float."""
+def f(x):
+    """Return the business value and the externalities of cofiring, as a pair of USD quantities.
+
+    The argument x must be a Series homogenous with uncertainty.index
+    """
+    assert all(
+        x.index == uncertainty.index
+    ), "Model argument mismatch uncertainty.index."
     price_MD1_local = Price(
         biomass_plantgate=price_MD1.biomass_plantgate,
         biomass_fieldside=price_MD1.biomass_fieldside,
-        coal=coal_price,
-        electricity=electricity_price,
-    )
-
-    MD1SystemVariant = System(
-        plant_parameter_MD1,
-        cofire_MD1,
-        supply_chain_MD1,
-        price_MD1_local,
-        farm_parameter,
-        transport_parameter,
-        mining_parameter,
-        emission_factor,
-    )
-    result = MD1SystemVariant.table_business_value(discount_rate)[-1] / USD
-    return result
-
-
-def multi_objectives(
-    discount_rate,
-    tax_rate,
-    coal_price,
-    electricity_price,
-    external_cost_CO2,
-    external_cost_SO2,
-    external_cost_PM10,
-    external_cost_NOx,
-):
-    """Return the business value and the externalities of cofiring in USD, as a pair of floats."""
-    price_MD1_local = Price(
-        biomass_plantgate=price_MD1.biomass_plantgate,
-        biomass_fieldside=price_MD1.biomass_fieldside,
-        coal=coal_price,
-        electricity=electricity_price,
+        coal=x["coal_price"],
+        electricity=x["electricity_price"],
     )
 
     external_cost_variant = Series(
         {
-            "CO2": external_cost_CO2,
-            "SO2": external_cost_SO2,
-            "PM10": external_cost_PM10,
-            "NOx": external_cost_NOx,
+            "CO2": x["external_cost_CO2"],
+            "SO2": x["external_cost_SO2"],
+            "PM10": x["external_cost_PM10"],
+            "NOx": x["external_cost_NOx"],
         }
     )
 
@@ -153,10 +101,12 @@ def multi_objectives(
         mining_parameter,
         emission_factor,
     )
-    business_value = MD1SystemVariant.table_business_value(discount_rate)[-1] / USD
+    business_value = MD1SystemVariant.table_business_value(x["discount_rate"])[-1]
+    display_as(business_value, "MUSD")
 
     benefits_table = MD1SystemVariant.emissions_reduction_benefit(
         external_cost_variant
     ).loc["Value"]
-    external_value = npv(discount_rate, benefits_table.sum()) / USD
+    external_value = npv(x["discount_rate"], benefits_table.sum())
+    display_as(external_value, "MUSD")
     return business_value, external_value

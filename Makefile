@@ -8,7 +8,7 @@
 PYTHON = python3
 PYTEST = python3 -m pytest
 PYLINT = pylint3 -j 0
-SOURCEDIRS = model manuscript1 lcoe tests manuscript1/table  manuscript1/figure
+SOURCEDIRS = model manuscript1 sensitivity lcoe tests manuscript1/table  manuscript1/figure
 
 figures-lcoe =  LCOE-4tech-3years-catalogue.png LCOE-4tech-3years-IEAfuelcosts.png\
                 LCOE-4tech-2020-catalogueextremes.png LCOE-4tech-2050-catalogueextremes.png\

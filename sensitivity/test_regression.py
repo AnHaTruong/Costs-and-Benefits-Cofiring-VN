@@ -8,8 +8,13 @@
 # Creative Commons Attribution-ShareAlike 4.0 International
 """Test the code for sensitivity analysis."""
 
-from sensitivity.one_at_a_time import df
+from sensitivity.blackbox import uncertainty
+from sensitivity.one_at_a_time import sensitivity_runs
 
 
-def test_parameters(regtest):
-    regtest.write(df.to_string())
+def test_uncertainty(regtest):
+    regtest.write(uncertainty.to_string())
+
+
+def test_results(regtest):
+    regtest.write(str(sensitivity_runs))
