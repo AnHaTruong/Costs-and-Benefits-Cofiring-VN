@@ -10,12 +10,20 @@
 
 from pandas import DataFrame
 
-from sensitivity.one_at_a_time import sensitivity_runs
+from sensitivity.one_at_a_time import sensitivity_runs_MD1, sensitivity_runs_NB
 
-print("Results of the sensitivity analysis.")
+print("Results of the sensitivity analysis for Mong Duong 1 case.")
 print()
 print("Result: business value.")
-print(DataFrame(sensitivity_runs["business_value"]))
+print(DataFrame(sensitivity_runs_MD1["business_value"]))
 print()
 print("Result: external value.")
-print(DataFrame(sensitivity_runs["external_value"]))
+print(DataFrame(sensitivity_runs_MD1["external_value"]))
+print()
+print("Results of the sensitivity analysis for Ninh Binh case.")
+print()
+print("Result: business value.")
+print(DataFrame(sensitivity_runs_NB["business_value"]))
+print()
+print("Result: external value.")
+print(DataFrame(sensitivity_runs_NB["external_value"]))

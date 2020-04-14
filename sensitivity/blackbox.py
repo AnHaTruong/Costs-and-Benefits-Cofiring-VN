@@ -25,6 +25,10 @@ from manuscript1.parameters import (
     cofire_MD1,
     supply_chain_MD1,
     price_MD1,
+    plant_parameter_NB,
+    cofire_NB,
+    supply_chain_NB,
+    price_NB,
     farm_parameter,
     transport_parameter,
     mining_parameter,
@@ -33,6 +37,7 @@ from manuscript1.parameters import (
 
 #%%
 
+# We use an average coal price as baseline to run the sensitivity test. Fixme?
 uncertainty = DataFrame(
     index=[
         "discount_rate",
@@ -48,7 +53,11 @@ uncertainty = DataFrame(
     data=[
         [0.03, discount_rate, 0.15],
         [0, tax_rate, 0.4],
-        [price_MD1.coal * 0.75, price_MD1.coal, price_MD1.coal * 1.25],
+        [
+            price_MD1.coal * 0.75,
+            (price_MD1.coal + price_NB.coal) / 2,
+            price_NB.coal * 1.25,
+        ],
         [1000 * VND / kWh, price_MD1.electricity, 1500 * VND / kWh],
         [external_cost["CO2"] * 0.1, external_cost["CO2"], external_cost["CO2"] * 30],
         [external_cost["SO2"] * 0.2, external_cost["SO2"], external_cost["SO2"] * 2],
@@ -67,10 +76,11 @@ display_as(uncertainty.loc["external_cost_NOx"], "USD/t")
 #%%
 
 
-def f(x):
+def f_MD1(x):
     """Return the business value and the externalities of cofiring, as a pair of USD quantities.
 
     The argument x must be a Series homogenous with uncertainty.index
+    Mong Duong 1 case.
     """
     assert all(
         x.index == uncertainty.index
@@ -105,6 +115,52 @@ def f(x):
     display_as(business_value, "MUSD")
 
     benefits_table = MD1SystemVariant.emissions_reduction_benefit(
+        external_cost_variant
+    ).loc["Value"]
+    external_value = npv(x["discount_rate"], benefits_table.sum())
+    display_as(external_value, "MUSD")
+    return business_value, external_value
+
+
+def f_NB(x):
+    """Return the business value and the externalities of cofiring, as a pair of USD quantities.
+
+    The argument x must be a Series homogenous with uncertainty.index
+    Ninh Binh case
+    """
+    assert all(
+        x.index == uncertainty.index
+    ), "Model argument mismatch uncertainty.index."
+    price_NB_local = Price(
+        biomass_plantgate=price_NB.biomass_plantgate,
+        biomass_fieldside=price_NB.biomass_fieldside,
+        coal=x["coal_price"],
+        electricity=x["electricity_price"],
+    )
+
+    external_cost_variant = Series(
+        {
+            "CO2": x["external_cost_CO2"],
+            "SO2": x["external_cost_SO2"],
+            "PM10": x["external_cost_PM10"],
+            "NOx": x["external_cost_NOx"],
+        }
+    )
+
+    NBSystemVariant = System(
+        plant_parameter_NB,
+        cofire_NB,
+        supply_chain_NB,
+        price_NB_local,
+        farm_parameter,
+        transport_parameter,
+        mining_parameter,
+        emission_factor,
+    )
+    business_value = NBSystemVariant.table_business_value(x["discount_rate"])[-1]
+    display_as(business_value, "MUSD")
+
+    benefits_table = NBSystemVariant.emissions_reduction_benefit(
         external_cost_variant
     ).loc["Value"]
     external_value = npv(x["discount_rate"], benefits_table.sum())

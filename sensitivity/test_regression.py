@@ -9,7 +9,7 @@
 """Test the code for sensitivity analysis."""
 
 from sensitivity.blackbox import uncertainty
-from sensitivity.one_at_a_time import sensitivity_runs
+from sensitivity.one_at_a_time import sensitivity_runs_MD1, sensitivity_runs_NB
 
 
 def test_uncertainty(regtest):
@@ -17,4 +17,5 @@ def test_uncertainty(regtest):
 
 
 def test_results(regtest):
-    regtest.write(str(sensitivity_runs))
+    regtest.write(str(sensitivity_runs_MD1))
+    regtest.write(str(sensitivity_runs_NB))

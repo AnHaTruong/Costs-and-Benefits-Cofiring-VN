@@ -13,69 +13,95 @@ It is often used to display results of sensitivity analysis one at a time.
 
 This file builds upon Marijn van Vliet's post on Stackoverflow Aug 21 '15 at 10:24
 https://stackoverflow.com/questions/32132773/a-tornado-chart-and-p10-p90-in-python-matplotlib
-
-We start coding as a specific. Will make abstract/reusable when it works.
 """
 
 from pandas import DataFrame
 from matplotlib import pyplot as plt
 
 from model.utils import MUSD
-from sensitivity.one_at_a_time import sensitivity_runs
+from sensitivity.one_at_a_time import sensitivity_runs_MD1, sensitivity_runs_NB
 
-#%%
 
-data = DataFrame(sensitivity_runs["business_value"])
+def plot_tornado(axes, data, ys, stack_label):
+    """Plot thehoizontal bars for one objective."""
 
-data["Maximum"] = data.max(axis=1)
-maximum = data["Maximum"].max()
-data["Minimum"] = data.min(axis=1)
-data["Width"] = (data["Low bound"] - data["High bound"]).apply(abs)
+    #%% Convert to floats
 
-data.sort_values(by=["Width"], inplace=True)
+    base = data.iloc[0, 1] / MUSD
+    lows = data.iloc[:, 0].to_numpy() / MUSD
+    highs = data.iloc[:, 2].to_numpy() / MUSD
 
-#%% Convert to floats
+    thickness = 0.8
 
-variables = data.index.tolist()
-base = data.iloc[0, 1] / MUSD
-lows = data.iloc[:, 0].to_numpy() / MUSD
-highs = data.iloc[:, 2].to_numpy() / MUSD
+    # Plot the bars, one by one
+    for y, low, high in zip(ys, lows, highs):
+        # Each bar is a "broken" horizontal bar chart
+        axes.broken_barh(
+            [(low, base - low), (base, high - base)],
+            (y - thickness / 2, thickness),
+            facecolors=["white", "grey"],
+            edgecolors=["grey", "grey"],
+            linewidth=1,
+        )
+    axes.text(base, ys[-1] + 1, stack_label, va="top", ha="center")
 
-right = maximum / MUSD
 
-#%% The actual drawing part
+def plot_sensitivity(runs, plant_name, axes):
+    """Plot the sensitivity analysis, tornado diagram, two objectives."""
 
-thickness = 0.8
-ylabel_position = right * 1.05
+    stack_order = [
+        "tax_rate",
+        "electricity_price",
+        "external_cost_NOx",
+        "external_cost_SO2",
+        "coal_price",
+        "external_cost_CO2",
+        "discount_rate",
+        "external_cost_PM10",
+    ]
 
-# The y position for each variable
-ys = range(len(variables))
+    ys = range(len(stack_order))
+    data = DataFrame(runs["business_value"]).reindex(stack_order)
+    plot_tornado(axes, data, ys, "Business value")
 
-# Plot the bars, one by one
-for y, low, high, label in zip(ys, lows, highs, variables):
-    # Each bar is a "broken" horizontal bar chart
-    plt.broken_barh(
-        [(low, base - low), (base, high - base)],
-        (y - thickness / 2, thickness),
-        facecolors=["grey", "white"],
-        edgecolors=["grey", "grey"],
-        linewidth=1,
+    data = DataFrame(runs["external_value"]).reindex(stack_order)
+    plot_tornado(axes, data, ys, "External value")
+
+    # Plot the parameters name
+    data["Maximum"] = data.max(axis=1)
+    maximum = data["Maximum"].max()
+    data["Minimum"] = data.min(axis=1)
+    right = maximum / MUSD
+    ylabel_position = right * 1.05
+
+    for y, label in zip(ys, stack_order):
+        axes.text(ylabel_position, y, label, va="center", ha="left")
+
+    axes.axvline(0, color="grey")  # Draw a vertical line down at zero
+
+    axes.spines["left"].set_visible(False)
+    axes.spines["right"].set_visible(False)
+    axes.spines["top"].set_visible(False)
+    axes.spines["bottom"].set_visible(True)
+
+    axes.set_yticks(ys)
+    axes.set_yticklabels([])
+    axes.tick_params(axis="y", length=0)
+
+    axes.text(
+        ylabel_position,
+        len(stack_order),
+        plant_name,
+        va="center",
+        ha="left",
+        style="italic",
     )
-    plt.text(ylabel_position, y, label, va="center", ha="left")
+    axes.text(right, -1, "MUSD", va="top", ha="right")
 
-plt.axvline(0, color="grey")  # Draw a vertical line down at zero
 
-# Position the x-axis on the top, hide all the other spines (=axis lines)
-axes = plt.gca()  # (gca = get current axes)
-axes.spines["left"].set_visible(False)
-axes.spines["right"].set_visible(False)
-axes.spines["top"].set_visible(False)
-axes.spines["bottom"].set_visible(True)
+# noinspection PyTypeChecker
+figure, axes_list = plt.subplots(nrows=2, ncols=1, figsize=[12, 9])
+plot_sensitivity(sensitivity_runs_MD1, "Mong Duong 1", axes_list[0])
+plot_sensitivity(sensitivity_runs_NB, "Ninh Binh", axes_list[1])
 
-axes.set_xlabel("Business value (MUSD)")
-
-axes.set_yticks(ys)
-axes.set_yticklabels([])
-axes.tick_params(axis="y", length=0)
-
-axes.set_title("Sensitivity analysis of biomass cofiring, Mong Duong plant")
+plt.savefig("figure_sensitivity.svg")

@@ -18,7 +18,7 @@ Sensitivity analysis starts with this method because it is the simplest and clea
 For deeper analysis, the SALib package implements more complex methods.
 """
 
-from sensitivity.blackbox import uncertainty, f
+from sensitivity.blackbox import uncertainty, f_MD1, f_NB
 
 
 def one_at_a_time(parameter_space, model):
@@ -47,4 +47,5 @@ def one_at_a_time(parameter_space, model):
     return result
 
 
-sensitivity_runs = one_at_a_time(uncertainty, f)
+sensitivity_runs_MD1 = one_at_a_time(uncertainty, f_MD1)
+sensitivity_runs_NB = one_at_a_time(uncertainty, f_NB)
