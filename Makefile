@@ -1,6 +1,6 @@
 # Economic of co-firing in two power plants in Vietnam
 #
-# (c) Minh Ha-Duong, An Ha Truong 2016-2019
+# (c) Minh Ha-Duong, An Ha Truong 2016-2020
 # minh.haduong@gmail.com
 # Creative Commons Attribution-ShareAlike 4.0 International
 #
@@ -13,7 +13,7 @@ SOURCEDIRS = model manuscript1 sensitivity lcoe tests manuscript1/table  manuscr
 figures-lcoe =  LCOE-4tech-3years-catalogue.png LCOE-4tech-3years-IEAfuelcosts.png\
                 LCOE-4tech-2020-catalogueextremes.png LCOE-4tech-2050-catalogueextremes.png\
                 LCOE-asDEA2019.png
-figures-manuscript1 = figure_emissions.svg figure_economics.svg figure_cba.svg
+figures-manuscript1 = figure_emissions.svg figure_economics.svg figure_cba.svg figure_sensitivity.svg 
 tables-manuscript1 = tables_manuscript.txt\
                      table_jobs.txt\
                      table_emission_reduction.txt\
@@ -22,7 +22,10 @@ tables-manuscript1 = tables_manuscript.txt\
                      table_opex_details.txt\
                      table_parameter_systems.txt\
                      table_parameter_economics.txt\
-                     table_parameter_emission_factors.txt
+                     table_parameter_emission_factors.txt\
+                     table_uncertainty.txt\
+                     table_sensitivity.txt
+
 
 all: $(tables) $(figures-lcoe) $(figures-manuscript1) $(tables-manuscript1)
 
@@ -34,6 +37,12 @@ $(figures-lcoe): lcoe/figures.py
 
 figure_%.svg: manuscript1/figure/%.py manuscript1/parameters.py
 	$(PYTHON) -m manuscript1.figure.$* > $@
+
+figure_%.svg: sensitivity/figure_%.py
+	$(PYTHON) -m sensitivity.figure_$* > $@
+
+table_%.txt: sensitivity/table_%.py
+	$(PYTHON) -m sensitivity.table_$* > $@
 
 table_%.txt: manuscript1/table/%.py manuscript1/parameters.py
 	$(PYTHON) -m manuscript1.table.$* > $@
