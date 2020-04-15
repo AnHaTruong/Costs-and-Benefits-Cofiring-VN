@@ -23,11 +23,9 @@ from manuscript1.parameters import (
     plant_parameter_MD1,
     cofire_MD1,
     supply_chain_MD1,
-    price_MD1,
     plant_parameter_NB,
     cofire_NB,
     supply_chain_NB,
-    price_NB,
     farm_parameter,
     transport_parameter,
     mining_parameter,
@@ -47,8 +45,8 @@ def f_MD1(x):
         x.index == uncertainty.index
     ), "Model argument mismatch uncertainty.index."
     price_MD1_local = Price(
-        biomass_plantgate=price_MD1.biomass_plantgate,
-        biomass_fieldside=price_MD1.biomass_fieldside,
+        biomass_plantgate=x["biomass_plantgate"],
+        biomass_fieldside=x["biomass_fieldside"],
         coal=x["coal_price"],
         electricity=x["electricity_price"],
     )
@@ -62,12 +60,16 @@ def f_MD1(x):
         }
     )
 
+    farm_parameter_variant = farm_parameter._replace(
+        straw_burn_rate=x["straw_burn_rate"]
+    )
+
     MD1SystemVariant = System(
         plant_parameter_MD1,
         cofire_MD1,
         supply_chain_MD1,
         price_MD1_local,
-        farm_parameter,
+        farm_parameter_variant,
         transport_parameter,
         mining_parameter,
         emission_factor,
@@ -93,8 +95,8 @@ def f_NB(x):
         x.index == uncertainty.index
     ), "Model argument mismatch uncertainty.index."
     price_NB_local = Price(
-        biomass_plantgate=price_NB.biomass_plantgate,
-        biomass_fieldside=price_NB.biomass_fieldside,
+        biomass_plantgate=x["biomass_plantgate"],
+        biomass_fieldside=x["biomass_fieldside"],
         coal=x["coal_price"],
         electricity=x["electricity_price"],
     )
@@ -108,12 +110,16 @@ def f_NB(x):
         }
     )
 
+    farm_parameter_variant = farm_parameter._replace(
+        straw_burn_rate=x["straw_burn_rate"]
+    )
+
     NBSystemVariant = System(
         plant_parameter_NB,
         cofire_NB,
         supply_chain_NB,
         price_NB_local,
-        farm_parameter,
+        farm_parameter_variant,
         transport_parameter,
         mining_parameter,
         emission_factor,

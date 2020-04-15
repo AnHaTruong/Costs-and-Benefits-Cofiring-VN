@@ -23,7 +23,7 @@ from sensitivity.one_at_a_time import sensitivity_runs_MD1, sensitivity_runs_NB
 
 
 def plot_tornado(axes, data, ys, stack_label):
-    """Plot thehoizontal bars for one objective."""
+    """Plot the horizontal bars for one objective."""
 
     #%% Convert to floats
 
@@ -35,12 +35,11 @@ def plot_tornado(axes, data, ys, stack_label):
 
     # Plot the bars, one by one
     for y, low, high in zip(ys, lows, highs):
-        # Each bar is a "broken" horizontal bar chart
         axes.broken_barh(
             [(low, base - low), (base, high - base)],
             (y - thickness / 2, thickness),
             facecolors=["white", "grey"],
-            edgecolors=["grey", "grey"],
+            edgecolors=["black", "black"],
             linewidth=1,
         )
     axes.text(base, ys[-1] + 1, stack_label, va="top", ha="center")

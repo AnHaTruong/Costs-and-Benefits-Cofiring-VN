@@ -21,13 +21,15 @@ from manuscript1.parameters import (
     external_cost_SKC,
     external_cost_ZWY,
     external_cost_HAS,
-    #    farm_parameter,
-    #    price_MD1,
+    farm_parameter,
+    price_MD1,
     price_NB,
     tax_rate,
 )
 
 #%%
+
+# There should be baseline_MD1 and baseline_NB to ensure coherence
 
 bounds = {}
 
@@ -76,12 +78,30 @@ bounds["external_cost_NOx"] = [
     * 1.2,
 ]
 
+bounds["straw_burn_rate"] = [0.3, farm_parameter.straw_burn_rate, 0.9]
+
+bounds["biomass_plantgate"] = [
+    min(price_MD1.biomass_plantgate, price_NB.biomass_plantgate) * 0.8,
+    (price_MD1.biomass_plantgate + price_NB.biomass_plantgate) / 2,
+    max(price_MD1.biomass_plantgate, price_NB.biomass_plantgate) * 1.2,
+]
+
+bounds["biomass_fieldside"] = [
+    min(price_MD1.biomass_fieldside, price_NB.biomass_fieldside) * 0.8,
+    (price_MD1.biomass_fieldside + price_NB.biomass_fieldside) / 2,
+    max(price_MD1.biomass_fieldside, price_NB.biomass_fieldside) * 1.2,
+]
+
 display_as(bounds["coal_price"], "USD/t")
 display_as(bounds["electricity_price"], "VND/kWh")
 display_as(bounds["external_cost_CO2"], "USD/t")
 display_as(bounds["external_cost_SO2"], "USD/t")
 display_as(bounds["external_cost_PM10"], "USD/t")
 display_as(bounds["external_cost_NOx"], "USD/t")
+display_as(bounds["biomass_plantgate"], "USD/t")
+display_as(bounds["biomass_fieldside"], "USD/t")
+
+# assert bounds bracket the baseline(s)
 
 uncertainty = DataFrame.from_dict(
     bounds, orient="index", columns=["Low bound", "Baseline", "High bound"]
