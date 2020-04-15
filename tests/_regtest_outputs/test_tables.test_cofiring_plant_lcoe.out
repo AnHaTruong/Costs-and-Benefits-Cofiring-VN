@@ -5,10 +5,10 @@ Fuel cost     (MUSD)            1,293.6
 O&M cost      (MUSD)              564.8
   O&M coal    (MUSD)              535.5
   O&M biomass (MUSD)               29.3
-Tax           (MUSD)              286.7
-Cash_out      (MUSD)            2,147.8
+Tax           (MUSD)              229.4
+Cash_out      (MUSD)            2,090.5
 Electricity produced        54040.5 GWh
-LCOE                    39.7443 USD/MWh
+LCOE                    38.6831 USD/MWh
 Name: Mong Duong 1 Cofire, dtype: object
 
 Investment    (MUSD)                0.5
@@ -18,8 +18,8 @@ Fuel cost     (MUSD)              331.8
 O&M cost      (MUSD)               53.9
   O&M coal    (MUSD)               51.1
   O&M biomass (MUSD)                2.8
-Tax           (MUSD)                3.3
-Cash_out      (MUSD)              389.5
+Tax           (MUSD)                2.6
+Cash_out      (MUSD)              388.8
 Electricity produced        5337.34 GWh
-LCOE                    72.9744 USD/MWh
+LCOE                    72.8509 USD/MWh
 Name: Ninh Binh Cofire, dtype: object

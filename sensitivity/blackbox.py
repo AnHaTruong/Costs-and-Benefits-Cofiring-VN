@@ -14,12 +14,15 @@ Sensitivity analysis is based on the representation  Y = f(X1, ..., Xn).
 """
 from pandas import Series, DataFrame
 
-from model.utils import npv, VND, kWh, display_as
+from model.utils import npv, VND, USD, kWh, t, display_as
 
 from model.system import System, Price
 from manuscript1.parameters import (
     discount_rate,
     external_cost,
+    external_cost_SKC,
+    external_cost_ZWY,
+    external_cost_HAS,
     tax_rate,
     plant_parameter_MD1,
     cofire_MD1,
@@ -33,6 +36,7 @@ from manuscript1.parameters import (
     transport_parameter,
     mining_parameter,
     emission_factor,
+    coal_import_price,
 )
 
 #%%
@@ -48,26 +52,88 @@ uncertainty = DataFrame(
         "external_cost_SO2",
         "external_cost_PM10",
         "external_cost_NOx",
+        # Biomass prices
+        # Straw burn rate  0.3 - 0.6 - 0.9
     ],
     columns=["Low bound", "Baseline", "High bound"],
     data=[
-        [0.03, discount_rate, 0.15],
-        [0, tax_rate, 0.4],
         [
-            price_MD1.coal * 0.75,
-            (price_MD1.coal + price_NB.coal) / 2,
-            price_NB.coal * 1.25,
+            0.05,  # GDP growth rate was >5% since 1980 except 85 and 86.
+            discount_rate,
+            0.15,  # Typical private sector
         ],
-        [1000 * VND / kWh, price_MD1.electricity, 1500 * VND / kWh],
-        [external_cost["CO2"] * 0.1, external_cost["CO2"], external_cost["CO2"] * 30],
-        [external_cost["SO2"] * 0.2, external_cost["SO2"], external_cost["SO2"] * 2],
-        [external_cost["PM10"] * 0.2, external_cost["PM10"], external_cost["PM10"] * 2],
-        [external_cost["NOx"] * 0.2, external_cost["NOx"], external_cost["NOx"] * 2],
+        [0.1, tax_rate, 0.3],
+        [
+            1060000
+            * VND
+            / t,  # Minimum observed in Vietnam, 2014-01 lowest grade coal. (MOIT)
+            price_NB.coal,
+            coal_import_price,
+        ],
+        [
+            1137.48
+            * VND
+            / kWh,  # 2015-01 system average power purchase price of EVN (MOIT web)
+            price_NB.electricity,
+            2000
+            * VND
+            / kWh,  # About 8.5 UScents, plausible upper bound on wholesale power price.
+        ],
+        [
+            0.2 * USD / t,  # Status quo according to UNDP (2018) table 16
+            external_cost["CO2"],
+            15 * USD / t,  # Upper case in UNDP (201*)
+        ],
+        [
+            min(
+                external_cost_SKC["SO2"],
+                external_cost_ZWY["SO2"],
+                external_cost_HAS["SO2"],
+            )
+            * 0.8,
+            external_cost["SO2"],
+            max(
+                external_cost_SKC["SO2"],
+                external_cost_ZWY["SO2"],
+                external_cost_HAS["SO2"],
+            )
+            * 1.2,
+        ],
+        [
+            min(
+                external_cost_SKC["PM10"],
+                external_cost_ZWY["PM10"],
+                external_cost_HAS["PM10"],
+            )
+            * 0.8,
+            external_cost["PM10"],
+            max(
+                external_cost_SKC["PM10"],
+                external_cost_ZWY["PM10"],
+                external_cost_HAS["PM10"],
+            )
+            * 1.2,
+        ],
+        [
+            min(
+                external_cost_SKC["NOx"],
+                external_cost_ZWY["NOx"],
+                external_cost_HAS["NOx"],
+            )
+            * 0.8,
+            external_cost["NOx"],
+            max(
+                external_cost_SKC["NOx"],
+                external_cost_ZWY["NOx"],
+                external_cost_HAS["NOx"],
+            )
+            * 1.2,
+        ],
     ],
 )
 
 display_as(uncertainty.loc["coal_price"], "USD/t")
-display_as(uncertainty.loc["electricity_price"], "USD/kWh")
+display_as(uncertainty.loc["electricity_price"], "VND/kWh")
 display_as(uncertainty.loc["external_cost_CO2"], "USD/t")
 display_as(uncertainty.loc["external_cost_SO2"], "USD/t")
 display_as(uncertainty.loc["external_cost_PM10"], "USD/t")

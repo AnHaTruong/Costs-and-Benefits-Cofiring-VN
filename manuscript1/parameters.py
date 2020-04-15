@@ -28,15 +28,16 @@ from model.system import MiningParameter
 from manuscript1.parameters_supplychain import supply_chain_MD1, supply_chain_NB
 
 
-discount_rate = 0.1
+discount_rate = 0.1  # As per MOIT circular on coal plants tariff calculation.
 depreciation_period = 10
-tax_rate = 0.25  # Corporate tax in Vietnam
+tax_rate = 0.20  # Corporate tax in Vietnam
 
 coal_import_price = 112 * USD / t
 
+# CO2 6 USD/t fromcentral case in UNDP (2018) Opportunities for carbon pricing in VN.
 external_cost_SKC = Series(
-    {
-        "CO2": 1 * USD / t,  # Sakulniyomporn, Kubaha, and Chullabodhi (2011) RSER 15
+    {  # Sakulniyomporn, Kubaha, and Chullabodhi (2011) RSER 15
+        "CO2": 6 * USD / t,
         "SO2": 3767 * USD / t,
         "PM10": 5883 * USD / t,
         "NOx": 286 * USD / t,
@@ -44,8 +45,8 @@ external_cost_SKC = Series(
 )
 
 external_cost_ZWY = Series(
-    {
-        "CO2": 1 * USD / t,  # Zhang Q, Weili T, Yumei W, et al. (2007) Energy Policy 35
+    {  # Zhang Q, Weili T, Yumei W, et al. (2007) Energy Policy 35
+        "CO2": 6 * USD / t,
         "SO2": 3680 * USD / t,
         "PM10": 2625 * USD / t,
         "NOx": 2438 * USD / t,
@@ -53,15 +54,15 @@ external_cost_ZWY = Series(
 )
 
 external_cost_HAS = Series(
-    {
-        "CO2": 1 * USD / t,  # Hainoun A, Almoustafa A, Seif Aldin M. (2010) Energy 35
+    {  # Hainoun A, Almoustafa A, Seif Aldin M. (2010) Energy 35
+        "CO2": 6 * USD / t,
         "SO2": 1134 * USD / t,
         "PM10": 2496 * USD / t,
         "NOx": 1398 * USD / t,
     }
 )
 
-external_cost = external_cost_SKC
+external_cost = (external_cost_SKC + external_cost_ZWY + external_cost_HAS) / 3
 
 mining_parameter = MiningParameter(
     productivity_surface=8.04 * t / hr,  # www.eia.g
@@ -160,7 +161,7 @@ farm_parameter = FarmerParameter(
     work_hour_day=8 * hr / d,
     wage_bm_collect=3.7 * USD / hr,  # Tran Dang (2019)
     fuel_cost_per_hour=0.5 * USD / hr,
-    straw_burn_rate=0.9,
+    straw_burn_rate=0.6,
     fuel_use=4.16 * kg / d,
     time_horizon=20,
 )
@@ -201,8 +202,9 @@ cofire_MD1 = CofiringParameter(
     wage_operation_maintenance=2.7 * USD / hr,  # A 2015 job opening
     biomass_ratio_energy=after_invest(0.05, plant_parameter_MD1.time_horizon),
     biomass=straw,
+    # Tillman (2000) r mass ratio
     boiler_efficiency_loss=lambda r: 0.0044 * r ** 2 + 0.0055 * r,
-)  # Tillman (2000) r mass ratio
+)
 
 price_MD1 = Price(
     biomass_plantgate=22 * USD / t,

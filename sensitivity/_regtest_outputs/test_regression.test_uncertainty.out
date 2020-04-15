@@ -1,9 +1,9 @@
-                            Low bound          Baseline         High bound
-discount_rate                     0.0               0.1                0.1
-tax_rate                            0               0.2                0.4
-coal_price              38.1028 USD/t     66.3927 USD/t      102.477 USD/t
-electricity_price   0.0449035 USD/kWh  0.055643 USD/kWh  0.0673552 USD/kWh
-external_cost_CO2           0.1 USD/t           1 USD/t           30 USD/t
-external_cost_SO2         753.4 USD/t        3767 USD/t         7534 USD/t
-external_cost_PM10       1176.6 USD/t        5883 USD/t        11766 USD/t
-external_cost_NOx          57.2 USD/t         286 USD/t          572 USD/t
+                          Low bound        Baseline    High bound
+discount_rate                   0.1             0.1           0.1
+tax_rate                        0.1             0.2           0.3
+coal_price            47.5977 USD/t   81.9816 USD/t     112 USD/t
+electricity_price   1137.48 VND/kWh  1665.6 VND/kWh  2000 VND/kWh
+external_cost_CO2         0.2 USD/t         6 USD/t      15 USD/t
+external_cost_SO2       907.2 USD/t   2860.33 USD/t  4520.4 USD/t
+external_cost_PM10     1996.8 USD/t      3668 USD/t  7059.6 USD/t
+external_cost_NOx       228.8 USD/t      1374 USD/t  2925.6 USD/t
