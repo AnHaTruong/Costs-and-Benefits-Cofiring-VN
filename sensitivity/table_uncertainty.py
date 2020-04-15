@@ -8,7 +8,10 @@
 # Creative Commons Attribution-ShareAlike 4.0 International
 """Print the table of parameters values used for the sensitivity analysis."""
 
+from pandas import set_option
 from sensitivity.blackbox import uncertainty
+
+set_option("display.float_format", "{:9,.2f}".format)
 
 print("Parameters values for the sensitivity analysis.")
 print(uncertainty)
