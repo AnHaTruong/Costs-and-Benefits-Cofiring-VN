@@ -35,6 +35,30 @@ from manuscript1.parameters import (
 #%%
 
 
+def as_model_parameters(x):
+    """Bundle the flat dict of parameters x into data structures used by the model.
+
+    Naming convention: underscore prefix to denote the parameter modified.
+    """
+    _price = Price(
+        biomass_plantgate=x["biomass_plantgate"],
+        biomass_fieldside=x["biomass_fieldside"],
+        coal=x["coal_price"],
+        electricity=x["electricity_price"],
+    )
+    _external_cost = Series(
+        {
+            "CO2": x["external_cost_CO2"],
+            "SO2": x["external_cost_SO2"],
+            "PM10": x["external_cost_PM10"],
+            "NOx": x["external_cost_NOx"],
+        }
+    )
+    _farm_parameter = farm_parameter._replace(straw_burn_rate=x["straw_burn_rate"])
+    _discount_rate = x["discount_rate"]
+    return _price, _external_cost, _farm_parameter, _discount_rate
+
+
 def f_MD1(x):
     """Return the business value and the externalities of cofiring, as a pair of USD quantities.
 
@@ -44,43 +68,25 @@ def f_MD1(x):
     assert all(
         x.index == uncertainty.index
     ), "Model argument mismatch uncertainty.index."
-    price_MD1_local = Price(
-        biomass_plantgate=x["biomass_plantgate"],
-        biomass_fieldside=x["biomass_fieldside"],
-        coal=x["coal_price"],
-        electricity=x["electricity_price"],
-    )
-
-    external_cost_variant = Series(
-        {
-            "CO2": x["external_cost_CO2"],
-            "SO2": x["external_cost_SO2"],
-            "PM10": x["external_cost_PM10"],
-            "NOx": x["external_cost_NOx"],
-        }
-    )
-
-    farm_parameter_variant = farm_parameter._replace(
-        straw_burn_rate=x["straw_burn_rate"]
-    )
+    _price_MD1, _external_cost, _farm_parameter, _discount_rate = as_model_parameters(x)
 
     MD1SystemVariant = System(
         plant_parameter_MD1,
         cofire_MD1,
         supply_chain_MD1,
-        price_MD1_local,
-        farm_parameter_variant,
+        _price_MD1,
+        _farm_parameter,
         transport_parameter,
         mining_parameter,
         emission_factor,
     )
-    business_value = MD1SystemVariant.table_business_value(x["discount_rate"])[-1]
+    business_value = MD1SystemVariant.table_business_value(_discount_rate)[-1]
     display_as(business_value, "MUSD")
 
-    benefits_table = MD1SystemVariant.emissions_reduction_benefit(
-        external_cost_variant
-    ).loc["Value"]
-    external_value = npv(x["discount_rate"], benefits_table.sum())
+    benefits_table = MD1SystemVariant.emissions_reduction_benefit(_external_cost).loc[
+        "Value"
+    ]
+    external_value = npv(_discount_rate, benefits_table.sum())
     display_as(external_value, "MUSD")
     return business_value, external_value
 
@@ -94,42 +100,24 @@ def f_NB(x):
     assert all(
         x.index == uncertainty.index
     ), "Model argument mismatch uncertainty.index."
-    price_NB_local = Price(
-        biomass_plantgate=x["biomass_plantgate"],
-        biomass_fieldside=x["biomass_fieldside"],
-        coal=x["coal_price"],
-        electricity=x["electricity_price"],
-    )
-
-    external_cost_variant = Series(
-        {
-            "CO2": x["external_cost_CO2"],
-            "SO2": x["external_cost_SO2"],
-            "PM10": x["external_cost_PM10"],
-            "NOx": x["external_cost_NOx"],
-        }
-    )
-
-    farm_parameter_variant = farm_parameter._replace(
-        straw_burn_rate=x["straw_burn_rate"]
-    )
+    _price_NB, _external_cost, _farm_parameter, _discount_rate = as_model_parameters(x)
 
     NBSystemVariant = System(
         plant_parameter_NB,
         cofire_NB,
         supply_chain_NB,
-        price_NB_local,
-        farm_parameter_variant,
+        _price_NB,
+        _farm_parameter,
         transport_parameter,
         mining_parameter,
         emission_factor,
     )
-    business_value = NBSystemVariant.table_business_value(x["discount_rate"])[-1]
+    business_value = NBSystemVariant.table_business_value(_discount_rate)[-1]
     display_as(business_value, "MUSD")
 
-    benefits_table = NBSystemVariant.emissions_reduction_benefit(
-        external_cost_variant
-    ).loc["Value"]
-    external_value = npv(x["discount_rate"], benefits_table.sum())
+    benefits_table = NBSystemVariant.emissions_reduction_benefit(_external_cost).loc[
+        "Value"
+    ]
+    external_value = npv(_discount_rate, benefits_table.sum())
     display_as(external_value, "MUSD")
     return business_value, external_value
