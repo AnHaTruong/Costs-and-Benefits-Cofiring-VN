@@ -122,7 +122,20 @@ display_as(bounds["external_cost_NOx"], "USD/t")
 display_as(bounds["biomass_plantgate"], "USD/t")
 display_as(bounds["biomass_fieldside"], "USD/t")
 
-# assert bounds bracket the baseline(s)
+
+# Sanity check
+def is_between(a, b, c: float):
+    """Check that bounds indeed bracket the central value."""
+    return (a <= b <= c) or (a >= b >= c)
+
+
+for key, value in bounds.items():
+    assert is_between(
+        value[0], value[1], value[3]
+    ), f"Baseline not beween uncertainty bounds for MD1 uncertainty for {key} parameter: {value}."
+    assert is_between(
+        value[0], value[2], value[3]
+    ), f"Baseline not beween uncertainty bounds for NB uncertainty for {key} parameter: {value}."
 
 uncertainty = DataFrame.from_dict(
     bounds,
