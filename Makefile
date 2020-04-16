@@ -116,7 +116,7 @@ codestyle:
 	pycodestyle
 
 clean:
-	rm -f $(figures-lcoe) $(figures-manuscript1) $(tables-manuscript1) run_profile
+	rm -f $(figures-lcoe) $(figures-manuscript1) $(tables-manuscript1) figure_benefits.svg
 
 cleaner: clean
 	find . -type f -name '*.pyc' -delete

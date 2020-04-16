@@ -50,6 +50,9 @@ def plot_sensitivity(runs, plant_name, axes):
 
     stack_order = [
         "tax_rate",
+        "straw_burn_rate",
+        "biomass_plantgate",
+        "biomass_fieldside",
         "electricity_price",
         "external_cost_NOx",
         "external_cost_SO2",
