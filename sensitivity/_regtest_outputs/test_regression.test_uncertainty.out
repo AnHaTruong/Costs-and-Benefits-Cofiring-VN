@@ -1,4 +1,15 @@
-                          Low bound        Baseline    High bound
+                          Low bound         Baseline    High bound
+discount_rate                   0.1              0.1           0.1
+tax_rate                        0.1              0.2           0.3
+coal_price            47.5977 USD/t    50.8038 USD/t     112 USD/t
+electricity_price   1137.48 VND/kWh  1239.17 VND/kWh  2000 VND/kWh
+external_cost_CO2         0.2 USD/t          6 USD/t      15 USD/t
+external_cost_SO2       907.2 USD/t    2860.33 USD/t  4520.4 USD/t
+external_cost_PM10     1996.8 USD/t       3668 USD/t  7059.6 USD/t
+external_cost_NOx       228.8 USD/t       1374 USD/t  2925.6 USD/t
+straw_burn_rate                 0.3              0.6           0.9
+biomass_plantgate        17.6 USD/t         22 USD/t    38.4 USD/t
+biomass_fieldside        12.8 USD/t         16 USD/t    22.8 USD/t                          Low bound        Baseline    High bound
 discount_rate                   0.1             0.1           0.1
 tax_rate                        0.1             0.2           0.3
 coal_price            47.5977 USD/t   81.9816 USD/t     112 USD/t
@@ -8,5 +19,5 @@ external_cost_SO2       907.2 USD/t   2860.33 USD/t  4520.4 USD/t
 external_cost_PM10     1996.8 USD/t      3668 USD/t  7059.6 USD/t
 external_cost_NOx       228.8 USD/t      1374 USD/t  2925.6 USD/t
 straw_burn_rate                 0.3             0.6           0.9
-biomass_plantgate        17.6 USD/t        27 USD/t    38.4 USD/t
-biomass_fieldside        12.8 USD/t      17.5 USD/t    22.8 USD/t
+biomass_plantgate        17.6 USD/t        32 USD/t    38.4 USD/t
+biomass_fieldside        12.8 USD/t        19 USD/t    22.8 USD/t

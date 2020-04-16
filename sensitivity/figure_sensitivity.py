@@ -95,7 +95,7 @@ def plot_sensitivity(runs, plant_name, axes):
         ha="left",
         style="italic",
     )
-    axes.text(right, -1, "MUSD", va="top", ha="right")
+    axes.text(right * 1.03, -1.05, "MUSD", va="top", ha="left")
 
 
 # noinspection PyTypeChecker

@@ -35,28 +35,40 @@ bounds = {}
 
 # Low bound: GDP growth rate was >5% since 1980 except 85 and 86.
 # High bound: # Typical private sector
-bounds["discount_rate"] = [0.05, discount_rate, 0.15]
+bounds["discount_rate"] = [0.05, discount_rate, discount_rate, 0.15]
 
-bounds["tax_rate"] = [0.1, tax_rate, 0.3]
+bounds["tax_rate"] = [0.1, tax_rate, tax_rate, 0.3]
 
 # Low bound: Minimum observed in Vietnam, 2014-01 lowest grade coal. (MOIT)
-bounds["coal_price"] = [1060000 * VND / t, price_NB.coal, coal_import_price]
+bounds["coal_price"] = [
+    1060000 * VND / t,
+    price_MD1.coal,
+    price_NB.coal,
+    coal_import_price,
+]
 
 # Low bound: 2015-01 system average power purchase price of EVN (MOIT web)
 # High bound: # About 8.5 UScents, plausible upper bound on wholesale power price.
 bounds["electricity_price"] = [
     1137.48 * VND / kWh,
+    price_MD1.electricity,
     price_NB.electricity,
     2000 * VND / kWh,
 ]
 
 # Low bound: # Status quo according to UNDP (2018) table 16
 # High bound: Upper case in UNDP (201*)
-bounds["external_cost_CO2"] = [0.2 * USD / t, external_cost["CO2"], 15 * USD / t]
+bounds["external_cost_CO2"] = [
+    0.2 * USD / t,
+    external_cost["CO2"],
+    external_cost["CO2"],
+    15 * USD / t,
+]
 
 bounds["external_cost_SO2"] = [
     min(external_cost_SKC["SO2"], external_cost_ZWY["SO2"], external_cost_HAS["SO2"])
     * 0.8,
+    external_cost["SO2"],
     external_cost["SO2"],
     max(external_cost_SKC["SO2"], external_cost_ZWY["SO2"], external_cost_HAS["SO2"])
     * 1.2,
@@ -66,6 +78,7 @@ bounds["external_cost_PM10"] = [
     min(external_cost_SKC["PM10"], external_cost_ZWY["PM10"], external_cost_HAS["PM10"])
     * 0.8,
     external_cost["PM10"],
+    external_cost["PM10"],
     max(external_cost_SKC["PM10"], external_cost_ZWY["PM10"], external_cost_HAS["PM10"])
     * 1.2,
 ]
@@ -74,21 +87,29 @@ bounds["external_cost_NOx"] = [
     min(external_cost_SKC["NOx"], external_cost_ZWY["NOx"], external_cost_HAS["NOx"])
     * 0.8,
     external_cost["NOx"],
+    external_cost["NOx"],
     max(external_cost_SKC["NOx"], external_cost_ZWY["NOx"], external_cost_HAS["NOx"])
     * 1.2,
 ]
 
-bounds["straw_burn_rate"] = [0.3, farm_parameter.straw_burn_rate, 0.9]
+bounds["straw_burn_rate"] = [
+    0.3,
+    farm_parameter.straw_burn_rate,
+    farm_parameter.straw_burn_rate,
+    0.9,
+]
 
 bounds["biomass_plantgate"] = [
     min(price_MD1.biomass_plantgate, price_NB.biomass_plantgate) * 0.8,
-    (price_MD1.biomass_plantgate + price_NB.biomass_plantgate) / 2,
+    price_MD1.biomass_plantgate,
+    price_NB.biomass_plantgate,
     max(price_MD1.biomass_plantgate, price_NB.biomass_plantgate) * 1.2,
 ]
 
 bounds["biomass_fieldside"] = [
     min(price_MD1.biomass_fieldside, price_NB.biomass_fieldside) * 0.8,
-    (price_MD1.biomass_fieldside + price_NB.biomass_fieldside) / 2,
+    price_MD1.biomass_fieldside,
+    price_NB.biomass_fieldside,
     max(price_MD1.biomass_fieldside, price_NB.biomass_fieldside) * 1.2,
 ]
 
@@ -104,5 +125,13 @@ display_as(bounds["biomass_fieldside"], "USD/t")
 # assert bounds bracket the baseline(s)
 
 uncertainty = DataFrame.from_dict(
-    bounds, orient="index", columns=["Low bound", "Baseline", "High bound"]
+    bounds,
+    orient="index",
+    columns=["Low bound", "Baseline_MD1", "Baseline_NB", "High bound"],
 )
+
+uncertainty_MD1 = uncertainty[["Low bound", "Baseline_MD1", "High bound"]]
+uncertainty_MD1 = uncertainty_MD1.rename(columns={"Baseline_MD1": "Baseline"})
+
+uncertainty_NB = uncertainty[["Low bound", "Baseline_NB", "High bound"]]
+uncertainty_NB = uncertainty_NB.rename(columns={"Baseline_NB": "Baseline"})

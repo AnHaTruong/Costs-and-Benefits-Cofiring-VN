@@ -17,7 +17,6 @@ from pandas import Series
 from model.utils import npv, display_as
 
 from model.system import System, Price
-from sensitivity.uncertainty import uncertainty
 
 from manuscript1.parameters import (
     plant_parameter_MD1,
@@ -62,12 +61,8 @@ def as_model_parameters(x):
 def f_MD1(x):
     """Return the business value and the externalities of cofiring, as a pair of USD quantities.
 
-    The argument x must be a Series homogenous with uncertainty.index
     Mong Duong 1 case.
     """
-    assert all(
-        x.index == uncertainty.index
-    ), "Model argument mismatch uncertainty.index."
     _price_MD1, _external_cost, _farm_parameter, _discount_rate = as_model_parameters(x)
 
     MD1SystemVariant = System(
@@ -94,12 +89,8 @@ def f_MD1(x):
 def f_NB(x):
     """Return the business value and the externalities of cofiring, as a pair of USD quantities.
 
-    The argument x must be a Series homogenous with uncertainty.index
     Ninh Binh case
     """
-    assert all(
-        x.index == uncertainty.index
-    ), "Model argument mismatch uncertainty.index."
     _price_NB, _external_cost, _farm_parameter, _discount_rate = as_model_parameters(x)
 
     NBSystemVariant = System(
