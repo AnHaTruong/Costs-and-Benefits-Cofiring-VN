@@ -23,7 +23,7 @@ def null_cofiring_system():
     no_cofiring = baseline.cofire_MD1.biomass_ratio_energy * 0
     return System(
         baseline.plant_parameter_MD1,
-        baseline.cofire_MD1._replace(biomass_ratio_energy=no_cofiring),
+        baseline.cofire_MD1._replace(biomass_ratio_energy=no_cofiring, cofire_rate=0),
         baseline.supply_chain_MD1,
         baseline.price_MD1,
         baseline.farm_parameter,

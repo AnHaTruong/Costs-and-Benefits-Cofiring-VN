@@ -60,7 +60,7 @@ def plot_sensitivity(runs, plant_name, axes):
         "external_cost_CO2",
         "discount_rate",
         "external_cost_PM10",
-        "biomass_ratio_energy",
+        "cofire_rate",
     ]
 
     ys = range(len(stack_order))

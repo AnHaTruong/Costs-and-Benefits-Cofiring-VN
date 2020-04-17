@@ -201,6 +201,7 @@ cofire_MD1 = CofiringParameter(
     OM_hour_MWh=0.12 * hr / MWh,  # working hour for OM per MWh
     wage_operation_maintenance=2.7 * USD / hr,  # A 2015 job opening
     biomass_ratio_energy=after_invest(0.05, plant_parameter_MD1.time_horizon),
+    cofire_rate=0.05,
     biomass=straw,
     # Tillman (2000) r mass ratio
     boiler_efficiency_loss=lambda r: 0.0044 * r ** 2 + 0.0055 * r,

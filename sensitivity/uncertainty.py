@@ -113,7 +113,7 @@ bounds["biomass_fieldside"] = [
     max(price_MD1.biomass_fieldside, price_NB.biomass_fieldside) * 1.2,
 ]
 
-bounds["biomass_ratio_energy"] = [0.03, 0.05, 0.05, 0.1]
+bounds["cofire_rate"] = [0.03, 0.05, 0.05, 0.1]
 
 display_as(bounds["coal_price"], "USD/t")
 display_as(bounds["electricity_price"], "VND/kWh")

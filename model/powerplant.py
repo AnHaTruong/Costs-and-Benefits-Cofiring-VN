@@ -12,7 +12,7 @@ from collections import namedtuple
 
 from pandas import Series, DataFrame, set_option, concat
 
-from model.utils import y, USD, MUSD, display_as, safe_divide, ones, npv
+from model.utils import y, USD, MUSD, display_as, safe_divide, ones, npv, after_invest
 from model.investment import Investment
 from model.emitter import Emitter, Activity
 
@@ -46,6 +46,7 @@ CofiringParameter = namedtuple(
         "OM_hour_MWh",
         "wage_operation_maintenance",
         "biomass_ratio_energy",
+        "cofire_rate",
         "biomass",
         "boiler_efficiency_loss",
     ],
@@ -247,8 +248,14 @@ class CofiringPlant(PowerPlant):
         """
         self.cofire_parameter = cofire_parameter
 
+        self.biomass_ratio_energy = after_invest(
+            cofire_parameter.cofire_rate, plant_parameter.time_horizon
+        )
+
+        assert cofire_parameter.biomass_ratio_energy[1] == cofire_parameter.cofire_rate
+
         biomass_ratio_mass = (
-            cofire_parameter.biomass_ratio_energy
+            self.biomass_ratio_energy
             * plant_parameter.coal.heat_value
             / cofire_parameter.biomass.heat_value
         )
@@ -268,15 +275,13 @@ class CofiringPlant(PowerPlant):
             amount_invested=(
                 cofire_parameter.investment_cost
                 * plant_parameter.capacity
-                * float(cofire_parameter.biomass_ratio_energy[1])
+                * float(cofire_parameter.cofire_rate)
             ),
         )
 
         self.name = plant_parameter.name + " Cofire"
 
-        biomass_heat = (
-            self.gross_heat_input * self.cofire_parameter.biomass_ratio_energy
-        )
+        biomass_heat = self.gross_heat_input * self.biomass_ratio_energy
 
         self.biomass_used = biomass_heat / cofire_parameter.biomass.heat_value
         display_as(self.biomass_used, "t")
@@ -331,14 +336,14 @@ class CofiringPlant(PowerPlant):
     def coal_om_cost(self):  # DISCUSS THIS
         # Fixed costs are proportional to capacity
         fixed_om_coal = (
-            (1 - self.cofire_parameter.biomass_ratio_energy)
+            (1 - self.biomass_ratio_energy)
             * self.parameter.fix_om_coal
             * self.parameter.capacity
             * y
         )
         # Variable costs proportional to generation after capacity factor
         variable_om_coal = (
-            (1 - self.cofire_parameter.biomass_ratio_energy)
+            (1 - self.biomass_ratio_energy)
             * self.power_generation
             * self.parameter.variable_om_coal
         )
@@ -352,7 +357,7 @@ class CofiringPlant(PowerPlant):
         """Return the hours of Operation and Maintenance for the biomass part of the plant."""
         time = (
             self.power_generation
-            * self.cofire_parameter.biomass_ratio_energy
+            * self.biomass_ratio_energy
             * self.cofire_parameter.OM_hour_MWh
         )
         return display_as(time, "hr")
@@ -366,13 +371,13 @@ class CofiringPlant(PowerPlant):
     def biomass_om_cost(self):
         """Return  Operation and Maintenance costs of the biomass cofiring part of the plant."""
         fixed_om_bm = (
-            self.cofire_parameter.biomass_ratio_energy
+            self.biomass_ratio_energy
             * self.cofire_parameter.fix_om_cost
             * self.parameter.capacity
             * y
         )
         var_om_bm = (
-            self.cofire_parameter.biomass_ratio_energy
+            self.biomass_ratio_energy
             * self.power_generation
             * self.cofire_parameter.variable_om_cost
         )
@@ -415,8 +420,8 @@ class CofiringPlant(PowerPlant):
         a = PowerPlant.parameters_table(self)
         a["name"] = self.name
         b = Series(self.cofire_parameter, self.cofire_parameter._fields)
-        bre0 = self.cofire_parameter.biomass_ratio_energy[0]
-        bre1 = self.cofire_parameter.biomass_ratio_energy[1]
+        bre0 = self.biomass_ratio_energy[0]
+        bre1 = self.biomass_ratio_energy[1]
         b["biomass_ratio_energy"] = f"{bre0}, {bre1:2f}, ..."
         display_as(b.loc["investment_cost"], "USD / kW")
         display_as(b.loc["fix_om_cost"], "USD / kW / y")

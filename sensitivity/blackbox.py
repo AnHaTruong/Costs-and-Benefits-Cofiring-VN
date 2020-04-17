@@ -60,11 +60,12 @@ def as_model_parameters(x):
 
 def cofire_patched(plant_parameter, cofiring_parameter, x):
     """Return a copy of cofiring_parameter, with the cofiring ratio modified as per x."""
-    return cofiring_parameter._replace(
+    _cofire = cofiring_parameter._replace(
         biomass_ratio_energy=after_invest(
-            x["biomass_ratio_energy"], plant_parameter.time_horizon
-        )
-    )
+            x["cofire_rate"], plant_parameter.time_horizon
+        ))
+    _cofire = _cofire._replace(cofire_rate=x["cofire_rate"])
+    return _cofire
 
 
 def f_MD1(x):
