@@ -38,8 +38,8 @@ def plot_tornado(axes, data, ys, stack_label):
         axes.broken_barh(
             [(low, base - low), (base, high - base)],
             (y - thickness / 2, thickness),
-            facecolors=["white", "grey"],
-            edgecolors=["black", "black"],
+            facecolors=["#FFFFFF00", "mistyrose"],
+            edgecolors=["black", "darkred"],
             linewidth=1,
         )
     axes.text(base, ys[-1] + 1, stack_label, va="top", ha="center")
@@ -60,6 +60,7 @@ def plot_sensitivity(runs, plant_name, axes):
         "external_cost_CO2",
         "discount_rate",
         "external_cost_PM10",
+        "biomass_ratio_energy",
     ]
 
     ys = range(len(stack_order))
