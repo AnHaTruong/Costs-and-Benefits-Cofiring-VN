@@ -53,7 +53,7 @@ def as_model_parameters(x):
             "NOx": x["external_cost_NOx"],
         }
     )
-    _farm_parameter = farm_parameter._replace(straw_burn_rate=x["straw_burn_rate"])
+    _farm_parameter = farm_parameter._replace(open_burn_rate=x["open_burn_rate"])
     _discount_rate = x["discount_rate"]
     return _price, _external_cost, _farm_parameter, _discount_rate
 

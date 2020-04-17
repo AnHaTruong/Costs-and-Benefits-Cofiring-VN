@@ -14,11 +14,17 @@ from pandas import set_option
 from manuscript1.parameters import MongDuong1System, NinhBinhSystem
 from manuscript1.parameters import discount_rate, tax_rate, depreciation_period
 from manuscript1.parameters import external_cost, coal_import_price, mining_parameter
-from model.tables import (energy_costs, straw_supply,
-                          emissions_reduction_benefit, emissions_reduction_ICERE,
-                          business_value_by_solving, business_value_direct)
+from model.tables import (
+    energy_costs,
+    straw_supply,
+    emissions_reduction_benefit,
+    emissions_reduction_ICERE,
+    business_value_by_solving,
+    business_value_direct,
+)
 
 from model.utils import use_floats
+
 pytestmark = pytest.mark.skipif(use_floats, reason="Using floats, units disabled.")
 
 
@@ -28,9 +34,9 @@ _ = coal_import_price, mining_parameter
 # pylint and pytest known compatibility bug
 # pylint: disable=redefined-outer-name
 
-set_option('display.max_columns', None)
-set_option('display.width', 10000)
-set_option('display.float_format', '{:,.1f}'.format)
+set_option("display.max_columns", None)
+set_option("display.width", 10000)
+set_option("display.float_format", "{:,.1f}".format)
 
 finance = discount_rate, tax_rate, depreciation_period
 
@@ -45,7 +51,9 @@ def test_energy_costs(regtest, systems):
 
 
 def test_emissions_reduction_benefit(regtest, systems):
-    regtest.write(str(emissions_reduction_benefit(*systems, external_cost, discount_rate)))
+    regtest.write(
+        str(emissions_reduction_benefit(*systems, external_cost, discount_rate))
+    )
 
 
 def test_emission_reductions(regtest, systems):
@@ -66,66 +74,64 @@ def test_business_value_direct(regtest, systems):
 
 # pylint: disable=eval-used, unused-argument
 def f(systems, method):
-    result_a = eval('systems[0].' + method)
-    result_b = eval('systems[1].' + method)
+    result_a = eval("systems[0]." + method)
+    result_b = eval("systems[1]." + method)
     return str(result_a) + "\n\n" + str(result_b)
 
 
 def test_plant_lcoe_statement(regtest, systems):
-    regtest.write(f(systems, 'plant.lcoe_statement(*finance)'))
+    regtest.write(f(systems, "plant.lcoe_statement(*finance)"))
 
 
 def test_cofiring_plant_lcoe(regtest, systems):
-    regtest.write(f(systems, 'cofiring_plant.lcoe_statement(*finance)'))
+    regtest.write(f(systems, "cofiring_plant.lcoe_statement(*finance)"))
 
 
 def test_technical_parameters(regtest, systems):
-    regtest.write(f(systems, 'plant.characteristics()'))
+    regtest.write(f(systems, "plant.characteristics()"))
 
 
 def test_emissions_baseline(regtest, systems):
-    regtest.write(f(systems, 'emissions_baseline()'))
+    regtest.write(f(systems, "emissions_baseline()"))
 
 
 def test_emissions_cofiring(regtest, systems):
-    regtest.write(f(systems, 'emissions_cofiring()'))
+    regtest.write(f(systems, "emissions_cofiring()"))
 
 
 def test_plant_business_data(regtest, systems):
-    regtest.write(f(systems, 'plant.business_data(tax_rate, depreciation_period)'))
+    regtest.write(f(systems, "plant.business_data(tax_rate, depreciation_period)"))
 
 
 def test_cofiring_business_data(regtest, systems):
     regtest.write(
-        f(systems, 'cofiring_plant.business_data(tax_rate, depreciation_period)'))
+        f(systems, "cofiring_plant.business_data(tax_rate, depreciation_period)")
+    )
 
 
 def test_farmer_business_data(regtest, systems):
-    regtest.write(
-        f(systems, 'farmer.business_data(tax_rate, depreciation_period)'))
+    regtest.write(f(systems, "farmer.business_data(tax_rate, depreciation_period)"))
 
 
 def test_plant_net_present_value(regtest, systems):
-    regtest.write(f(systems, 'plant.net_present_value(*finance)'))
+    regtest.write(f(systems, "plant.net_present_value(*finance)"))
 
 
 def test_cofiring_net_present_value(regtest, systems):
-    regtest.write(
-        f(systems, 'cofiring_plant.net_present_value(*finance)'))
+    regtest.write(f(systems, "cofiring_plant.net_present_value(*finance)"))
 
 
 def test_farmer_net_present_value(regtest, systems):
-    regtest.write(
-        f(systems, 'farmer.net_present_value(*finance)'))
+    regtest.write(f(systems, "farmer.net_present_value(*finance)"))
 
 
 def test_coal_saved(regtest, systems):
-    regtest.write(f(systems, 'coal_saved_benefits(coal_import_price)'))
+    regtest.write(f(systems, "coal_saved_benefits(coal_import_price)"))
 
 
 def test_benefits(regtest, systems):
-    regtest.write(f(systems, 'benefits(discount_rate, external_cost)'))
+    regtest.write(f(systems, "benefits(discount_rate, external_cost)"))
 
 
 def test_job_changes(regtest, systems):
-    regtest.write(f(systems, 'job_changes()'))
+    regtest.write(f(systems, "job_changes()"))

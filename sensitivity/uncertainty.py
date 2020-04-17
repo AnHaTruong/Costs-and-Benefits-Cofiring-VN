@@ -92,11 +92,11 @@ bounds["external_cost_NOx"] = [
     * 1.2,
 ]
 
-bounds["straw_burn_rate"] = [
-    0.3,
-    farm_parameter.straw_burn_rate,
-    farm_parameter.straw_burn_rate,
-    0.9,
+bounds["open_burn_rate"] = [
+    0.4,
+    farm_parameter.open_burn_rate,
+    farm_parameter.open_burn_rate,
+    0.8,
 ]
 
 bounds["biomass_plantgate"] = [
@@ -112,6 +112,8 @@ bounds["biomass_fieldside"] = [
     price_NB.biomass_fieldside,
     max(price_MD1.biomass_fieldside, price_NB.biomass_fieldside) * 1.2,
 ]
+
+# bounds["biomass_ratio_energy"] = [0.03, 0.05, 0.05, 0.10]
 
 display_as(bounds["coal_price"], "USD/t")
 display_as(bounds["electricity_price"], "VND/kWh")

@@ -25,7 +25,7 @@ FarmerParameter = namedtuple(
         "work_hour_day",
         "wage_bm_collect",
         "fuel_cost_per_hour",
-        "straw_burn_rate",
+        "open_burn_rate",
         "fuel_use",
         "time_horizon",
     ],
@@ -52,7 +52,7 @@ class Farmer(Investment, Emitter):
 
         # ex-ante baseline emissions are one crop, in the supply zone
         straw_burned = (
-            supply_chain.straw_available() * farmer_parameter.straw_burn_rate / t
+            supply_chain.straw_available() * farmer_parameter.open_burn_rate / t
         )
 
         field_burning_before = Activity(
@@ -63,6 +63,10 @@ class Farmer(Investment, Emitter):
 
         self.emissions_exante = Emitter(field_burning_before).emissions(total=False)
 
+        # We assume that all biomass collected would have been burned in open field.
+        assert all(
+            field_burning_before.level >= self.quantity
+        ), "Not enough biomass open burned."
         field_burning = Activity(
             name="Straw",
             level=field_burning_before.level - self.quantity,
