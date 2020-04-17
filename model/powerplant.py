@@ -45,7 +45,6 @@ CofiringParameter = namedtuple(
         "variable_om_cost",
         "OM_hour_MWh",
         "wage_operation_maintenance",
-        "biomass_ratio_energy",
         "cofire_rate",
         "biomass",
         "boiler_efficiency_loss",
@@ -252,8 +251,6 @@ class CofiringPlant(PowerPlant):
             cofire_parameter.cofire_rate, plant_parameter.time_horizon
         )
 
-        assert cofire_parameter.biomass_ratio_energy[1] == cofire_parameter.cofire_rate
-
         biomass_ratio_mass = (
             self.biomass_ratio_energy
             * plant_parameter.coal.heat_value
@@ -420,9 +417,6 @@ class CofiringPlant(PowerPlant):
         a = PowerPlant.parameters_table(self)
         a["name"] = self.name
         b = Series(self.cofire_parameter, self.cofire_parameter._fields)
-        bre0 = self.biomass_ratio_energy[0]
-        bre1 = self.biomass_ratio_energy[1]
-        b["biomass_ratio_energy"] = f"{bre0}, {bre1:2f}, ..."
         display_as(b.loc["investment_cost"], "USD / kW")
         display_as(b.loc["fix_om_cost"], "USD / kW / y")
         display_as(b.loc["variable_om_cost"], "USD / kWh")

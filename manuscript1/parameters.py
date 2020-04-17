@@ -17,7 +17,7 @@ except those defined in the parameters_supplychain module
 
 from pandas import Series
 
-from model.utils import USD, VND, after_invest
+from model.utils import USD, VND
 from model.utils import MJ, kg, t, d, hr, km, MW, ha, kW, y, kWh, MWh, g
 from model.system import System, Price
 from model.powerplant import Fuel, PlantParameter, CofiringParameter
@@ -200,7 +200,6 @@ cofire_MD1 = CofiringParameter(
     variable_om_cost=0.006 * USD / kWh,
     OM_hour_MWh=0.12 * hr / MWh,  # working hour for OM per MWh
     wage_operation_maintenance=2.7 * USD / hr,  # A 2015 job opening
-    biomass_ratio_energy=after_invest(0.05, plant_parameter_MD1.time_horizon),
     cofire_rate=0.05,
     biomass=straw,
     # Tillman (2000) r mass ratio

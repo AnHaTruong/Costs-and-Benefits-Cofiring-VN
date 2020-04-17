@@ -14,7 +14,7 @@ Sensitivity analysis is based on the representation  Y = f(X1, ..., Xn).
 """
 from pandas import Series
 
-from model.utils import npv, display_as, after_invest
+from model.utils import npv, display_as
 
 from model.system import System, Price
 
@@ -58,13 +58,9 @@ def as_model_parameters(x):
     return _price, _external_cost, _farm_parameter, _discount_rate
 
 
-def cofire_patched(plant_parameter, cofiring_parameter, x):
+def cofire_patched(cofiring_parameter, x):
     """Return a copy of cofiring_parameter, with the cofiring ratio modified as per x."""
-    _cofire = cofiring_parameter._replace(
-        biomass_ratio_energy=after_invest(
-            x["cofire_rate"], plant_parameter.time_horizon
-        ))
-    _cofire = _cofire._replace(cofire_rate=x["cofire_rate"])
+    _cofire = cofiring_parameter._replace(cofire_rate=x["cofire_rate"])
     return _cofire
 
 
@@ -74,7 +70,7 @@ def f_MD1(x):
     Mong Duong 1 case.
     """
     _price_MD1, _external_cost, _farm_parameter, _discount_rate = as_model_parameters(x)
-    _cofire = cofire_patched(plant_parameter_MD1, cofire_MD1, x)
+    _cofire = cofire_patched(cofire_MD1, x)
 
     MD1SystemVariant = System(
         plant_parameter_MD1,
@@ -103,7 +99,7 @@ def f_NB(x):
     Ninh Binh case
     """
     _price_NB, _external_cost, _farm_parameter, _discount_rate = as_model_parameters(x)
-    _cofire = cofire_patched(plant_parameter_NB, cofire_NB, x)
+    _cofire = cofire_patched(cofire_NB, x)
 
     NBSystemVariant = System(
         plant_parameter_NB,
