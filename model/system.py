@@ -11,7 +11,7 @@ from collections import namedtuple
 from pandas import Series, DataFrame, set_option, concat
 
 from model.utils import t, kt, npv, np_sum
-from model.utils import year_1, display_as, safe_divide, after_invest, isclose_all
+from model.utils import year_1, display_as, safe_divide, after_invest_new, isclose_all
 from model.powerplant import PowerPlant, CofiringPlant
 from model.farmer import Farmer
 from model.reseller import Reseller
@@ -57,9 +57,7 @@ class System:
         self.quantity_plantgate = self.cofiring_plant.biomass_used
         self.supply_chain = supply_chain_potential.fit(self.quantity_plantgate[1])
 
-        self.quantity_fieldside = after_invest(
-            self.supply_chain.straw_sold(), farm_parameter.time_horizon
-        )
+        self.quantity_fieldside = after_invest_new(self.supply_chain.straw_sold())
         # Transport losses negligible
         assert isclose_all(self.quantity_fieldside, self.quantity_plantgate)
 

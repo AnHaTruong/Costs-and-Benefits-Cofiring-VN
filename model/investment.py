@@ -13,7 +13,7 @@
 from abc import abstractmethod
 
 from pandas import Series, DataFrame
-from model.utils import USD, after_invest, display_as, isclose, zeros, npv
+from model.utils import USD, TIME_HORIZON, after_invest, display_as, isclose, zeros, npv
 
 
 class Investment:
@@ -55,7 +55,7 @@ class Investment:
     -1 kUSD
     """
 
-    def __init__(self, name, time_horizon, amount_invested=0 * USD):
+    def __init__(self, name, time_horizon=TIME_HORIZON, amount_invested=0 * USD):
         self.amount_invested = display_as(amount_invested, "kUSD")
         self.name = name
         self.time_horizon = time_horizon

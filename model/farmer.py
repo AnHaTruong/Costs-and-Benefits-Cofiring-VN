@@ -11,7 +11,7 @@ from collections import namedtuple
 
 from pandas import Series, DataFrame, set_option
 
-from model.utils import t, after_invest, display_as, ones
+from model.utils import t, after_invest_new, display_as, ONES
 
 from model.emitter import Emitter, Activity
 from model.investment import Investment
@@ -27,7 +27,6 @@ FarmerParameter = namedtuple(
         "fuel_cost_per_hour",
         "open_burn_rate",
         "fuel_use",
-        "time_horizon",
     ],
 )
 
@@ -42,13 +41,9 @@ class Farmer(Investment, Emitter):
     def __init__(self, supply_chain, farmer_parameter, emission_factor):
         self.parameter = farmer_parameter
         self.emission_factor = emission_factor
-        self.quantity = after_invest(
-            supply_chain.straw_sold(), self.parameter.time_horizon
-        )
+        self.quantity = after_invest_new(supply_chain.straw_sold())
 
-        self.winder_use_area = after_invest(
-            supply_chain.collected_area(), self.parameter.time_horizon
-        )
+        self.winder_use_area = after_invest_new(supply_chain.collected_area())
 
         # ex-ante baseline emissions are one crop, in the supply zone
         straw_burned = (
@@ -57,7 +52,7 @@ class Farmer(Investment, Emitter):
 
         field_burning_before = Activity(
             name="Straw",
-            level=ones(self.parameter.time_horizon + 1) * straw_burned * t,
+            level=ONES * straw_burned * t,
             emission_factor=self.emission_factor["straw_open"],
         )
 
@@ -82,7 +77,7 @@ class Farmer(Investment, Emitter):
 
         Emitter.__init__(self, field_burning, winder_use)
 
-        Investment.__init__(self, "Farmers", self.parameter.time_horizon)
+        Investment.__init__(self, "Farmers")
 
     def labor(self):
         """Work time needed to collect straw for co-firing per year."""

@@ -12,7 +12,18 @@ from collections import namedtuple
 
 from pandas import Series, DataFrame, set_option, concat
 
-from model.utils import y, USD, MUSD, display_as, safe_divide, ones, npv, after_invest
+from model.utils import (
+    y,
+    USD,
+    MUSD,
+    display_as,
+    safe_divide,
+    ones,
+    npv,
+    after_invest_new,
+)
+
+# from model.utils import TIME_HORIZON
 from model.investment import Investment
 from model.emitter import Emitter, Activity
 
@@ -247,9 +258,7 @@ class CofiringPlant(PowerPlant):
         """
         self.cofire_parameter = cofire_parameter
 
-        self.biomass_ratio_energy = after_invest(
-            cofire_parameter.cofire_rate, plant_parameter.time_horizon
-        )
+        self.biomass_ratio_energy = after_invest_new(cofire_parameter.cofire_rate)
 
         biomass_ratio_mass = (
             self.biomass_ratio_energy
@@ -272,7 +281,7 @@ class CofiringPlant(PowerPlant):
             amount_invested=(
                 cofire_parameter.investment_cost
                 * plant_parameter.capacity
-                * float(cofire_parameter.cofire_rate)
+                * cofire_parameter.cofire_rate  # REmoving a float () ??
             ),
         )
 

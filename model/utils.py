@@ -71,6 +71,29 @@ FTE = 1560 * hr
 units.FTE = FTE
 
 
+TIME_HORIZON = 20
+
+ONES = ones(TIME_HORIZON + 1)
+
+
+def after_invest_new(qty):
+    """Construct a time serie from a quantity.
+
+    Used to vectorize calculations involving qty.
+    Assumes invest completes in the first year.
+    Return  natu.numpy.array([0, qty, ..., qty]).
+    The dtype=object might be a performance cost when "use_quantities = False" (untested).
+
+    >>> import pytest
+    >>> if use_floats:
+    ...     pytest.skip('This doctests uses units.')
+    >>> after_invest_new(3 * t)
+    array([0 t, 3 t, 3 t, ..., 3 t, 3 t, 3 t], dtype=object)
+    """
+    assert not hasattr(qty, "__iter__"), "Vectorize only scalar arguments."
+    return array([0 * qty] + [qty] * TIME_HORIZON, dtype=object)
+
+
 def after_invest(qty, time_horizon):
     """Construct a time serie from a quantity.
 
