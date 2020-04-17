@@ -163,7 +163,6 @@ farm_parameter = FarmerParameter(
     fuel_cost_per_hour=0.5 * USD / hr,
     open_burn_rate=0.6,
     fuel_use=4.16 * kg / d,
-    time_horizon=20,
 )
 
 transport_parameter = ResellerParameter(
@@ -176,7 +175,6 @@ transport_parameter = ResellerParameter(
     fuel_cost_per_hour_loading=0 * USD / hr,
     rental_cost_per_hour=9.62 * USD / hr,
     wage_bm_transport=2.13 * USD / hr,  # http://vietnamsalary.careerbuilder.vn
-    time_horizon=20,
 )
 
 plant_parameter_MD1 = PlantParameter(
