@@ -189,7 +189,6 @@ plant_parameter_MD1 = PlantParameter(
     variable_om_coal=0.0048 * USD / kWh,
     emission_control={"CO2": 0.0, "SO2": 0.982, "NOx": 0.0, "PM10": 0.996},
     coal=coal_6b,
-    time_horizon=20,
 )
 
 cofire_MD1 = CofiringParameter(
@@ -234,7 +233,6 @@ plant_parameter_NB = PlantParameter(
     variable_om_coal=plant_parameter_MD1.variable_om_coal,
     emission_control={"CO2": 0.0, "SO2": 0.0, "NOx": 0.0, "PM10": 0.992},
     coal=coal_4b,
-    time_horizon=20,
 )
 
 cofire_NB = cofire_MD1._replace(investment_cost=100 * USD / kW)

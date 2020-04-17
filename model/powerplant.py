@@ -45,7 +45,6 @@ PlantParameter = namedtuple(
         "variable_om_coal",
         "emission_control",
         "coal",
-        "time_horizon",
     ],
 )
 
@@ -88,7 +87,7 @@ class PowerPlant(Investment, Emitter):
         The capital cost represents the cost of installing cofiring,
         it is zero in this case.
         """
-        self.time_horizon = parameter.time_horizon
+        self.time_horizon = time_horizon
         self.ones = ones(self.time_horizon + 1)
 
         Investment.__init__(self, parameter.name, self.time_horizon, amount_invested)
@@ -282,7 +281,7 @@ class CofiringPlant(PowerPlant):
             amount_invested=(
                 cofire_parameter.investment_cost
                 * plant_parameter.capacity
-                * cofire_parameter.cofire_rate  # REmoving a float () ??
+                * cofire_parameter.cofire_rate
             ),
         )
 
