@@ -135,7 +135,7 @@ print(table_separator)
 print("Table: Results of profitability assessment")
 print(
     "Net present value over",
-    MongDuong1System.plant.parameter.time_horizon,
+    MongDuong1System.plant.time_horizon,
     "years at discount rate =",
     discount_rate,
 )

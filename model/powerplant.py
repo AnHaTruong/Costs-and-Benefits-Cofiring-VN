@@ -19,6 +19,7 @@ from model.utils import (
     display_as,
     safe_divide,
     ones,
+    TIME_HORIZON,
     npv,
     after_invest_new,
 )
@@ -63,12 +64,17 @@ CofiringParameter = namedtuple(
 )
 
 
-# pylint: disable=too-many-instance-attributes
+# pylint: disable=too-many-instance-attributes, too-many-arguments
 class PowerPlant(Investment, Emitter):
     """A coal power plant, without co-firing."""
 
     def __init__(
-        self, parameter, emission_factor, derating=None, amount_invested=0 * USD
+        self,
+        parameter,
+        emission_factor,
+        time_horizon=TIME_HORIZON,
+        derating=None,
+        amount_invested=0 * USD,
     ):
         """Initialize the power plant, compute the amount of coal used.
 
@@ -82,24 +88,22 @@ class PowerPlant(Investment, Emitter):
         The capital cost represents the cost of installing cofiring,
         it is zero in this case.
         """
-        Investment.__init__(
-            self, parameter.name, parameter.time_horizon, amount_invested
-        )
+        self.time_horizon = parameter.time_horizon
+        self.ones = ones(self.time_horizon + 1)
+
+        Investment.__init__(self, parameter.name, self.time_horizon, amount_invested)
         self.parameter = parameter
         self.emission_factor = emission_factor
 
         self.power_generation = (
-            ones(parameter.time_horizon + 1)
-            * parameter.capacity
-            * parameter.capacity_factor
-            * y
+            self.ones * parameter.capacity * parameter.capacity_factor * y
         )
         display_as(self.power_generation, "GWh")
 
         if derating is not None:
             self.derating = derating
         else:
-            self.derating = ones(parameter.time_horizon + 1)
+            self.derating = self.ones
         self.plant_efficiency = parameter.plant_efficiency * self.derating
 
         self.gross_heat_input = self.power_generation / self.plant_efficiency
@@ -154,10 +158,7 @@ class PowerPlant(Investment, Emitter):
     def coal_om_cost(self):
         """Return the vector of operation and maintenance cost."""
         fixed_om_coal = (
-            ones(self.parameter.time_horizon + 1)
-            * self.parameter.fix_om_coal
-            * self.parameter.capacity
-            * y
+            self.ones * self.parameter.fix_om_coal * self.parameter.capacity * y
         )
         variable_om_coal = self.power_generation * self.parameter.variable_om_coal
         cost = fixed_om_coal + variable_om_coal
@@ -267,7 +268,7 @@ class CofiringPlant(PowerPlant):
         )
 
         boiler_efficiency = ones(
-            plant_parameter.time_horizon + 1
+            TIME_HORIZON + 1
         ) * plant_parameter.boiler_efficiency_new - cofire_parameter.boiler_efficiency_loss(
             biomass_ratio_mass
         )

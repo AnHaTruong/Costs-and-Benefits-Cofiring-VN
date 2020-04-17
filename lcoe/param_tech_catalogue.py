@@ -342,7 +342,7 @@ def create_plant(name, tech_data, fuel, year):
     )
     plant.coal_cost = plant.coal_used * fuel_price[str(fuel.name)][str(year)]
     plant.revenue = after_invest(
-        plant.power_generation[1] * electricity_price, plant.parameter.time_horizon
+        plant.power_generation[1] * electricity_price, plant.time_horizon
     )
     return plant
 
@@ -404,7 +404,7 @@ def create_RE_plant(name, tech_data, year):
     plant = PowerPlant(
         plant_parameter, emission_factor=emission_factor, amount_invested=capital_idc
     )
-    plant.coal_used = ones(plant.parameter.time_horizon + 1) * 0.0 * t
+    plant.coal_used = ones(plant.time_horizon + 1) * 0.0 * t
     plant.coal_cost = plant.coal_used * fuel_price["6b_coal"][str(year)]
     plant.revenue = after_invest(
         plant.power_generation[1] * electricity_price, plant.parameter.time_horizon
