@@ -1,1 +1,62 @@
-{'business_value': {'Low bound': {'discount_rate': 34.995 MUSD, 'tax_rate': 23.0514 MUSD, 'coal_price': 19.3934 MUSD, 'electricity_price': 23.0514 MUSD, 'external_cost_CO2': 23.0514 MUSD, 'external_cost_SO2': 23.0514 MUSD, 'external_cost_PM10': 23.0514 MUSD, 'external_cost_NOx': 23.0514 MUSD, 'open_burn_rate': 23.0514 MUSD, 'biomass_plantgate': 23.0514 MUSD, 'biomass_fieldside': 23.0514 MUSD, 'cofire_rate': 13.9495 MUSD}, 'Baseline': {'discount_rate': 23.0514 MUSD, 'tax_rate': 23.0514 MUSD, 'coal_price': 23.0514 MUSD, 'electricity_price': 23.0514 MUSD, 'external_cost_CO2': 23.0514 MUSD, 'external_cost_SO2': 23.0514 MUSD, 'external_cost_PM10': 23.0514 MUSD, 'external_cost_NOx': 23.0514 MUSD, 'open_burn_rate': 23.0514 MUSD, 'biomass_plantgate': 23.0514 MUSD, 'biomass_fieldside': 23.0514 MUSD, 'cofire_rate': 23.0514 MUSD}, 'High bound': {'discount_rate': 16.2329 MUSD, 'tax_rate': 23.0514 MUSD, 'coal_price': 92.8717 MUSD, 'electricity_price': 23.0514 MUSD, 'external_cost_CO2': 23.0514 MUSD, 'external_cost_SO2': 23.0514 MUSD, 'external_cost_PM10': 23.0514 MUSD, 'external_cost_NOx': 23.0514 MUSD, 'open_burn_rate': 23.0514 MUSD, 'biomass_plantgate': 23.0514 MUSD, 'biomass_fieldside': 23.0514 MUSD, 'cofire_rate': 44.9205 MUSD}}, 'external_value': {'Low bound': {'discount_rate': 142.44 MUSD, 'tax_rate': 97.308 MUSD, 'coal_price': 97.308 MUSD, 'electricity_price': 97.308 MUSD, 'external_cost_CO2': 90.5415 MUSD, 'external_cost_SO2': 94.9929 MUSD, 'external_cost_PM10': 66.959 MUSD, 'external_cost_NOx': 80.3827 MUSD, 'open_burn_rate': 97.308 MUSD, 'biomass_plantgate': 97.308 MUSD, 'biomass_fieldside': 97.308 MUSD, 'cofire_rate': 58.3871 MUSD}, 'Baseline': {'discount_rate': 97.308 MUSD, 'tax_rate': 97.308 MUSD, 'coal_price': 97.308 MUSD, 'electricity_price': 97.308 MUSD, 'external_cost_CO2': 97.308 MUSD, 'external_cost_SO2': 97.308 MUSD, 'external_cost_PM10': 97.308 MUSD, 'external_cost_NOx': 97.308 MUSD, 'open_burn_rate': 97.308 MUSD, 'biomass_plantgate': 97.308 MUSD, 'biomass_fieldside': 97.308 MUSD, 'cofire_rate': 97.308 MUSD}, 'High bound': {'discount_rate': 71.5427 MUSD, 'tax_rate': 97.308 MUSD, 'coal_price': 97.308 MUSD, 'electricity_price': 97.308 MUSD, 'external_cost_CO2': 107.808 MUSD, 'external_cost_SO2': 99.2757 MUSD, 'external_cost_PM10': 158.899 MUSD, 'external_cost_NOx': 120.24 MUSD, 'open_burn_rate': 97.308 MUSD, 'biomass_plantgate': 97.308 MUSD, 'biomass_fieldside': 97.308 MUSD, 'cofire_rate': 194.622 MUSD}}}{'business_value': {'Low bound': {'discount_rate': 14.1834 MUSD, 'tax_rate': 9.53096 MUSD, 'coal_price': 3.30901 MUSD, 'electricity_price': 9.53096 MUSD, 'external_cost_CO2': 9.53096 MUSD, 'external_cost_SO2': 9.53096 MUSD, 'external_cost_PM10': 9.53096 MUSD, 'external_cost_NOx': 9.53096 MUSD, 'open_burn_rate': 9.53096 MUSD, 'biomass_plantgate': 9.53096 MUSD, 'biomass_fieldside': 9.53096 MUSD, 'cofire_rate': 5.73343 MUSD}, 'Baseline': {'discount_rate': 9.53096 MUSD, 'tax_rate': 9.53096 MUSD, 'coal_price': 9.53096 MUSD, 'electricity_price': 9.53096 MUSD, 'external_cost_CO2': 9.53096 MUSD, 'external_cost_SO2': 9.53096 MUSD, 'external_cost_PM10': 9.53096 MUSD, 'external_cost_NOx': 9.53096 MUSD, 'open_burn_rate': 9.53096 MUSD, 'biomass_plantgate': 9.53096 MUSD, 'biomass_fieldside': 9.53096 MUSD, 'cofire_rate': 9.53096 MUSD}, 'High bound': {'discount_rate': 6.87495 MUSD, 'tax_rate': 9.53096 MUSD, 'coal_price': 14.963 MUSD, 'electricity_price': 9.53096 MUSD, 'external_cost_CO2': 9.53096 MUSD, 'external_cost_SO2': 9.53096 MUSD, 'external_cost_PM10': 9.53096 MUSD, 'external_cost_NOx': 9.53096 MUSD, 'open_burn_rate': 9.53096 MUSD, 'biomass_plantgate': 9.53096 MUSD, 'biomass_fieldside': 9.53096 MUSD, 'cofire_rate': 18.9687 MUSD}}, 'external_value': {'Low bound': {'discount_rate': 32.7746 MUSD, 'tax_rate': 22.3899 MUSD, 'coal_price': 22.3899 MUSD, 'electricity_price': 22.3899 MUSD, 'external_cost_CO2': 21.1561 MUSD, 'external_cost_SO2': 18.1132 MUSD, 'external_cost_PM10': 17.0484 MUSD, 'external_cost_NOx': 19.7841 MUSD, 'open_burn_rate': 22.3899 MUSD, 'biomass_plantgate': 22.3899 MUSD, 'biomass_fieldside': 22.3899 MUSD, 'cofire_rate': 13.4336 MUSD}, 'Baseline': {'discount_rate': 22.3899 MUSD, 'tax_rate': 22.3899 MUSD, 'coal_price': 22.3899 MUSD, 'electricity_price': 22.3899 MUSD, 'external_cost_CO2': 22.3899 MUSD, 'external_cost_SO2': 22.3899 MUSD, 'external_cost_PM10': 22.3899 MUSD, 'external_cost_NOx': 22.3899 MUSD, 'open_burn_rate': 22.3899 MUSD, 'biomass_plantgate': 22.3899 MUSD, 'biomass_fieldside': 22.3899 MUSD, 'cofire_rate': 22.3899 MUSD}, 'High bound': {'discount_rate': 16.4615 MUSD, 'tax_rate': 22.3899 MUSD, 'coal_price': 22.3899 MUSD, 'electricity_price': 22.3899 MUSD, 'external_cost_CO2': 24.3045 MUSD, 'external_cost_SO2': 26.025 MUSD, 'external_cost_PM10': 33.2304 MUSD, 'external_cost_NOx': 25.9205 MUSD, 'open_burn_rate': 22.3899 MUSD, 'biomass_plantgate': 22.3899 MUSD, 'biomass_fieldside': 22.3899 MUSD, 'cofire_rate': 44.7866 MUSD}}}
+Results of the sensitivity analysis for Mong Duong 1 case.
+
+Result: business value.
+                       Low bound      Baseline    High bound
+biomass_fieldside   23.0514 MUSD  23.0514 MUSD  23.0514 MUSD
+biomass_plantgate   23.0514 MUSD  23.0514 MUSD  23.0514 MUSD
+coal_price          19.3934 MUSD  23.0514 MUSD  92.8717 MUSD
+cofire_rate         13.9495 MUSD  23.0514 MUSD  44.9205 MUSD
+discount_rate        34.995 MUSD  23.0514 MUSD  16.2329 MUSD
+electricity_price   23.0514 MUSD  23.0514 MUSD  23.0514 MUSD
+external_cost_CO2   23.0514 MUSD  23.0514 MUSD  23.0514 MUSD
+external_cost_NOx   23.0514 MUSD  23.0514 MUSD  23.0514 MUSD
+external_cost_PM10  23.0514 MUSD  23.0514 MUSD  23.0514 MUSD
+external_cost_SO2   23.0514 MUSD  23.0514 MUSD  23.0514 MUSD
+open_burn_rate      23.0514 MUSD  23.0514 MUSD  23.0514 MUSD
+tax_rate            23.0514 MUSD  23.0514 MUSD  23.0514 MUSD
+
+Result: external value.
+                       Low bound     Baseline    High bound
+biomass_fieldside    97.308 MUSD  97.308 MUSD   97.308 MUSD
+biomass_plantgate    97.308 MUSD  97.308 MUSD   97.308 MUSD
+coal_price           97.308 MUSD  97.308 MUSD   97.308 MUSD
+cofire_rate         58.3871 MUSD  97.308 MUSD  194.622 MUSD
+discount_rate        142.44 MUSD  97.308 MUSD  71.5427 MUSD
+electricity_price    97.308 MUSD  97.308 MUSD   97.308 MUSD
+external_cost_CO2   90.5415 MUSD  97.308 MUSD  107.808 MUSD
+external_cost_NOx   80.3827 MUSD  97.308 MUSD   120.24 MUSD
+external_cost_PM10   66.959 MUSD  97.308 MUSD  158.899 MUSD
+external_cost_SO2   94.9929 MUSD  97.308 MUSD  99.2757 MUSD
+open_burn_rate       97.308 MUSD  97.308 MUSD   97.308 MUSD
+tax_rate             97.308 MUSD  97.308 MUSD   97.308 MUSD
+Results of the sensitivity analysis for Ninh Binh case.
+
+Result: business value.
+                       Low bound      Baseline    High bound
+biomass_fieldside   9.53096 MUSD  9.53096 MUSD  9.53096 MUSD
+biomass_plantgate   9.53096 MUSD  9.53096 MUSD  9.53096 MUSD
+coal_price          3.30901 MUSD  9.53096 MUSD   14.963 MUSD
+cofire_rate         5.73343 MUSD  9.53096 MUSD  18.9687 MUSD
+discount_rate       14.1834 MUSD  9.53096 MUSD  6.87495 MUSD
+electricity_price   9.53096 MUSD  9.53096 MUSD  9.53096 MUSD
+external_cost_CO2   9.53096 MUSD  9.53096 MUSD  9.53096 MUSD
+external_cost_NOx   9.53096 MUSD  9.53096 MUSD  9.53096 MUSD
+external_cost_PM10  9.53096 MUSD  9.53096 MUSD  9.53096 MUSD
+external_cost_SO2   9.53096 MUSD  9.53096 MUSD  9.53096 MUSD
+open_burn_rate      9.53096 MUSD  9.53096 MUSD  9.53096 MUSD
+tax_rate            9.53096 MUSD  9.53096 MUSD  9.53096 MUSD
+
+Result: external value.
+                       Low bound      Baseline    High bound
+biomass_fieldside   22.3899 MUSD  22.3899 MUSD  22.3899 MUSD
+biomass_plantgate   22.3899 MUSD  22.3899 MUSD  22.3899 MUSD
+coal_price          22.3899 MUSD  22.3899 MUSD  22.3899 MUSD
+cofire_rate         13.4336 MUSD  22.3899 MUSD  44.7866 MUSD
+discount_rate       32.7746 MUSD  22.3899 MUSD  16.4615 MUSD
+electricity_price   22.3899 MUSD  22.3899 MUSD  22.3899 MUSD
+external_cost_CO2   21.1561 MUSD  22.3899 MUSD  24.3045 MUSD
+external_cost_NOx   19.7841 MUSD  22.3899 MUSD  25.9205 MUSD
+external_cost_PM10  17.0484 MUSD  22.3899 MUSD  33.2304 MUSD
+external_cost_SO2   18.1132 MUSD  22.3899 MUSD   26.025 MUSD
+open_burn_rate      22.3899 MUSD  22.3899 MUSD  22.3899 MUSD
+tax_rate            22.3899 MUSD  22.3899 MUSD  22.3899 MUSD

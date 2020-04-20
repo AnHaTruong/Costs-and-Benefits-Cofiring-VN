@@ -12,18 +12,21 @@ from pandas import DataFrame
 
 from sensitivity.one_at_a_time import sensitivity_runs_MD1, sensitivity_runs_NB
 
-print("Results of the sensitivity analysis for Mong Duong 1 case.")
-print()
-print("Result: business value.")
-print(DataFrame(sensitivity_runs_MD1["business_value"]))
-print()
-print("Result: external value.")
-print(DataFrame(sensitivity_runs_MD1["external_value"]))
-print()
-print("Results of the sensitivity analysis for Ninh Binh case.")
-print()
-print("Result: business value.")
-print(DataFrame(sensitivity_runs_NB["business_value"]))
-print()
-print("Result: external value.")
-print(DataFrame(sensitivity_runs_NB["external_value"]))
+
+def table_sensitivity(run, name):
+    """Return the two sensitivity analysis result tables, as a string."""
+    contents = [
+        f"Results of the sensitivity analysis for {name} case.",
+        "",
+        "Result: business value.",
+        DataFrame(run["business_value"]).to_string(),
+        "",
+        "Result: external value.",
+        DataFrame(run["external_value"]).to_string(),
+        "",
+    ]
+    return "\n".join(contents)
+
+
+print(table_sensitivity(sensitivity_runs_MD1, "Mong Duong 1"))
+print(table_sensitivity(sensitivity_runs_NB, "Ninh Binh"))

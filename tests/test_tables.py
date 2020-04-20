@@ -90,7 +90,7 @@ def test_cofiring_plant_lcoe(regtest, systems):
 
 
 def test_technical_parameters(regtest, systems):
-    #    set_option("display.float_format", "{:9,.2f}".format)
+    set_option("display.float_format", "{:9,.2f}".format)
     regtest.write(f(systems, "plant.characteristics()"))
 
 
