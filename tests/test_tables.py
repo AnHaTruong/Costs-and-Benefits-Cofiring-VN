@@ -80,14 +80,17 @@ def f(systems, method):
 
 
 def test_plant_lcoe_statement(regtest, systems):
+    set_option("display.float_format", "{:9,.1f}".format)
     regtest.write(f(systems, "plant.lcoe_statement(*finance)"))
 
 
 def test_cofiring_plant_lcoe(regtest, systems):
+    set_option("display.float_format", "{:9,.1f}".format)
     regtest.write(f(systems, "cofiring_plant.lcoe_statement(*finance)"))
 
 
 def test_technical_parameters(regtest, systems):
+    #    set_option("display.float_format", "{:9,.2f}".format)
     regtest.write(f(systems, "plant.characteristics()"))
 
 
@@ -126,6 +129,7 @@ def test_farmer_net_present_value(regtest, systems):
 
 
 def test_coal_saved(regtest, systems):
+    set_option("display.float_format", "{:9,.1f}".format)
     regtest.write(f(systems, "coal_saved_benefits(coal_import_price)"))
 
 

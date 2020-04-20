@@ -1,3 +1,4 @@
+
 # encoding: utf-8
 # Economic of co-firing in two power plants in Vietnam
 #
@@ -21,7 +22,7 @@ from model.utils import (
     ones,
     TIME_HORIZON,
     npv,
-    after_invest_new,
+    after_invest,
 )
 
 # from model.utils import TIME_HORIZON
@@ -258,7 +259,7 @@ class CofiringPlant(PowerPlant):
         """
         self.cofire_parameter = cofire_parameter
 
-        self.biomass_ratio_energy = after_invest_new(cofire_parameter.cofire_rate)
+        self.biomass_ratio_energy = after_invest(cofire_parameter.cofire_rate)
 
         biomass_ratio_mass = (
             self.biomass_ratio_energy

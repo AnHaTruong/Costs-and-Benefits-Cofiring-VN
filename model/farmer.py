@@ -11,7 +11,7 @@ from collections import namedtuple
 
 from pandas import Series, DataFrame, set_option
 
-from model.utils import t, after_invest_new, display_as, ONES
+from model.utils import t, after_invest, display_as, ONES
 
 from model.emitter import Emitter, Activity
 from model.investment import Investment
@@ -41,9 +41,9 @@ class Farmer(Investment, Emitter):
     def __init__(self, supply_chain, farmer_parameter, emission_factor):
         self.parameter = farmer_parameter
         self.emission_factor = emission_factor
-        self.quantity = after_invest_new(supply_chain.straw_sold())
+        self.quantity = after_invest(supply_chain.straw_sold())
 
-        self.winder_use_area = after_invest_new(supply_chain.collected_area())
+        self.winder_use_area = after_invest(supply_chain.collected_area())
 
         # ex-ante baseline emissions are one crop, in the supply zone
         straw_burned = (

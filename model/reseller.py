@@ -11,7 +11,7 @@ from collections import namedtuple
 
 from pandas import Series, DataFrame, set_option
 
-from model.utils import after_invest_new, display_as
+from model.utils import after_invest, display_as
 
 from model.emitter import Emitter, Activity
 from model.investment import Investment
@@ -54,8 +54,8 @@ class Reseller(Investment, Emitter):
         Investment.__init__(self, "Reseller")
 
         self.parameter = transport_parameter
-        self.activity_level = after_invest_new(supply_chain.transport_tkm())
-        self.quantity = after_invest_new(supply_chain.straw_sold())
+        self.activity_level = after_invest(supply_chain.transport_tkm())
+        self.quantity = after_invest(supply_chain.straw_sold())
         self.collection_radius = supply_chain.collection_radius()
 
         self.truck_trips = self.quantity / self.parameter.truck_load
