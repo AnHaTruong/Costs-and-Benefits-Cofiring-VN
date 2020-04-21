@@ -163,6 +163,9 @@ farm_parameter = FarmerParameter(
     fuel_cost_per_hour=0.5 * USD / hr,
     open_burn_rate=0.6,
     fuel_use=4.16 * kg / d,
+    # Thang T.C. et al. (2014), Policies and measures for improve the efficiency of value chain:
+    # the cases of rice and pork in Vietnam, Hanoi, Vietnam.
+    profit=2 * 527 * USD / ha,
 )
 
 transport_parameter = ResellerParameter(

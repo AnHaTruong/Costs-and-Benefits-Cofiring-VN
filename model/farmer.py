@@ -27,6 +27,7 @@ FarmerParameter = namedtuple(
         "fuel_cost_per_hour",
         "open_burn_rate",
         "fuel_use",
+        "profit",
     ],
 )
 
