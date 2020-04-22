@@ -50,7 +50,7 @@ def plot_sensitivity(runs, plant_name, axes):
 
     stack_order = [
         "tax_rate",
-        "open_burn_rate",
+        # "open_burn_rate",
         "biomass_plantgate",
         "biomass_fieldside",
         "electricity_price",
@@ -106,5 +106,6 @@ def plot_sensitivity(runs, plant_name, axes):
 figure, axes_list = plt.subplots(nrows=2, ncols=1, figsize=[12, 9])
 plot_sensitivity(sensitivity_runs_MD1, "Mong Duong 1", axes_list[0])
 plot_sensitivity(sensitivity_runs_NB, "Ninh Binh", axes_list[1])
+plt.subplots_adjust(right=0.8)
 
 plt.savefig("figure_sensitivity.svg")
