@@ -20,6 +20,7 @@ For deeper analysis, the SALib package implements more complex methods.
 
 from pandas import DataFrame
 
+
 def one_at_a_time(parameter_space, model):
     """Run the model 2N+1 times, to perform the one-at-a-time sensitivity analysis.
 

@@ -10,6 +10,7 @@ PYTEST = python3 -m pytest
 # Parallel exectution on 2 jobs is the less slow, on my Intel Core i5-8250U CPU.
 PYLINT = pylint3 -j 2
 SOURCEDIRS = model manuscript1 sensitivity lcoe tests manuscript1/table  manuscript1/figure
+DOCTESTFILES := $(shell grep -l '>>>' */*.py */*/*.py)
 
 figures-lcoe =  LCOE-4tech-3years-catalogue.png LCOE-4tech-3years-IEAfuelcosts.png\
                 LCOE-4tech-2020-catalogueextremes.png LCOE-4tech-2050-catalogueextremes.png\
@@ -83,10 +84,10 @@ archive:
 	rm -rf $(distName)
 
 test: cleaner
-	$(PYTEST) --doctest-modules
+	$(PYTEST)
 
-test-new : cleaner
-	$(PYTEST) --doctest-modules sensitivity
+doctest: $(DOCTESTFILES)
+	$(PYTHON) -m doctest $(DOCTESTFILES)
 
 coverage: coverage.xml
 	python3.7-coverage html

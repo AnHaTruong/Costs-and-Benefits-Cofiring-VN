@@ -87,7 +87,8 @@ def after_invest(qty, time_horizon=TIME_HORIZON):
     >>> if use_floats:
     ...     pytest.skip('after_invest doctests uses quantities.')
     >>> after_invest(3 * t, 20)
-    array([0 t, 3 t, 3 t, ..., 3 t, 3 t, 3 t], dtype=object)
+    array([0 t, 3 t, 3 t, 3 t, 3 t, 3 t, 3 t, 3 t, 3 t, 3 t, 3 t, 3 t, 3 t,
+           3 t, 3 t, 3 t, 3 t, 3 t, 3 t, 3 t, 3 t], dtype=object)
     """
     assert not hasattr(qty, "__iter__"), "Vectorize only scalar arguments."
     data_type = float if use_floats else object
