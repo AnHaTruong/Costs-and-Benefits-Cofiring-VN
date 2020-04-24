@@ -10,6 +10,7 @@
 
 git stash -q --keep-index
 make test
+make black
 make codestyle
 make docstyle
 make lint

@@ -95,23 +95,17 @@ coverage: coverage.xml
 coverage.xml:
 	$(PYTEST) --doctest-modules --cov=. --cov-report term-missing --cov-report xml
 
-codacy-update: coverage.xml
-	export CODACY_PROJECT_TOKEN=e69e0e5c845f4e2dbc1c13fbaa35aeab; python-codacy-coverage -r coverage.xml
-
 regtest-reset:
 	$(PYTEST) --regtest-reset
 
-#lint:
-#	$(PYLINT) */*.py manuscript1/*/*.py
-#
 lint:
 	$(PYLINT) $(SOURCEDIRS)
 
 docstyle:
 	pydocstyle $(SOURCEDIRS)
 
-#format:
-#	black $(SOURCEDIRS)
+black:
+	black $(SOURCEDIRS)
 
 codestyle:
 	pycodestyle
