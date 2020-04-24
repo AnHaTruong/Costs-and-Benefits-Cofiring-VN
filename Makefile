@@ -7,7 +7,8 @@
 
 PYTHON = python3
 PYTEST = python3 -m pytest
-PYLINT = pylint3 -j 0
+# Parallel exectution on 2 jobs is the less slow, on my Intel Core i5-8250U CPU.
+PYLINT = pylint3 -j 2
 SOURCEDIRS = model manuscript1 sensitivity lcoe tests manuscript1/table  manuscript1/figure
 
 figures-lcoe =  LCOE-4tech-3years-catalogue.png LCOE-4tech-3years-IEAfuelcosts.png\
