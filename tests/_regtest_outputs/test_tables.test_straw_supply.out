@@ -1,53 +1,53 @@
 
 Parameter                           Mong Duong 1               Ninh Binh
-Amount required                       225127 t                 39673 t
-Cost plant gate                           22.00 USD/t             32.00 USD/t
-Transportation cost                     2.36 USD/t              0.77 USD/t
-Cost field side                           16.00 USD/t             19.00 USD/t
+Amount required                    225126727              39673373
+Cost plant gate                            0.02              0.03
+Transportation cost                     0.00              0.00
+Cost field side                            0.02              0.02
 
 Mong Duong 1 Supply chain
 
-Area:                      8352.2 km2
-Rice growing area:         1013.52 km2
-Collected area:            400.342 km2
-Straw available:           569941 t
-Straw sold:                225127 t
-Transport      :           2.01507e+07 km*t
-Collection_radius:         72.919 km
+Area:                      8352197895.453823
+Rice growing area:         1013523304.3142804
+Collected area:            400341705.2041408
+Straw available:           569941081.9233754
+Straw sold:                225126727.35973328
+Transport      :           20150704437079.105
+Collection_radius:         72918.95722631259
 Supply zone
- Shape: Semiannulus. Half of the Annulus with inner radius 0 km, outer radius 50 km, area 3926.99 km2
- Area:                      392699 ha
- Rice growing area:         10488.1 ha
- Collected area:            4142.79 ha
- Straw available:           49398.8 t
- Straw sold:                19512.5 t
+ Shape: Semiannulus. Half of the Annulus with inner radius 0.0, outer radius 50000.0, area 3926990816.9872413
+ Area:                      3926990816.9872413
+ Rice growing area:         104880784.20247568
+ Collected area:            41427909.7599779
+ Straw available:           49398849.35936604
+ Straw sold:                19512545.496949587
  Tortuosity:                1.5
- Activity to transport all: 975627 km*t
+ Activity to transport all: 975627274847.4792
 Supply zone
- Shape: Semiannulus. Half of the Annulus with inner radius 50 km, outer radius 72.919 km, area 4425.21 km(2)
- Area:                      442521 ha
- Rice growing area:         90864.3 ha
- Collected area:            35891.4 ha
- Straw available:           520542 t
- Straw sold:                205614 t
+ Shape: Semiannulus. Half of the Annulus with inner radius 50000.0, outer radius 72918.95722631259, area 4425207078.466581
+ Area:                      4425207078.466581
+ Rice growing area:         908642520.1118047
+ Collected area:            358913795.4441629
+ Straw available:           520542232.56400937
+ Straw sold:                205614181.8627837
  Tortuosity:                1.5
- Activity to transport all: 1.91751e+07 km*t
+ Activity to transport all: 19175077162231.625
 
 Ninh Binh Supply chain
 
-Area:                      603.115 km2
-Rice growing area:         178.717 km2
-Collected area:            70.5932 km2
-Straw available:           100439 t
-Straw sold:                39673.4 t
-Transport      :           549698 km*t
-Collection_radius:         13.8556 km
+Area:                      603115306.9429221
+Rice growing area:         178716936.6644131
+Collected area:            70593189.98244317
+Straw available:           100438918.40540014
+Straw sold:                39673372.770133056
+Transport      :           549698259697.53284
+Collection_radius:         13855.59687305832
 Supply zone
- Shape: Disk with radius 13.8556 km, area 603.115 km2
- Area:                      60311.5 ha
- Rice growing area:         17871.7 ha
- Collected area:            7059.32 ha
- Straw available:           100439 t
- Straw sold:                39673.4 t
+ Shape: Disk with radius 13855.59687305832, area 603115306.9429221
+ Area:                      603115306.9429221
+ Rice growing area:         178716936.6644131
+ Collected area:            70593189.98244317
+ Straw available:           100438918.40540014
+ Straw sold:                39673372.770133056
  Tortuosity:                1.5
- Activity to transport all: 549698 km*t
+ Activity to transport all: 549698259697.53284

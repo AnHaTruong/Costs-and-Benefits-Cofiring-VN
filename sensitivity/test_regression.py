@@ -10,6 +10,11 @@
 
 from pandas import set_option
 
+# pylint: disable=wrong-import-position
+from natu import config
+
+config.use_quantities = False
+
 from sensitivity.uncertainty import uncertainty_MD1, uncertainty_NB
 from sensitivity.one_at_a_time import table_sensitivity
 from sensitivity.blackbox import f_MD1, f_NB

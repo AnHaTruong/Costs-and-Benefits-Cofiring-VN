@@ -1,17 +1,17 @@
-                             CO2          NOx         PM10          SO2
-6b_coal          5.08601e+06 t/y  48763.5 t/y  474.631 t/y   560.78 t/y
-conveyor_belt              0 t/y        0 t/y        0 t/y        0 t/y
-Straw                 402492 t/y  167.563 t/y  3214.47 t/y  174.402 t/y
-Total             5.4885e+06 t/y  48931.1 t/y   3689.1 t/y  735.182 t/y
-Total_plant      5.08601e+06 t/y  48763.5 t/y  474.631 t/y   560.78 t/y
-Total_transport            0 t/y        0 t/y        0 t/y        0 t/y
-Total_field           402492 t/y  167.563 t/y  3214.47 t/y  174.402 t/y
+                      CO2       NOx      PM10       SO2
+6b_coal            161.17      1.55      0.02      0.02
+conveyor_belt        0.00      0.00      0.00      0.00
+Straw               12.75      0.01      0.10      0.01
+Total              173.92      1.55      0.12      0.02
+Total_plant        161.17      1.55      0.02      0.02
+Total_transport      0.00      0.00      0.00      0.00
+Total_field         12.75      0.01      0.10      0.01
 
-                         CO2          NOx         PM10          SO2
-4b_coal           896195 t/y  7749.95 t/y  89.8995 t/y  4951.36 t/y
-barge_transport  12227.7 t/y  69.9218 t/y  4.39508 t/y  2.75554 t/y
-Straw              70930 t/y   29.529 t/y  566.475 t/y  30.7343 t/y
-Total             979353 t/y   7849.4 t/y   660.77 t/y  4984.85 t/y
-Total_plant       896195 t/y  7749.95 t/y  89.8995 t/y  4951.36 t/y
-Total_transport  12227.7 t/y  69.9218 t/y  4.39508 t/y  2.75554 t/y
-Total_field        70930 t/y   29.529 t/y  566.475 t/y  30.7343 t/y
+                      CO2       NOx      PM10       SO2
+4b_coal             28.40      0.25      0.00      0.16
+barge_transport      0.39      0.00      0.00      0.00
+Straw                2.25      0.00      0.02      0.00
+Total               31.03      0.25      0.02      0.16
+Total_plant         28.40      0.25      0.00      0.16
+Total_transport      0.39      0.00      0.00      0.00
+Total_field          2.25      0.00      0.02      0.00

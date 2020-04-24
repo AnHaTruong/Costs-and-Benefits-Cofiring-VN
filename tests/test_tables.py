@@ -7,9 +7,15 @@
 #
 """Regression testing. Did results change?"""
 
+
 import pytest
 
 from pandas import set_option
+
+# pylint: disable=wrong-import-position
+from natu import config
+
+config.use_quantities = False
 
 from manuscript1.parameters import MongDuong1System, NinhBinhSystem
 from manuscript1.parameters import discount_rate, tax_rate, depreciation_period
@@ -22,10 +28,6 @@ from model.tables import (
     business_value_by_solving,
     business_value_direct,
 )
-
-from model.utils import use_floats
-
-pytestmark = pytest.mark.skipif(use_floats, reason="Using floats, units disabled.")
 
 
 # Quiet unused-import warning from pylint and spyder, we use them inside an eval string

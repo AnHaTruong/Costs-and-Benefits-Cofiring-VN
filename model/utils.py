@@ -8,7 +8,8 @@
 # Creative Commons Attribution-ShareAlike 4.0 International
 """Common init file for all modules in the directory.
 
-For 10x acceleration, run these two lines BEFORE imporing this module:
+For 10x acceleration, add these three lines BEFORE imporing this module:
+    # pylint: disable=wrong-import-position
     from natu import config
     config.use_quantities = False
 

@@ -1,23 +1,23 @@
-                             CO2          NOx           PM10             SO2
-6b_coal          4.83441e+06 t/y  46351.3 t/y    451.152 t/y      533.04 t/y
-Straw                 376862 t/y  772.185 t/y    5.65518 t/y    0.729411 t/y
-conveyor_belt              0 t/y        0 t/y          0 t/y           0 t/y
-Straw                 137518 t/y  57.2506 t/y    1098.28 t/y     59.5873 t/y
-diesel               457.252 t/y  11.6745 t/y   0.908018 t/y     2.59434 t/y
-Road transport       2216.58 t/y  2.70019 t/y  0.0403014 t/y  0.00302261 t/y
-Total            5.35147e+06 t/y  47195.1 t/y    1556.03 t/y     595.954 t/y
-Total_plant      5.21127e+06 t/y  47123.5 t/y    456.808 t/y     533.769 t/y
-Total_transport      457.252 t/y  11.6745 t/y   0.908018 t/y     2.59434 t/y
-Total_field           137518 t/y  57.2506 t/y    1098.28 t/y     59.5873 t/y
+                      CO2       NOx      PM10       SO2
+6b_coal            153.19      1.47      0.01      0.02
+Straw               11.94      0.02      0.00      0.00
+conveyor_belt        0.00      0.00      0.00      0.00
+Straw                4.36      0.00      0.03      0.00
+diesel               0.01      0.00      0.00      0.00
+Road transport       0.07      0.00      0.00      0.00
+Total              169.58      1.50      0.05      0.02
+Total_plant        165.14      1.49      0.01      0.02
+Total_transport      0.01      0.00      0.00      0.00
+Total_field          4.36      0.00      0.03      0.00
 
-                         CO2            NOx           PM10              SO2
-4b_coal           851953 t/y    7367.36 t/y    85.4614 t/y      4706.93 t/y
-Straw            66413.2 t/y     136.08 t/y    1.99319 t/y      7.14121 t/y
-barge_transport  11624.1 t/y      66.47 t/y    4.17811 t/y      2.61951 t/y
-Straw            24234.4 t/y    10.0891 t/y    193.546 t/y      10.5009 t/y
-diesel           80.5801 t/y    2.05736 t/y   0.160017 t/y     0.457192 t/y
-Road transport   60.4668 t/y  0.0736596 t/y  0.0010994 t/y  8.24547e-05 t/y
-Total             954366 t/y    7582.13 t/y     285.34 t/y      4727.65 t/y
-Total_plant       918366 t/y    7503.44 t/y    87.4546 t/y      4714.07 t/y
-Total_transport  11704.6 t/y    68.5274 t/y    4.33813 t/y       3.0767 t/y
-Total_field      24234.4 t/y    10.0891 t/y    193.546 t/y      10.5009 t/y
+                      CO2       NOx      PM10       SO2
+4b_coal             27.00      0.23      0.00      0.15
+Straw                2.10      0.00      0.00      0.00
+barge_transport      0.37      0.00      0.00      0.00
+Straw                0.77      0.00      0.01      0.00
+diesel               0.00      0.00      0.00      0.00
+Road transport       0.00      0.00      0.00      0.00
+Total               30.24      0.24      0.01      0.15
+Total_plant         29.10      0.24      0.00      0.15
+Total_transport      0.37      0.00      0.00      0.00
+Total_field          0.77      0.00      0.01      0.00

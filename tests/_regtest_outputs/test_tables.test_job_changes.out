@@ -1,45 +1,45 @@
 Benefit from job creation: Mong Duong 1
 
-Biomass collection              175.7 FTE      1014.3 kUSD
-Biomass transportation           14.4 FTE        47.7 kUSD
-Biomass loading                   6.5 FTE        11.2 kUSD
-O&M                              21.8 FTE        92.0 kUSD
-Mining                          -34.4 FTE      -299.7 kUSD
-Total                           184.1 FTE       865.6 kUSD
+Biomass collection        986856887.1   1014269.6
+Biomass transportation     80602817.7     47690.0
+Biomass loading            36470529.8     11245.1
+O&M                       122695948.8     92022.0
+Mining                   -192978392.2   -299652.6
+Total                    1033647791.3    865574.1
 
-Area collected                 8352.2 km2
-Collection radius                72.9 km
-Maximum transport time            1.6 hr
+Area collected           8352197895.5
+Collection radius             72919.0
+Maximum transport time         5833.5
 Number of truck trips         11256.3
 
 Mining job lost from co-firing at Mong Duong 1
 
-Coal saved                      134.0 kt
-Productivity                      2.5 t/hr
-Job lost                      53605.1 hr
-Job lost                         34.4 FTE
-Wage                              5.6 USD/hr
-Wage lost                       299.7 kUSD
+Coal saved                134012772.3
+Productivity                      0.7
+Job lost                  192978392.2
+Job lost                  192978392.2
+Wage                              0.0
+Wage lost                    299652.6
 
 Benefit from job creation: Ninh Binh
 
-Biomass collection               31.0 FTE       178.7 kUSD
-Biomass transportation            0.4 FTE         1.3 kUSD
-Biomass loading                   1.1 FTE         2.0 kUSD
-O&M                               2.2 FTE         9.1 kUSD
-Mining                           -5.4 FTE       -47.5 kUSD
-Total                            29.2 FTE       143.6 kUSD
+Biomass collection        173910675.2    178741.5
+Biomass transportation      2198793.0      1301.0
+Biomass loading             6427086.4      1981.7
+O&M                        12118118.4      9088.6
+Mining                    -30607103.1    -47526.0
+Total                     164047569.8    143586.7
 
-Area collected                  603.1 km2
-Collection radius                13.9 km
-Maximum transport time            0.3 hr
+Area collected            603115306.9
+Collection radius             13855.6
+Maximum transport time         1108.4
 Number of truck trips          1983.7
 
 Mining job lost from co-firing at Ninh Binh
 
-Coal saved                       21.3 kt
-Productivity                      2.5 t/hr
-Job lost                       8502.0 hr
-Job lost                          5.4 FTE
-Wage                              5.6 USD/hr
-Wage lost                        47.5 kUSD
+Coal saved                 21254932.7
+Productivity                      0.7
+Job lost                   30607103.1
+Job lost                   30607103.1
+Wage                              0.0
+Wage lost                     47526.0

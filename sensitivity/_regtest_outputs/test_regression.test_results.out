@@ -2,61 +2,61 @@ Results of the sensitivity analysis for Mong Duong 1 case.
 
 Result: business value.
                        Low bound      Baseline    High bound
-biomass_fieldside   23.0514 MUSD  23.0514 MUSD  23.0514 MUSD
-biomass_plantgate   23.0514 MUSD  23.0514 MUSD  23.0514 MUSD
-coal_price          19.3934 MUSD  23.0514 MUSD  92.8717 MUSD
-cofire_rate         13.9495 MUSD  23.0514 MUSD  44.9205 MUSD
-discount_rate        34.995 MUSD  23.0514 MUSD  16.2329 MUSD
-electricity_price   23.0514 MUSD  23.0514 MUSD  23.0514 MUSD
-external_cost_CO2   23.0514 MUSD  23.0514 MUSD  23.0514 MUSD
-external_cost_NOx   23.0514 MUSD  23.0514 MUSD  23.0514 MUSD
-external_cost_PM10  23.0514 MUSD  23.0514 MUSD  23.0514 MUSD
-external_cost_SO2   23.0514 MUSD  23.0514 MUSD  23.0514 MUSD
-open_burn_rate      23.0514 MUSD  23.0514 MUSD  23.0514 MUSD
-tax_rate            23.0514 MUSD  23.0514 MUSD  23.0514 MUSD
+biomass_fieldside  23,051,360.54 23,051,360.54 23,051,360.54
+biomass_plantgate  23,051,360.54 23,051,360.54 23,051,360.54
+coal_price         19,393,428.97 23,051,360.54 92,871,745.22
+cofire_rate        13,949,497.26 23,051,360.54 44,920,491.91
+discount_rate      34,995,010.25 23,051,360.54 16,232,882.50
+electricity_price  23,051,360.54 23,051,360.54 23,051,360.54
+external_cost_CO2  23,051,360.54 23,051,360.54 23,051,360.54
+external_cost_NOx  23,051,360.54 23,051,360.54 23,051,360.54
+external_cost_PM10 23,051,360.54 23,051,360.54 23,051,360.54
+external_cost_SO2  23,051,360.54 23,051,360.54 23,051,360.54
+open_burn_rate     23,051,360.54 23,051,360.54 23,051,360.54
+tax_rate           23,051,360.54 23,051,360.54 23,051,360.54
 
 Result: external value.
-                       Low bound     Baseline    High bound
-biomass_fieldside    97.308 MUSD  97.308 MUSD   97.308 MUSD
-biomass_plantgate    97.308 MUSD  97.308 MUSD   97.308 MUSD
-coal_price           97.308 MUSD  97.308 MUSD   97.308 MUSD
-cofire_rate         58.3871 MUSD  97.308 MUSD  194.622 MUSD
-discount_rate        142.44 MUSD  97.308 MUSD  71.5427 MUSD
-electricity_price    97.308 MUSD  97.308 MUSD   97.308 MUSD
-external_cost_CO2   90.5415 MUSD  97.308 MUSD  107.808 MUSD
-external_cost_NOx   80.3827 MUSD  97.308 MUSD   120.24 MUSD
-external_cost_PM10   66.959 MUSD  97.308 MUSD  158.899 MUSD
-external_cost_SO2   94.9929 MUSD  97.308 MUSD  99.2757 MUSD
-open_burn_rate       97.308 MUSD  97.308 MUSD   97.308 MUSD
-tax_rate             97.308 MUSD  97.308 MUSD   97.308 MUSD
+                        Low bound      Baseline     High bound
+biomass_fieldside   97,308,020.60 97,308,020.60  97,308,020.60
+biomass_plantgate   97,308,020.60 97,308,020.60  97,308,020.60
+coal_price          97,308,020.60 97,308,020.60  97,308,020.60
+cofire_rate         58,387,094.96 97,308,020.60 194,622,369.88
+discount_rate      142,440,117.99 97,308,020.60  71,542,678.96
+electricity_price   97,308,020.60 97,308,020.60  97,308,020.60
+external_cost_CO2   90,541,541.15 97,308,020.60 107,807,730.10
+external_cost_NOx   80,382,653.34 97,308,020.60 120,239,735.44
+external_cost_PM10  66,959,028.80 97,308,020.60 158,899,476.20
+external_cost_SO2   94,992,911.61 97,308,020.60  99,275,748.66
+open_burn_rate      97,308,020.60 97,308,020.60  97,308,020.60
+tax_rate            97,308,020.60 97,308,020.60  97,308,020.60
 Results of the sensitivity analysis for Ninh Binh case.
 
 Result: business value.
-                       Low bound      Baseline    High bound
-biomass_fieldside   9.53096 MUSD  9.53096 MUSD  9.53096 MUSD
-biomass_plantgate   9.53096 MUSD  9.53096 MUSD  9.53096 MUSD
-coal_price          3.30901 MUSD  9.53096 MUSD   14.963 MUSD
-cofire_rate         5.73343 MUSD  9.53096 MUSD  18.9687 MUSD
-discount_rate       14.1834 MUSD  9.53096 MUSD  6.87495 MUSD
-electricity_price   9.53096 MUSD  9.53096 MUSD  9.53096 MUSD
-external_cost_CO2   9.53096 MUSD  9.53096 MUSD  9.53096 MUSD
-external_cost_NOx   9.53096 MUSD  9.53096 MUSD  9.53096 MUSD
-external_cost_PM10  9.53096 MUSD  9.53096 MUSD  9.53096 MUSD
-external_cost_SO2   9.53096 MUSD  9.53096 MUSD  9.53096 MUSD
-open_burn_rate      9.53096 MUSD  9.53096 MUSD  9.53096 MUSD
-tax_rate            9.53096 MUSD  9.53096 MUSD  9.53096 MUSD
+                       Low bound     Baseline    High bound
+biomass_fieldside   9,530,963.70 9,530,963.70  9,530,963.70
+biomass_plantgate   9,530,963.70 9,530,963.70  9,530,963.70
+coal_price          3,309,012.93 9,530,963.70 14,962,951.89
+cofire_rate         5,733,431.32 9,530,963.70 18,968,676.15
+discount_rate      14,183,390.38 9,530,963.70  6,874,952.36
+electricity_price   9,530,963.70 9,530,963.70  9,530,963.70
+external_cost_CO2   9,530,963.70 9,530,963.70  9,530,963.70
+external_cost_NOx   9,530,963.70 9,530,963.70  9,530,963.70
+external_cost_PM10  9,530,963.70 9,530,963.70  9,530,963.70
+external_cost_SO2   9,530,963.70 9,530,963.70  9,530,963.70
+open_burn_rate      9,530,963.70 9,530,963.70  9,530,963.70
+tax_rate            9,530,963.70 9,530,963.70  9,530,963.70
 
 Result: external value.
                        Low bound      Baseline    High bound
-biomass_fieldside   22.3899 MUSD  22.3899 MUSD  22.3899 MUSD
-biomass_plantgate   22.3899 MUSD  22.3899 MUSD  22.3899 MUSD
-coal_price          22.3899 MUSD  22.3899 MUSD  22.3899 MUSD
-cofire_rate         13.4336 MUSD  22.3899 MUSD  44.7866 MUSD
-discount_rate       32.7746 MUSD  22.3899 MUSD  16.4615 MUSD
-electricity_price   22.3899 MUSD  22.3899 MUSD  22.3899 MUSD
-external_cost_CO2   21.1561 MUSD  22.3899 MUSD  24.3045 MUSD
-external_cost_NOx   19.7841 MUSD  22.3899 MUSD  25.9205 MUSD
-external_cost_PM10  17.0484 MUSD  22.3899 MUSD  33.2304 MUSD
-external_cost_SO2   18.1132 MUSD  22.3899 MUSD   26.025 MUSD
-open_burn_rate      22.3899 MUSD  22.3899 MUSD  22.3899 MUSD
-tax_rate            22.3899 MUSD  22.3899 MUSD  22.3899 MUSD
+biomass_fieldside  22,389,949.81 22,389,949.81 22,389,949.81
+biomass_plantgate  22,389,949.81 22,389,949.81 22,389,949.81
+coal_price         22,389,949.81 22,389,949.81 22,389,949.81
+cofire_rate        13,433,649.77 22,389,949.81 44,786,629.33
+discount_rate      32,774,555.20 22,389,949.81 16,461,510.38
+electricity_price  22,389,949.81 22,389,949.81 22,389,949.81
+external_cost_CO2  21,156,123.49 22,389,949.81 24,304,507.88
+external_cost_NOx  19,784,140.07 22,389,949.81 25,920,489.79
+external_cost_PM10 17,048,375.78 22,389,949.81 33,230,353.38
+external_cost_SO2  18,113,151.19 22,389,949.81 26,025,016.96
+open_burn_rate     22,389,949.81 22,389,949.81 22,389,949.81
+tax_rate           22,389,949.81 22,389,949.81 22,389,949.81

@@ -1,25 +1,25 @@
-Investment    (MUSD)                0.0
-Fuel cost     (MUSD)            1,309.4
-  Coal        (MUSD)            1,309.4
-  Biomass     (MUSD)                0.0
-O&M cost      (MUSD)              560.5
-  O&M coal    (MUSD)              560.5
-  O&M biomass (MUSD)                0.0
-Tax           (MUSD)              227.4
-Cash_out      (MUSD)            2,097.3
-Electricity produced        54040.5 GWh
-LCOE                    38.8102 USD/MWh
-Name: Mong Duong 1, dtype: object
+Investment    (MUSD)                         0.0
+Fuel cost     (MUSD)                     1,309.4
+  Coal        (MUSD)                     1,309.4
+  Biomass     (MUSD)                         0.0
+O&M cost      (MUSD)                       560.5
+  O&M coal    (MUSD)                       560.5
+  O&M biomass (MUSD)                         0.0
+Tax           (MUSD)                       227.4
+Cash_out      (MUSD)                     2,097.3
+Electricity produced   194,545,954,510,838,944.0
+LCOE                                         0.0
+Name: Mong Duong 1, dtype: float64
 
-Investment    (MUSD)                0.0
-Fuel cost     (MUSD)              335.8
-  Coal        (MUSD)              335.8
-  Biomass     (MUSD)                0.0
-O&M cost      (MUSD)               53.5
-  O&M coal    (MUSD)               53.5
-  O&M biomass (MUSD)                0.0
-Tax           (MUSD)                2.0
-Cash_out      (MUSD)              391.3
-Electricity produced        5337.34 GWh
-LCOE                    73.3106 USD/MWh
-Name: Ninh Binh, dtype: object
+Investment    (MUSD)                        0.0
+Fuel cost     (MUSD)                      335.8
+  Coal        (MUSD)                      335.8
+  Biomass     (MUSD)                        0.0
+O&M cost      (MUSD)                       53.5
+  O&M coal    (MUSD)                       53.5
+  O&M biomass (MUSD)                        0.0
+Tax           (MUSD)                        2.0
+Cash_out      (MUSD)                      391.3
+Electricity produced   19,214,415,260,329,764.0
+LCOE                                        0.0
+Name: Ninh Binh, dtype: float64
