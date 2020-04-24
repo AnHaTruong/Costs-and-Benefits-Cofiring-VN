@@ -11,7 +11,7 @@
 git stash -q --keep-index
 make test
 make doctest
-make . --check
+black . --check
 make codestyle
 make docstyle
 make lint
