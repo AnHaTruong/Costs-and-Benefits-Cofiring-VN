@@ -19,7 +19,9 @@ from pandas import DataFrame
 from matplotlib import pyplot as plt
 
 from model.utils import MUSD
-from sensitivity.one_at_a_time import sensitivity_runs_MD1, sensitivity_runs_NB
+from sensitivity.uncertainty import uncertainty_MD1, uncertainty_NB
+from sensitivity.one_at_a_time import one_at_a_time
+from sensitivity.blackbox import f_MD1, f_NB
 
 
 def plot_tornado(axes, data, ys, stack_label):
@@ -45,8 +47,10 @@ def plot_tornado(axes, data, ys, stack_label):
     axes.text(base, ys[-1] + 1, stack_label, va="top", ha="center")
 
 
-def plot_sensitivity(runs, plant_name, axes):
+def plot_sensitivity(uncertainty, model, plant_name, axes):
     """Plot the sensitivity analysis, tornado diagram, two objectives."""
+
+    runs = one_at_a_time(uncertainty, model)
 
     stack_order = [
         "tax_rate",
@@ -104,8 +108,8 @@ def plot_sensitivity(runs, plant_name, axes):
 
 # noinspection PyTypeChecker
 figure, axes_list = plt.subplots(nrows=2, ncols=1, figsize=[12, 9])
-plot_sensitivity(sensitivity_runs_MD1, "Mong Duong 1", axes_list[0])
-plot_sensitivity(sensitivity_runs_NB, "Ninh Binh", axes_list[1])
+plot_sensitivity(uncertainty_MD1, f_MD1, "Mong Duong 1", axes_list[0])
+plot_sensitivity(uncertainty_NB, f_NB, "Ninh Binh", axes_list[1])
 plt.subplots_adjust(right=0.8)
 
 plt.savefig("figure_sensitivity.svg")

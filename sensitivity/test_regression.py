@@ -11,8 +11,8 @@
 from pandas import set_option
 
 from sensitivity.uncertainty import uncertainty_MD1, uncertainty_NB
-from sensitivity.one_at_a_time import sensitivity_runs_MD1, sensitivity_runs_NB
-from table_sensitivity import table_sensitivity
+from sensitivity.one_at_a_time import table_sensitivity
+from sensitivity.blackbox import f_MD1, f_NB
 
 
 def test_uncertainty(regtest):
@@ -26,5 +26,5 @@ def test_uncertainty(regtest):
 
 def test_results(regtest):
     set_option("display.float_format", "{:9,.2f}".format)
-    regtest.write(table_sensitivity(sensitivity_runs_MD1, "Mong Duong 1"))
-    regtest.write(table_sensitivity(sensitivity_runs_NB, "Ninh Binh"))
+    regtest.write(table_sensitivity(uncertainty_MD1, f_MD1, "Mong Duong 1"))
+    regtest.write(table_sensitivity(uncertainty_NB, f_NB, "Ninh Binh"))

@@ -18,9 +18,7 @@ Sensitivity analysis starts with this method because it is the simplest and clea
 For deeper analysis, the SALib package implements more complex methods.
 """
 
-from sensitivity.uncertainty import uncertainty_MD1, uncertainty_NB
-from sensitivity.blackbox import f_MD1, f_NB
-
+from pandas import DataFrame
 
 def one_at_a_time(parameter_space, model):
     """Run the model 2N+1 times, to perform the one-at-a-time sensitivity analysis.
@@ -48,5 +46,17 @@ def one_at_a_time(parameter_space, model):
     return result
 
 
-sensitivity_runs_MD1 = one_at_a_time(uncertainty_MD1, f_MD1)
-sensitivity_runs_NB = one_at_a_time(uncertainty_NB, f_NB)
+def table_sensitivity(uncertainty, model, name):
+    """Return the two sensitivity analysis result tables, as a string."""
+    run = one_at_a_time(uncertainty, model)
+    contents = [
+        f"Results of the sensitivity analysis for {name} case.",
+        "",
+        "Result: business value.",
+        DataFrame(run["business_value"]).to_string(),
+        "",
+        "Result: external value.",
+        DataFrame(run["external_value"]).to_string(),
+        "",
+    ]
+    return "\n".join(contents)

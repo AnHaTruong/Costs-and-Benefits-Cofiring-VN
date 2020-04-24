@@ -89,7 +89,7 @@ test-new : cleaner
 	$(PYTEST) --doctest-modules sensitivity
 
 coverage: coverage.xml
-	python3.5-coverage html
+	python3.7-coverage html
 	see htmlcov/index.html
 
 coverage.xml:
