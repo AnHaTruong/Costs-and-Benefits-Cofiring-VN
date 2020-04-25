@@ -1,51 +1,49 @@
 ## What this is about
 
 ### Cofiring
+Does it make sense for a tropical middle income country to burn rice straw at the coal power plants?
 
-Blending biomass with fossil fuels is a relatively low-cost technology to use renewable energy in the electricity generation sector. Most coal power plants can co-fire a small fraction (<10% energy) of biomass without major retrofit. In high income countries, over a hundred of power plants cofire biomass, often because governments forced utilities to deliver a minimum fraction of their electricity from renewable sources.
+Blending biomass with fossil fuels is a relatively low-cost technology to use renewable energy in the electricity generation sector. Most coal power plants can co-fire a small fraction (<10% energy) of biomass without major retrofit. In high income countries, over a hundred of power plants cofire biomass, often because governments forced utilities to deliver a minimum fraction of their electricity from renewable sources. 
 
 ### Key results
 
-Would that technology be relevant in Vietnam, a middle income country? Here we study the business case for cofiring 5% rice straw with coal, in an old and in a new coal power plant. We compute the costs and benefits for three segments --farmers, reseller and plant owner-- as well as external benefits to society as a whole. We find that there is a business case: based on existing coal costs, the willingness to pay of the plant owner is greater than the willingness to accept of the farmer, plus transportation costs. External benefits come from two effects: reducing open air straw burning, and displacing greenhouse gas emissions for coal. Assuming a carbon value of 1$/tCO2, the value of avoided CO2 is small in front of agricultural and air quality benefits.
+This is a financial model of the sector, to study the business and social case for cofiring 5% rice straw with coal, in an old and in a new coal power plant. We compute the costs and benefits for three segments --farmers, reseller and plant owner-- as well as external benefits to society as a whole. We find that there is a weak business case: based on existing coal costs, the willingness to pay of the plant owner is greater than the willingness to accept of the farmer, plus transportation costs. External benefits come from two effects: reducing open air straw burning, and displacing greenhouse gas emissions for coal. Assuming a carbon value of 1$/tCO2, the value of avoided CO2 is small in front of agricultural and air quality benefits.
 
 
 ## Installation
 
-The model is written in  Python 3.
-It uses pandas, pytest and other python dependencies listed in the file `requirements.txt`.
+The model is written in  Python 3 with a virtual environment and managed by GNU Make. From a default Ubuntu you will need:
 
-Installation should be   ***pip3 install -r requirements.txt***.
-For developing you also need to install ***sudo apt install pylint3, pycodestyle, pydocstyle***
+***sudo apt install make***
+***sudo apt install python3-venv***
 
-Failing that, here are installation notes:
-+ We don't test compatibility with Python 2.
-+ `pandas` can be installed from Ubuntu package `python3-pandas`, but the pip version is likely more up to date.
-+  `xlrd` can be installed from Ubuntu package  `python3-xlrd`, or from pip.
-+ `pytest` can be installed from the Ubuntu package `python3-pytest` but DON'T. That is an old version.
-+ `pytest-cov` can be installed from the Ubuntu package `python3-coverage`, or from pip
-+ `natu` version 1.2 is required with Python 3, it not in Pypi as of 2017/11, so we install from GitHub
-+ `pylint3` can be installed from Ubuntu package  `pylint3`
-+ `traits` requires header files in the Ubuntu package  `python3-dev`.
-+ If necessary the makefile will install  `.git/hook/pre-commit`  script when doing `make install-pre-commit`. Making it executable is up to you.
+Installation of dependencies into the virtual environment is supposed to happens automagically. Even for the `natu` package, which is the less bad solution to deal with physical units in Python we found.
 
 ## Usage
 
-The project is managed with `make`. To make all figures and tables, use:
+To make all figures and tables, use:
 ```make```
 
-## Code quality
+On first run the Makefile should setup the virtual environment. This includes pulling Pandas (with the xlrd optional Excel import filter), Numpy and Matplotlib libraries, as well as setting up `natu`.  Version 0.1.2 is required with Python 3, since version 0.1.1 is incompatible, its module `core.py` uses the `reduce` function without importing it. Unfortunately the proper version is not in Pypi as of 2020/04, so we install from GitHub.
+
+## Development notes
+
+Dependencies for development are also listed in the file `requirements.txt` . They can be installed system-wide from the distribution repository, but I got burned with Ubuntu's old version of  `pytest` once, so now I prefer to use the Pypi version in the venv.
 
 Code quality is promoted with these practices:
 
-0. Self testing with  assert  statements
-1. Unit testing with  doctests  comments in the code
-2. Regression testing with the  pytest
-3. System testing (TODO): by reproducing previously published results using their cost numbers
-4. Compliance with Python code conventions is enforced with  pycodestyle  (aka pep8) before each commit
-5. Compliance with Python in-code documentation is enforced with  pydocstyle  (aka pep257) before each commit
-6. Static code analysis quality is enforced with  pylint  before each commit
-7. Coherence of computations with respect to physical units is enforced with the  natu  package
-8. Format code with `black`.
+0. Defensive self testing with  `assert`  statements
+1. Unit testing with  `doctests`  comments in the code
+2. Regression testing with the  `pytest`
+3. Format code with `black`.
+4. Compliance with Python code conventions is enforced with  `pycodestyle`  (aka pep8) before each commit
+5. Compliance with Python in-code documentation is enforced with  `pydocstyle` (aka pep257) before each commit
+6. Static code analysis quality is enforced with  `pylint`  before each commit
+7. Coherence of computations with respect to physical units is enforced with the  `natu`  package
+
+The `pre-commit` script in the project directory is meant to enforce practices 1 to 6. The script is to be inspected, made executable, and then moved to `.git/hook/pre-commit`. You can call `make install-pre-commit` for that. The precommit hook script is fragile to `git mv` commands. In this case do the tests manually, then commit with -n option.
+
+In addition we did some limited system testing by reproducing previously published LCOE numbers in the MOIT Technology Database.
 
 ## Bugs
 Known bugs and workarounds:
@@ -53,14 +51,6 @@ Known bugs and workarounds:
 doctest fails in an spyder3 IPython console with an unexpected argument in __init__
 See https://github.com/spyder-ide/spyder/issues/1855
 Use a simple Python console instead.
-
-We use `natu` version 1.2 because version 1.1 is broken with Python 3. Its module  `core.py` uses the `reduce` function without importing it. As an alternative to pip, one can install a local copy with:
-```
-git clone git@github.com:kdavies4/natu.git
-cd natu
-pip3 install -e .
-```
-Doing that will make static code analysis tools like lint cry a lot. Exclude the subdirectory `natu/` from their search path.
 
 
 ## For new developpers
@@ -85,5 +75,3 @@ Modules must be run from the root directory, not from the directory they are in.
 All imports from natu have to go through model.utils. Import nothing from natu directly.
 If a module needs something from natu.units, natu.math or natu.numpy : first import it into model.utils and then get it from there.
 This is because we need a single point to control natu.
-
-The precommit hook script is fragile to `git mv` commands. In this case do the tests manually, then commit with -n option.

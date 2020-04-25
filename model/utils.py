@@ -22,10 +22,12 @@ Units thread into arrays from the right but not from the left
  So when multiplying a vector by a quantity, put the vector left
 """
 
+from numpy import asarray, arange
+
 from natu import config
 
-from natu.numpy import array, npv, unique
-from natu.numpy import arange, ones, zeros, concatenate, cumsum, roll, sum as np_sum
+from natu.numpy import array, unique
+from natu.numpy import ones, zeros, concatenate, cumsum, roll, sum as np_sum
 from natu.math import fsum, sqrt, pi
 from natu.units import t, hr, d, y
 from natu.units import m, km, ha, g, kg, MJ, GJ, kWh, MWh, kW, MW
@@ -75,6 +77,15 @@ units.FTE = FTE
 TIME_HORIZON = 20
 
 ONES = ones(TIME_HORIZON + 1)
+
+
+def npv(rate, values):
+    """Net present value of an array-like cash flow.
+
+    Cut and pasterd here to avoid warnings because numpy moved it to numpy-financial
+    """
+    values = asarray(values)
+    return (values / (1 + rate) ** arange(0, len(values))).sum(axis=0)
 
 
 def after_invest(qty, time_horizon=TIME_HORIZON):

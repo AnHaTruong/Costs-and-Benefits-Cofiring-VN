@@ -22,6 +22,7 @@ class Emitter:
     for example a quantity of fuel burned, or a distance traveled by a given mode
 
     Example:
+    -------
     >>> from pandas import set_option
     >>> set_option('display.float_format', '{:,.1f}'.format)
     >>> a = Activity('Combustion', 1000, {'CO2': 1, 'PM10': 0.0091})
@@ -58,6 +59,7 @@ class Emitter:
                    CO2  PM10
     Combustion 1,000.0   9.1
     Total      1,000.0   9.1
+
     """
 
     def __init__(self, *activities, emission_control=None):

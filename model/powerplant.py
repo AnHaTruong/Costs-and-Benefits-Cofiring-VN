@@ -202,7 +202,7 @@ class PowerPlant(Investment, Emitter):
         """Describe the technical characteristics of the plant."""
         # FLAG FOR DELETION.
         #  AFTER UPDATING tests/test_tables.py
-        description = Series(name=self.parameter.name)
+        description = Series(name=self.parameter.name, dtype=object)
         description["Comissioning year"] = self.parameter.commissioning
         description["Boiler technology"] = self.parameter.boiler_technology
         description["Installed capacity"] = self.parameter.capacity
@@ -218,7 +218,7 @@ class PowerPlant(Investment, Emitter):
 
     def lcoe_statement(self, discount_rate, tax_rate, depreciation_period):
         """Assess the levelized cost of electricity."""
-        statement = Series(name=self.name)
+        statement = Series(name=self.name, dtype=float)
         statement["Investment    (MUSD)"] = self.amount_invested / MUSD
         statement["Fuel cost     (MUSD)"] = npv(discount_rate, self.fuel_cost()) / MUSD
         statement["  Coal        (MUSD)"] = npv(discount_rate, self.coal_cost) / MUSD

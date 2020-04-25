@@ -54,10 +54,10 @@ def table_sensitivity(uncertainty, model, name):
         f"Results of the sensitivity analysis for {name} case.",
         "",
         "Result: business value.",
-        DataFrame(run["business_value"]).to_string(),
+        DataFrame(run["business_value"]).sort_index().to_string(),
         "",
         "Result: external value.",
-        DataFrame(run["external_value"]).to_string(),
+        DataFrame(run["external_value"]).sort_index().to_string(),
         "",
     ]
     return "\n".join(contents)

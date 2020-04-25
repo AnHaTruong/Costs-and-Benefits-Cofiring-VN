@@ -1,13 +1,23 @@
 pandas
+numpy
+matplotlib
+# Pandas optional, needed by DataFrame.read_excel
 xlrd
+# natu>=0.1.2
+# Until that version moves into Pypi, we build it from the GitHub upstream
+# TODO: Fix the error messages with natu seen when running  make venv
+wheel
+setuptools
+git+https://github.com/kdavies4/natu.git
+# -e git+git@github.com:kdavies4/natu.git#egg=natumatplotlib
+# For development
 pytest
 pytest-cov
 pytest-regtest
-matplotlib
-scimath
-sh
-traits
-nose
-#natu>=0.2
-git+https://github.com/kdavies4/natu.git
-# -e git+git@github.com:kdavies4/natu.git#egg=natumatplotlib
+pydocstyle
+pycodestyle
+black
+pylint
+# For using the Spyder IDE
+# Configure spyder to use python kernel from virtual environment, not system
+spyder-kernels
