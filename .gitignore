@@ -18,3 +18,4 @@ natu/config/__pycache__/
 SALib/
 SALib-0.7.1.dist-info/
 .cache/
+.venv/

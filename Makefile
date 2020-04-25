@@ -13,8 +13,7 @@ PYLINTARGS = -j 2
 BLACK = $(VENV)/black
 DOCSTYLE = $(VENV)/pydocstyle
 CODESTYLE = $(VENV)/pycodestyle
-# Boken atm
-# COVERAGE = $(VENV)/python-coverage
+COVERAGE = $(VENV)/coverage
 
 SOURCEDIRS = model manuscript1 sensitivity lcoe tests manuscript1/table manuscript1/figure
 DOCTESTFILES := $(shell grep -l '>>>' */*.py */*/*.py)
@@ -91,15 +90,14 @@ archive:
 test: cleaner venv
 	$(PYTEST)
 
-coverage: coverage.xml venv
-	$(COVERAGE) html
-	see htmlcov/index.html
-
 doctest: venv
 	$(PYTHON) -m doctest $(DOCTESTFILES)
 
-coverage.xml: venv
-	$(PYTEST) --doctest-modules --cov=. --cov-report term-missing --cov-report xml
+coverage: htmlcov
+	see htmlcov/index.html
+
+htmlcov: venv
+	$(PYTEST) --cov=. --cov-report term-missing --cov-report html
 
 regtest-reset: venv
 	$(PYTEST) --regtest-reset
@@ -123,6 +121,6 @@ cleaner: clean
 	find . -type f -name '*.pyc' -delete
 	rm -rf __pycache__ .pytest_cache
 	rm -rf classes.dot packages.dot
-	rm -rf .coverage coverage.xml htmlcov
+	rm -rf .coverage htmlcov
 
 include Makefile.venv
