@@ -20,7 +20,7 @@ from pandas import Series
 from model.utils import USD, VND
 from model.utils import MJ, kg, t, d, hr, km, MW, ha, kW, y, kWh, MWh, g
 from model.system import System, Price
-from model.coalpowerplant import Fuel, PlantParameter
+from model.flamepowerplant import Fuel, PlantParameter
 from model.cofiringplant import CofiringParameter
 from model.farmer import FarmerParameter
 from model.reseller import ResellerParameter
@@ -189,10 +189,10 @@ plant_parameter_MD1 = PlantParameter(
     capacity_factor=0.60,
     boiler_efficiency_new=87.03 / 100,
     plant_efficiency=38.84 / 100,
-    fix_om_coal=29.31 * USD / kW / y,
-    variable_om_coal=0.0048 * USD / kWh,
+    fix_om_fuel=29.31 * USD / kW / y,
+    variable_om_fuel=0.0048 * USD / kWh,
     emission_control={"CO2": 0.0, "SO2": 0.982, "NOx": 0.0, "PM10": 0.996},
-    coal=coal_6b,
+    fuel=coal_6b,
 )
 
 cofire_MD1 = CofiringParameter(
@@ -202,7 +202,7 @@ cofire_MD1 = CofiringParameter(
     OM_hour_MWh=0.12 * hr / MWh,  # working hour for OM per MWh
     wage_operation_maintenance=2.7 * USD / hr,  # A 2015 job opening
     cofire_rate=0.05,
-    biomass=straw,
+    cofuel=straw,
     # Tillman (2000) r mass ratio
     boiler_efficiency_loss=lambda r: 0.0044 * r ** 2 + 0.0055 * r,
 )
@@ -233,10 +233,10 @@ plant_parameter_NB = PlantParameter(
     capacity_factor=0.64,
     plant_efficiency=21.77 / 100,
     boiler_efficiency_new=81.61 / 100,
-    fix_om_coal=plant_parameter_MD1.fix_om_coal,
-    variable_om_coal=plant_parameter_MD1.variable_om_coal,
+    fix_om_fuel=plant_parameter_MD1.fix_om_fuel,
+    variable_om_fuel=plant_parameter_MD1.variable_om_fuel,
     emission_control={"CO2": 0.0, "SO2": 0.0, "NOx": 0.0, "PM10": 0.992},
-    coal=coal_4b,
+    fuel=coal_4b,
 )
 
 cofire_NB = cofire_MD1._replace(investment_cost=100 * USD / kW)

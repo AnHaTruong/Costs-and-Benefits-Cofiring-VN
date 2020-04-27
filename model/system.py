@@ -12,7 +12,7 @@ from pandas import Series, DataFrame, set_option, concat
 
 from model.utils import t, kt, npv, np_sum
 from model.utils import year_1, display_as, safe_divide, after_invest, isclose_all
-from model.coalpowerplant import CoalPowerPlant
+from model.flamepowerplant import FlamePowerPlant
 from model.cofiringplant import CofiringPlant
 from model.farmer import Farmer
 from model.reseller import Reseller
@@ -51,11 +51,11 @@ class System:
         emission_factor,
     ):
         """Instantiate the system actors."""
-        self.plant = CoalPowerPlant(plant_parameter, emission_factor)
+        self.plant = FlamePowerPlant(plant_parameter, emission_factor)
         self.cofiring_plant = CofiringPlant(
             plant_parameter, cofire_parameter, emission_factor
         )
-        self.quantity_plantgate = self.cofiring_plant.biomass_used
+        self.quantity_plantgate = self.cofiring_plant.cofuel_used
         self.supply_chain = supply_chain_potential.fit(self.quantity_plantgate[1])
 
         self.quantity_fieldside = after_invest(self.supply_chain.straw_sold())
@@ -77,15 +77,17 @@ class System:
         display_as(electricity_sales, "kUSD")
 
         self.plant.revenue = electricity_sales
-        self.plant.coal_cost = self.plant.coal_used * price.coal
+        self.plant.mainfuel_cost = self.plant.mainfuel_used * price.coal
 
         self.cofiring_plant.revenue = electricity_sales
-        self.cofiring_plant.coal_cost = self.cofiring_plant.coal_used * price.coal
+        self.cofiring_plant.mainfuel_cost = (
+            self.cofiring_plant.mainfuel_used * price.coal
+        )
 
         # Transaction  at the plant gate
         payment_plantgate = self.quantity_plantgate * price.biomass_plantgate
         display_as(payment_plantgate, "kUSD")
-        self.cofiring_plant.biomass_cost = self.reseller.revenue = payment_plantgate
+        self.cofiring_plant.cofuel_cost = self.reseller.revenue = payment_plantgate
 
         # Transaction  at the field side
         payment_fieldside = self.quantity_fieldside * price.biomass_fieldside
@@ -103,7 +105,7 @@ class System:
         time = (
             self.farmer.labor()
             + self.reseller.labor()
-            + self.cofiring_plant.biomass_om_work()
+            + self.cofiring_plant.cofuel_om_work()
             - self.coal_work_lost
         )
         return display_as(time, "hr")
@@ -114,7 +116,7 @@ class System:
         amount = (
             self.farmer.labor_cost()
             + self.reseller.labor_cost()
-            + self.cofiring_plant.biomass_om_wages()
+            + self.cofiring_plant.cofuel_om_wages()
             - self.coal_wages_lost
         )
         return display_as(amount, "kUSD")
@@ -125,7 +127,7 @@ class System:
 
     @property
     def coal_saved(self):
-        mass = self.plant.coal_used - self.cofiring_plant.coal_used
+        mass = self.plant.mainfuel_used - self.cofiring_plant.mainfuel_used
         _ = kt  # Quiet pylint and the spyder codechecker
         return display_as(mass, "kt")
 
@@ -143,7 +145,7 @@ class System:
         """Tabulate system atmospheric emissions in year 1 ex ante (no cofiring)."""
         baseline = DataFrame(columns=["CO2", "NOx", "PM10", "SO2"])
         baseline = baseline.append(year_1(self.plant.emissions()))
-        baseline = baseline.append(year_1(self.plant.coal_reseller().emissions()))
+        baseline = baseline.append(year_1(self.plant.fuel_reseller().emissions()))
         baseline = baseline.append(year_1(self.farmer.emissions_exante))
         baseline.loc["Total"] = baseline.sum()
         baseline.loc["Total_plant"] = baseline.iloc[0]
@@ -156,7 +158,7 @@ class System:
         cofiring = DataFrame(columns=["CO2", "NOx", "PM10", "SO2"])
         cofiring = cofiring.append(year_1(self.cofiring_plant.emissions()))
         cofiring = cofiring.append(
-            year_1(self.cofiring_plant.coal_reseller().emissions())
+            year_1(self.cofiring_plant.fuel_reseller().emissions())
         )
         cofiring = cofiring.append(year_1(self.farmer.emissions()))
         cofiring = cofiring.append(year_1(self.reseller.emissions()))
@@ -172,7 +174,7 @@ class System:
         Return a dataframe of time series, indexed by segment and pollutant.
         """
         plant_emissions = self.plant.emissions(total=True)["Total"]
-        ship_coal_emissions = self.plant.coal_reseller().emissions(total=True)["Total"]
+        ship_coal_emissions = self.plant.fuel_reseller().emissions(total=True)["Total"]
         field_emissions = self.farmer.emissions_exante["Straw"]
         transport_emissions = field_emissions * 0  # No logistics
         total_emissions = plant_emissions + ship_coal_emissions + field_emissions
@@ -193,7 +195,7 @@ class System:
         Return a dataframe of time series, indexed by segment and pollutant.
         """
         plant_emissions = self.cofiring_plant.emissions(total=True)["Total"]
-        ship_coal_emissions = self.cofiring_plant.coal_reseller().emissions(total=True)[
+        ship_coal_emissions = self.cofiring_plant.fuel_reseller().emissions(total=True)[
             "Total"
         ]
         transport_emissions = self.reseller.emissions(total=True)["Total"]
@@ -247,7 +249,7 @@ class System:
 
     def coal_saved_benefits(self, coal_import_price):
         """Tabulate the quantity and value of coal saved by cofiring."""
-        baseline = self.plant.coal_used
+        baseline = self.plant.mainfuel_used
         reduction = self.coal_saved
         relative = reduction / baseline
         benefit = reduction * coal_import_price
@@ -343,8 +345,8 @@ class System:
         name = self.plant.name
         npv_opex_exante = self.plant.npv_opex(discount_rate, name)
         table = self.cofiring_plant.npv_opex(discount_rate, name)
-        table.loc["Fuel cost, coal"] -= npv_opex_exante.loc["Fuel cost, coal"]
-        table.loc["O&M, coal"] -= npv_opex_exante.loc["Operation & Maintenance"]
+        table.loc["Fuel cost, main fuel"] -= npv_opex_exante.loc["Fuel cost, main fuel"]
+        table.loc["O&M, main fuel"] -= npv_opex_exante.loc["Operation & Maintenance"]
         table.loc["= Operating expenses"] -= npv_opex_exante.loc["= Operating expenses"]
         return table
 
@@ -360,7 +362,7 @@ class System:
         ]
 
         table_opex = self.plant_npv_opex_change(discount_rate)
-        extra_OM = table_opex.loc["O&M, coal"] + table_opex.loc["O&M, biomass"]
+        extra_OM = table_opex.loc["O&M, main fuel"] + table_opex.loc["O&M, cofuel"]
         data.append(display_as(extra_OM, "kUSD"))
 
         technical_cost = np_sum(data)
@@ -405,8 +407,8 @@ class System:
         row2 = self.reseller.driving_wages()[1]
         row11 = self.reseller.loading_work()[1]
         row12 = self.reseller.loading_wages()[1]
-        row9 = self.cofiring_plant.biomass_om_work()[1]
-        row3 = self.cofiring_plant.biomass_om_wages()[1]
+        row9 = self.cofiring_plant.cofuel_om_work()[1]
+        row3 = self.cofiring_plant.cofuel_om_wages()[1]
         row6 = -self.coal_work_lost[1]
         row5 = -self.coal_wages_lost[1]
         row10 = self.labor[1]

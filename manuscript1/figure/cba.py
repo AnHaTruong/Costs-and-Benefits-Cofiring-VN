@@ -38,8 +38,8 @@ def plot_cba(system, axes):
     #%% Benefits
 
     fuel_saved = (
-        system.plant.operating_expenses_detail().loc["Fuel cost, coal"]
-        - system.cofiring_plant.operating_expenses_detail().loc["Fuel cost, coal"]
+        system.plant.operating_expenses_detail().loc["Fuel cost, main fuel"]
+        - system.cofiring_plant.operating_expenses_detail().loc["Fuel cost, main fuel"]
     )
 
     emission_reduction_value = system.emissions_reduction_benefit(external_cost).loc[
@@ -84,8 +84,8 @@ def plot_cba(system, axes):
     #%% Costs
 
     extra_om = (
-        system.cofiring_plant.operating_expenses_detail().loc["O&M, coal"]
-        + system.cofiring_plant.operating_expenses_detail().loc["O&M, biomass"]
+        system.cofiring_plant.operating_expenses_detail().loc["O&M, main fuel"]
+        + system.cofiring_plant.operating_expenses_detail().loc["O&M, cofuel"]
         - system.plant.operating_expenses_detail().loc["Operation & Maintenance"]
     )
 

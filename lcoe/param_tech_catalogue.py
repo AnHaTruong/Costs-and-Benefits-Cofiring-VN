@@ -27,7 +27,7 @@ from model.utils import (
     t,
     kWh,
 )
-from model.coalpowerplant import CoalPowerPlant, PlantParameter
+from model.flamepowerplant import FlamePowerPlant, PlantParameter
 from manuscript1.parameters import emission_factor
 
 discount_rate = 0.1
@@ -315,15 +315,15 @@ def create_plant(name, tech_data, fuel, year):
         boiler_technology="CFB",
         boiler_efficiency_new=87.03 / 100,
         plant_efficiency=tech_data[str(year)][3] / 100,
-        fix_om_coal=tech_data[str(year)][25] * USD / MW / y,
-        variable_om_coal=tech_data[str(year)][26] * USD / MWh,
+        fix_om_fuel=tech_data[str(year)][25] * USD / MW / y,
+        variable_om_fuel=tech_data[str(year)][26] * USD / MWh,
         emission_control={
             "CO2": 0.0,
             "SO2": tech_data[year][19],
             "NOx": 0.0,
             "PM10": 0.996,
         },
-        coal=fuel,
+        fuel=fuel,
     )
     capital_cost = float(tech_data[str(year)][22]) * tech_data[str(year)][1] * MUSD
     construction_time = tech_data[str(year)][7]
@@ -335,13 +335,13 @@ def create_plant(name, tech_data, fuel, year):
         - 1
     )
     capital_idc = capital_cost * (1 + idc)
-    plant = CoalPowerPlant(
+    plant = FlamePowerPlant(
         plant_parameter,
         time_horizon=30,
         emission_factor=emission_factor,
         amount_invested=capital_idc,
     )
-    plant.coal_cost = plant.coal_used * fuel_price[str(fuel.name)][str(year)]
+    plant.mainfuel_cost = plant.mainfuel_used * fuel_price[str(fuel.name)][str(year)]
     plant.revenue = after_invest(
         plant.power_generation[1] * electricity_price, plant.time_horizon
     )
@@ -386,10 +386,10 @@ def create_RE_plant(name, tech_data, year):
         boiler_technology="CFB",
         boiler_efficiency_new=87.03 / 100,
         plant_efficiency=1.0,
-        fix_om_coal=tech_data[str(year)][25] * USD / MW / y,
-        variable_om_coal=tech_data[str(year)][26] * USD / MWh,
+        fix_om_fuel=tech_data[str(year)][25] * USD / MW / y,
+        variable_om_fuel=tech_data[str(year)][26] * USD / MWh,
         emission_control={"CO2": 0.0, "SO2": 0.0, "NOx": 0.0, "PM10": 0.0},
-        coal=coal_6b,
+        fuel=coal_6b,
     )
     capital_cost = float(tech_data[str(year)][22]) * tech_data[str(year)][1] * MUSD
     construction_time = tech_data[str(year)][7]
@@ -401,14 +401,14 @@ def create_RE_plant(name, tech_data, year):
         - 1
     )
     capital_idc = capital_cost * (1 + idc)
-    plant = CoalPowerPlant(
+    plant = FlamePowerPlant(
         plant_parameter,
         time_horizon=30,
         emission_factor=emission_factor,
         amount_invested=capital_idc,
     )
-    plant.coal_used = plant.ones * 0.0 * t
-    plant.coal_cost = plant.coal_used * fuel_price["6b_coal"][str(year)]
+    plant.mainfuel_used = plant.ones * 0.0 * t
+    plant.mainfuel_cost = plant.mainfuel_used * fuel_price["6b_coal"][str(year)]
     plant.revenue = after_invest(
         plant.power_generation[1] * electricity_price, plant.time_horizon
     )

@@ -15,7 +15,7 @@ An Ha Truong, Minh Ha-Duong
 from pandas import DataFrame, concat
 
 from manuscript1.parameters import MongDuong1System, NinhBinhSystem
-from model.coalpowerplant import Fuel
+from model.flamepowerplant import Fuel
 
 
 def dict_to_df(stem, dictionary):

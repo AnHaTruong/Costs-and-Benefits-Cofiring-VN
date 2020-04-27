@@ -122,9 +122,9 @@ def energy_costs(system_a, system_b):
 
     lines.append(
         "Coal                "
-        + str(energy_cost(system_a.price.coal, system_a.plant.parameter.coal))
+        + str(energy_cost(system_a.price.coal, system_a.plant.parameter.fuel))
         + "      "
-        + str(energy_cost(system_b.price.coal, system_b.plant.parameter.coal))
+        + str(energy_cost(system_b.price.coal, system_b.plant.parameter.fuel))
     )
 
     lines.append(
@@ -132,23 +132,23 @@ def energy_costs(system_a, system_b):
         + str(
             energy_cost(
                 system_a.price.biomass_fieldside,
-                system_a.cofiring_plant.cofire_parameter.biomass,
+                system_a.cofiring_plant.cofire_parameter.cofuel,
             )
         )
         + "      "
         + str(
             energy_cost(
                 system_b.price.biomass_fieldside,
-                system_b.cofiring_plant.cofire_parameter.biomass,
+                system_b.cofiring_plant.cofire_parameter.cofuel,
             )
         )
     )
 
     lines.append(
         "Biomass plant gate  "
-        + str(system_a.cofiring_plant.biomass_energy_cost()[1])
+        + str(system_a.cofiring_plant.cofuel_energy_cost()[1])
         + "      "
-        + str(system_b.cofiring_plant.biomass_energy_cost()[1])
+        + str(system_b.cofiring_plant.cofuel_energy_cost()[1])
     )
 
     return "\n".join(lines)
@@ -164,8 +164,8 @@ def straw_supply(system_a, system_b):
     col3 = system_a.quantity_fieldside[1]
     col4 = system_b.quantity_fieldside[1]
 
-    col5 = system_a.cofiring_plant.biomass_cost_per_t()[1]
-    col6 = system_b.cofiring_plant.biomass_cost_per_t()[1]
+    col5 = system_a.cofiring_plant.cofuel_cost_per_t()[1]
+    col6 = system_b.cofiring_plant.cofuel_cost_per_t()[1]
 
     assert isclose(
         col5, system_a.price.biomass_plantgate
@@ -229,7 +229,7 @@ def balance_jobs(system_a, system_b):
                 system.farmer.labor()[1],
                 system.reseller.loading_work()[1],
                 system.reseller.driving_work()[1],
-                system.cofiring_plant.biomass_om_work()[1],
+                system.cofiring_plant.cofuel_om_work()[1],
                 -system.coal_work_lost[1],
             ],
             index=headings,
@@ -241,7 +241,7 @@ def balance_jobs(system_a, system_b):
                 system.farmer.labor_cost()[1],
                 system.reseller.loading_wages()[1],
                 system.reseller.driving_wages()[1],
-                system.cofiring_plant.biomass_om_wages()[1],
+                system.cofiring_plant.cofuel_om_wages()[1],
                 -system.coal_wages_lost[1],
             ],
             index=headings,
