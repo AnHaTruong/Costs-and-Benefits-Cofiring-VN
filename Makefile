@@ -111,6 +111,9 @@ docstyle: venv
 black: venv
 	$(BLACK) $(SOURCEDIRS)
 
+black-check: venv
+	$(BLACK) --check $(SOURCEDIRS)
+
 codestyle: venv
 	$(CODESTYLE)
 
