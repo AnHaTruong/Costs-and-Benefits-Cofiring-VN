@@ -8,7 +8,8 @@ xlrd
 # TODO: Fix the error messages with natu seen when running  make venv
 wheel
 setuptools
-git+https://github.com/kdavies4/natu.git
+git+https://github.com/MinhHaDuong/natu.git
+#git+https://github.com/kdavies4/natu.git
 # -e git+git@github.com:kdavies4/natu.git#egg=natumatplotlib
 # For development
 pytest
