@@ -14,7 +14,7 @@ from pandas import Series, DataFrame, set_option
 from model.utils import t, after_invest, display_as, ONES
 
 from model.emitter import Emitter, Activity
-from model.investment import Investment
+from model.accountholder import Accountholder
 
 
 FarmerParameter = namedtuple(
@@ -32,7 +32,7 @@ FarmerParameter = namedtuple(
 )
 
 
-class Farmer(Investment, Emitter):
+class Farmer(Accountholder, Emitter):
     """The farming segment of the system: farmers who produce and sell straw.
 
     As an Investment, the Farmer.revenue has to be set after initialization.
@@ -78,7 +78,7 @@ class Farmer(Investment, Emitter):
 
         Emitter.__init__(self, field_burning, winder_use)
 
-        Investment.__init__(self, "Farmers")
+        Accountholder.__init__(self, "Farmers")
 
     def labor(self):
         """Work time needed to collect straw for co-firing per year."""

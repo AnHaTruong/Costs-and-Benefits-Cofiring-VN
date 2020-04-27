@@ -16,7 +16,7 @@ from pandas import Series, DataFrame
 from model.utils import USD, TIME_HORIZON, after_invest, display_as, isclose, zeros, npv
 
 
-class Investment:
+class Accountholder:
     """Financial project accounting: NPV after revenue, operating expenses, amortization and taxes.
 
     The investment is made in period 0,
@@ -36,11 +36,11 @@ class Investment:
     >>> from model.utils import use_floats
     >>> if use_floats:
     ...     pytest.skip('This doctests uses units.')
-    >>> i = Investment('test', 20)
+    >>> i = Accountholder('test', 20)
     >>> i.revenue()
     Traceback (most recent call last):
         ...
-    AttributeError: Accessing  Investment.revenue  value before it is set
+    AttributeError: Accessing  Accountholder.revenue  value before it is set
 
     >>> i.revenue = after_invest(3000 * USD, 20)
     >>> # set the costs of whoever is paying the 3000 USD per year
@@ -49,7 +49,7 @@ class Investment:
            3 kUSD, 3 kUSD, 3 kUSD, 3 kUSD, 3 kUSD, 3 kUSD, 3 kUSD, 3 kUSD,
            3 kUSD, 3 kUSD, 3 kUSD, 3 kUSD, 3 kUSD], dtype=object)
 
-    >>> i = Investment("test", 20, 1000*USD)
+    >>> i = Accountholder("test", 20, 1000*USD)
     >>> i.revenue = zeros(21) * USD
     >>> i.net_present_value(0, 0, 10)
     -1 kUSD
@@ -69,7 +69,7 @@ class Investment:
         """Return the revenue. Decorator @property means it is a getter method."""
         if self._revenue is None:
             raise AttributeError(
-                "Accessing  Investment.revenue  value before it is set"
+                "Accessing  Accountholder.revenue  value before it is set"
             )
         return display_as(self._revenue, "kUSD")
 

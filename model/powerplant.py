@@ -25,7 +25,7 @@ from model.utils import (
 )
 
 # from model.utils import TIME_HORIZON
-from model.investment import Investment
+from model.accountholder import Accountholder
 from model.emitter import Emitter, Activity
 
 
@@ -64,7 +64,7 @@ CofiringParameter = namedtuple(
 
 
 # pylint: disable=too-many-instance-attributes, too-many-arguments
-class PowerPlant(Investment, Emitter):
+class PowerPlant(Accountholder, Emitter):
     """A coal power plant, without co-firing."""
 
     def __init__(
@@ -90,7 +90,7 @@ class PowerPlant(Investment, Emitter):
         self.time_horizon = time_horizon
         self.ones = ones(self.time_horizon + 1)
 
-        Investment.__init__(self, parameter.name, self.time_horizon, amount_invested)
+        Accountholder.__init__(self, parameter.name, self.time_horizon, amount_invested)
         self.parameter = parameter
         self.emission_factor = emission_factor
 

@@ -14,7 +14,7 @@ from pandas import Series, DataFrame, set_option
 from model.utils import after_invest, display_as
 
 from model.emitter import Emitter, Activity
-from model.investment import Investment
+from model.accountholder import Accountholder
 
 ResellerParameter = namedtuple(
     "ResellerParameter",
@@ -33,7 +33,7 @@ ResellerParameter = namedtuple(
 
 
 # pylint: disable=too-many-instance-attributes
-class Reseller(Investment, Emitter):
+class Reseller(Accountholder, Emitter):
     """The reseller segment of the system.
 
     Members:
@@ -51,7 +51,7 @@ class Reseller(Investment, Emitter):
 
     def __init__(self, supply_chain, transport_parameter, emission_factor):
 
-        Investment.__init__(self, "Reseller")
+        Accountholder.__init__(self, "Reseller")
 
         self.parameter = transport_parameter
         self.activity_level = after_invest(supply_chain.transport_tkm())
