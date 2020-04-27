@@ -12,7 +12,7 @@ import pytest
 import manuscript1.parameters as baseline
 from model.utils import isclose
 from model.system import System
-from model.powerplant import PowerPlant
+from model.coalpowerplant import CoalPowerPlant
 
 # pylint and pytest known compatibility bug
 # pylint: disable=redefined-outer-name
@@ -43,7 +43,7 @@ def test_npv(null_cofiring_system):
 
 def test_npv_powerplant(null_cofiring_system):
     """Compare NPV of baseline plant without cofiring with NPV of cofiring plant at zero ratio."""
-    plant = PowerPlant(
+    plant = CoalPowerPlant(
         baseline.plant_parameter_MD1, emission_factor=baseline.emission_factor
     )
     plant.revenue = plant.power_generation * baseline.price_MD1.electricity
