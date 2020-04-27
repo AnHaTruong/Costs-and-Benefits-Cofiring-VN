@@ -1,0 +1,19 @@
+winder_rental_cost        0.00
+winder_haul               0.08
+work_hour_day             0.33
+wage_bm_collect           0.00
+fuel_cost_per_hour        0.00
+open_burn_rate            0.60
+fuel_use                  0.00
+profit                    0.11
+dtype: float64
+
+winder_rental_cost        0.00
+winder_haul               0.08
+work_hour_day             0.33
+wage_bm_collect           0.00
+fuel_cost_per_hour        0.00
+open_burn_rate            0.60
+fuel_use                  0.00
+profit                    0.11
+dtype: float64

@@ -42,6 +42,7 @@ CofiringParameter = namedtuple(
 )
 
 
+# pylint: disable=too-many-instance-attributes
 class CofiringPlant(CoalPowerPlant):
     """A coal-fired power plant which co-fires biomass."""
 

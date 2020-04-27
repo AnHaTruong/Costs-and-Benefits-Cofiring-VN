@@ -104,8 +104,16 @@ def test_emissions_cofiring(regtest, systems):
     regtest.write(f(systems, "emissions_cofiring()"))
 
 
+def test_plant_parameters(regtest, systems):
+    regtest.write(f(systems, "plant.parameters_table()"))
+
+
 def test_plant_business_data(regtest, systems):
     regtest.write(f(systems, "plant.business_data(tax_rate, depreciation_period)"))
+
+
+def test_cofiring_parameters(regtest, systems):
+    regtest.write(f(systems, "cofiring_plant.parameters_table()"))
 
 
 def test_cofiring_business_data(regtest, systems):
@@ -114,8 +122,20 @@ def test_cofiring_business_data(regtest, systems):
     )
 
 
+def test_farmer_parameters(regtest, systems):
+    regtest.write(f(systems, "farmer.parameters_table()"))
+
+
 def test_farmer_business_data(regtest, systems):
     regtest.write(f(systems, "farmer.business_data(tax_rate, depreciation_period)"))
+
+
+def test_reseller_parameters(regtest, systems):
+    regtest.write(f(systems, "reseller.parameters_table()"))
+
+
+def test_reseller_business_data(regtest, systems):
+    regtest.write(f(systems, "reseller.business_data(tax_rate, depreciation_period)"))
 
 
 def test_plant_net_present_value(regtest, systems):

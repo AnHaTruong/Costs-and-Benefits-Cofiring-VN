@@ -52,9 +52,12 @@ doctest fails in an spyder3 IPython console with an unexpected argument in __ini
 See https://github.com/spyder-ide/spyder/issues/1855
 Use a simple Python console instead.
 
-natu uses invalid escape sequences in core.py:331 and exponents.py:41. This make a silent DeprecationWarning in Python 3.6, a visible DeprecationWarning in Python 3.8 and is expected to cause SyntaxError in Python 3.10.
+Make does not handle whitespace in PATH. Workaround: use underscores not spaces in directory and file names.
 
-Make does not handle whitespace in directory or filenames.
+natu 0.1.2 improperly quote a LaTeX escape sequences in core.py:331 and exponents.py:41. This make a silent DeprecationWarning in Python 3.6, a visible DeprecationWarning in Python 3.8 and is expected to cause SyntaxError in Python 3.10. Fix: replace '\,' by r'\\,'.
+
+In `pytest-5.4.1` the modules `doctest` and `coverage` are incompatible and five AttributeError: 'DoctestItem' object has no attribute 'fixturenames'. Workaround: coverage does not include doctests.
+
 
 ## For new developpers
 

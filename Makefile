@@ -16,6 +16,7 @@ CODESTYLE = $(VENV)/pycodestyle
 COVERAGE = $(VENV)/coverage
 
 SOURCEDIRS = model manuscript1 sensitivity lcoe tests manuscript1/table manuscript1/figure
+SOURCEFILES := $(shell find $(SOURCEDIRS) -name '*.py')
 DOCTESTFILES := $(shell grep -l '>>>' */*.py */*/*.py)
 
 figures-lcoe =  LCOE-4tech-3years-catalogue.png LCOE-4tech-3years-IEAfuelcosts.png\
@@ -34,7 +35,6 @@ tables-manuscript1 = tables_manuscript.txt\
                      table_parameter_emission_factors.txt\
                      table_uncertainty.txt\
                      table_sensitivity.txt
-
 
 all: $(tables) $(figures-lcoe) $(figures-manuscript1) $(tables-manuscript1)
 
@@ -99,11 +99,16 @@ coverage: htmlcov
 htmlcov: venv
 	$(PYTEST) --cov=. --cov-report term-missing --cov-report html
 
+# Broken in pytest 5.4.1
+# htmlcov: venv
+# 	$(PYTHON) -m pytest --doctest-modules --cov=. --cov-report term-missing --cov-report html
+
 regtest-reset: venv
 	$(PYTEST) --regtest-reset
 
 lint: venv
-	$(PYLINT) $(PYLINTARGS) $(SOURCEDIRS)
+	$(PYLINT) $(PYLINTARGS) $(SOURCEFILES)
+	# $(PYLINT) $(PYLINTARGS) $(SOURCEDIRS)
 
 docstyle: venv
 	$(DOCSTYLE) $(SOURCEDIRS)
