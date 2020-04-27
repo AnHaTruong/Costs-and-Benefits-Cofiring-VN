@@ -52,6 +52,9 @@ doctest fails in an spyder3 IPython console with an unexpected argument in __ini
 See https://github.com/spyder-ide/spyder/issues/1855
 Use a simple Python console instead.
 
+natu uses invalid escape sequences in core.py:331 and exponents.py:41. This make a silent DeprecationWarning in Python 3.6, a visible DeprecationWarning in Python 3.8 and is expected to cause SyntaxError in Python 3.10.
+
+Make does not handle whitespace in directory or filenames.
 
 ## For new developpers
 
