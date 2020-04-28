@@ -27,7 +27,7 @@ from model.utils import (
     t,
     kWh,
 )
-from model.flamepowerplant import FlamePowerPlant, PlantParameter
+from model.fuelpowerplant import FuelPowerPlant, PlantParameter
 from manuscript1.parameters import emission_factor
 
 discount_rate = 0.1
@@ -335,7 +335,7 @@ def create_plant(name, tech_data, fuel, year):
         - 1
     )
     capital_idc = capital_cost * (1 + idc)
-    plant = FlamePowerPlant(
+    plant = FuelPowerPlant(
         plant_parameter,
         time_horizon=30,
         emission_factor=emission_factor,
@@ -401,7 +401,7 @@ def create_RE_plant(name, tech_data, year):
         - 1
     )
     capital_idc = capital_cost * (1 + idc)
-    plant = FlamePowerPlant(
+    plant = FuelPowerPlant(
         plant_parameter,
         time_horizon=30,
         emission_factor=emission_factor,

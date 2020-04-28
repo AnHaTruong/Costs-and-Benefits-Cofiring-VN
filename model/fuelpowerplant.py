@@ -6,7 +6,7 @@
 # (c) Minh Ha-Duong, An Ha Truong 2016-2019
 # minh.haduong@gmail.com
 # Creative Commons Attribution-ShareAlike 4.0 International
-"""Define FlamePowerPlant, which should be subclassed from PowerPlant.
+"""Define FuelPowerPlant, which should be subclassed from PowerPlant.
 
 A flame power plant burns a single fuel to produce electricity.
 """
@@ -51,7 +51,7 @@ PlantParameter = namedtuple(
 
 
 # pylint: disable=too-many-instance-attributes, too-many-arguments
-class FlamePowerPlant(Accountholder, Emitter):
+class FuelPowerPlant(Accountholder, Emitter):
     """A flame power plant, burning a single fuel."""
 
     def __init__(
@@ -66,7 +66,7 @@ class FlamePowerPlant(Accountholder, Emitter):
 
         The financials (revenue and mainfuel_cost) are not initialized and must be defined later.
         For example:
-        a/ instantiate      plant = FlamePowerPlant(plant_parameter_MD1)
+        a/ instantiate      plant = FuelPowerPlant(plant_parameter_MD1)
         b/ assign           plant.revenue = plant.power_generation * price_MD1.electricity
         c/ assign           plant.mainfuel_cost = plant.mainfuel_used * price_MD1.coal
         d/ Now you can      print(plant.net_present_value(discount_rate=0.08))
@@ -115,7 +115,7 @@ class FlamePowerPlant(Accountholder, Emitter):
         """Return the cost of main fuel. Decorator @property means it is a getter method."""
         if self._mainfuel_cost is None:
             raise AttributeError(
-                "Accessing  FlamePowerPlant.mainfuel_cost  value before it is set"
+                "Accessing  FuelPowerPlant.mainfuel_cost  value before it is set"
             )
         return display_as(self._mainfuel_cost, "kUSD")
 

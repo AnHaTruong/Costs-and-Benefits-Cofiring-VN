@@ -6,7 +6,7 @@
 # (c) Minh Ha-Duong, An Ha Truong 2016-2019
 # minh.haduong@gmail.com
 # Creative Commons Attribution-ShareAlike 4.0 International
-"""Define a CofiringPlant, subclass of FlamePowerPlant."""
+"""Define a CofiringPlant, subclass of FuelPowerPlant."""
 
 from collections import namedtuple
 
@@ -23,7 +23,7 @@ from model.utils import (
     after_invest,
 )
 
-from model.flamepowerplant import FlamePowerPlant
+from model.fuelpowerplant import FuelPowerPlant
 from model.emitter import Activity
 
 
@@ -43,7 +43,7 @@ CofiringParameter = namedtuple(
 
 
 # pylint: disable=too-many-instance-attributes
-class CofiringPlant(FlamePowerPlant):
+class CofiringPlant(FuelPowerPlant):
     """A flame power plant which co-fires the (main) fuel with a cofuel.
 
     For example the fuel is coal, the cofuel is biomass.
@@ -52,7 +52,7 @@ class CofiringPlant(FlamePowerPlant):
     def __init__(self, plant_parameter, cofire_parameter, emission_factor):
         """Initialize the cofiring plant.
 
-        1/ Instanciate as a FlamePowerPlant with a lower efficiency and higher capital cost
+        1/ Instanciate as a FuelPowerPlant with a lower efficiency and higher capital cost
         2/ Compute the co-fuel used and main fuel saved
         3/ Overwrite the list of activities from grandparent class Emitter.
 
@@ -76,7 +76,7 @@ class CofiringPlant(FlamePowerPlant):
         )
         boiler_efficiency[0] = plant_parameter.boiler_efficiency_new
 
-        FlamePowerPlant.__init__(
+        FuelPowerPlant.__init__(
             self,
             plant_parameter,
             emission_factor,
@@ -215,7 +215,7 @@ class CofiringPlant(FlamePowerPlant):
 
     def lcoe_statement(self, discount_rate, tax_rate, depreciation_period):
         """Assess the levelized cost of electricity."""
-        statement = FlamePowerPlant.lcoe_statement(
+        statement = FuelPowerPlant.lcoe_statement(
             self, discount_rate, tax_rate, depreciation_period
         )
         statement["  Cofuel      (MUSD)"] = npv(discount_rate, self.cofuel_cost) / MUSD
@@ -226,7 +226,7 @@ class CofiringPlant(FlamePowerPlant):
 
     def parameters_table(self):
         """Tabulate the arguments defining the cofiring plant. Return a Pandas Series."""
-        a = FlamePowerPlant.parameters_table(self)
+        a = FuelPowerPlant.parameters_table(self)
         a["name"] = self.name
         b = Series(self.cofire_parameter, self.cofire_parameter._fields)
         display_as(b.loc["investment_cost"], "USD / kW")

@@ -20,7 +20,7 @@ from pandas import Series
 from model.utils import USD, VND
 from model.utils import MJ, kg, t, d, hr, km, MW, ha, kW, y, kWh, MWh, g
 from model.system import System, Price
-from model.flamepowerplant import Fuel, PlantParameter
+from model.fuelpowerplant import Fuel, PlantParameter
 from model.cofiringplant import CofiringParameter
 from model.farmer import FarmerParameter
 from model.reseller import ResellerParameter
