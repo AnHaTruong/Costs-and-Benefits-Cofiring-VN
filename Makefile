@@ -41,7 +41,15 @@ all: $(tables) $(figures-lcoe) $(figures-manuscript1) $(tables-manuscript1)
 feasibility.txt: manuscript1/table/feasibility.py manuscript1/parameters.py venv
 	$(PYTHON) -m manuscript1.table.feasibility > $@
 
-$(figures-lcoe): lcoe/figures.py venv
+# With GNU make 4.3 we could use &: to specify grouped target
+#$(figures-lcoe): lcoe/figures.py venv
+#	$(PYTHON) -m lcoe.figures
+
+$(figures-lcoe): figures-lcoe-done
+	@#Empty recipe
+
+.INTERMEDIATE: figures-lcoe-done
+figures-lcoe-done: lcoe/figures.py venv
 	$(PYTHON) -m lcoe.figures
 
 figure_%.svg: manuscript1/figure/%.py manuscript1/parameters.py venv
