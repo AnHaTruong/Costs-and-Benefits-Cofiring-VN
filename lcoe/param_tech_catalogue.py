@@ -12,30 +12,11 @@
 from collections import namedtuple
 from pandas import read_excel
 
-from model.utils import (
-    USD,
-    after_invest,
-    array,
-    MJ,
-    kg,
-    hr,
-    MW,
-    y,
-    MUSD,
-    MWh,
-    GJ,
-    t,
-    kWh,
-)
-from model.fuelpowerplant import FuelPowerPlant, PlantParameter
+from model.utils import array, USD, MJ, kg, hr, GJ, t
 from manuscript1.parameters import emission_factor
 
 from lcoe.plants_new import create_plant_dict_new, create_REplant_dict_new
-
-discount_rate = 0.1
-electricity_price = 0.08 * USD / kWh
-tax_rate = 0.0
-depreciation_period = 10
+from lcoe.plants import create_plant_dict, create_REplant_dict
 
 # %% Read data and input parameters
 
@@ -284,6 +265,8 @@ fuel_price["gas_IEA_lower"] = {}
 for key in fuel_price["gas_IEA"]:
     fuel_price["gas_IEA_lower"][key] = fuel_price["gas_IEA"][key] - gas_price_2std
 
+# Is this used somewhere
+
 emission_factor["natural_gas"] = {
     "CO2": 0.0561 * kg / MJ * natural_gas.heat_value,  # IPCC 2006
     "SO2": 0.012 * kg / t,  # EPA 1995, using NG density at 0.8 kg/m3
@@ -310,159 +293,60 @@ emission_factor["RE"] = {
 
 # %% Instantiate plants
 
-
-def create_plant(name, tech_data, fuel, year):
-    """Create a power plant with Vietnam Technology Catalogue data by PowerPlant class.
-
-    The argument 'name' (string type) take the technology name from full_load_hour dictionary.
-    The argument 'tech_data' is the pd dataframe of the technology.
-    The argument 'fuel' is definded by Fuel.
-    """
-    SO2control = tech_data[year][19]
-    if SO2control == "-":
-        SO2control = 0
-    plant_parameter = PlantParameter(
-        name=name,
-        capacity=tech_data[str(year)][1] * MW,
-        capacity_factor=full_load_hour[name] / (8760 * hr),
-        commissioning=2015,
-        boiler_technology="CFB",
-        boiler_efficiency_new=87.03 / 100,
-        plant_efficiency=tech_data[str(year)][3] / 100,
-        fix_om_fuel=tech_data[str(year)][25] * USD / MW / y,
-        variable_om_fuel=tech_data[str(year)][26] * USD / MWh,
-        emission_control={"CO2": 0.0, "SO2": SO2control, "NOx": 0.0, "PM10": 0.996,},
-        fuel=fuel,
-    )
-    capital_cost = float(tech_data[str(year)][22]) * tech_data[str(year)][1] * MUSD
-    construction_time = tech_data[str(year)][7]
-    idc = (
-        1
-        * ((1 + discount_rate) ** construction_time - 1)
-        / (discount_rate * construction_time)
-        * (1 + discount_rate / 2)
-        - 1
-    )
-    capital_idc = capital_cost * (1 + idc)
-    plant = FuelPowerPlant(
-        plant_parameter,
-        time_horizon=30,
-        emission_factor=emission_factor,
-        amount_invested=capital_idc,
-    )
-    plant.mainfuel_cost = plant.mainfuel_used * fuel_price[str(fuel.name)][str(year)]
-    plant.revenue = after_invest(
-        plant.power_generation[1] * electricity_price, plant.time_horizon
-    )
-    return plant
-
-
 coal_list = [coal_6b, coal_upper, coal_lower, coal_IEA, coal_IEA_upper, coal_IEA_lower]
 gas_list = [natural_gas, gas_upper, gas_lower, gas_IEA, gas_IEA_upper, gas_IEA_lower]
 
 
-def create_plant_dict(tech_name, tech_data, fuel_list):
-    """Create a dictionary of convention plants in 2020, 2030 & 2050 with different fuel price."""
-    plant_dict = dict()
-    for year in ["2020", "2030", "2050", "Lower20", "Upper20", "Lower50", "Upper50"]:
-        plant_dict[year] = {}
-        for fuel in fuel_list:
-            arg = [tech_name, tech_data, fuel, year]
-            plant = create_plant(*arg)
-            plant_dict[year][fuel.name] = plant
-    return plant_dict
+Coal_Subcritical = create_plant_dict(
+    "coal subcritical", CoalSub_data, coal_list, fuel_price, emission_factor
+)
+Coal_Supercritical = create_plant_dict(
+    "coal supercritical", CoalSC_data, coal_list, fuel_price, emission_factor
+)
+Coal_USC = create_plant_dict(
+    "coal USC", CoalUSC_data, coal_list, fuel_price, emission_factor
+)
 
-
-Coal_Subcritical = create_plant_dict("coal subcritical", CoalSub_data, coal_list)
-Coal_Supercritical = create_plant_dict("coal supercritical", CoalSC_data, coal_list)
-Coal_USC = create_plant_dict("coal USC", CoalUSC_data, coal_list)
-
-SCGT = create_plant_dict("SCGT", SCGT_data, gas_list)
-CCGT = create_plant_dict("CCGT", CCGT_data, gas_list)
+SCGT = create_plant_dict("SCGT", SCGT_data, gas_list, fuel_price, emission_factor)
+CCGT = create_plant_dict("CCGT", CCGT_data, gas_list, fuel_price, emission_factor)
 
 Coal_Subcritical_new = create_plant_dict_new(
-    "coal subcritical", CoalSub_data, coal_list, fuel_price
+    "coal subcritical", CoalSub_data, coal_list, fuel_price, emission_factor
 )
-assert Coal_Subcritical == Coal_Subcritical_new
-
 Coal_Supercritical_new = create_plant_dict_new(
-    "coal supercritical", CoalSC_data, coal_list, fuel_price
+    "coal supercritical", CoalSC_data, coal_list, fuel_price, emission_factor
 )
+Coal_USC_new = create_plant_dict_new(
+    "coal USC", CoalUSC_data, coal_list, fuel_price, emission_factor
+)
+SCGT_new = create_plant_dict_new(
+    "SCGT", SCGT_data, gas_list, fuel_price, emission_factor
+)
+CCGT_new = create_plant_dict_new(
+    "CCGT", CCGT_data, gas_list, fuel_price, emission_factor
+)
+
+assert Coal_Subcritical == Coal_Subcritical_new
 assert Coal_Supercritical == Coal_Supercritical_new
-
-Coal_USC_new = create_plant_dict_new("coal USC", CoalUSC_data, coal_list, fuel_price)
 assert Coal_USC == Coal_USC_new
-
-SCGT_new = create_plant_dict_new("SCGT", SCGT_data, gas_list, fuel_price)
 assert SCGT == SCGT_new
-
-CCGT_new = create_plant_dict_new("CCGT", CCGT_data, gas_list, fuel_price)
 assert CCGT == CCGT_new
 
 
-def create_RE_plant(name, tech_data, year):
-    """Create a renewble power plant with Vietnam Technology Catalogue data by PowerPlant class.
+Solar_PV = create_REplant_dict("solar", PV_data, fuel_price, emission_factor)
+Wind_Onshore = create_REplant_dict(
+    "onshore wind", Wind_onshore_data, fuel_price, emission_factor
+)
+Wind_Offshore = create_REplant_dict(
+    "offshore wind", Wind_offshore_data, fuel_price, emission_factor
+)
 
-    The argument 'name' (string type) take the technology name from full_load_hour dictionary.
-    The argument 'tech_data' is the pd dataframe of the technlogy.
-    """
-    plant_parameter = PlantParameter(
-        name=name,
-        capacity=tech_data[str(year)][1] * MW,
-        capacity_factor=full_load_hour[name] / (8760 * hr),
-        commissioning=2015,
-        boiler_technology="CFB",
-        boiler_efficiency_new=87.03 / 100,
-        plant_efficiency=1.0,
-        fix_om_fuel=tech_data[str(year)][25] * USD / MW / y,
-        variable_om_fuel=tech_data[str(year)][26] * USD / MWh,
-        emission_control={"CO2": 0.0, "SO2": 0.0, "NOx": 0.0, "PM10": 0.0},
-        fuel=coal_6b,
-    )
-    capital_cost = float(tech_data[str(year)][22]) * tech_data[str(year)][1] * MUSD
-    construction_time = tech_data[str(year)][7]
-    idc = (
-        1
-        * ((1 + discount_rate) ** construction_time - 1)
-        / (discount_rate * construction_time)
-        * (1 + discount_rate / 2)
-        - 1
-    )
-    capital_idc = capital_cost * (1 + idc)
-    plant = FuelPowerPlant(
-        plant_parameter,
-        time_horizon=30,
-        emission_factor=emission_factor,
-        amount_invested=capital_idc,
-    )
-    plant.mainfuel_used = plant.ones * 0.0 * t
-    plant.mainfuel_cost = plant.mainfuel_used * fuel_price["6b_coal"][str(year)]
-    plant.revenue = after_invest(
-        plant.power_generation[1] * electricity_price, plant.time_horizon
-    )
-    return plant
-
-
-def create_REplant_dict(tech_name, tech_data):
-    """Create a dictionary of RE plants in 2020, 2030 and 2050."""
-    plant_dict = dict()
-    for year in ["2020", "2030", "2050", "Lower20", "Upper20", "Lower50", "Upper50"]:
-        arg = [tech_name, tech_data, year]
-        plant = create_RE_plant(*arg)
-        plant_dict[year] = plant
-    return plant_dict
-
-
-Solar_PV = create_REplant_dict("solar", PV_data)
-Wind_Onshore = create_REplant_dict("onshore wind", Wind_onshore_data)
-Wind_Offshore = create_REplant_dict("offshore wind", Wind_offshore_data)
-
-Solar_PV_new = create_REplant_dict_new("solar", PV_data, fuel_price)
+Solar_PV_new = create_REplant_dict_new("solar", PV_data, fuel_price, emission_factor)
 Wind_Onshore_new = create_REplant_dict_new(
-    "onshore wind", Wind_onshore_data, fuel_price
+    "onshore wind", Wind_onshore_data, fuel_price, emission_factor
 )
 Wind_Offshore_new = create_REplant_dict_new(
-    "offshore wind", Wind_offshore_data, fuel_price
+    "offshore wind", Wind_offshore_data, fuel_price, emission_factor
 )
 
 # for idx, row in Solar_PV.items():

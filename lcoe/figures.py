@@ -15,10 +15,8 @@ import matplotlib.patches as mpatches
 
 # pylint: disable=wrong-import-order
 from model.utils import MWh, USD, npv, array, arange, concatenate
+from lcoe.param_economics import discount_rate, tax_rate, depreciation_period
 from lcoe.param_tech_catalogue import (
-    discount_rate,
-    tax_rate,
-    depreciation_period,
     Coal_Supercritical,
     CCGT,
     Solar_PV,

@@ -47,8 +47,7 @@ coal_6b = Fuel(
 # %% Instantiate plants
 
 # pylint: disable=too-many-arguments
-
-def create_plant_new(name, tech_data, fuel, year, fuel_price, emission_factor):
+def create_plant(name, tech_data, fuel, year, fuel_price, emission_factor):
     """Create a power plant with Vietnam Technology Catalogue data by PowerPlant class.
 
     The argument 'name' (string type) take the technology name from full_load_hour dictionary.
@@ -94,19 +93,19 @@ def create_plant_new(name, tech_data, fuel, year, fuel_price, emission_factor):
     return plant
 
 
-def create_plant_dict_new(tech_name, tech_data, fuel_list, fuel_price, emission_factor):
+def create_plant_dict(tech_name, tech_data, fuel_list, fuel_price, emission_factor):
     """Create a dictionary of convention plants in 2020, 2030 & 2050 with different fuel price."""
     plant_dict = dict()
     for year in ["2020", "2030", "2050", "Lower20", "Upper20", "Lower50", "Upper50"]:
         plant_dict[year] = {}
         for fuel in fuel_list:
             arg = [tech_name, tech_data, fuel, year, fuel_price, emission_factor]
-            plant = create_plant_new(*arg)
+            plant = create_plant(*arg)
             plant_dict[year][fuel.name] = plant
     return plant_dict
 
 
-def create_RE_plant_new(name, tech_data, year, fuel_price, emission_factor):
+def create_RE_plant(name, tech_data, year, fuel_price, emission_factor):
     """Create a renewble power plant with Vietnam Technology Catalogue data by PowerPlant class.
 
     The argument 'name' (string type) take the technology name from full_load_hour dictionary.
@@ -149,11 +148,11 @@ def create_RE_plant_new(name, tech_data, year, fuel_price, emission_factor):
     return plant
 
 
-def create_REplant_dict_new(tech_name, tech_data, fuel_price, emission_factor):
+def create_REplant_dict(tech_name, tech_data, fuel_price, emission_factor):
     """Create a dictionary of RE plants in 2020, 2030 and 2050."""
     plant_dict = dict()
     for year in ["2020", "2030", "2050", "Lower20", "Upper20", "Lower50", "Upper50"]:
         arg = [tech_name, tech_data, year, fuel_price, emission_factor]
-        plant = create_RE_plant_new(*arg)
+        plant = create_RE_plant(*arg)
         plant_dict[year] = plant
     return plant_dict
