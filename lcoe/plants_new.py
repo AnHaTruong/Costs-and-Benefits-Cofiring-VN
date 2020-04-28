@@ -18,10 +18,11 @@ from model.utils import (
     MUSD,
     MWh,
 )
-from model.fuelpowerplant import FuelPowerPlant, PlantParameter
+from model.powerplant import PowerPlant, PlantParameter
 from lcoe.param_economics import discount_rate, electricity_price
 
-# Unsure where these numbers come from
+# If these capacity factors numbers come from tech catalogue,
+# move them back in the module and import them
 
 full_load_hour = {
     "coal subcritical": 6000 * hr,
@@ -58,8 +59,8 @@ def create_plant_new(name, tech_data, fuel, year, fuel_price, emission_factor):
         boiler_technology="CFB",
         boiler_efficiency_new=87.03 / 100,
         plant_efficiency=tech_data[str(year)][3] / 100,
-        fix_om_fuel=tech_data[str(year)][25] * USD / MW / y,
-        variable_om_fuel=tech_data[str(year)][26] * USD / MWh,
+        fix_om_main=tech_data[str(year)][25] * USD / MW / y,
+        variable_om_main=tech_data[str(year)][26] * USD / MWh,
         emission_control={"CO2": 0.0, "SO2": SO2control, "NOx": 0.0, "PM10": 0.996},
         fuel=fuel,
     )
@@ -73,7 +74,7 @@ def create_plant_new(name, tech_data, fuel, year, fuel_price, emission_factor):
         - 1
     )
     capital_idc = capital_cost * (1 + idc)
-    plant = FuelPowerPlant(
+    plant = PowerPlant(
         plant_parameter,
         time_horizon=30,
         emission_factor=emission_factor,
@@ -109,12 +110,12 @@ def create_RE_plant_new(name, tech_data, year, emission_factor):
         capacity=tech_data[str(year)][1] * MW,
         capacity_factor=full_load_hour[name] / (8760 * hr),
         commissioning=2015,
-        boiler_technology="CFB",
-        boiler_efficiency_new=87.03 / 100,
+        boiler_technology="No boiler",
+        boiler_efficiency_new=None,
         plant_efficiency=1.0,
-        fix_om_fuel=tech_data[str(year)][25] * USD / MW / y,
-        variable_om_fuel=tech_data[str(year)][26] * USD / MWh,
-        emission_control={"CO2": 0.0, "SO2": 0.0, "NOx": 0.0, "PM10": 0.0},
+        fix_om_main=tech_data[str(year)][25] * USD / MW / y,
+        variable_om_main=tech_data[str(year)][26] * USD / MWh,
+        emission_control=None,
         fuel=None,
     )
     capital_cost = float(tech_data[str(year)][22]) * tech_data[str(year)][1] * MUSD
@@ -127,7 +128,7 @@ def create_RE_plant_new(name, tech_data, year, emission_factor):
         - 1
     )
     capital_idc = capital_cost * (1 + idc)
-    plant = FuelPowerPlant(
+    plant = PowerPlant(
         plant_parameter,
         time_horizon=30,
         emission_factor=emission_factor,

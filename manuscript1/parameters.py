@@ -20,7 +20,7 @@ from pandas import Series
 from model.utils import USD, VND
 from model.utils import MJ, kg, t, d, hr, km, MW, ha, kW, y, kWh, MWh, g
 from model.system import System, Price
-from model.fuelpowerplant import Fuel, PlantParameter
+from model.powerplant import Fuel, PlantParameter
 from model.cofiringplant import CofiringParameter
 from model.farmer import FarmerParameter
 from model.reseller import ResellerParameter
@@ -196,8 +196,8 @@ plant_parameter_MD1 = PlantParameter(
     capacity_factor=0.60,
     boiler_efficiency_new=87.03 / 100,
     plant_efficiency=38.84 / 100,
-    fix_om_fuel=29.31 * USD / kW / y,
-    variable_om_fuel=0.0048 * USD / kWh,
+    fix_om_main=29.31 * USD / kW / y,
+    variable_om_main=0.0048 * USD / kWh,
     emission_control={"CO2": 0.0, "SO2": 0.982, "NOx": 0.0, "PM10": 0.996},
     fuel=coal_6b,
 )
@@ -240,8 +240,8 @@ plant_parameter_NB = PlantParameter(
     capacity_factor=0.64,
     plant_efficiency=21.77 / 100,
     boiler_efficiency_new=81.61 / 100,
-    fix_om_fuel=plant_parameter_MD1.fix_om_fuel,
-    variable_om_fuel=plant_parameter_MD1.variable_om_fuel,
+    fix_om_main=plant_parameter_MD1.fix_om_main,
+    variable_om_main=plant_parameter_MD1.variable_om_main,
     emission_control={"CO2": 0.0, "SO2": 0.0, "NOx": 0.0, "PM10": 0.992},
     fuel=coal_4b,
 )

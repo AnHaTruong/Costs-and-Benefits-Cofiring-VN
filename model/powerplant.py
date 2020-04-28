@@ -6,7 +6,7 @@
 # (c) Minh Ha-Duong, An Ha Truong 2016-2019
 # minh.haduong@gmail.com
 # Creative Commons Attribution-ShareAlike 4.0 International
-"""Define FuelPowerPlant, which should be subclassed from PowerPlant.
+"""Define PowerPlant, which should be subclassed from PowerPlant.
 
 A flame power plant burns a single fuel to produce electricity.
 """
@@ -44,8 +44,8 @@ PlantParameter = namedtuple(
         "capacity_factor",
         "plant_efficiency",
         "boiler_efficiency_new",
-        "fix_om_fuel",
-        "variable_om_fuel",
+        "fix_om_main",
+        "variable_om_main",
         "emission_control",
         "fuel",
     ],
@@ -53,7 +53,7 @@ PlantParameter = namedtuple(
 
 
 # pylint: disable=too-many-instance-attributes, too-many-arguments
-class FuelPowerPlant(Accountholder, Emitter):
+class PowerPlant(Accountholder, Emitter):
     """A power plant, burning a single fuel."""
 
     def __init__(
@@ -68,7 +68,7 @@ class FuelPowerPlant(Accountholder, Emitter):
 
         The financials (revenue and mainfuel_cost) are not initialized and must be defined later.
         For example:
-        a/ instantiate      plant = FuelPowerPlant(plant_parameter_MD1)
+        a/ instantiate      plant = PowerPlant(plant_parameter_MD1)
         b/ assign           plant.revenue = plant.power_generation * price_MD1.electricity
         c/ assign           plant.mainfuel_cost = plant.mainfuel_used * price_MD1.coal
         d/ Now you can      print(plant.net_present_value(discount_rate=0.08))
@@ -127,7 +127,7 @@ class FuelPowerPlant(Accountholder, Emitter):
         """Return the cost of main fuel. Decorator @property means it is a getter method."""
         if self._mainfuel_cost is None:
             raise AttributeError(
-                "Accessing  FuelPowerPlant.mainfuel_cost  value before it is set"
+                "Accessing  PowerPlant.mainfuel_cost  value before it is set"
             )
         return display_as(self._mainfuel_cost, "kUSD")
 
@@ -158,11 +158,11 @@ class FuelPowerPlant(Accountholder, Emitter):
 
     def mainfuel_om_cost(self):
         """Return the vector of operation and maintenance cost."""
-        fixed_om_fuel = (
-            self.ones * self.parameter.fix_om_fuel * self.parameter.capacity * y
+        fixed_om_main = (
+            self.ones * self.parameter.fix_om_main * self.parameter.capacity * y
         )
-        variable_om_fuel = self.power_generation * self.parameter.variable_om_fuel
-        cost = fixed_om_fuel + variable_om_fuel
+        variable_om_main = self.power_generation * self.parameter.variable_om_main
+        cost = fixed_om_main + variable_om_main
         return display_as(cost, "kUSD")
 
     def lcoe(self, discount_rate, tax_rate, depreciation_period):
@@ -195,8 +195,8 @@ class FuelPowerPlant(Accountholder, Emitter):
         a = Series(self.parameter, self.parameter._fields)
         a["derating"] = f"{self.derating[0]}, {self.derating[1]:4f}, ..."
         a["amount_invested"] = self.amount_invested
-        display_as(a.loc["fix_om_fuel"], "USD / kW / y")
-        display_as(a.loc["variable_om_fuel"], "USD / kWh")
+        display_as(a.loc["fix_om_main"], "USD / kW / y")
+        display_as(a.loc["variable_om_main"], "USD / kWh")
         display_as(a.loc["amount_invested"], "MUSD")
         return a
 

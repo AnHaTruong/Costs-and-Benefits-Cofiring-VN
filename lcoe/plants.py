@@ -24,7 +24,7 @@ from model.utils import (
     MWh,
     t,
 )
-from model.fuelpowerplant import FuelPowerPlant, PlantParameter
+from model.powerplant import PowerPlant, PlantParameter
 from lcoe.param_economics import discount_rate, electricity_price
 
 # Unsure where these numbers come from
@@ -67,8 +67,8 @@ def create_plant(name, tech_data, fuel, year, fuel_price, emission_factor):
         boiler_technology="CFB",
         boiler_efficiency_new=87.03 / 100,
         plant_efficiency=tech_data[str(year)][3] / 100,
-        fix_om_fuel=tech_data[str(year)][25] * USD / MW / y,
-        variable_om_fuel=tech_data[str(year)][26] * USD / MWh,
+        fix_om_main=tech_data[str(year)][25] * USD / MW / y,
+        variable_om_main=tech_data[str(year)][26] * USD / MWh,
         emission_control={"CO2": 0.0, "SO2": SO2control, "NOx": 0.0, "PM10": 0.996},
         fuel=fuel,
     )
@@ -82,7 +82,7 @@ def create_plant(name, tech_data, fuel, year, fuel_price, emission_factor):
         - 1
     )
     capital_idc = capital_cost * (1 + idc)
-    plant = FuelPowerPlant(
+    plant = PowerPlant(
         plant_parameter,
         time_horizon=30,
         emission_factor=emission_factor,
@@ -121,8 +121,8 @@ def create_RE_plant(name, tech_data, year, fuel_price, emission_factor):
         boiler_technology="CFB",
         boiler_efficiency_new=87.03 / 100,
         plant_efficiency=1.0,
-        fix_om_fuel=tech_data[str(year)][25] * USD / MW / y,
-        variable_om_fuel=tech_data[str(year)][26] * USD / MWh,
+        fix_om_main=tech_data[str(year)][25] * USD / MW / y,
+        variable_om_main=tech_data[str(year)][26] * USD / MWh,
         emission_control={"CO2": 0.0, "SO2": 0.0, "NOx": 0.0, "PM10": 0.0},
         fuel=coal_6b,
     )
@@ -136,7 +136,7 @@ def create_RE_plant(name, tech_data, year, fuel_price, emission_factor):
         - 1
     )
     capital_idc = capital_cost * (1 + idc)
-    plant = FuelPowerPlant(
+    plant = PowerPlant(
         plant_parameter,
         time_horizon=30,
         emission_factor=emission_factor,

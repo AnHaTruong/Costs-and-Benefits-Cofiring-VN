@@ -6,7 +6,7 @@
 # (c) Minh Ha-Duong, An Ha Truong 2016-2019
 # minh.haduong@gmail.com
 # Creative Commons Attribution-ShareAlike 4.0 International
-"""Define a CofiringPlant, subclass of FuelPowerPlant."""
+"""Define a CofiringPlant, subclass of PowerPlant."""
 
 from collections import namedtuple
 
@@ -23,7 +23,7 @@ from model.utils import (
     after_invest,
 )
 
-from model.fuelpowerplant import FuelPowerPlant
+from model.powerplant import PowerPlant
 from model.emitter import Activity
 
 
@@ -43,7 +43,7 @@ CofiringParameter = namedtuple(
 
 
 # pylint: disable=too-many-instance-attributes
-class CofiringPlant(FuelPowerPlant):
+class CofiringPlant(PowerPlant):
     """A flame power plant which co-fires the (main) fuel with a cofuel.
 
     For example the fuel is coal, the cofuel is biomass.
@@ -52,7 +52,7 @@ class CofiringPlant(FuelPowerPlant):
     def __init__(self, plant_parameter, cofire_parameter, emission_factor):
         """Initialize the cofiring plant.
 
-        1/ Instanciate as a FuelPowerPlant with a lower efficiency and higher capital cost
+        1/ Instanciate as a PowerPlant with a lower efficiency and higher capital cost
         2/ Compute the co-fuel used and main fuel saved
         3/ Overwrite the list of activities from grandparent class Emitter.
 
@@ -76,7 +76,7 @@ class CofiringPlant(FuelPowerPlant):
         )
         boiler_efficiency[0] = plant_parameter.boiler_efficiency_new
 
-        FuelPowerPlant.__init__(
+        PowerPlant.__init__(
             self,
             plant_parameter,
             emission_factor,
@@ -144,19 +144,19 @@ class CofiringPlant(FuelPowerPlant):
 
     def mainfuel_om_cost(self):  # DISCUSS THIS
         # Fixed costs are proportional to capacity
-        fixed_om_fuel = (
+        fixed_om_main = (
             (1 - self.cofuel_ratio_energy)
-            * self.parameter.fix_om_fuel
+            * self.parameter.fix_om_main
             * self.parameter.capacity
             * y
         )
         # Variable costs proportional to generation after capacity factor
-        variable_om_fuel = (
+        variable_om_main = (
             (1 - self.cofuel_ratio_energy)
             * self.power_generation
-            * self.parameter.variable_om_fuel
+            * self.parameter.variable_om_main
         )
-        cost = fixed_om_fuel + variable_om_fuel
+        cost = fixed_om_main + variable_om_main
         return display_as(cost, "kUSD")
 
         # Approximation "Small cofuel ratio"
@@ -215,7 +215,7 @@ class CofiringPlant(FuelPowerPlant):
 
     def lcoe_statement(self, discount_rate, tax_rate, depreciation_period):
         """Assess the levelized cost of electricity."""
-        statement = FuelPowerPlant.lcoe_statement(
+        statement = PowerPlant.lcoe_statement(
             self, discount_rate, tax_rate, depreciation_period
         )
         statement["  Cofuel      (MUSD)"] = npv(discount_rate, self.cofuel_cost) / MUSD
@@ -226,7 +226,7 @@ class CofiringPlant(FuelPowerPlant):
 
     def parameters_table(self):
         """Tabulate the arguments defining the cofiring plant. Return a Pandas Series."""
-        a = FuelPowerPlant.parameters_table(self)
+        a = PowerPlant.parameters_table(self)
         a["name"] = self.name
         b = Series(self.cofire_parameter, self.cofire_parameter._fields)
         display_as(b.loc["investment_cost"], "USD / kW")

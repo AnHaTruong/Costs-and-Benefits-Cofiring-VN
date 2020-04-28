@@ -12,7 +12,7 @@ from pandas import Series, DataFrame, set_option, concat
 
 from model.utils import t, kt, npv, np_sum
 from model.utils import year_1, display_as, safe_divide, after_invest, isclose_all
-from model.fuelpowerplant import FuelPowerPlant
+from model.powerplant import PowerPlant
 from model.cofiringplant import CofiringPlant
 from model.farmer import Farmer
 from model.reseller import Reseller
@@ -51,7 +51,7 @@ class System:
         emission_factor,
     ):
         """Instantiate the system actors."""
-        self.plant = FuelPowerPlant(plant_parameter, emission_factor)
+        self.plant = PowerPlant(plant_parameter, emission_factor)
         self.cofiring_plant = CofiringPlant(
             plant_parameter, cofire_parameter, emission_factor
         )
