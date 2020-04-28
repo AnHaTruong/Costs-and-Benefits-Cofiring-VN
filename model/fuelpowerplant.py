@@ -17,6 +17,8 @@ from pandas import Series, DataFrame, set_option
 
 from model.utils import (
     y,
+    t,
+    TJ,
     USD,
     MUSD,
     display_as,
@@ -52,7 +54,7 @@ PlantParameter = namedtuple(
 
 # pylint: disable=too-many-instance-attributes, too-many-arguments
 class FuelPowerPlant(Accountholder, Emitter):
-    """A flame power plant, burning a single fuel."""
+    """A power plant, burning a single fuel."""
 
     def __init__(
         self,
@@ -71,8 +73,7 @@ class FuelPowerPlant(Accountholder, Emitter):
         c/ assign           plant.mainfuel_cost = plant.mainfuel_used * price_MD1.coal
         d/ Now you can      print(plant.net_present_value(discount_rate=0.08))
 
-        The capital cost is left to zero because
-        it does not influence results we are interested in this model.
+        If parameter.fuel is None, step c is not needed, mainfuel_cost is 0.
         """
         self.time_horizon = time_horizon
         self.ones = ones(self.time_horizon + 1)
@@ -92,23 +93,29 @@ class FuelPowerPlant(Accountholder, Emitter):
             self.derating = self.ones
         self.plant_efficiency = parameter.plant_efficiency * self.derating
 
-        self.gross_heat_input = self.power_generation / self.plant_efficiency
-        display_as(self.gross_heat_input, "TJ")
+        if parameter.fuel is None:
+            self.fuelname = None
+            self.gross_heat_input = self.ones * 0.0 * TJ
+            self.mainfuel_used = self.ones * 0.0 * t
+            self._mainfuel_cost = self.ones * 0.0 * USD
+        else:
+            self.fuelname = parameter.fuel.name
+            self.gross_heat_input = self.power_generation / self.plant_efficiency
+            self.mainfuel_used = self.gross_heat_input / parameter.fuel.heat_value
+            self._mainfuel_cost = None
 
-        self.mainfuel_used = self.gross_heat_input / parameter.fuel.heat_value
+        display_as(self.gross_heat_input, "TJ")
         display_as(self.mainfuel_used, "t")
 
         Emitter.__init__(
             self,
             Activity(
-                name=parameter.fuel.name,
+                name=self.fuelname,
                 level=self.mainfuel_used,
-                emission_factor=self.emission_factor[parameter.fuel.name],
+                emission_factor=self.emission_factor[self.fuelname],
             ),
             emission_control=parameter.emission_control,
         )
-
-        self._mainfuel_cost = None
 
     def __eq__(self, other):
         if isinstance(other, self.__class__):
@@ -126,6 +133,8 @@ class FuelPowerPlant(Accountholder, Emitter):
 
     @mainfuel_cost.setter
     def mainfuel_cost(self, value):
+        if self.parameter.fuel is None:
+            raise AttributeError("Setting the fuel cost for plant where fuel is None")
         self._mainfuel_cost = value
 
     def fuel_cost(self):

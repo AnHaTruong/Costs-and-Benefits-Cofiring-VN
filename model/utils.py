@@ -30,12 +30,12 @@ from natu.numpy import array, unique
 from natu.numpy import ones, zeros, concatenate, cumsum, roll, sum as np_sum
 from natu.math import fsum, sqrt, pi
 from natu.units import t, hr, d, y
-from natu.units import m, km, ha, g, kg, MJ, GJ, kWh, MWh, kW, MW
+from natu.units import m, km, ha, g, kg, MJ, GJ, TJ, kWh, MWh, kW, MW
 from natu import units
 from natu.core import ScalarUnit
 
 # Quiet pylint "unused-import" warning , they are for re-export.
-_ = m, km, ha, g, kg, d, MJ, GJ, kWh, MWh, kW, MW
+_ = m, km, ha, g, kg, d, MJ, GJ, TJ, kWh, MWh, kW, MW
 _ = arange, ones, zeros, concatenate, np_sum, cumsum, roll
 _ = fsum, sqrt, pi
 

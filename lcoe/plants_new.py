@@ -9,23 +9,19 @@
 #
 """Reproduce LCOE as calculated by DEA in EOR19 using parameter from VN Technology Catalogue."""
 
-from collections import namedtuple
-
-
 from model.utils import (
     USD,
     after_invest,
     hr,
-    kg,
-    MJ,
     MW,
     y,
     MUSD,
     MWh,
-    t,
 )
 from model.fuelpowerplant import FuelPowerPlant, PlantParameter
 from lcoe.param_economics import discount_rate, electricity_price
+
+# Unsure where these numbers come from
 
 full_load_hour = {
     "coal subcritical": 6000 * hr,
@@ -38,15 +34,11 @@ full_load_hour = {
     "offshore wind": 5200 * hr,
 }
 
-Fuel = namedtuple("Fuel", "name, heat_value")
-coal_6b = Fuel(
-    name="6b_coal", heat_value=19.43468 * MJ / kg
-)  # numerical value also used in emission_factor
-
 
 # %% Instantiate plants
 
 # pylint: disable=too-many-arguments
+
 
 def create_plant_new(name, tech_data, fuel, year, fuel_price, emission_factor):
     """Create a power plant with Vietnam Technology Catalogue data by PowerPlant class.
@@ -106,7 +98,7 @@ def create_plant_dict_new(tech_name, tech_data, fuel_list, fuel_price, emission_
     return plant_dict
 
 
-def create_RE_plant_new(name, tech_data, year, fuel_price, emission_factor):
+def create_RE_plant_new(name, tech_data, year, emission_factor):
     """Create a renewble power plant with Vietnam Technology Catalogue data by PowerPlant class.
 
     The argument 'name' (string type) take the technology name from full_load_hour dictionary.
@@ -123,7 +115,7 @@ def create_RE_plant_new(name, tech_data, year, fuel_price, emission_factor):
         fix_om_fuel=tech_data[str(year)][25] * USD / MW / y,
         variable_om_fuel=tech_data[str(year)][26] * USD / MWh,
         emission_control={"CO2": 0.0, "SO2": 0.0, "NOx": 0.0, "PM10": 0.0},
-        fuel=coal_6b,
+        fuel=None,
     )
     capital_cost = float(tech_data[str(year)][22]) * tech_data[str(year)][1] * MUSD
     construction_time = tech_data[str(year)][7]
@@ -141,19 +133,17 @@ def create_RE_plant_new(name, tech_data, year, fuel_price, emission_factor):
         emission_factor=emission_factor,
         amount_invested=capital_idc,
     )
-    plant.mainfuel_used = plant.ones * 0.0 * t
-    plant.mainfuel_cost = plant.mainfuel_used * fuel_price["6b_coal"][str(year)]
     plant.revenue = after_invest(
         plant.power_generation[1] * electricity_price, plant.time_horizon
     )
     return plant
 
 
-def create_REplant_dict_new(tech_name, tech_data, fuel_price, emission_factor):
+def create_REplant_dict_new(tech_name, tech_data, emission_factor):
     """Create a dictionary of RE plants in 2020, 2030 and 2050."""
     plant_dict = dict()
     for year in ["2020", "2030", "2050", "Lower20", "Upper20", "Lower50", "Upper50"]:
-        arg = [tech_name, tech_data, year, fuel_price, emission_factor]
+        arg = [tech_name, tech_data, year, emission_factor]
         plant = create_RE_plant_new(*arg)
         plant_dict[year] = plant
     return plant_dict

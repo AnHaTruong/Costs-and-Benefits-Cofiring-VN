@@ -27,6 +27,8 @@ from model.utils import (
 from model.fuelpowerplant import FuelPowerPlant, PlantParameter
 from lcoe.param_economics import discount_rate, electricity_price
 
+# Unsure where these numbers come from
+
 full_load_hour = {
     "coal subcritical": 6000 * hr,
     "coal supercritical": 6000 * hr,

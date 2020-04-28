@@ -96,6 +96,13 @@ _diesel_heat_value = 45.5 * MJ / kg  # ACEA
 
 emission_factor = dict()
 
+emission_factor[None] = {
+    "CO2": 0 * kg / t,
+    "SO2": 0 * kg / t,
+    "NOx": 0 * kg / t,
+    "PM10": 0 * kg / t,
+}
+
 emission_factor["6b_coal"] = {
     "CO2": 0.0966 * kg / MJ * coal_6b.heat_value,  # IPCC 2006
     "SO2": 11.5 * kg / t,  # Eastern Research Group (2011)

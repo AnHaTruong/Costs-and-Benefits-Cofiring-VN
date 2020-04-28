@@ -12,7 +12,7 @@
 from collections import namedtuple
 from pandas import read_excel
 
-from model.utils import array, USD, MJ, kg, hr, GJ, t
+from model.utils import array, USD, MJ, kg, GJ, t
 from manuscript1.parameters import emission_factor
 
 from lcoe.plants_new import create_plant_dict_new, create_REplant_dict_new
@@ -72,24 +72,15 @@ CoalSub_data = read_excel(
     ],
 )
 
+# %% Data cleanup
+
 # Missing uncertainty on SCGT Efficiency
-# Assumption: no uncertainty
+# Our assumption: no uncertainty
 SCGT_data["Lower20"][3] = SCGT_data["2020"][3]
 SCGT_data["Upper20"][3] = SCGT_data["2020"][3]
 SCGT_data["Lower50"][3] = SCGT_data["2050"][3]
 SCGT_data["Upper50"][3] = SCGT_data["2050"][3]
 
-
-full_load_hour = {
-    "coal subcritical": 6000 * hr,
-    "coal supercritical": 6000 * hr,
-    "coal USC": 6000 * hr,
-    "SCGT": 4000 * hr,
-    "CCGT": 4000 * hr,
-    "solar": 1800 * hr,
-    "onshore wind": 3600 * hr,
-    "offshore wind": 5200 * hr,
-}
 
 Fuel = namedtuple("Fuel", "name, heat_value")
 coal_6b = Fuel(
@@ -265,7 +256,9 @@ fuel_price["gas_IEA_lower"] = {}
 for key in fuel_price["gas_IEA"]:
     fuel_price["gas_IEA_lower"][key] = fuel_price["gas_IEA"][key] - gas_price_2std
 
-# Is this used somewhere
+# %%
+
+# Expand table imported manuscript1.parameter.py
 
 emission_factor["natural_gas"] = {
     "CO2": 0.0561 * kg / MJ * natural_gas.heat_value,  # IPCC 2006
@@ -295,7 +288,6 @@ emission_factor["RE"] = {
 
 coal_list = [coal_6b, coal_upper, coal_lower, coal_IEA, coal_IEA_upper, coal_IEA_lower]
 gas_list = [natural_gas, gas_upper, gas_lower, gas_IEA, gas_IEA_upper, gas_IEA_lower]
-
 
 Coal_Subcritical = create_plant_dict(
     "coal subcritical", CoalSub_data, coal_list, fuel_price, emission_factor
@@ -341,12 +333,12 @@ Wind_Offshore = create_REplant_dict(
     "offshore wind", Wind_offshore_data, fuel_price, emission_factor
 )
 
-Solar_PV_new = create_REplant_dict_new("solar", PV_data, fuel_price, emission_factor)
+Solar_PV_new = create_REplant_dict_new("solar", PV_data, emission_factor)
 Wind_Onshore_new = create_REplant_dict_new(
-    "onshore wind", Wind_onshore_data, fuel_price, emission_factor
+    "onshore wind", Wind_onshore_data, emission_factor
 )
 Wind_Offshore_new = create_REplant_dict_new(
-    "offshore wind", Wind_offshore_data, fuel_price, emission_factor
+    "offshore wind", Wind_offshore_data, emission_factor
 )
 
 # for idx, row in Solar_PV.items():
@@ -354,6 +346,20 @@ Wind_Offshore_new = create_REplant_dict_new(
 #    print(idx, test)
 
 
-assert Solar_PV == Solar_PV_new
-assert Wind_Onshore == Wind_Onshore_new
-assert Wind_Offshore == Wind_Offshore_new
+def compare_plant(plant, otherplant):
+    """Test regression."""
+    sameLCOE = plant.lcoe(0.1, 0.1, 20) == otherplant.lcoe(0.1, 0.1, 20)
+    return sameLCOE
+
+
+def same(old, new):
+    """Compare two dicts of plants."""
+    for idx, plant in old.items():
+        if not compare_plant(plant, new[idx]):
+            return False
+    return True
+
+
+assert same(Solar_PV, Solar_PV_new)
+assert same(Wind_Onshore, Wind_Onshore_new)
+assert same(Wind_Offshore, Wind_Offshore_new)
