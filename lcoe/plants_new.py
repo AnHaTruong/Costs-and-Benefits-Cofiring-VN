@@ -38,30 +38,40 @@ full_load_hour = {
 
 # %% Instantiate plants
 
-# pylint: disable=too-many-arguments
+# pylint: disable=too-many-arguments, too-many-locals
 
 
-def create_plant_new(name, tech_data, fuel, year, fuel_price, emission_factor):
-    """Create a power plant with Vietnam Technology Catalogue data by PowerPlant class.
+def create_plant_new(
+    name, tech_data, year, emission_factor, fuel=None, fuel_price=None
+):
+    """Create a renewble power plant with Vietnam Technology Catalogue data by PowerPlant class.
 
     The argument 'name' (string type) take the technology name from full_load_hour dictionary.
-    The argument 'tech_data' is the pd dataframe of the technology.
-    The argument 'fuel' is definded by Fuel.
+    The argument 'tech_data' is the pd dataframe of the technlogy.
     """
-    SO2control = tech_data[year][19]
-    if SO2control == "-":
-        SO2control = 0
+    if fuel is None:
+        boiler_efficiency = None
+        plant_efficiency = 1
+        emission_control = None
+    else:
+        boiler_efficiency = 87.03 / 100
+        plant_efficiency = tech_data[str(year)][3] / 100
+        SO2control = tech_data[year][19]
+        if SO2control == "-":
+            SO2control = 0
+        emission_control = {"CO2": 0.0, "SO2": SO2control, "NOx": 0.0, "PM10": 0.996}
+
     plant_parameter = PlantParameter(
         name=name,
         capacity=tech_data[str(year)][1] * MW,
         capacity_factor=full_load_hour[name] / (8760 * hr),
         commissioning=2015,
-        boiler_technology="CFB",
-        boiler_efficiency_new=87.03 / 100,
-        plant_efficiency=tech_data[str(year)][3] / 100,
+        boiler_technology="NA",
+        boiler_efficiency_new=boiler_efficiency,
+        plant_efficiency=plant_efficiency,
         fix_om_main=tech_data[str(year)][25] * USD / MW / y,
         variable_om_main=tech_data[str(year)][26] * USD / MWh,
-        emission_control={"CO2": 0.0, "SO2": SO2control, "NOx": 0.0, "PM10": 0.996},
+        emission_control=emission_control,
         fuel=fuel,
     )
     capital_cost = float(tech_data[str(year)][22]) * tech_data[str(year)][1] * MUSD
@@ -80,64 +90,26 @@ def create_plant_new(name, tech_data, fuel, year, fuel_price, emission_factor):
         emission_factor=emission_factor,
         amount_invested=capital_idc,
     )
-    plant.mainfuel_cost = plant.mainfuel_used * fuel_price[str(fuel.name)][str(year)]
+    if plant_parameter.fuel is not None:
+        plant.mainfuel_cost = (
+            plant.mainfuel_used * fuel_price[str(fuel.name)][str(year)]
+        )
     plant.revenue = after_invest(
         plant.power_generation[1] * electricity_price, plant.time_horizon
     )
     return plant
 
 
-def create_plant_dict_new(tech_name, tech_data, fuel_list, fuel_price, emission_factor):
+def create_plant_dict_new(tech_name, tech_data, emission_factor, fuel_price, fuel_list):
     """Create a dictionary of convention plants in 2020, 2030 & 2050 with different fuel price."""
     plant_dict = dict()
     for year in ["2020", "2030", "2050", "Lower20", "Upper20", "Lower50", "Upper50"]:
         plant_dict[year] = {}
         for fuel in fuel_list:
-            arg = [tech_name, tech_data, fuel, year, fuel_price, emission_factor]
+            arg = [tech_name, tech_data, year, emission_factor, fuel, fuel_price]
             plant = create_plant_new(*arg)
             plant_dict[year][fuel.name] = plant
     return plant_dict
-
-
-def create_RE_plant_new(name, tech_data, year, emission_factor):
-    """Create a renewble power plant with Vietnam Technology Catalogue data by PowerPlant class.
-
-    The argument 'name' (string type) take the technology name from full_load_hour dictionary.
-    The argument 'tech_data' is the pd dataframe of the technlogy.
-    """
-    plant_parameter = PlantParameter(
-        name=name,
-        capacity=tech_data[str(year)][1] * MW,
-        capacity_factor=full_load_hour[name] / (8760 * hr),
-        commissioning=2015,
-        boiler_technology="No boiler",
-        boiler_efficiency_new=None,
-        plant_efficiency=1.0,
-        fix_om_main=tech_data[str(year)][25] * USD / MW / y,
-        variable_om_main=tech_data[str(year)][26] * USD / MWh,
-        emission_control=None,
-        fuel=None,
-    )
-    capital_cost = float(tech_data[str(year)][22]) * tech_data[str(year)][1] * MUSD
-    construction_time = tech_data[str(year)][7]
-    idc = (
-        1
-        * ((1 + discount_rate) ** construction_time - 1)
-        / (discount_rate * construction_time)
-        * (1 + discount_rate / 2)
-        - 1
-    )
-    capital_idc = capital_cost * (1 + idc)
-    plant = PowerPlant(
-        plant_parameter,
-        time_horizon=30,
-        emission_factor=emission_factor,
-        amount_invested=capital_idc,
-    )
-    plant.revenue = after_invest(
-        plant.power_generation[1] * electricity_price, plant.time_horizon
-    )
-    return plant
 
 
 def create_REplant_dict_new(tech_name, tech_data, emission_factor):
@@ -145,6 +117,6 @@ def create_REplant_dict_new(tech_name, tech_data, emission_factor):
     plant_dict = dict()
     for year in ["2020", "2030", "2050", "Lower20", "Upper20", "Lower50", "Upper50"]:
         arg = [tech_name, tech_data, year, emission_factor]
-        plant = create_RE_plant_new(*arg)
+        plant = create_plant_new(*arg)
         plant_dict[year] = plant
     return plant_dict

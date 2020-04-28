@@ -303,20 +303,30 @@ SCGT = create_plant_dict("SCGT", SCGT_data, gas_list, fuel_price, emission_facto
 CCGT = create_plant_dict("CCGT", CCGT_data, gas_list, fuel_price, emission_factor)
 
 Coal_Subcritical_new = create_plant_dict_new(
-    "coal subcritical", CoalSub_data, coal_list, fuel_price, emission_factor
+    "coal subcritical", CoalSub_data, emission_factor, fuel_price, coal_list
 )
 Coal_Supercritical_new = create_plant_dict_new(
-    "coal supercritical", CoalSC_data, coal_list, fuel_price, emission_factor
+    "coal supercritical", CoalSC_data, emission_factor, fuel_price, coal_list
 )
 Coal_USC_new = create_plant_dict_new(
-    "coal USC", CoalUSC_data, coal_list, fuel_price, emission_factor
+    "coal USC", CoalUSC_data, emission_factor, fuel_price, coal_list
 )
 SCGT_new = create_plant_dict_new(
-    "SCGT", SCGT_data, gas_list, fuel_price, emission_factor
+    "SCGT", SCGT_data, emission_factor, fuel_price, gas_list
 )
 CCGT_new = create_plant_dict_new(
-    "CCGT", CCGT_data, gas_list, fuel_price, emission_factor
+    "CCGT", CCGT_data, emission_factor, fuel_price, gas_list
 )
+
+
+# for idx, row in Coal_Subcritical.items():
+#     print(idx)
+#     for col, val in row.items():
+#         test = Coal_Subcritical[idx] == Coal_Subcritical_new[idx]
+#         print(col, test)
+
+# print(Coal_Subcritical['2020']['6b_coal'].parameter)
+# print(Coal_Subcritical_new['2020']['6b_coal'].parameter)
 
 assert Coal_Subcritical == Coal_Subcritical_new
 assert Coal_Supercritical == Coal_Supercritical_new
