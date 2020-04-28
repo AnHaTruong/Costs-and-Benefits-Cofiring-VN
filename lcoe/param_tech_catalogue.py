@@ -30,6 +30,8 @@ from model.utils import (
 from model.fuelpowerplant import FuelPowerPlant, PlantParameter
 from manuscript1.parameters import emission_factor
 
+from lcoe.plants_new import create_plant_dict_new, create_REplant_dict_new
+
 discount_rate = 0.1
 electricity_price = 0.08 * USD / kWh
 tax_rate = 0.0
@@ -88,6 +90,15 @@ CoalSub_data = read_excel(
         "Upper50",
     ],
 )
+
+# Missing uncertainty on SCGT Efficiency
+# Assumption: no uncertainty
+SCGT_data["Lower20"][3] = SCGT_data["2020"][3]
+SCGT_data["Upper20"][3] = SCGT_data["2020"][3]
+SCGT_data["Lower50"][3] = SCGT_data["2050"][3]
+SCGT_data["Upper50"][3] = SCGT_data["2050"][3]
+
+
 full_load_hour = {
     "coal subcritical": 6000 * hr,
     "coal supercritical": 6000 * hr,
@@ -307,6 +318,9 @@ def create_plant(name, tech_data, fuel, year):
     The argument 'tech_data' is the pd dataframe of the technology.
     The argument 'fuel' is definded by Fuel.
     """
+    SO2control = tech_data[year][19]
+    if SO2control == "-":
+        SO2control = 0
     plant_parameter = PlantParameter(
         name=name,
         capacity=tech_data[str(year)][1] * MW,
@@ -317,12 +331,7 @@ def create_plant(name, tech_data, fuel, year):
         plant_efficiency=tech_data[str(year)][3] / 100,
         fix_om_fuel=tech_data[str(year)][25] * USD / MW / y,
         variable_om_fuel=tech_data[str(year)][26] * USD / MWh,
-        emission_control={
-            "CO2": 0.0,
-            "SO2": tech_data[year][19],
-            "NOx": 0.0,
-            "PM10": 0.996,
-        },
+        emission_control={"CO2": 0.0, "SO2": SO2control, "NOx": 0.0, "PM10": 0.996,},
         fuel=fuel,
     )
     capital_cost = float(tech_data[str(year)][22]) * tech_data[str(year)][1] * MUSD
@@ -370,6 +379,25 @@ Coal_USC = create_plant_dict("coal USC", CoalUSC_data, coal_list)
 
 SCGT = create_plant_dict("SCGT", SCGT_data, gas_list)
 CCGT = create_plant_dict("CCGT", CCGT_data, gas_list)
+
+Coal_Subcritical_new = create_plant_dict_new(
+    "coal subcritical", CoalSub_data, coal_list, fuel_price
+)
+assert Coal_Subcritical == Coal_Subcritical_new
+
+Coal_Supercritical_new = create_plant_dict_new(
+    "coal supercritical", CoalSC_data, coal_list, fuel_price
+)
+assert Coal_Supercritical == Coal_Supercritical_new
+
+Coal_USC_new = create_plant_dict_new("coal USC", CoalUSC_data, coal_list, fuel_price)
+assert Coal_USC == Coal_USC_new
+
+SCGT_new = create_plant_dict_new("SCGT", SCGT_data, gas_list, fuel_price)
+assert SCGT == SCGT_new
+
+CCGT_new = create_plant_dict_new("CCGT", CCGT_data, gas_list, fuel_price)
+assert CCGT == CCGT_new
 
 
 def create_RE_plant(name, tech_data, year):
@@ -428,3 +456,20 @@ def create_REplant_dict(tech_name, tech_data):
 Solar_PV = create_REplant_dict("solar", PV_data)
 Wind_Onshore = create_REplant_dict("onshore wind", Wind_onshore_data)
 Wind_Offshore = create_REplant_dict("offshore wind", Wind_offshore_data)
+
+Solar_PV_new = create_REplant_dict_new("solar", PV_data, fuel_price)
+Wind_Onshore_new = create_REplant_dict_new(
+    "onshore wind", Wind_onshore_data, fuel_price
+)
+Wind_Offshore_new = create_REplant_dict_new(
+    "offshore wind", Wind_offshore_data, fuel_price
+)
+
+# for idx, row in Solar_PV.items():
+#    test = Solar_PV[idx] == Solar_PV_new[idx]
+#    print(idx, test)
+
+
+assert Solar_PV == Solar_PV_new
+assert Wind_Onshore == Wind_Onshore_new
+assert Wind_Offshore == Wind_Offshore_new

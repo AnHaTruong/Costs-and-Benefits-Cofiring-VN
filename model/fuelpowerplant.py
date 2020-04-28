@@ -110,6 +110,11 @@ class FuelPowerPlant(Accountholder, Emitter):
 
         self._mainfuel_cost = None
 
+    def __eq__(self, other):
+        if isinstance(other, self.__class__):
+            return self.parameter == other.parameter
+        return False
+
     @property
     def mainfuel_cost(self):
         """Return the cost of main fuel. Decorator @property means it is a getter method."""
