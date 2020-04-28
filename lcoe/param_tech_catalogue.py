@@ -15,8 +15,7 @@ from pandas import read_excel
 from model.utils import array, USD, MJ, kg, GJ, t
 from manuscript1.parameters import emission_factor
 
-from lcoe.plants_new import plants_factory
-from lcoe.plants import create_plant_dict, create_REplant_dict
+from lcoe.plants_factory import plants_factory
 
 # %% Read data and input parameters
 
@@ -289,79 +288,18 @@ emission_factor["RE"] = {
 coal_list = [coal_6b, coal_upper, coal_lower, coal_IEA, coal_IEA_upper, coal_IEA_lower]
 gas_list = [natural_gas, gas_upper, gas_lower, gas_IEA, gas_IEA_upper, gas_IEA_lower]
 
-Coal_Subcritical = create_plant_dict(
-    "coal subcritical", CoalSub_data, coal_list, fuel_price, emission_factor
-)
-Coal_Supercritical = create_plant_dict(
-    "coal supercritical", CoalSC_data, coal_list, fuel_price, emission_factor
-)
-Coal_USC = create_plant_dict(
-    "coal USC", CoalUSC_data, coal_list, fuel_price, emission_factor
-)
-
-SCGT = create_plant_dict("SCGT", SCGT_data, gas_list, fuel_price, emission_factor)
-CCGT = create_plant_dict("CCGT", CCGT_data, gas_list, fuel_price, emission_factor)
-
-Coal_Subcritical_new = plants_factory(
+Coal_Subcritical = plants_factory(
     "coal subcritical", CoalSub_data, emission_factor, fuel_price, coal_list
 )
-Coal_Supercritical_new = plants_factory(
+Coal_Supercritical = plants_factory(
     "coal supercritical", CoalSC_data, emission_factor, fuel_price, coal_list
 )
-Coal_USC_new = plants_factory(
+Coal_USC = plants_factory(
     "coal USC", CoalUSC_data, emission_factor, fuel_price, coal_list
 )
-SCGT_new = plants_factory("SCGT", SCGT_data, emission_factor, fuel_price, gas_list)
-CCGT_new = plants_factory("CCGT", CCGT_data, emission_factor, fuel_price, gas_list)
+SCGT = plants_factory("SCGT", SCGT_data, emission_factor, fuel_price, gas_list)
+CCGT = plants_factory("CCGT", CCGT_data, emission_factor, fuel_price, gas_list)
 
-
-# for idx, row in Coal_Subcritical.items():
-#     print(idx)
-#     for col, val in row.items():
-#         test = Coal_Subcritical[idx] == Coal_Subcritical_new[idx]
-#         print(col, test)
-
-# print(Coal_Subcritical['2020']['6b_coal'].parameter)
-# print(Coal_Subcritical_new['2020']['6b_coal'].parameter)
-
-assert Coal_Subcritical == Coal_Subcritical_new
-assert Coal_Supercritical == Coal_Supercritical_new
-assert Coal_USC == Coal_USC_new
-assert SCGT == SCGT_new
-assert CCGT == CCGT_new
-
-
-Solar_PV = create_REplant_dict("solar", PV_data, fuel_price, emission_factor)
-Wind_Onshore = create_REplant_dict(
-    "onshore wind", Wind_onshore_data, fuel_price, emission_factor
-)
-Wind_Offshore = create_REplant_dict(
-    "offshore wind", Wind_offshore_data, fuel_price, emission_factor
-)
-
-Solar_PV_new = plants_factory("solar", PV_data, emission_factor)
-Wind_Onshore_new = plants_factory("onshore wind", Wind_onshore_data, emission_factor)
-Wind_Offshore_new = plants_factory("offshore wind", Wind_offshore_data, emission_factor)
-
-# for idx, row in Solar_PV.items():
-#    test = Solar_PV[idx] == Solar_PV_new[idx]
-#    print(idx, test)
-
-
-def compare_plant(plant, otherplant):
-    """Test regression."""
-    sameLCOE = plant.lcoe(0.1, 0.1, 20) == otherplant.lcoe(0.1, 0.1, 20)
-    return sameLCOE
-
-
-def same(old, new):
-    """Compare two dicts of plants."""
-    for idx, plant in old.items():
-        if not compare_plant(plant, new[idx]):
-            return False
-    return True
-
-
-assert same(Solar_PV, Solar_PV_new)
-assert same(Wind_Onshore, Wind_Onshore_new)
-assert same(Wind_Offshore, Wind_Offshore_new)
+Solar_PV = plants_factory("solar", PV_data, emission_factor)
+Wind_Onshore = plants_factory("onshore wind", Wind_onshore_data, emission_factor)
+Wind_Offshore = plants_factory("offshore wind", Wind_offshore_data, emission_factor)

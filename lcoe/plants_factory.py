@@ -9,20 +9,12 @@
 #
 """Reproduce LCOE as calculated by DEA in EOR19 using parameter from VN Technology Catalogue."""
 
-from model.utils import (
-    USD,
-    after_invest,
-    hr,
-    MW,
-    y,
-    MUSD,
-    MWh,
-)
+from model.utils import after_invest, hr, y, MW, MWh, USD, MUSD
 from model.powerplant import PowerPlant, PlantParameter
 from lcoe.param_economics import discount_rate, electricity_price
 
 # If these capacity factors numbers come from tech catalogue,
-# move them back in the module and pass as parameter
+# move them back in the module and pass them as parameter
 
 full_load_hour = {
     "coal subcritical": 6000 * hr,
@@ -36,11 +28,7 @@ full_load_hour = {
 }
 
 
-# %% Instantiate plants
-
 # pylint: disable=too-many-arguments, too-many-locals
-
-
 def plant(name, tech_data, year, emission_factor, fuel=None, fuel_price=None):
     """Create a power plant parametrized with Vietnam Technology Catalogue data.
 
