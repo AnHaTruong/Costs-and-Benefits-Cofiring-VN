@@ -22,7 +22,7 @@ from model.powerplant import PowerPlant, PlantParameter
 from lcoe.param_economics import discount_rate, electricity_price
 
 # If these capacity factors numbers come from tech catalogue,
-# move them back in the module and import them
+# move them back in the module and pass as parameter
 
 full_load_hour = {
     "coal subcritical": 6000 * hr,
@@ -41,13 +41,11 @@ full_load_hour = {
 # pylint: disable=too-many-arguments, too-many-locals
 
 
-def create_plant_new(
-    name, tech_data, year, emission_factor, fuel=None, fuel_price=None
-):
-    """Create a renewble power plant with Vietnam Technology Catalogue data by PowerPlant class.
+def plant(name, tech_data, year, emission_factor, fuel=None, fuel_price=None):
+    """Create a power plant parametrized with Vietnam Technology Catalogue data.
 
     The argument 'name' (string type) take the technology name from full_load_hour dictionary.
-    The argument 'tech_data' is the pd dataframe of the technlogy.
+    The argument 'tech_data' is the dataframe describing the technlogy.
     """
     if fuel is None:
         boiler_efficiency = None
@@ -84,39 +82,39 @@ def create_plant_new(
         - 1
     )
     capital_idc = capital_cost * (1 + idc)
-    plant = PowerPlant(
+    result = PowerPlant(
         plant_parameter,
         time_horizon=30,
         emission_factor=emission_factor,
         amount_invested=capital_idc,
     )
-    if plant_parameter.fuel is not None:
-        plant.mainfuel_cost = (
-            plant.mainfuel_used * fuel_price[str(fuel.name)][str(year)]
+    if fuel is not None:
+        result.mainfuel_cost = (
+            result.mainfuel_used * fuel_price[str(fuel.name)][str(year)]
         )
-    plant.revenue = after_invest(
-        plant.power_generation[1] * electricity_price, plant.time_horizon
+    result.revenue = after_invest(
+        result.power_generation[1] * electricity_price, result.time_horizon
     )
-    return plant
+    return result
 
 
-def create_plant_dict_new(tech_name, tech_data, emission_factor, fuel_price, fuel_list):
-    """Create a dictionary of convention plants in 2020, 2030 & 2050 with different fuel price."""
+def plants_factory(
+    tech_name, tech_data, emission_factor, fuel_price=None, fuel_list=None
+):
+    """Return a table of plants in 2020, 2030 & 2050.
+
+    The table is a 1 dimensional dictionary if called with 3 arguments,
+    or a dict of dict if the last two arguments are specified.
+    """
     plant_dict = dict()
     for year in ["2020", "2030", "2050", "Lower20", "Upper20", "Lower50", "Upper50"]:
-        plant_dict[year] = {}
-        for fuel in fuel_list:
-            arg = [tech_name, tech_data, year, emission_factor, fuel, fuel_price]
-            plant = create_plant_new(*arg)
-            plant_dict[year][fuel.name] = plant
-    return plant_dict
-
-
-def create_REplant_dict_new(tech_name, tech_data, emission_factor):
-    """Create a dictionary of RE plants in 2020, 2030 and 2050."""
-    plant_dict = dict()
-    for year in ["2020", "2030", "2050", "Lower20", "Upper20", "Lower50", "Upper50"]:
-        arg = [tech_name, tech_data, year, emission_factor]
-        plant = create_plant_new(*arg)
-        plant_dict[year] = plant
+        if fuel_list is None:
+            plant_dict[year] = plant(tech_name, tech_data, year, emission_factor)
+        else:
+            plant_dict[year] = {
+                fuel.name: plant(
+                    tech_name, tech_data, year, emission_factor, fuel, fuel_price
+                )
+                for fuel in fuel_list
+            }
     return plant_dict

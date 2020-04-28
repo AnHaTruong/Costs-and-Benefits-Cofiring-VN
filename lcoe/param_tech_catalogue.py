@@ -15,7 +15,7 @@ from pandas import read_excel
 from model.utils import array, USD, MJ, kg, GJ, t
 from manuscript1.parameters import emission_factor
 
-from lcoe.plants_new import create_plant_dict_new, create_REplant_dict_new
+from lcoe.plants_new import plants_factory
 from lcoe.plants import create_plant_dict, create_REplant_dict
 
 # %% Read data and input parameters
@@ -302,21 +302,17 @@ Coal_USC = create_plant_dict(
 SCGT = create_plant_dict("SCGT", SCGT_data, gas_list, fuel_price, emission_factor)
 CCGT = create_plant_dict("CCGT", CCGT_data, gas_list, fuel_price, emission_factor)
 
-Coal_Subcritical_new = create_plant_dict_new(
+Coal_Subcritical_new = plants_factory(
     "coal subcritical", CoalSub_data, emission_factor, fuel_price, coal_list
 )
-Coal_Supercritical_new = create_plant_dict_new(
+Coal_Supercritical_new = plants_factory(
     "coal supercritical", CoalSC_data, emission_factor, fuel_price, coal_list
 )
-Coal_USC_new = create_plant_dict_new(
+Coal_USC_new = plants_factory(
     "coal USC", CoalUSC_data, emission_factor, fuel_price, coal_list
 )
-SCGT_new = create_plant_dict_new(
-    "SCGT", SCGT_data, emission_factor, fuel_price, gas_list
-)
-CCGT_new = create_plant_dict_new(
-    "CCGT", CCGT_data, emission_factor, fuel_price, gas_list
-)
+SCGT_new = plants_factory("SCGT", SCGT_data, emission_factor, fuel_price, gas_list)
+CCGT_new = plants_factory("CCGT", CCGT_data, emission_factor, fuel_price, gas_list)
 
 
 # for idx, row in Coal_Subcritical.items():
@@ -343,13 +339,9 @@ Wind_Offshore = create_REplant_dict(
     "offshore wind", Wind_offshore_data, fuel_price, emission_factor
 )
 
-Solar_PV_new = create_REplant_dict_new("solar", PV_data, emission_factor)
-Wind_Onshore_new = create_REplant_dict_new(
-    "onshore wind", Wind_onshore_data, emission_factor
-)
-Wind_Offshore_new = create_REplant_dict_new(
-    "offshore wind", Wind_offshore_data, emission_factor
-)
+Solar_PV_new = plants_factory("solar", PV_data, emission_factor)
+Wind_Onshore_new = plants_factory("onshore wind", Wind_onshore_data, emission_factor)
+Wind_Offshore_new = plants_factory("offshore wind", Wind_offshore_data, emission_factor)
 
 # for idx, row in Solar_PV.items():
 #    test = Solar_PV[idx] == Solar_PV_new[idx]
