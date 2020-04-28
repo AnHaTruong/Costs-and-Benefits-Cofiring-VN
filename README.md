@@ -14,8 +14,7 @@ This is a financial model of the sector, to study the business and social case f
 
 The model is written in  Python 3 with a virtual environment and managed by GNU Make. From a default Ubuntu you will need:
 
-***sudo apt install make***
-***sudo apt install python3-venv***
+***sudo apt install make python3-venv***
 
 Installation of dependencies into the virtual environment is supposed to happens automagically. Even for the `natu` package, which is the less bad solution to deal with physical units in Python we found.
 
@@ -54,7 +53,9 @@ Use a simple Python console instead.
 
 Make does not handle whitespace in PATH. Workaround: use underscores not spaces in directory and file names.
 
-natu 0.1.2 improperly quote a LaTeX escape sequences in core.py:331 and exponents.py:41. This make a silent DeprecationWarning in Python 3.6, a visible DeprecationWarning in Python 3.8 and is expected to cause SyntaxError in Python 3.10. Fix: replace '\,' by r'\\,'.
+Waiting for GNU make >=4.3 to understand grouped targets.
+
+natu 0.1.2 improperly quote a LaTeX escape sequences in core.py:331 and exponents.py:41. This make a silent DeprecationWarning in Python 3.6, a visible DeprecationWarning in Python 3.8 and is expected to cause SyntaxError in Python 3.10. Fix: replace '\\,' by r'\\\\,'.
 
 In `pytest-5.4.1` the modules `doctest` and `coverage` are incompatible and five AttributeError: 'DoctestItem' object has no attribute 'fixturenames'. Workaround: coverage does not include doctests.
 
