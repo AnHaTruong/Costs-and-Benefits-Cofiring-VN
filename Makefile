@@ -86,7 +86,7 @@ archive:
 	cp stable-requirements.txt $(distName)
 	cp requirements.txt $(distName)
 	cp Makefile $(distName)
-	cp pylintrc $(distName)
+	cp Makefile.venv $(distName)
 	cp setup.cfg $(distName)
 	cp README.md $(distName)
 	cp pre-commit $(distName)
