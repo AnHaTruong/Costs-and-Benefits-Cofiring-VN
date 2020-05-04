@@ -57,7 +57,7 @@ Waiting for GNU make >=4.3 to understand grouped targets.
 
 natu 0.1.2 improperly quote a LaTeX escape sequences in core.py:331 and exponents.py:41. This make a silent DeprecationWarning in Python 3.6, a visible DeprecationWarning in Python 3.8 and is expected to cause SyntaxError in Python 3.10. Fix: replace '\\,' by r'\\\\,'.
 
-In `pytest-5.4.1` the modules `doctest` and `coverage` are incompatible and five AttributeError: 'DoctestItem' object has no attribute 'fixturenames'. Workaround: coverage does not include doctests.
+In `pytest-5.4.1` the modules `doctest` and `coverage` are incompatible and give AttributeError: 'DoctestItem' object has no attribute 'fixturenames'. Workaround: coverage does not include doctests.
 
 
 ## For new developpers
