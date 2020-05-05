@@ -81,11 +81,13 @@ MARKER=.initialized-with-Makefile.venv
 # Internal variable resolution
 #
 
-ifdef WORKDIR  # Must be an absolute path
-WORKDIR:=$(abspath $(WORKDIR))
-else
-WORKDIR=$(CURDIR)
-endif
+# ifdef WORKDIR  # Must be an absolute path
+# WORKDIR:=$(abspath $(WORKDIR))
+# else
+# WORKDIR=$(CURDIR)
+# endif
+
+WORKDIR=.
 
 VENV=$(VENVDIR)/bin
 EXE=
