@@ -1,7 +1,7 @@
 #
 # SEAMLESSLY MANAGE PYTHON VIRTUAL ENVIRONMENT WITH A MAKEFILE
 #
-# https://github.com/sio/Makefile.venv             v2020.02.26
+# https://github.com/sio/Makefile.venv             v2020.05.05
 #
 #
 # Insert `include Makefile.venv` at the bottom of your Makefile to enable these
@@ -60,7 +60,7 @@
 # implementations.
 #
 #
-# Copyright (c) 2019 Vitaly Potyarkin
+# Copyright (c) 2019-2020 Vitaly Potyarkin
 #
 # Licensed under the Apache License, Version 2.0
 #    <http://www.apache.org/licenses/LICENSE-2.0>
@@ -72,6 +72,7 @@
 #
 
 PY?=python3
+WORKDIR?=.
 VENVDIR?=$(WORKDIR)/.venv
 REQUIREMENTS_TXT?=requirements.txt  # Multiple paths are supported (space separated)
 MARKER=.initialized-with-Makefile.venv
@@ -81,14 +82,6 @@ MARKER=.initialized-with-Makefile.venv
 # Internal variable resolution
 #
 
-# ifdef WORKDIR  # Must be an absolute path
-# WORKDIR:=$(abspath $(WORKDIR))
-# else
-# WORKDIR=$(CURDIR)
-# endif
-
-WORKDIR=.
-
 VENV=$(VENVDIR)/bin
 EXE=
 # Detect windows
@@ -96,6 +89,7 @@ ifeq (win32,$(shell $(PY) -c "import __future__, sys; print(sys.platform)"))
 VENV=$(VENVDIR)/Scripts
 EXE=.exe
 endif
+
 
 #
 # Virtual environment
@@ -106,7 +100,7 @@ venv: $(VENV)/$(MARKER)
 
 .PHONY: clean-venv
 clean-venv:
-	[ ! -d $(VENVDIR) ] || rm -rf $(VENVDIR)
+	-$(RM) -r "$(VENVDIR)"
 
 .PHONY: show-venv
 show-venv: venv
