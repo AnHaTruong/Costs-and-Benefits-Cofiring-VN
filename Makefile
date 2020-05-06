@@ -22,8 +22,8 @@ DOCTESTFILES := $(shell grep -l '>>>' */*.py */*/*.py)
 figures-lcoe =  LCOE-4tech-3years-catalogue.png LCOE-4tech-3years-IEAfuelcosts.png\
                 LCOE-4tech-2020-catalogueextremes.png LCOE-4tech-2050-catalogueextremes.png\
                 LCOE-asDEA2019.png
-figures-manuscript1 = figure_emissions.svg figure_economics.svg figure_cba.svg\
-                      figure_sensitivity.svg figure_benefits.svg
+figures-manuscript1 = figure_emissions.pdf figure_economics.pdf figure_cba.pdf\
+                      figure_sensitivity.pdf figure_benefits.pdf
 tables-manuscript1 = tables_manuscript.txt\
                      table_jobs.txt\
                      table_emission_reduction.txt\
@@ -52,10 +52,10 @@ $(figures-lcoe): figures-lcoe-done
 figures-lcoe-done: lcoe/figures.py venv
 	$(PYTHON) -m lcoe.figures
 
-figure_%.svg: manuscript1/figure/%.py manuscript1/parameters.py venv
+figure_%.pdf: manuscript1/figure/%.py manuscript1/parameters.py venv
 	$(PYTHON) -m manuscript1.figure.$* > $@
 
-figure_%.svg: sensitivity/figure_%.py venv
+figure_%.pdf: sensitivity/figure_%.py venv
 	$(PYTHON) -m sensitivity.figure_$* > $@
 
 table_%.txt: sensitivity/table_%.py venv

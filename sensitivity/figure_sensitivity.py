@@ -112,4 +112,4 @@ plot_sensitivity(uncertainty_MD1, f_MD1, "Mong Duong 1", axes_list[0])
 plot_sensitivity(uncertainty_NB, f_NB, "Ninh Binh", axes_list[1])
 plt.subplots_adjust(right=0.8)
 
-plt.savefig("figure_sensitivity.svg")
+plt.savefig("figure_sensitivity.pdf")

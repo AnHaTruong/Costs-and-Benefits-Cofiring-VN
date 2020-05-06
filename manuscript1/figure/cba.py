@@ -178,4 +178,4 @@ plot_cba(MongDuong1System, AXESS[0])
 plot_cba(NinhBinhSystem, AXESS[1])
 FIGURE.tight_layout()
 
-plt.savefig("figure_cba.svg")
+plt.savefig("figure_cba.pdf")

@@ -81,4 +81,4 @@ plot_feasibility(MongDuong1System, axes[0])
 plot_feasibility(NinhBinhSystem, axes[1])
 figure.tight_layout()
 
-plt.savefig("figure_economics.svg")
+plt.savefig("figure_economics.pdf")
