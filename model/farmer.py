@@ -118,4 +118,5 @@ class Farmer(Accountholder, Emitter):
         display_as(a.loc["winder_rental_cost"], "USD / ha")
         display_as(a.loc["wage_bm_collect"], "USD / hr")
         display_as(a.loc["fuel_cost_per_hour"], "USD / hr")
+        display_as(a.loc["profit"], "USD / ha")
         return a
