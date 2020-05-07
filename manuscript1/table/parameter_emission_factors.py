@@ -24,7 +24,7 @@ set_option("display.width", 80)
 data = DataFrame.from_dict(emission_factor).transpose()
 
 set_option("display.float_format", "{:9,.1f} kg/t".format)
-print(data.iloc[[0, 1, 7, 6]] / (kg / t))
+print(data.loc[["6b_coal", "4b_coal", "straw_boiler", "straw_open"]] / (kg / t))
 
 set_option("display.float_format", "{:8,.5F} g/tkm".format)
-print(data.iloc[[4, 5]] / (g / t / km))
+print(data.loc[["conveyor_belt", "road_transport", "barge_transport"]] / (g / t / km))
