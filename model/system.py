@@ -353,6 +353,11 @@ class System:
     #        df = self.plant_opex_change()
     #        return df.apply(lambda s: npv(discount_rate, s), axis=1)
 
+    def plant_om_change(self):
+        exante = self.plant.operation_maintenance_cost()
+        expost = self.cofiring_plant.operation_maintenance_cost()
+        return expost - exante
+
     def table_business_value(self, discount_rate):
         """Tabulate cofiring business value:  technical costs vs. value of coal saved."""
         data = [
