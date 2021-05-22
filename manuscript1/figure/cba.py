@@ -46,6 +46,7 @@ def plot_cba(system, axes):
         "Value"
     ]
     benefit_year1 = emission_reduction_value.apply(lambda sequence: sequence[1] / kUSD)
+    benefit_year1 = benefit_year1.drop("PM10")
 
     benefits = array([fuel_saved[1] / kUSD] + list(benefit_year1))
 
