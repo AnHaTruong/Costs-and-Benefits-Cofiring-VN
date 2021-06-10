@@ -63,7 +63,7 @@ def plot_sensitivity(uncertainty, model, plant_name, axes):
         "coal_price",
         "external_cost_CO2",
         "discount_rate",
-        "external_cost_PM10",
+        "external_cost_PM2.5",
         "cofire_rate",
     ]
 

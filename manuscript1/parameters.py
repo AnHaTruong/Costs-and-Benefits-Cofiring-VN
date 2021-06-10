@@ -65,13 +65,40 @@ coal_import_price = 112 * USD / t
 #)
 
 #external_cost = (external_cost_SKC + external_cost_ZWY + external_cost_HAS) / 3
+# external_cost_Parry = Series(
+#     {  # Parry et al. 2014
+#         "CO2": 6 * USD / t,
+#         "SO2": 5823 * USD / t,
+#         "PM10": 7243 * USD / t,
+#         "PM2.5": 7143 * USD / t,
+#         "NOx": 4060 * USD / t,
+#     }
+# )
+
+# External costs from PDP8 draft 3 page 198-199
 external_cost = Series(
-    {  # Parry et al. 2014
-        "CO2": 6 * USD / t,
-        "SO2": 5823 * USD / t,
-        "PM10": 7243 * USD / t,
-        "PM2.5": 7143 * USD / t,
-        "NOx": 4060 * USD / t,
+    {   "CO2": 4 * USD / t,       # Conditional on tax, low case
+        "SO2": 5.7 * USD / kg,    # Average 2020-2030, figure 4.7
+        "PM2.5": 7.2 * USD / kg,  # Average 2020-2030, figure 4.7
+        "NOx": 5.7 * USD / kg,    # Average 2020-2030, figure 4.7
+    }
+)
+
+# The 0.8 factor is based on ranges cited in the PDP8 draft
+external_cost_low = Series(
+    {   "CO2": 0.4 * USD / t,           # Market price 2019
+        "SO2": 0.8 * 5.7 * USD / kg,
+        "PM2.5": 0.8 * 7.2 * USD / kg,
+        "NOx": 0.8 * 5.7 * USD / kg,
+    }
+)
+
+# The 1.2 factor is based on ranges cited in the PDP8 draft
+external_cost_high = Series(
+    {   "CO2": 22.5 * USD / t,       # (17+28)/2 conditional on tax, high case
+        "SO2": 5.7 * 1.2 * USD / kg,
+        "PM2.5": 7.2 * 1.2 * USD / kg,
+        "NOx": 5.7 * 1.2 * USD / kg,
     }
 )
 
