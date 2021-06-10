@@ -8,8 +8,8 @@
 PYTHON = $(VENV)/python
 PYTEST = $(VENV)/python -m pytest
 PYLINT = $(VENV)/pylint
-# Parallel exectution on 2 jobs is the less slow, on my Intel Core i5-8250U CPU.
-PYLINTARGS = -j 2
+# Parallel exectution on 2 jobs is the less slow, on my Intel Core i5-8250U CPU. Also, disable duplicate lines check
+PYLINTARGS = -j 2 -d R0801
 BLACK = $(VENV)/black
 DOCSTYLE = $(VENV)/pydocstyle
 CODESTYLE = $(VENV)/pycodestyle
