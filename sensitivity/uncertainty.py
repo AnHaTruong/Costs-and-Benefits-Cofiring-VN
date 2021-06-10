@@ -61,28 +61,28 @@ bounds["external_cost_CO2"] = [
     external_cost_low["CO2"],
     external_cost["CO2"],
     external_cost["CO2"],
-    external_cost_high["CO2"]
+    external_cost_high["CO2"],
 ]
 
 bounds["external_cost_SO2"] = [
     external_cost_low["SO2"],
     external_cost["SO2"],
     external_cost["SO2"],
-    external_cost_high["SO2"]
+    external_cost_high["SO2"],
 ]
 
 bounds["external_cost_PM2.5"] = [
     external_cost_low["PM2.5"],
     external_cost["PM2.5"],
     external_cost["PM2.5"],
-    external_cost_high["PM2.5"]
+    external_cost_high["PM2.5"],
 ]
 
 bounds["external_cost_NOx"] = [
     external_cost_low["NOx"],
     external_cost["NOx"],
     external_cost["NOx"],
-    external_cost_high["NOx"]
+    external_cost_high["NOx"],
 ]
 
 bounds["open_burn_rate"] = [

@@ -37,34 +37,34 @@ tax_rate = 0.20  # Corporate tax in Vietnam
 coal_import_price = 112 * USD / t
 
 # CO2 6 USD/t fromcentral case in UNDP (2018) Opportunities for carbon pricing in VN.
-#external_cost_SKC = Series(
+# external_cost_SKC = Series(
 #    {  # Sakulniyomporn, Kubaha, and Chullabodhi (2011) RSER 15
 #        "CO2": 6 * USD / t,
 #        "SO2": 3767 * USD / t,
 #        "PM10": 5883 * USD / t,
 #        "NOx": 286 * USD / t,
 #    }
-#)
+# )
 #
-#external_cost_ZWY = Series(
+# external_cost_ZWY = Series(
 #    {  # Zhang Q, Weili T, Yumei W, et al. (2007) Energy Policy 35
 #        "CO2": 6 * USD / t,
 #        "SO2": 3680 * USD / t,
 #        "PM10": 2625 * USD / t,
 #        "NOx": 2438 * USD / t,
 #    }
-#)
+# )
 #
-#external_cost_HAS = Series(
+# external_cost_HAS = Series(
 #    {  # Hainoun A, Almoustafa A, Seif Aldin M. (2010) Energy 35
 #        "CO2": 6 * USD / t,
 #        "SO2": 1134 * USD / t,
 #        "PM10": 2496 * USD / t,
 #        "NOx": 1398 * USD / t,
 #    }
-#)
+# )
 
-#external_cost = (external_cost_SKC + external_cost_ZWY + external_cost_HAS) / 3
+# external_cost = (external_cost_SKC + external_cost_ZWY + external_cost_HAS) / 3
 # external_cost_Parry = Series(
 #     {  # Parry et al. 2014
 #         "CO2": 6 * USD / t,
@@ -77,16 +77,18 @@ coal_import_price = 112 * USD / t
 
 # External costs from PDP8 draft 3 page 198-199
 external_cost = Series(
-    {   "CO2": 4 * USD / t,       # Conditional on tax, low case
-        "SO2": 5.7 * USD / kg,    # Average 2020-2030, figure 4.7
+    {
+        "CO2": 4 * USD / t,  # Conditional on tax, low case
+        "SO2": 5.7 * USD / kg,  # Average 2020-2030, figure 4.7
         "PM2.5": 7.2 * USD / kg,  # Average 2020-2030, figure 4.7
-        "NOx": 5.7 * USD / kg,    # Average 2020-2030, figure 4.7
+        "NOx": 5.7 * USD / kg,  # Average 2020-2030, figure 4.7
     }
 )
 
 # The 0.8 factor is based on ranges cited in the PDP8 draft
 external_cost_low = Series(
-    {   "CO2": 0.4 * USD / t,           # Market price 2019
+    {
+        "CO2": 0.4 * USD / t,  # Market price 2019
         "SO2": 0.8 * 5.7 * USD / kg,
         "PM2.5": 0.8 * 7.2 * USD / kg,
         "NOx": 0.8 * 5.7 * USD / kg,
@@ -95,7 +97,8 @@ external_cost_low = Series(
 
 # The 1.2 factor is based on ranges cited in the PDP8 draft
 external_cost_high = Series(
-    {   "CO2": 22.5 * USD / t,       # (17+28)/2 conditional on tax, high case
+    {
+        "CO2": 22.5 * USD / t,  # (17+28)/2 conditional on tax, high case
         "SO2": 5.7 * 1.2 * USD / kg,
         "PM2.5": 7.2 * 1.2 * USD / kg,
         "NOx": 5.7 * 1.2 * USD / kg,
@@ -145,16 +148,16 @@ emission_factor["6b_coal"] = {
     "CO2": 0.0966 * kg / MJ * coal_6b.heat_value,  # IPCC 2006
     "SO2": 11.5 * kg / t,  # Eastern Research Group (2011)
     "NOx": 18 * kg / t,  # Nielsen et al. 2019
-    "PM10": 0.0077 * g / MJ * coal_6b.heat_value * kg / t, # Nielsen et al. 2019
-    "PM2.5": 0.0052 * g / MJ * coal_6b.heat_value * kg / t, # Nielsen et al. 2019
+    "PM10": 0.0077 * g / MJ * coal_6b.heat_value * kg / t,  # Nielsen et al. 2019
+    "PM2.5": 0.0052 * g / MJ * coal_6b.heat_value * kg / t,  # Nielsen et al. 2019
 }  # idem
 
 emission_factor["4b_coal"] = {
     "CO2": 0.0966 * kg / MJ * coal_4b.heat_value,  # IPCC 2006
     "SO2": emission_factor["6b_coal"]["SO2"],
     "NOx": emission_factor["6b_coal"]["NOx"],
-    "PM10": 0.0077 * g / MJ * coal_6b.heat_value * kg / t, # Nielsen et al. 2019
-    "PM2.5": 0.0052 * g / MJ * coal_6b.heat_value * kg / t, # Nielsen et al. 2019
+    "PM10": 0.0077 * g / MJ * coal_6b.heat_value * kg / t,  # Nielsen et al. 2019
+    "PM2.5": 0.0052 * g / MJ * coal_6b.heat_value * kg / t,  # Nielsen et al. 2019
 }
 
 emission_factor["diesel"] = {
@@ -169,16 +172,16 @@ emission_factor["conveyor_belt"] = {
     "CO2": 0 * kg / t / km,
     "SO2": 0 * kg / t / km,
     "NOx": 0 * kg / t / km,
-    "PM10": 0.00055 * kg / t / km,   #NDEP 2017
-    "PM2.5": 0.000085 * kg / t / km, #NDEP 2017
+    "PM10": 0.00055 * kg / t / km,  # NDEP 2017
+    "PM2.5": 0.000085 * kg / t / km,  # NDEP 2017
 }
 
 emission_factor["road_transport"] = {
     "CO2": 0.110 * kg / t / km,  # Binh & Tuan (2016)
     "SO2": 1.86 * g / (20 * t) / km,  # Vu Hoang Ngoc Khue et al. 2019
     "NOx": 6.77 * g / (20 * t) / km,  # Vu Hoang Ngoc Khue et al. 2019
-    "PM10": 0.13 * g / (20 * t) / km, # Vu Hoang Ngoc Khue et al. 2019
-    "PM2.5": 0.13 * g / (20 * t) / km, # Vu Hoang Ngoc Khue et al. 2019
+    "PM10": 0.13 * g / (20 * t) / km,  # Vu Hoang Ngoc Khue et al. 2019
+    "PM2.5": 0.13 * g / (20 * t) / km,  # Vu Hoang Ngoc Khue et al. 2019
 }  # idem
 
 emission_factor["barge_transport"] = {
@@ -186,7 +189,7 @@ emission_factor["barge_transport"] = {
     "SO2": 2 * g / kg * (8 * g / t / km),  # Van Dingenen et al. (2016)
     "NOx": 50.75 * g / kg * (8 * g / t / km),  # idem
     "PM10": 3.19 * g / kg * (8 * g / t / km),
-    "PM2.5": 3.19 * g / kg * (8 * g / t / km)
+    "PM2.5": 3.19 * g / kg * (8 * g / t / km),
 }  # idem
 
 emission_factor["straw_open"] = {
@@ -194,7 +197,7 @@ emission_factor["straw_open"] = {
     "SO2": 0.51 * kg / t,  # (Kim Oanh & 2015) for open burning
     "NOx": 0.49 * kg / t,  # (Kim Oanh & 2011) for open burning
     "PM10": 9.4 * kg / t,
-    "PM2.5": 8.3 * kg / t, # (Kim Oanh & 2011) for open burning
+    "PM2.5": 8.3 * kg / t,  # (Kim Oanh & 2011) for open burning
 }  # (Kim Oanh & 2011) for open burning
 
 emission_factor["straw_boiler"] = {
@@ -241,8 +244,13 @@ plant_parameter_MD1 = PlantParameter(
     plant_efficiency=38.84 / 100,
     fix_om_main=29.31 * USD / kW / y,
     variable_om_main=0.0048 * USD / kWh,
-    emission_control={"CO2": 0.0, "SO2": 0.982, "NOx": 0.0, "PM10": 0.996,
-                      "PM2.5": 0.996},
+    emission_control={
+        "CO2": 0.0,
+        "SO2": 0.982,
+        "NOx": 0.0,
+        "PM10": 0.996,
+        "PM2.5": 0.996,
+    },
     fuel=coal_6b,
 )
 
@@ -286,8 +294,13 @@ plant_parameter_NB = PlantParameter(
     boiler_efficiency_new=81.61 / 100,
     fix_om_main=plant_parameter_MD1.fix_om_main,
     variable_om_main=plant_parameter_MD1.variable_om_main,
-    emission_control={"CO2": 0.0, "SO2": 0.0, "NOx": 0.0, "PM10": 0.992,
-                      "PM2.5": 0.922},
+    emission_control={
+        "CO2": 0.0,
+        "SO2": 0.0,
+        "NOx": 0.0,
+        "PM10": 0.992,
+        "PM2.5": 0.922,
+    },
     fuel=coal_4b,
 )
 
