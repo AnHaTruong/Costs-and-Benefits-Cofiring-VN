@@ -51,7 +51,7 @@ class Accountholder:
 
     >>> i = Accountholder("test", 20, 1000*USD)
     >>> i.revenue = zeros(21) * USD
-    >>> i.net_present_value(0, 0, 10)
+    >>> i.net_present_value(0, 21, 0, 10)
     -1 kUSD
     """
 
@@ -202,29 +202,36 @@ class Accountholder:
             self.operating_expenses_detail(),
         )
 
-    def npv_cash(self, discount_rate, tax_rate, depreciation_period, label=""):
+    # pylint: disable=too-many-arguments
+    def npv_cash(self, discount_rate, horizon, tax_rate, depreciation_period, label=""):
         """Return a Series. Cash flow statement, net present value."""
         cash_result = self.result_cash(tax_rate, depreciation_period)
-        data = cash_result.apply((lambda x: npv(discount_rate, x)), axis=1)
+        data = cash_result.apply((lambda x: npv(x, discount_rate, horizon)), axis=1)
         table = Series(data)
         assert isclose(
-            self.net_present_value(discount_rate, tax_rate, depreciation_period),
+            self.net_present_value(
+                discount_rate, horizon, tax_rate, depreciation_period
+            ),
             data.loc["= Net cashflow"],
         )
         table.name = self.name if label == "" else label
         return table
 
-    def npv_opex(self, discount_rate, label=""):
+    def npv_opex(self, discount_rate, horizon, label=""):
         """Return a Series. Operating expenses statement, net present value."""
         opex = self.operating_expenses_detail()
-        data = opex.apply((lambda x: npv(discount_rate, x)), axis=1)
+        data = opex.apply((lambda x: npv(x, discount_rate, horizon)), axis=1)
         table = Series(data)
         table.name = self.name if label == "" else label
         return table
 
-    def net_present_value(self, discount_rate, tax_rate=0, depreciation_period=1):
+    def net_present_value(
+        self, discount_rate, horizon, tax_rate=0, depreciation_period=1
+    ):
         assert 0 <= discount_rate < 1, "Discount rate not in [0, 1["
-        value = npv(discount_rate, self.net_cash_flow(tax_rate, depreciation_period))
+        value = npv(
+            self.net_cash_flow(tax_rate, depreciation_period), discount_rate, horizon
+        )
         return display_as(value, "kUSD")
 
     def internal_rate_of_return(self):

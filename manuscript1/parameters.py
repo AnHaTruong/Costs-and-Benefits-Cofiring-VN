@@ -31,6 +31,7 @@ from manuscript1.parameters_supplychain import supply_chain_MD1, supply_chain_NB
 
 discount_rate = 0.1  # As per MOIT circular on coal plants tariff calculation.
 depreciation_period = 10
+economic_horizon = 20  # 20 for comptability, to be changed to 10
 tax_rate = 0.20  # Corporate tax in Vietnam
 
 coal_import_price = 112 * USD / t

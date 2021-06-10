@@ -20,15 +20,37 @@ from manuscript1.parameters import (
     MongDuong1System,
     NinhBinhSystem,
     discount_rate,
+    economic_horizon,
+    depreciation_period,
     farm_parameter,
 )
 
+print("Submitted manuscript discounts at rate 0.1 per year over 21 years.")
+print("In revision use the tables with discount (0%) over 10 years.")
+print("Also suggest to drop ros Business value per year since already in Figure 5")
+print()
+
+#%%
+
 print("Business value of cofiring, from project NPVs.\n")
+print("Discounted at", discount_rate, "over", economic_horizon + 1, "years")
 print(
     concat(
         [
-            MongDuong1System.table_business_value(discount_rate),
-            NinhBinhSystem.table_business_value(discount_rate),
+            MongDuong1System.table_business_value(discount_rate, economic_horizon + 1),
+            NinhBinhSystem.table_business_value(discount_rate, economic_horizon + 1),
+        ],
+        axis=1,
+    )
+)
+
+print("\n")
+print("Discounted at", 0, "over", depreciation_period + 1, "years")
+print(
+    concat(
+        [
+            MongDuong1System.table_business_value(0, depreciation_period + 1),
+            NinhBinhSystem.table_business_value(0, depreciation_period + 1),
         ],
         axis=1,
     )
@@ -38,9 +60,18 @@ print(
 
 print("\n")
 print("Business value of cofiring, from WTA, WTP and other per t values.\n")
+print("Discounted at", discount_rate, "over", economic_horizon + 1, "years")
+table_MD1 = feasibility_direct(MongDuong1System, discount_rate, economic_horizon + 1)
+table_NB = feasibility_direct(NinhBinhSystem, discount_rate, economic_horizon + 1)
 
-table_MD1 = feasibility_direct(MongDuong1System, discount_rate)
-table_NB = feasibility_direct(NinhBinhSystem, discount_rate)
+print(concat([table_MD1, table_NB], axis=1))
+
+
+print("\n")
+print("Business value of cofiring, from WTA, WTP and other per t values.\n")
+print("Discounted at", 0, "over", depreciation_period + 1, "years")
+table_MD1 = feasibility_direct(MongDuong1System, 0, depreciation_period + 1)
+table_NB = feasibility_direct(NinhBinhSystem, 0, depreciation_period + 1)
 
 print(concat([table_MD1, table_NB], axis=1))
 

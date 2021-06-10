@@ -15,7 +15,12 @@ import matplotlib.patches as mpatches
 
 # pylint: disable=wrong-import-order
 from model.utils import MWh, USD, npv, array, arange, concatenate
-from lcoe.param_economics import discount_rate, tax_rate, depreciation_period
+from lcoe.param_economics import (
+    discount_rate,
+    economic_horizon,
+    tax_rate,
+    depreciation_period,
+)
 from lcoe.param_tech_catalogue import (
     Coal_Supercritical,
     CCGT,
@@ -26,7 +31,7 @@ from lcoe.param_tech_catalogue import (
 
 # %% Creat a graph
 unit = USD / MWh
-lcoe_arg = [discount_rate, tax_rate, depreciation_period]
+lcoe_arg = [discount_rate, economic_horizon + 1, tax_rate, depreciation_period]
 
 
 def create_LCOE_df(plant, base_price, upper_price, lower_price):
@@ -43,17 +48,17 @@ def create_LCOE_df(plant, base_price, upper_price, lower_price):
         lcoe_lower.append(plant[year][lower_price].lcoe(*lcoe_arg) / unit)
         lcoe_capital.append(
             plant[year][base_price].amount_invested
-            / npv(discount_rate, plant[year][base_price].power_generation)
+            / npv(plant[year][base_price].power_generation, discount_rate)
             / unit
         )
         lcoe_fuel.append(
-            npv(discount_rate, plant[year][base_price].fuel_cost())
-            / npv(discount_rate, plant[year][base_price].power_generation)
+            npv(plant[year][base_price].fuel_cost(), discount_rate)
+            / npv(plant[year][base_price].power_generation, discount_rate)
             / unit
         )
         lcoe_OM.append(
-            npv(discount_rate, plant[year][base_price].operation_maintenance_cost())
-            / npv(discount_rate, plant[year][base_price].power_generation)
+            npv(plant[year][base_price].operation_maintenance_cost(), discount_rate)
+            / npv(plant[year][base_price].power_generation, discount_rate)
             / unit
         )
 
@@ -85,17 +90,17 @@ def create_RELCOE_df(plant):
         lcoe_RE.append(plant[year].lcoe(*lcoe_arg) / unit)
         lcoe_capital.append(
             plant[year].amount_invested
-            / npv(discount_rate, plant[year].power_generation)
+            / npv(plant[year].power_generation, discount_rate)
             / unit
         )
         lcoe_fuel.append(
-            npv(discount_rate, plant[year].fuel_cost())
-            / npv(discount_rate, plant[year].power_generation)
+            npv(plant[year].fuel_cost(), discount_rate)
+            / npv(plant[year].power_generation, discount_rate)
             / unit
         )
         lcoe_OM.append(
-            npv(discount_rate, plant[year].operation_maintenance_cost())
-            / npv(discount_rate, plant[year].power_generation)
+            npv(plant[year].operation_maintenance_cost(), discount_rate)
+            / npv(plant[year].power_generation, discount_rate)
             / unit
         )
 

@@ -21,7 +21,7 @@ Installation of dependencies into the virtual environment is supposed to happens
 ## Usage
 
 To make all figures and tables, use:
-```make```
+ ```make```
 
 On first run the Makefile should setup the virtual environment. This includes pulling Pandas (with the xlrd optional Excel import filter), Numpy and Matplotlib libraries, as well as setting up `natu`.  Version 0.1.2 is required with Python 3, since version 0.1.1 is incompatible, its module `core.py` uses the `reduce` function without importing it. Unfortunately the proper version is not in Pypi as of 2020/04, so we install from GitHub.
 
@@ -93,5 +93,8 @@ In the Spyder editor, set the path in `Tools | Preferences | Python interpreter 
 Ubuntu 21.04 ships Spyder editor in version 4.2.1
 But which does not run with the latest version of spyder-kernels
 Downgrade these modules with:
- source .venv/bin/activate
- pip3 install spyder-kernels==1.10.3
+ `source .venv/bin/activate`
+ `pip3 install spyder-kernels==1.10.3`
+
+Then to start editing:
+ `spyder -p . &`

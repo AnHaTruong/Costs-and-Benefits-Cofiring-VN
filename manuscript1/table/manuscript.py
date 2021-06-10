@@ -18,6 +18,7 @@ from manuscript1.parameters import (
     MongDuong1System,
     NinhBinhSystem,
     discount_rate,
+    economic_horizon,
     tax_rate,
     depreciation_period,
     external_cost_SKC,
@@ -156,16 +157,16 @@ print()
 table = concat(
     [
         MongDuong1System.plant.lcoe_statement(
-            discount_rate, tax_rate, depreciation_period
+            discount_rate, economic_horizon + 1, tax_rate, depreciation_period
         ),
         MongDuong1System.cofiring_plant.lcoe_statement(
-            discount_rate, tax_rate, depreciation_period
+            discount_rate, economic_horizon + 1, tax_rate, depreciation_period
         ),
         NinhBinhSystem.plant.lcoe_statement(
-            discount_rate, tax_rate, depreciation_period
+            discount_rate, economic_horizon + 1, tax_rate, depreciation_period
         ),
         NinhBinhSystem.cofiring_plant.lcoe_statement(
-            discount_rate, tax_rate, depreciation_period
+            discount_rate, economic_horizon + 1, tax_rate, depreciation_period
         ),
     ],
     axis=1,

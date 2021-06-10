@@ -11,29 +11,42 @@
 """Draw a figure showing the cumulative costs/benefits for different groups."""
 import matplotlib.pyplot as plt
 
-from model.utils import MUSD, USD, t, display_as, array, arange
+from model.utils import MUSD, USD, t, display_as, array, arange, TIME_HORIZON
 from manuscript1.parameters import (
     discount_rate,
     tax_rate,
     depreciation_period,
+    economic_horizon,
     external_cost,
 )
 from manuscript1.parameters import NinhBinhSystem, price_NB
 
+HORIZON = TIME_HORIZON
+
 
 def benefit_array(system):
     """Return the data to be plot."""
-    job_benefit = system.wages_npv(discount_rate) / MUSD
+    job_benefit = system.wages_npv(discount_rate, economic_horizon) / MUSD
     plant_benefit = (
         system.cofiring_plant.net_present_value(
-            discount_rate, tax_rate, depreciation_period
+            discount_rate, economic_horizon, tax_rate, depreciation_period
         )
-        - system.plant.net_present_value(discount_rate, tax_rate, depreciation_period)
+        - system.plant.net_present_value(
+            discount_rate, economic_horizon, tax_rate, depreciation_period
+        )
     ) / MUSD
-    reseller_benefit = system.reseller.net_present_value(discount_rate) / MUSD
-    farmer_benefit = system.farmer.net_present_value(discount_rate) / MUSD
-    health_benefit = system.health_npv(discount_rate, external_cost) / MUSD
-    climate_benefit = system.mitigation_npv(discount_rate, external_cost) / MUSD
+    reseller_benefit = (
+        system.reseller.net_present_value(discount_rate, economic_horizon) / MUSD
+    )
+    farmer_benefit = (
+        system.farmer.net_present_value(discount_rate, economic_horizon) / MUSD
+    )
+    health_benefit = (
+        system.health_npv(external_cost, discount_rate, economic_horizon) / MUSD
+    )
+    climate_benefit = (
+        system.mitigation_npv(external_cost, discount_rate, economic_horizon) / MUSD
+    )
     return array(
         [
             reseller_benefit,

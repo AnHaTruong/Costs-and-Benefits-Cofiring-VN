@@ -15,3 +15,4 @@ discount_rate = 0.1
 electricity_price = 0.08 * USD / kWh
 tax_rate = 0.0
 depreciation_period = 10
+economic_horizon = 20

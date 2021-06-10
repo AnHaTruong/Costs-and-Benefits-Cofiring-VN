@@ -14,6 +14,7 @@ An Ha Truong, Minh Ha-Duong
 
 from manuscript1.parameters import (
     discount_rate,
+    economic_horizon,
     tax_rate,
     depreciation_period,
     coal_import_price,
@@ -22,6 +23,7 @@ from model.utils import display_as
 
 
 print("Discount rate         ", discount_rate)
+print("Economic horizon      ", economic_horizon)
 print("Tax rate              ", tax_rate)
 print("Depreciation period   ", depreciation_period)
 print("Coal import price     ", display_as(coal_import_price, "USD/t"))

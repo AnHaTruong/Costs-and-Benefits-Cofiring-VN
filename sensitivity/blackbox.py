@@ -14,7 +14,7 @@ Sensitivity analysis is based on the representation  Y = f(X1, ..., Xn).
 """
 from pandas import Series
 
-from model.utils import npv, display_as
+from model.utils import npv, display_as, TIME_HORIZON
 
 from model.system import System, Price
 
@@ -82,13 +82,15 @@ def f_MD1(x):
         mining_parameter,
         emission_factor,
     )
-    business_value = MD1SystemVariant.table_business_value(_discount_rate)[-1]
+    business_value = MD1SystemVariant.table_business_value(
+        _discount_rate, TIME_HORIZON + 1
+    )[-1]
     display_as(business_value, "MUSD")
 
     benefits_table = MD1SystemVariant.emissions_reduction_benefit(_external_cost).loc[
         "Value"
     ]
-    external_value = npv(_discount_rate, benefits_table.sum())
+    external_value = npv(benefits_table.sum(), _discount_rate)
     display_as(external_value, "MUSD")
     return business_value, external_value
 
@@ -111,12 +113,14 @@ def f_NB(x):
         mining_parameter,
         emission_factor,
     )
-    business_value = NBSystemVariant.table_business_value(_discount_rate)[-1]
+    business_value = NBSystemVariant.table_business_value(
+        _discount_rate, TIME_HORIZON + 1
+    )[-1]
     display_as(business_value, "MUSD")
 
     benefits_table = NBSystemVariant.emissions_reduction_benefit(_external_cost).loc[
         "Value"
     ]
-    external_value = npv(_discount_rate, benefits_table.sum())
+    external_value = npv(benefits_table.sum(), _discount_rate)
     display_as(external_value, "MUSD")
     return business_value, external_value

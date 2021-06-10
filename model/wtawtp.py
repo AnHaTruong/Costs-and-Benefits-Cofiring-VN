@@ -15,7 +15,6 @@ from pandas import Series
 
 from model.utils import npv, solve_linear, USD, t, display_as, isclose
 
-
 #%%
 
 
@@ -45,17 +44,17 @@ def farmer_wta(system, starting_range=(0 * USD / t, 50 * USD / t)):
 #%%
 
 
-def plant_gain(system, biomass_price, discount_rate):
+def plant_gain(system, biomass_price, discount_rate, horizon):
     """Return plant's project profitability before taxes, for a given price of biomass."""
     original_price = system.price
     try:
         new_price = original_price._replace(biomass_plantgate=biomass_price)
         system.clear_market(new_price)
         npv_ante = system.plant.net_present_value(
-            discount_rate, tax_rate=0, depreciation_period=1
+            discount_rate, horizon, tax_rate=0, depreciation_period=1
         )
         npv_post = system.cofiring_plant.net_present_value(
-            discount_rate, tax_rate=0, depreciation_period=1
+            discount_rate, horizon, tax_rate=0, depreciation_period=1
         )
         profit = npv_post - npv_ante
     finally:
@@ -66,11 +65,13 @@ def plant_gain(system, biomass_price, discount_rate):
 #%%
 
 
-def plant_wtp(system, discount_rate, starting_range=(0 * USD / t, 50 * USD / t)):
+def plant_wtp(
+    system, discount_rate, horizon, starting_range=(0 * USD / t, 50 * USD / t)
+):
     """Compute and return the plant's willingness to pay for straw."""
 
     def gain(biomass_price):
-        return plant_gain(system, biomass_price, discount_rate)
+        return plant_gain(system, biomass_price, discount_rate, horizon)
 
     return solve_linear(gain, starting_range[0], starting_range[1])
 
@@ -89,13 +90,13 @@ row_labels = [
 ]
 
 
-def feasibility_by_solving(system, discount_rate):
+def feasibility_by_solving(system, discount_rate, horizon):
     """Tabulate the WTA and WTP, using the micro definition: call code solving Profit(p) == 0."""
     wta = farmer_wta(system)
-    wtp = plant_wtp(system, discount_rate)
+    wtp = plant_wtp(system, discount_rate, horizon)
     transport_cost = system.transport_cost_per_t[1]
     potential_gain = wtp - wta - transport_cost
-    q = npv(discount_rate, system.farmer.quantity)
+    q = npv(system.farmer.quantity, discount_rate, horizon)
     business_value = potential_gain * q
 
     q_per_year = system.quantity_plantgate[1]
@@ -115,10 +116,11 @@ def feasibility_by_solving(system, discount_rate):
     return Series(data, index=row_labels, name=system.plant.name + " by solve")
 
 
-def feasibility_direct(system, discount_rate):
+# pylint: disable=too-many-locals
+def feasibility_direct(system, discount_rate, horizon):
     """Tabulate the feasibility, using the theoretical analysis."""
-    npv_table = system.table_business_value(discount_rate)
-    q = npv(discount_rate, system.farmer.quantity)
+    npv_table = system.table_business_value(discount_rate, horizon)
+    q = npv(system.farmer.quantity, discount_rate, horizon)
 
     wta = npv_table.loc["Farmer opex"] / q
     assert isclose(wta, farmer_wta(system))
@@ -128,7 +130,7 @@ def feasibility_direct(system, discount_rate):
     extra_OM = npv_table.loc["Extra O&M"] / q
     coal_saving = npv_table.loc["Value of coal saved"] / q
     wtp = coal_saving - extra_OM - investment
-    assert isclose(wtp, plant_wtp(system, discount_rate))
+    assert isclose(wtp, plant_wtp(system, discount_rate, horizon))
 
     value_per_t = wtp - wta - minimum_margin
     value = value_per_t * q

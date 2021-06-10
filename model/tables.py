@@ -264,23 +264,23 @@ def balance_jobs(system_a, system_b):
 #%%
 
 
-def business_value_by_solving(system_a, system_b, discount_rate):
+def business_value_by_solving(system_a, system_b, discount_rate, horizon):
     """Tabulate the WTA and WTP, using the micro definition: call code solving Profit(p) == 0."""
     return concat(
         [
-            feasibility_by_solving(system_a, discount_rate),
-            feasibility_by_solving(system_b, discount_rate),
+            feasibility_by_solving(system_a, discount_rate, horizon),
+            feasibility_by_solving(system_b, discount_rate, horizon),
         ],
         axis=1,
     )
 
 
-def business_value_direct(system_a, system_b, discount_rate):
+def business_value_direct(system_a, system_b, discount_rate, horizon):
     """Tabulate the feasibility, using the theoretical analysis."""
     return concat(
         [
-            feasibility_direct(system_a, discount_rate),
-            feasibility_direct(system_b, discount_rate),
+            feasibility_direct(system_a, discount_rate, horizon),
+            feasibility_direct(system_b, discount_rate, horizon),
         ],
         axis=1,
     )

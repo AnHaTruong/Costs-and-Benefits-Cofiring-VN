@@ -213,14 +213,16 @@ class CofiringPlant(PowerPlant):
         df.loc["= Operating expenses"] = df.sum()
         return df
 
-    def lcoe_statement(self, discount_rate, tax_rate, depreciation_period):
+    def lcoe_statement(self, discount_rate, horizon, tax_rate, depreciation_period):
         """Assess the levelized cost of electricity."""
         statement = PowerPlant.lcoe_statement(
-            self, discount_rate, tax_rate, depreciation_period
+            self, discount_rate, horizon, tax_rate, depreciation_period
         )
-        statement["  Cofuel      (MUSD)"] = npv(discount_rate, self.cofuel_cost) / MUSD
+        statement["  Cofuel      (MUSD)"] = (
+            npv(self.cofuel_cost, discount_rate, horizon) / MUSD
+        )
         statement["  O&M Cofuel  (MUSD)"] = (
-            npv(discount_rate, self.cofuel_om_cost()) / MUSD
+            npv(self.cofuel_om_cost(), discount_rate, horizon) / MUSD
         )
         return statement
 

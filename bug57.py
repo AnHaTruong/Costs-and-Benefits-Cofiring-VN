@@ -14,6 +14,7 @@ from manuscript1.parameters import (
     MongDuong1System,
     NinhBinhSystem,
     discount_rate,
+    economic_horizon,
     depreciation_period,
 )
 
@@ -28,32 +29,27 @@ row_labels = [
     "Plant extra O&M",
     "Coal saving",
     "Business value of cofiring",
-    "Annual business value of cofiring, levelized",
     "Annual business value of cofiring, linearized"
 ]
 
 
-def table2(system, discount_rate, horizon=(TIME_HORIZON + 1)):
+def table2(system, discount_rate, horizon):
     """Tabulate the feasibility, using the theoretical analysis.
 
     Keeping only  horizon  time periods. Investment in period 0, payback starts at 1
     """
 
-    mask = [1] * horizon + [0] * (TIME_HORIZON + 1 - horizon)
+    cost_collect = npv(system.farmer.operating_expenses(), discount_rate, horizon)
 
-    cost_collect = npv(discount_rate, system.farmer.operating_expenses() * mask)
+    minimum_margin = npv(system.reseller.operating_expenses(), discount_rate, horizon)
 
-    minimum_margin = npv(discount_rate, system.reseller.operating_expenses() * mask)
+    investment = npv(system.cofiring_plant.investment(), discount_rate, horizon)
 
-    investment = npv(discount_rate, system.cofiring_plant.investment() * mask)
+    extra_OM = npv(system.plant_om_change(), discount_rate, horizon)
 
-    extra_OM = npv(discount_rate, system.plant_om_change() * mask)
-
-    coal_saving = npv(discount_rate, system.coal_saved * mask * system.price.coal)
+    coal_saving = npv(system.coal_saved * system.price.coal, discount_rate, horizon)
 
     value = coal_saving - extra_OM - investment - cost_collect - minimum_margin
-
-    value_levelized = value / npv(discount_rate, mask)
 
     value_linearized = value / (horizon - 1)
 
@@ -64,7 +60,6 @@ def table2(system, discount_rate, horizon=(TIME_HORIZON + 1)):
         display_as(extra_OM, "kUSD"),
         display_as(coal_saving, "kUSD"),
         display_as(value, "kUSD"),
-        display_as(value_levelized, "kUSD"),
         display_as(value_linearized, "kUSD"),
     ]
 
@@ -75,9 +70,9 @@ def table2(system, discount_rate, horizon=(TIME_HORIZON + 1)):
     print()
 
 
-table2(MongDuong1System, discount_rate)
-table2(MongDuong1System, 0)
-table2(MongDuong1System, 0, 11)
+table2(MongDuong1System, discount_rate, TIME_HORIZON + 1)
+table2(MongDuong1System, 0, TIME_HORIZON + 1)
+table2(MongDuong1System, 0, 10 + 1)
 
 
 #%% Per ton
@@ -97,22 +92,20 @@ row_labels = [
 ]
 
 
-def table3(system, discount_rate, horizon=(TIME_HORIZON + 1)):
+def table3(system, discount_rate, horizon):
     """Tabulate the feasibility, using the theoretical analysis."""
 
-    mask = [1] * horizon + [0] * (TIME_HORIZON + 1 - horizon)
+    q = npv(system.farmer.quantity, discount_rate, horizon)
 
-    q = npv(discount_rate, system.farmer.quantity * mask)
+    wta = npv(system.farmer.operating_expenses(), discount_rate, horizon) / q
 
-    wta = npv(discount_rate, system.farmer.operating_expenses() * mask) / q
+    minimum_margin = npv(system.reseller.operating_expenses(), discount_rate, horizon) / q
 
-    minimum_margin = npv(discount_rate, system.reseller.operating_expenses() * mask) / q
+    investment = npv(system.cofiring_plant.investment(), discount_rate, horizon) / q
 
-    investment = npv(discount_rate, system.cofiring_plant.investment() * mask) / q
+    extra_OM = npv(system.plant_om_change(), discount_rate, horizon) / q
 
-    extra_OM = npv(discount_rate, system.plant_om_change() * mask) / q
-
-    coal_saving = npv(discount_rate, system.coal_saved * mask * system.price.coal) / q
+    coal_saving = npv(system.coal_saved * system.price.coal, discount_rate, horizon) / q
 
     wtp = coal_saving - extra_OM - investment
 
@@ -143,9 +136,9 @@ def table3(system, discount_rate, horizon=(TIME_HORIZON + 1)):
     print()
 
 
-table3(MongDuong1System, discount_rate)
-table3(MongDuong1System, 0)
-table3(MongDuong1System, 0, 11)  # The one to use
+table3(MongDuong1System, discount_rate, TIME_HORIZON + 1)
+table3(MongDuong1System, 0, TIME_HORIZON + 1)
+table3(MongDuong1System, 0, 10 + 1)  # The one to use
 
 
 #%% Business value in figure

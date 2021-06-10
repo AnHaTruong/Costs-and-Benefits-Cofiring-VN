@@ -18,7 +18,12 @@ from natu import config
 config.use_quantities = False
 
 from manuscript1.parameters import MongDuong1System, NinhBinhSystem
-from manuscript1.parameters import discount_rate, tax_rate, depreciation_period
+from manuscript1.parameters import (
+    discount_rate,
+    economic_horizon,
+    tax_rate,
+    depreciation_period,
+)
 from manuscript1.parameters import external_cost, coal_import_price, mining_parameter
 from model.tables import (
     energy_costs,
@@ -40,7 +45,7 @@ set_option("display.max_columns", None)
 set_option("display.width", 10000)
 set_option("display.float_format", "{:,.1f}".format)
 
-finance = discount_rate, tax_rate, depreciation_period
+finance = discount_rate, economic_horizon + 1, tax_rate, depreciation_period
 
 
 @pytest.fixture()
@@ -67,11 +72,15 @@ def test_straw_supply(regtest, systems):
 
 
 def test_business_value_by_solving(regtest, systems):
-    regtest.write(str(business_value_by_solving(*systems, discount_rate)))
+    regtest.write(
+        str(business_value_by_solving(*systems, discount_rate, economic_horizon + 1))
+    )
 
 
 def test_business_value_direct(regtest, systems):
-    regtest.write(str(business_value_direct(*systems, discount_rate)))
+    regtest.write(
+        str(business_value_direct(*systems, discount_rate, economic_horizon + 1))
+    )
 
 
 # pylint: disable=eval-used, unused-argument
@@ -156,7 +165,9 @@ def test_coal_saved(regtest, systems):
 
 
 def test_benefits(regtest, systems):
-    regtest.write(f(systems, "benefits(discount_rate, external_cost)"))
+    regtest.write(
+        f(systems, "benefits(discount_rate, economic_horizon + 1, external_cost)")
+    )
 
 
 def test_job_changes(regtest, systems):
