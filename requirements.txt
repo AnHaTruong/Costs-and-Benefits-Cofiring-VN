@@ -2,7 +2,7 @@ pandas
 numpy
 matplotlib
 # Pandas optional, needed by DataFrame.read_excel
-xlrd
+openpyxl
 # natu>=0.1.2
 # Until that version moves into Pypi, we build it from the GitHub upstream
 # TODO: Fix the error messages with natu seen when running  make venv

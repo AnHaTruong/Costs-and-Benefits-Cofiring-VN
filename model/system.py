@@ -121,8 +121,8 @@ class System:
         )
         return display_as(amount, "kUSD")
 
-    def wages_npv(self, discount_rate):
-        amount = npv(discount_rate, self.wages)
+    def wages_npv(self, discount_rate, horizon):
+        amount = npv(self.wages, discount_rate, horizon)
         return display_as(amount, "kUSD")
 
     @property
@@ -259,16 +259,16 @@ class System:
             index=["Baseline", "Reduction", "Relative reduction", "Value"],
         )
 
-    def mitigation_npv(self, discount_rate, external_cost):
+    def mitigation_npv(self, external_cost, discount_rate, horizon):
         df = self.emissions_reduction_benefit(external_cost)
         annual_mitigation_value = df.loc["Value", "CO2"]
-        value = npv(discount_rate, annual_mitigation_value)
+        value = npv(annual_mitigation_value, discount_rate, horizon)
         return display_as(value, "kUSD")
 
-    def health_npv(self, discount_rate, external_cost):
+    def health_npv(self, external_cost, discount_rate, horizon):
         df = self.emissions_reduction_benefit(external_cost)
         annual_health_benefit = df.loc["Value"].drop("CO2").sum()
-        value = npv(discount_rate, annual_health_benefit)
+        value = npv(annual_health_benefit, discount_rate, horizon)
         return display_as(value, "kUSD")
 
     def parameters_table(self):
@@ -291,49 +291,56 @@ class System:
         display_as(e.loc["electricity"], "USD / kWh")
         return concat([legend_c, c, legend_a, a, legend_b, b, legend_d, d, legend_e, e])
 
-    def benefits(self, discount_rate, external_cost):
+    def benefits(self, discount_rate, horizon, external_cost):
         """Tabulate the present value of various benefits from co-firing."""
         table = [""]
         table.append(self.cofiring_plant.name)
         table.append("-------------------")
         row2 = "{:30}" + "{:20.0f}"
         table.append(
-            row2.format("Health", self.health_npv(discount_rate, external_cost))
+            row2.format(
+                "Health", self.health_npv(external_cost, discount_rate, horizon)
+            )
         )
         table.append(
             row2.format(
-                "Emission reduction", self.mitigation_npv(discount_rate, external_cost)
+                "Emission reduction",
+                self.mitigation_npv(external_cost, discount_rate, horizon),
             )
         )
-        table.append(row2.format("Wages", self.wages_npv(discount_rate)))
+        table.append(row2.format("Wages", self.wages_npv(discount_rate, horizon)))
         table.append(
             row2.format(
                 "Farmer earnings before tax",
-                self.farmer.net_present_value(discount_rate),
+                self.farmer.net_present_value(discount_rate, horizon),
             )
         )
         table.append(
             row2.format(
                 "Trader earnings before tax",
-                self.reseller.net_present_value(discount_rate),
+                self.reseller.net_present_value(discount_rate, horizon),
             )
         )
         return "\n".join(table)
 
-    def plant_npv_cash_change(self, discount_rate, tax_rate, depreciation_period):
+    def plant_npv_cash_change(
+        self, discount_rate, horizon, tax_rate, depreciation_period
+    ):
         """Return the NPV change table for the power plant.
 
         Cofiring profit is positive if its benefits (reducing the operating expenses)
         exceeds its costs (the investment).
         """
         name = self.plant.name
-        exante = self.plant.npv_cash(discount_rate, tax_rate, depreciation_period, name)
+        exante = self.plant.npv_cash(
+            discount_rate, horizon, tax_rate, depreciation_period, name
+        )
         expost = self.cofiring_plant.npv_cash(
-            discount_rate, tax_rate, depreciation_period, name
+            discount_rate, horizon, tax_rate, depreciation_period, name
         )
         return expost - exante
 
-    def plant_npv_opex_change(self, discount_rate):
+    def plant_npv_opex_change(self, discount_rate, horizon):
         """Return the Operating expenses changes for the power plant, as NPV.
 
         Ex post compared to ex ante:
@@ -343,32 +350,37 @@ class System:
         and if the biomass is cheap enough, then the operating expenses decrease.
         """
         name = self.plant.name
-        npv_opex_exante = self.plant.npv_opex(discount_rate, name)
-        table = self.cofiring_plant.npv_opex(discount_rate, name)
+        npv_opex_exante = self.plant.npv_opex(discount_rate, horizon, name)
+        table = self.cofiring_plant.npv_opex(discount_rate, horizon, name)
         table.loc["Fuel cost, main fuel"] -= npv_opex_exante.loc["Fuel cost, main fuel"]
         table.loc["O&M, main fuel"] -= npv_opex_exante.loc["Operation & Maintenance"]
         table.loc["= Operating expenses"] -= npv_opex_exante.loc["= Operating expenses"]
         return table
 
     #        df = self.plant_opex_change()
-    #        return df.apply(lambda s: npv(discount_rate, s), axis=1)
+    #        return df.apply(lambda s: npv(s, discount_rate), axis=1)
 
-    def table_business_value(self, discount_rate):
+    def plant_om_change(self):
+        exante = self.plant.operation_maintenance_cost()
+        expost = self.cofiring_plant.operation_maintenance_cost()
+        return expost - exante
+
+    def table_business_value(self, discount_rate, horizon):
         """Tabulate cofiring business value:  technical costs vs. value of coal saved."""
         data = [
-            npv(discount_rate, self.farmer.operating_expenses()),
-            npv(discount_rate, self.reseller.operating_expenses()),
-            npv(discount_rate, self.cofiring_plant.investment()),
+            npv(self.farmer.operating_expenses(), discount_rate, horizon),
+            npv(self.reseller.operating_expenses(), discount_rate, horizon),
+            npv(self.cofiring_plant.investment(), discount_rate, horizon),
         ]
 
-        table_opex = self.plant_npv_opex_change(discount_rate)
+        table_opex = self.plant_npv_opex_change(discount_rate, horizon)
         extra_OM = table_opex.loc["O&M, main fuel"] + table_opex.loc["O&M, cofuel"]
         data.append(display_as(extra_OM, "kUSD"))
 
         technical_cost = np_sum(data)
         data.append(technical_cost)
 
-        coal_saved = npv(discount_rate, self.coal_saved)
+        coal_saved = npv(self.coal_saved, discount_rate, horizon)
         coal_price = display_as(self.price.coal, "USD/t")
         savings = display_as(coal_saved * coal_price, "kUSD")
         data.append(coal_saved)

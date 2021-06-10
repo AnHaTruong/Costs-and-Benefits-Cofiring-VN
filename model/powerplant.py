@@ -71,7 +71,7 @@ class PowerPlant(Accountholder, Emitter):
         a/ instantiate      plant = PowerPlant(plant_parameter_MD1)
         b/ assign           plant.revenue = plant.power_generation * price_MD1.electricity
         c/ assign           plant.mainfuel_cost = plant.mainfuel_used * price_MD1.coal
-        d/ Now you can      print(plant.net_present_value(discount_rate=0.08))
+        d/ Now you can      print(plant.net_present_value(discount_rate=0.08, horizon=11))
 
         If parameter.fuel is None, step c is not needed, mainfuel_cost is 0.
         """
@@ -165,11 +165,13 @@ class PowerPlant(Accountholder, Emitter):
         cost = fixed_om_main + variable_om_main
         return display_as(cost, "kUSD")
 
-    def lcoe(self, discount_rate, tax_rate, depreciation_period):
+    def lcoe(self, discount_rate, horizon, tax_rate, depreciation_period):
         """Return the levelized cost of electricity, taxes included."""
-        total_lifetime_power_production = npv(discount_rate, self.power_generation)
+        total_lifetime_power_production = npv(
+            self.power_generation, discount_rate, horizon
+        )
         total_life_cycle_cost = npv(
-            discount_rate, self.cash_out(tax_rate, depreciation_period)
+            self.cash_out(tax_rate, depreciation_period), discount_rate, horizon
         )
         result = total_life_cycle_cost / total_lifetime_power_production
         return display_as(result, "USD/MWh")
@@ -218,30 +220,36 @@ class PowerPlant(Accountholder, Emitter):
         description["Fuel transport mean"] = self.parameter.fuel.transport_mean
         return description
 
-    def lcoe_statement(self, discount_rate, tax_rate, depreciation_period):
+    def lcoe_statement(self, discount_rate, horizon, tax_rate, depreciation_period):
         """Assess the levelized cost of electricity."""
         statement = Series(name=self.name, dtype=float)
         statement["Investment    (MUSD)"] = self.amount_invested / MUSD
-        statement["Fuel cost     (MUSD)"] = npv(discount_rate, self.fuel_cost()) / MUSD
+        statement["Fuel cost     (MUSD)"] = (
+            npv(self.fuel_cost(), discount_rate, horizon) / MUSD
+        )
         statement["  Main fuel   (MUSD)"] = (
-            npv(discount_rate, self.mainfuel_cost) / MUSD
+            npv(self.mainfuel_cost, discount_rate, horizon) / MUSD
         )
         statement["  Cofuel      (MUSD)"] = 0
         statement["O&M cost      (MUSD)"] = (
-            npv(discount_rate, self.operation_maintenance_cost()) / MUSD
+            npv(self.operation_maintenance_cost(), discount_rate, horizon) / MUSD
         )
         statement["  O&M Mainfuel(MUSD)"] = (
-            npv(discount_rate, self.mainfuel_om_cost()) / MUSD
+            npv(self.mainfuel_om_cost(), discount_rate, horizon) / MUSD
         )
         statement["  O&M Cofuel  (MUSD)"] = 0
         statement["Tax           (MUSD)"] = (
-            npv(discount_rate, self.income_tax(tax_rate, depreciation_period)) / MUSD
+            npv(self.income_tax(tax_rate, depreciation_period), discount_rate, horizon)
+            / MUSD
         )
         statement["Cash_out      (MUSD)"] = (
-            npv(discount_rate, self.cash_out(tax_rate, depreciation_period)) / MUSD
+            npv(self.cash_out(tax_rate, depreciation_period), discount_rate, horizon)
+            / MUSD
         )
-        statement["Electricity produced"] = npv(discount_rate, self.power_generation)
+        statement["Electricity produced"] = npv(
+            self.power_generation, discount_rate, horizon
+        )
         statement["LCOE                "] = self.lcoe(
-            discount_rate, tax_rate, depreciation_period
+            discount_rate, horizon, tax_rate, depreciation_period
         )
         return statement

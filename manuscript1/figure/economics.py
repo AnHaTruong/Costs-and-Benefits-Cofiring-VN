@@ -17,7 +17,7 @@ from model.utils import USD, MUSD, t, isclose
 from model.wtawtp import farmer_gain, farmer_wta, plant_gain, plant_wtp
 
 from manuscript1.parameters import MongDuong1System, NinhBinhSystem
-from manuscript1.parameters import discount_rate
+from manuscript1.parameters import discount_rate, economic_horizon
 
 
 #%%
@@ -27,7 +27,7 @@ def plot_feasibility(system, ax):
     """Plot to determine if cofiring is economically feasible."""
     x0 = 0
     x1 = farmer_wta(system) / (USD / t)
-    x2 = plant_wtp(system, discount_rate) / (USD / t)
+    x2 = plant_wtp(system, discount_rate, economic_horizon) / (USD / t)
     assert not isclose(x1, x2), "WTA == WTP, aborting plot."
     x3 = x2 + (x2 - x1) / 2
     x4 = (x1 + x2) / 2
@@ -37,9 +37,9 @@ def plot_feasibility(system, ax):
     y3farmer = farmer_gain(system, x3 * USD / t) / MUSD
     assert abs(y1farmer) < 0.001, "Farmer gain at WTA not zero, aborting plot."
 
-    y0plant = plant_gain(system, x0 * USD / t, discount_rate) / MUSD
-    y2plant = plant_gain(system, x2 * USD / t, discount_rate) / MUSD
-    y3plant = plant_gain(system, x3 * USD / t, discount_rate) / MUSD
+    y0plant = plant_gain(system, x0 * USD / t, discount_rate, economic_horizon) / MUSD
+    y2plant = plant_gain(system, x2 * USD / t, discount_rate, economic_horizon) / MUSD
+    y3plant = plant_gain(system, x3 * USD / t, discount_rate, economic_horizon) / MUSD
     assert abs(y2plant) < 0.001, "Plant gain at WTP not zero, aborting plot."
 
     transport_cost = system.transport_cost_per_t[1] / (USD / t)

@@ -16,13 +16,14 @@ from manuscript1.parameters import (
     MongDuong1System,
     NinhBinhSystem,
     discount_rate,
+    economic_horizon,
     tax_rate,
     depreciation_period,
     price_MD1,
     price_NB,
 )
 
-from model.utils import display_as
+from model.utils import display_as, TIME_HORIZON
 
 
 print("Business value of cofiring for the three segments")
@@ -46,8 +47,12 @@ print()
 
 def result_table(systema_segment, systemb_segment):
     """Return a DataFrame with the NPV accounts of a segment in two systems."""
-    table_a = systema_segment.npv_cash(discount_rate, tax_rate, depreciation_period)
-    table_b = systemb_segment.npv_cash(discount_rate, tax_rate, depreciation_period)
+    table_a = systema_segment.npv_cash(
+        discount_rate, economic_horizon, tax_rate, depreciation_period
+    )
+    table_b = systemb_segment.npv_cash(
+        discount_rate, economic_horizon, tax_rate, depreciation_period
+    )
     return concat([table_a, table_b], axis=1)
 
 
@@ -72,15 +77,17 @@ print()
 #%%
 print("For power plant, the change in net cash flow NPV (expost - exante):")
 table_i = MongDuong1System.plant_npv_cash_change(
-    discount_rate, tax_rate, depreciation_period
+    discount_rate, economic_horizon, tax_rate, depreciation_period
 )
 table_j = NinhBinhSystem.plant_npv_cash_change(
-    discount_rate, tax_rate, depreciation_period
+    discount_rate, economic_horizon, tax_rate, depreciation_period
 )
 print(concat([table_i, table_j], axis=1))
 print()
 #%%
 print("For power plant, the change in the operating expenses line (expost - exante):")
-table_i_details = MongDuong1System.plant_npv_opex_change(discount_rate)
-table_j_details = NinhBinhSystem.plant_npv_opex_change(discount_rate)
+table_i_details = MongDuong1System.plant_npv_opex_change(
+    discount_rate, TIME_HORIZON + 1
+)
+table_j_details = NinhBinhSystem.plant_npv_opex_change(discount_rate, TIME_HORIZON + 1)
 print(concat([table_i_details, table_j_details], axis=1))

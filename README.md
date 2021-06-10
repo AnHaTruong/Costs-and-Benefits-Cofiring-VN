@@ -21,7 +21,7 @@ Installation of dependencies into the virtual environment is supposed to happens
 ## Usage
 
 To make all figures and tables, use:
-```make```
+ ```make```
 
 On first run the Makefile should setup the virtual environment. This includes pulling Pandas (with the xlrd optional Excel import filter), Numpy and Matplotlib libraries, as well as setting up `natu`.  Version 0.1.2 is required with Python 3, since version 0.1.1 is incompatible, its module `core.py` uses the `reduce` function without importing it. Unfortunately the proper version is not in Pypi as of 2020/04, so we install from GitHub.
 
@@ -75,10 +75,26 @@ From the filesystem point of view, source files are organised in directories. Bu
 Modules must be run from the root directory, not from the directory they are in. Otherwise Python does not know the root of the package hierarchy.
 
 + In a terminal, to run the file `manuscript1/figure2.py` the command is `python3 -m manuscript1.figure2`. 
-+ A graphical environment may also need to be told to run modules from the project root directory. Start Spyder3 from the project root directory. When it opens the dialog box "Run settings for X" when you run a file X.py for the first time. In the `Working directory setting`, choose `The current working directory`. 
++ A graphical environment may also need to be told to run modules from the project root directory. Start Spyder3 from the project root directory. When it opens the dialog box "Run settings for X" when you run a file X.py for the first time. In the `Working directory setting`, choose `The current working directory`.
++ If the dialog box does not open, goto Tools | Preferences | Run | Working directory settings and choose `The current working directory`. That overrides the `Preferences | Current working directory` option. Then set the current working directory in the icons bar, in the path chooser box at the right.
+
 
 ## For developpers
 
 All imports from natu have to go through model.utils. Import nothing from natu directly.
 If a module needs something from natu.units, natu.math or natu.numpy : first import it into model.utils and then get it from there.
 This is because we need a single point to control natu.
+
+## To use in a virtual environment
+
+In the Spyder editor, set the path in `Tools | Preferences | Python interpreter | Use the following Python Interpreter`
+ to `.venv/bin/python`
+
+Ubuntu 21.04 ships Spyder editor in version 4.2.1
+But which does not run with the latest version of spyder-kernels
+Downgrade these modules with:
+ `source .venv/bin/activate`
+ `pip3 install spyder-kernels==1.10.3`
+
+Then to start editing:
+ `spyder -p . &`
