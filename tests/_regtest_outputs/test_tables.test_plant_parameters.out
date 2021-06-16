@@ -1,29 +1,29 @@
-name                                                                             Mong Duong 1
-capacity                                                                     1,080,000,000.00
-commissioning                                                                            2015
-boiler_technology                                                                         CFB
-capacity_factor                                                                          0.60
-plant_efficiency                                                                         0.39
-boiler_efficiency_new                                                                    0.87
-fix_om_main                                                                              0.00
-variable_om_main                                                                         0.00
-emission_control         {'CO2': 0.0, 'SO2': 0.982, 'NOx': 0.0, 'PM10': 0.996, 'PM25': 0.996}
-fuel                                                (6b_coal, 19434680.0, 0.0, conveyor_belt)
-derating                                                                   1.0, 1.000000, ...
-amount_invested                                                                             0
+name                                                                              Mong Duong 1
+capacity                                                                      1,080,000,000.00
+commissioning                                                                             2015
+boiler_technology                                                                          CFB
+capacity_factor                                                                           0.60
+plant_efficiency                                                                          0.39
+boiler_efficiency_new                                                                     0.87
+fix_om_main                                                                               0.00
+variable_om_main                                                                          0.00
+emission_control         {'CO2': 0.0, 'SO2': 0.982, 'NOx': 0.0, 'PM10': 0.996, 'PM2.5': 0.996}
+fuel                                                 (6b_coal, 19434680.0, 0.0, conveyor_belt)
+derating                                                                    1.0, 1.000000, ...
+amount_invested                                                                              0
 dtype: object
 
-name                                                                              Ninh Binh
-capacity                                                                     100,000,000.00
-commissioning                                                                          1974
-boiler_technology                                                                        PC
-capacity_factor                                                                        0.64
-plant_efficiency                                                                       0.22
-boiler_efficiency_new                                                                  0.82
-fix_om_main                                                                            0.00
-variable_om_main                                                                       0.00
-emission_control         {'CO2': 0.0, 'SO2': 0.0, 'NOx': 0.0, 'PM10': 0.992, 'PM25': 0.922}
-fuel                                       (4b_coal, 21547600.0, 200000.0, barge_transport)
-derating                                                                 1.0, 1.000000, ...
-amount_invested                                                                           0
+name                                                                               Ninh Binh
+capacity                                                                      100,000,000.00
+commissioning                                                                           1974
+boiler_technology                                                                         PC
+capacity_factor                                                                         0.64
+plant_efficiency                                                                        0.22
+boiler_efficiency_new                                                                   0.82
+fix_om_main                                                                             0.00
+variable_om_main                                                                        0.00
+emission_control         {'CO2': 0.0, 'SO2': 0.0, 'NOx': 0.0, 'PM10': 0.992, 'PM2.5': 0.922}
+fuel                                        (4b_coal, 21547600.0, 200000.0, barge_transport)
+derating                                                                  1.0, 1.000000, ...
+amount_invested                                                                            0
 dtype: object

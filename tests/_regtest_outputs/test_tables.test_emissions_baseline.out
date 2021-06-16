@@ -1,4 +1,4 @@
-                      CO2       NOx      PM10      PM25       SO2
+                      CO2       NOx      PM10     PM2.5       SO2
 6b_coal            161.17      1.55      0.02      0.00      0.02
 conveyor_belt        0.00      0.00      0.00      0.00      0.00
 Straw               12.75      0.01      0.10      0.09      0.01
@@ -7,7 +7,7 @@ Total_plant        161.17      1.55      0.02      0.00      0.02
 Total_transport      0.00      0.00      0.00      0.00      0.00
 Total_field         12.75      0.01      0.10      0.09      0.01
 
-                      CO2       NOx      PM10      PM25       SO2
+                      CO2       NOx      PM10     PM2.5       SO2
 4b_coal             28.40      0.25      0.00      0.00      0.16
 barge_transport      0.39      0.00      0.00      0.00      0.00
 Straw                2.25      0.00      0.02      0.02      0.00

@@ -42,7 +42,7 @@ external_cost_SKC = Series(
         "CO2": 6 * USD / t,
         "SO2": 3767 * USD / t,
         "PM10": 5883 * USD / t,
-        "PM25": 0 * USD / t,
+        "PM2.5": 0 * USD / t,
         "NOx": 286 * USD / t,
     }
 )
@@ -52,7 +52,7 @@ external_cost_ZWY = Series(
         "CO2": 6 * USD / t,
         "SO2": 3680 * USD / t,
         "PM10": 2625 * USD / t,
-        "PM25": 0 * USD / t,
+        "PM2.5": 0 * USD / t,
         "NOx": 2438 * USD / t,
     }
 )
@@ -62,7 +62,7 @@ external_cost_HAS = Series(
         "CO2": 6 * USD / t,
         "SO2": 1134 * USD / t,
         "PM10": 2496 * USD / t,
-        "PM25": 0 * USD / t,
+        "PM2.5": 0 * USD / t,
         "NOx": 1398 * USD / t,
     }
 )
@@ -74,7 +74,7 @@ external_cost = (external_cost_SKC + external_cost_ZWY + external_cost_HAS) / 3
 #         "CO2": 6 * USD / t,
 #         "SO2": 5823 * USD / t,
 #         "PM10": 7243 * USD / t,
-#         "PM25": 7143 * USD / t,
+#         "PM2.5": 7143 * USD / t,
 #         "NOx": 4060 * USD / t,
 #     }
 # )
@@ -84,7 +84,7 @@ external_cost_low = Series(
         "CO2": 0.2 * USD / t,
         "SO2": 0.8 * 1134 * USD / t,
         "PM10": 0.8 * 2496 * USD / t,
-        "PM25": 0.8 * 0 * USD / t,
+        "PM2.5": 0.8 * 0 * USD / t,
         "NOx": 0.8 * 286 * USD / t,
     }
 )
@@ -94,7 +94,7 @@ external_cost_high = Series(
         "CO2": 15 * USD / t,
         "SO2": 1.2 * 3767 * USD / t,
         "PM10": 1.2 * 5883 * USD / t,
-        "PM25": 1.2 * 0 * USD / t,
+        "PM2.5": 1.2 * 0 * USD / t,
         "NOx": 1.2 * 2438 * USD / t,
     }
 )
@@ -105,7 +105,7 @@ external_cost_high = Series(
 #     {
 #         "CO2": 4 * USD / t,  # Conditional on tax, low case
 #         "SO2": 5.7 * USD / kg,  # Average 2020-2030, figure 4.7
-#         "PM25": 7.2 * USD / kg,  # Average 2020-2030, figure 4.7
+#         "PM2.5": 7.2 * USD / kg,  # Average 2020-2030, figure 4.7
 #         "NOx": 5.7 * USD / kg,  # Average 2020-2030, figure 4.7
 #     }
 # )
@@ -115,7 +115,7 @@ external_cost_high = Series(
 #     {
 #         "CO2": 0.4 * USD / t,  # Market price 2019
 #         "SO2": 0.8 * 5.7 * USD / kg,
-#         "PM25": 0.8 * 7.2 * USD / kg,
+#         "PM2.5": 0.8 * 7.2 * USD / kg,
 #         "NOx": 0.8 * 5.7 * USD / kg,
 #     }
 # )
@@ -125,7 +125,7 @@ external_cost_high = Series(
 #     {
 #         "CO2": 22.5 * USD / t,  # (17+28)/2 conditional on tax, high case
 #         "SO2": 5.7 * 1.2 * USD / kg,
-#         "PM25": 7.2 * 1.2 * USD / kg,
+#         "PM2.5": 7.2 * 1.2 * USD / kg,
 #         "NOx": 5.7 * 1.2 * USD / kg,
 #     }
 # )
@@ -166,7 +166,7 @@ emission_factor[None] = {
     "SO2": 0 * kg / t,
     "NOx": 0 * kg / t,
     "PM10": 0 * kg / t,
-    "PM25": 0 * kg / t,
+    "PM2.5": 0 * kg / t,
 }
 
 emission_factor["6b_coal"] = {
@@ -175,7 +175,7 @@ emission_factor["6b_coal"] = {
     "NOx": 18 * kg / t,  # Nielsen et al. 2019
     "PM10": 43.8 * kg / t,  # FOR REGRESSION TESTING ONLY. BELOW IS BETTER.
     #    "PM10": 0.0077 * g / MJ * coal_6b.heat_value * kg / t,  # Nielsen et al. 2019
-    "PM25": 0.0052 * g / MJ * coal_6b.heat_value * kg / t,  # Nielsen et al. 2019
+    "PM2.5": 0.0052 * g / MJ * coal_6b.heat_value * kg / t,  # Nielsen et al. 2019
 }  # idem
 
 emission_factor["4b_coal"] = {
@@ -184,7 +184,7 @@ emission_factor["4b_coal"] = {
     "NOx": emission_factor["6b_coal"]["NOx"],
     "PM10": 26.1 * kg / t,  # FOR REGRESSION TESTING ONLY. BELOW IS BETTER.
     #    "PM10": 0.0077 * g / MJ * coal_6b.heat_value * kg / t,  # Nielsen et al. 2019
-    "PM25": 0.0052 * g / MJ * coal_6b.heat_value * kg / t,  # Nielsen et al. 2019
+    "PM2.5": 0.0052 * g / MJ * coal_6b.heat_value * kg / t,  # Nielsen et al. 2019
 }
 
 emission_factor["diesel"] = {
@@ -192,7 +192,7 @@ emission_factor["diesel"] = {
     "SO2": 0.0004 * kg / MJ * _diesel_heat_value,  # EPA AP-42, VolI, 3,3
     "NOx": 0.0018 * kg / MJ * _diesel_heat_value,  # EPA AP-42, VolI, 3,3
     "PM10": 0.00014 * kg / MJ * _diesel_heat_value,
-    "PM25": 0.00014 * kg / MJ * _diesel_heat_value,
+    "PM2.5": 0.00014 * kg / MJ * _diesel_heat_value,
 }  # EPA AP-42, VolI, 3,3
 
 emission_factor["conveyor_belt"] = {
@@ -201,7 +201,7 @@ emission_factor["conveyor_belt"] = {
     "NOx": 0 * kg / t / km,
     "PM10": 0 * kg / t / km,  # FOR REGRESSION TESTING ONLY. BELOW IS BETTER.
     #    "PM10": 0.00055 * kg / t / km,  # NDEP 2017
-    "PM25": 0.000085 * kg / t / km,  # NDEP 2017
+    "PM2.5": 0.000085 * kg / t / km,  # NDEP 2017
 }
 
 # FOR REGRESSION TESTING ONLY. BELOW IS BETTER.
@@ -213,7 +213,7 @@ emission_factor["road_transport"] = {
     / km,  # http://naei.defra.gov.uk/data/ef-transport, year 2014
     "NOx": 2.68 * g / (20 * t) / km,  # idem
     "PM10": 0.04 * g / (20 * t) / km,
-    "PM25": 0.04 * g / (20 * t) / km,
+    "PM2.5": 0.04 * g / (20 * t) / km,
 }  # idem
 
 # emission_factor["road_transport"] = {
@@ -221,7 +221,7 @@ emission_factor["road_transport"] = {
 #     "SO2": 1.86 * g / (20 * t) / km,  # Vu Hoang Ngoc Khue et al. 2019
 #     "NOx": 6.77 * g / (20 * t) / km,  # Vu Hoang Ngoc Khue et al. 2019
 #     "PM10": 0.13 * g / (20 * t) / km,  # Vu Hoang Ngoc Khue et al. 2019
-#     "PM25": 0.13 * g / (20 * t) / km,  # Vu Hoang Ngoc Khue et al. 2019
+#     "PM2.5": 0.13 * g / (20 * t) / km,  # Vu Hoang Ngoc Khue et al. 2019
 # }  # idem
 
 emission_factor["barge_transport"] = {
@@ -229,7 +229,7 @@ emission_factor["barge_transport"] = {
     "SO2": 2 * g / kg * (8 * g / t / km),  # Van Dingenen et al. (2016)
     "NOx": 50.75 * g / kg * (8 * g / t / km),  # idem
     "PM10": 3.19 * g / kg * (8 * g / t / km),
-    "PM25": 3.19 * g / kg * (8 * g / t / km),
+    "PM2.5": 3.19 * g / kg * (8 * g / t / km),
 }  # idem
 
 emission_factor["straw_open"] = {
@@ -237,7 +237,7 @@ emission_factor["straw_open"] = {
     "SO2": 0.51 * kg / t,  # (Kim Oanh & 2015) for open burning
     "NOx": 0.49 * kg / t,  # (Kim Oanh & 2011) for open burning
     "PM10": 9.4 * kg / t,
-    "PM25": 8.3 * kg / t,  # (Kim Oanh & 2011) for open burning
+    "PM2.5": 8.3 * kg / t,  # (Kim Oanh & 2011) for open burning
 }  # (Kim Oanh & 2011) for open burning
 
 emission_factor["straw_boiler"] = {
@@ -245,7 +245,7 @@ emission_factor["straw_boiler"] = {
     "SO2": 0.18 * kg / t,  # idem
     "NOx": 3.43 * kg / t,  # idem
     "PM10": 6.28 * kg / t,
-    "PM25": 6.28 * kg / t,
+    "PM2.5": 6.28 * kg / t,
 }  # idem
 
 # hourly wage calculated from base salary defined in governmental regulations
@@ -289,7 +289,7 @@ plant_parameter_MD1 = PlantParameter(
         "SO2": 0.982,
         "NOx": 0.0,
         "PM10": 0.996,
-        "PM25": 0.996,
+        "PM2.5": 0.996,
     },
     fuel=coal_6b,
 )
@@ -339,7 +339,7 @@ plant_parameter_NB = PlantParameter(
         "SO2": 0.0,
         "NOx": 0.0,
         "PM10": 0.992,
-        "PM25": 0.922,
+        "PM2.5": 0.922,
     },
     fuel=coal_4b,
 )

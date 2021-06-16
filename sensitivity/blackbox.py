@@ -51,7 +51,7 @@ def as_model_parameters(x):
             "CO2": x["external_cost_CO2"],
             "SO2": x["external_cost_SO2"],
             "PM10": x["external_cost_PM10"],
-            "PM25": x["external_cost_PM25"],
+            "PM2.5": x["external_cost_PM2.5"],
             "NOx": x["external_cost_NOx"],
         }
     )
