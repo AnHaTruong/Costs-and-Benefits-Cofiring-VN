@@ -23,7 +23,7 @@ from manuscript1.parameters import (
     price_NB,
 )
 
-from model.utils import display_as, TIME_HORIZON
+from model.utils import display_as
 
 
 print("Business value of cofiring for the three segments")
@@ -87,7 +87,7 @@ print()
 #%%
 print("For power plant, the change in the operating expenses line (expost - exante):")
 table_i_details = MongDuong1System.plant_npv_opex_change(
-    discount_rate, TIME_HORIZON + 1
+    discount_rate, economic_horizon
 )
-table_j_details = NinhBinhSystem.plant_npv_opex_change(discount_rate, TIME_HORIZON + 1)
+table_j_details = NinhBinhSystem.plant_npv_opex_change(discount_rate, economic_horizon)
 print(concat([table_i_details, table_j_details], axis=1))

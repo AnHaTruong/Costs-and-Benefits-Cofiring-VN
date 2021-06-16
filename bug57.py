@@ -14,7 +14,6 @@ from manuscript1.parameters import (
     MongDuong1System,
     NinhBinhSystem,
     discount_rate,
-    economic_horizon,
     depreciation_period,
 )
 
@@ -70,9 +69,9 @@ def table2(system, discount_rate, horizon):
     print()
 
 
-table2(MongDuong1System, discount_rate, TIME_HORIZON + 1)
-table2(MongDuong1System, 0, TIME_HORIZON + 1)
-table2(MongDuong1System, 0, 10 + 1)
+table2(MongDuong1System, discount_rate, TIME_HORIZON)
+table2(MongDuong1System, 0, TIME_HORIZON)
+table2(MongDuong1System, 0, 10)
 
 
 #%% Per ton
@@ -136,9 +135,9 @@ def table3(system, discount_rate, horizon):
     print()
 
 
-table3(MongDuong1System, discount_rate, TIME_HORIZON + 1)
-table3(MongDuong1System, 0, TIME_HORIZON + 1)
-table3(MongDuong1System, 0, 10 + 1)  # The one to use
+table3(MongDuong1System, discount_rate, TIME_HORIZON)
+table3(MongDuong1System, 0, TIME_HORIZON)
+table3(MongDuong1System, 0, 10)  # The one to use
 
 
 #%% Business value in figure

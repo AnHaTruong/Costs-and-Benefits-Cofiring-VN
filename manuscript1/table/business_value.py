@@ -33,24 +33,24 @@ print()
 #%%
 
 print("Business value of cofiring, from project NPVs.\n")
-print("Discounted at", discount_rate, "over", economic_horizon + 1, "years")
+print("Discounted at", discount_rate, "over", economic_horizon, "years")
 print(
     concat(
         [
-            MongDuong1System.table_business_value(discount_rate, economic_horizon + 1),
-            NinhBinhSystem.table_business_value(discount_rate, economic_horizon + 1),
+            MongDuong1System.table_business_value(discount_rate, economic_horizon),
+            NinhBinhSystem.table_business_value(discount_rate, economic_horizon),
         ],
         axis=1,
     )
 )
 
 print("\n")
-print("Discounted at", 0, "over", depreciation_period + 1, "years")
+print("Discounted at", 0, "over", depreciation_period, "years")
 print(
     concat(
         [
-            MongDuong1System.table_business_value(0, depreciation_period + 1),
-            NinhBinhSystem.table_business_value(0, depreciation_period + 1),
+            MongDuong1System.table_business_value(0, depreciation_period),
+            NinhBinhSystem.table_business_value(0, depreciation_period),
         ],
         axis=1,
     )
@@ -60,18 +60,18 @@ print(
 
 print("\n")
 print("Business value of cofiring, from WTA, WTP and other per t values.\n")
-print("Discounted at", discount_rate, "over", economic_horizon + 1, "years")
-table_MD1 = feasibility_direct(MongDuong1System, discount_rate, economic_horizon + 1)
-table_NB = feasibility_direct(NinhBinhSystem, discount_rate, economic_horizon + 1)
+print("Discounted at", discount_rate, "over", economic_horizon, "years")
+table_MD1 = feasibility_direct(MongDuong1System, discount_rate, economic_horizon)
+table_NB = feasibility_direct(NinhBinhSystem, discount_rate, economic_horizon)
 
 print(concat([table_MD1, table_NB], axis=1))
 
 
 print("\n")
 print("Business value of cofiring, from WTA, WTP and other per t values.\n")
-print("Discounted at", 0, "over", depreciation_period + 1, "years")
-table_MD1 = feasibility_direct(MongDuong1System, 0, depreciation_period + 1)
-table_NB = feasibility_direct(NinhBinhSystem, 0, depreciation_period + 1)
+print("Discounted at", 0, "over", depreciation_period, "years")
+table_MD1 = feasibility_direct(MongDuong1System, 0, depreciation_period)
+table_NB = feasibility_direct(NinhBinhSystem, 0, depreciation_period)
 
 print(concat([table_MD1, table_NB], axis=1))
 

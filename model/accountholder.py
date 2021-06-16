@@ -51,7 +51,7 @@ class Accountholder:
 
     >>> i = Accountholder("test", 20, 1000*USD)
     >>> i.revenue = zeros(21) * USD
-    >>> i.net_present_value(0, 21, 0, 10)
+    >>> i.net_present_value(0, 20, 0, 10)
     -1 kUSD
     """
 

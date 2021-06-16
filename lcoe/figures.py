@@ -31,7 +31,7 @@ from lcoe.param_tech_catalogue import (
 
 # %% Creat a graph
 unit = USD / MWh
-lcoe_arg = [discount_rate, economic_horizon + 1, tax_rate, depreciation_period]
+lcoe_arg = [discount_rate, economic_horizon, tax_rate, depreciation_period]
 
 
 def create_LCOE_df(plant, base_price, upper_price, lower_price):

@@ -45,7 +45,7 @@ set_option("display.max_columns", None)
 set_option("display.width", 10000)
 set_option("display.float_format", "{:,.1f}".format)
 
-finance = discount_rate, economic_horizon + 1, tax_rate, depreciation_period
+finance = discount_rate, economic_horizon, tax_rate, depreciation_period
 
 
 @pytest.fixture()
@@ -73,14 +73,12 @@ def test_straw_supply(regtest, systems):
 
 def test_business_value_by_solving(regtest, systems):
     regtest.write(
-        str(business_value_by_solving(*systems, discount_rate, economic_horizon + 1))
+        str(business_value_by_solving(*systems, discount_rate, economic_horizon))
     )
 
 
 def test_business_value_direct(regtest, systems):
-    regtest.write(
-        str(business_value_direct(*systems, discount_rate, economic_horizon + 1))
-    )
+    regtest.write(str(business_value_direct(*systems, discount_rate, economic_horizon)))
 
 
 # pylint: disable=eval-used, unused-argument
@@ -166,7 +164,7 @@ def test_coal_saved(regtest, systems):
 
 def test_benefits(regtest, systems):
     regtest.write(
-        f(systems, "benefits(discount_rate, economic_horizon + 1, external_cost)")
+        f(systems, "benefits(discount_rate, economic_horizon, external_cost)")
     )
 
 

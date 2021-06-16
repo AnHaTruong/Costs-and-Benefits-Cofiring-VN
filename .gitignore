@@ -19,3 +19,4 @@ SALib/
 SALib-0.7.1.dist-info/
 .cache/
 .venv/
+.spyproject/

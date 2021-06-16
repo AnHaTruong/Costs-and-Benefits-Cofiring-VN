@@ -40,7 +40,7 @@ def plot_emissions(system, axes):
             [
                 emis(segment, "SO2", kt),
                 #                emis(segment, "PM10", kt),
-                emis(segment, "PM2.5", kt),
+                emis(segment, "PM25", kt),
                 emis(segment, "NOx", kt),
             ]
         )
@@ -88,8 +88,8 @@ def plot_emissions(system, axes):
             "SO2 ex post",
             #            "PM10 ex ante",
             #            "PM10 ex post",
-            "PM2.5 ex ante",
-            "PM2.5 ex post",
+            "PM25 ex ante",
+            "PM25 ex post",
             "NOx  ex ante",
             "NOx ex post",
         ),

@@ -69,7 +69,7 @@ def emissions_reduction_benefit(system_a, system_b, external_cost, discount_rate
     headers = [" Quantity", "Value", " Quantity", "Value"]
     table = DataFrame(data=contents, index=headers)
     table = table.applymap(lambda x: summarize(x, discount_rate))
-    return table[["CO2", "SO2", "PM10", "NOx"]].T
+    return table[["CO2", "SO2", "PM25", "NOx"]].T
 
 
 def coal_saved_benefit(system_a, system_b, coal_import_price, discount_rate):

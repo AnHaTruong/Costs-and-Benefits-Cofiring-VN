@@ -143,7 +143,7 @@ class System:
 
     def emissions_baseline(self):
         """Tabulate system atmospheric emissions in year 1 ex ante (no cofiring)."""
-        baseline = DataFrame(columns=["CO2", "NOx", "PM10", "PM2.5", "SO2"])
+        baseline = DataFrame(columns=["CO2", "NOx", "PM10", "PM25", "SO2"])
         baseline = baseline.append(year_1(self.plant.emissions()))
         baseline = baseline.append(year_1(self.plant.fuel_reseller().emissions()))
         baseline = baseline.append(year_1(self.farmer.emissions_exante))
@@ -155,7 +155,7 @@ class System:
 
     def emissions_cofiring(self):
         """Tabulate system atmospheric emissions in year 1 ex post (with cofiring)."""
-        cofiring = DataFrame(columns=["CO2", "NOx", "PM10", "PM2.5", "SO2"])
+        cofiring = DataFrame(columns=["CO2", "NOx", "PM10", "PM25", "SO2"])
         cofiring = cofiring.append(year_1(self.cofiring_plant.emissions()))
         cofiring = cofiring.append(
             year_1(self.cofiring_plant.fuel_reseller().emissions())
@@ -233,9 +233,12 @@ class System:
         """Tabulate external benefits of reducing atmospheric emissions from cofiring.
 
         Return a dataframe of time series, indexed by segment and pollutant.
+        We disregard PM10 externalities, impact of dust quantified using PM2.5 only
         """
         baseline = self.emissions_exante().loc["Total"]
         reduction = self.emissions_reduction().loc["Total"]
+        # baseline = self.emissions_exante().loc["Total"].drop("PM10")
+        # reduction = self.emissions_reduction().loc["Total"].drop("PM10")
         relative = reduction / baseline
         benefit = reduction * external_cost
         for pollutant in benefit:

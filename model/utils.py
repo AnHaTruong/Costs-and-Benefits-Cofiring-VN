@@ -79,15 +79,15 @@ TIME_HORIZON = 20
 ONES = ones(TIME_HORIZON + 1)
 
 
-def npv(values, rate, length=(TIME_HORIZON + 1)):
+def npv(values, rate, length=TIME_HORIZON):
     """Net present value of an array-like cash flow.
 
-    Only the first 'length' values are included.
-    Warning: off-by-one error risk, investment in period 0
+    Includes investment in period 0 and the subsequent 'length' values.
     Cut and pasted here to avoid warnings because numpy moved it to numpy-financial.
     """
     assert length <= len(values), "NPV called with time horizon larger than array"
-    mask = [1] * length + [0] * (len(values) - length)
+    assert length in (10, 20), "Catch off by one error in testing phase"
+    mask = [1] + [1] * length + [0] * (len(values) - length - 1)
     values = asarray(values) * mask
     return (values / (1 + rate) ** arange(0, len(values))).sum(axis=0)
 

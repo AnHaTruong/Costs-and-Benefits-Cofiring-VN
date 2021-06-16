@@ -14,11 +14,12 @@ Sensitivity analysis is based on the representation  Y = f(X1, ..., Xn).
 """
 from pandas import Series
 
-from model.utils import npv, display_as, TIME_HORIZON
+from model.utils import npv, display_as
 
 from model.system import System, Price
 
 from manuscript1.parameters import (
+    economic_horizon,
     plant_parameter_MD1,
     cofire_MD1,
     supply_chain_MD1,
@@ -49,7 +50,8 @@ def as_model_parameters(x):
         {
             "CO2": x["external_cost_CO2"],
             "SO2": x["external_cost_SO2"],
-            "PM2.5": x["external_cost_PM2.5"],
+            "PM10": x["external_cost_PM10"],
+            "PM25": x["external_cost_PM25"],
             "NOx": x["external_cost_NOx"],
         }
     )
@@ -83,14 +85,14 @@ def f_MD1(x):
         emission_factor,
     )
     business_value = MD1SystemVariant.table_business_value(
-        _discount_rate, TIME_HORIZON + 1
+        _discount_rate, economic_horizon
     )[-1]
     display_as(business_value, "MUSD")
 
     benefits_table = MD1SystemVariant.emissions_reduction_benefit(_external_cost).loc[
         "Value"
     ]
-    external_value = npv(benefits_table.sum(), _discount_rate)
+    external_value = npv(benefits_table.sum(), _discount_rate, economic_horizon)
     display_as(external_value, "MUSD")
     return business_value, external_value
 
@@ -114,13 +116,13 @@ def f_NB(x):
         emission_factor,
     )
     business_value = NBSystemVariant.table_business_value(
-        _discount_rate, TIME_HORIZON + 1
+        _discount_rate, economic_horizon
     )[-1]
     display_as(business_value, "MUSD")
 
     benefits_table = NBSystemVariant.emissions_reduction_benefit(_external_cost).loc[
         "Value"
     ]
-    external_value = npv(benefits_table.sum(), _discount_rate)
+    external_value = npv(benefits_table.sum(), _discount_rate, economic_horizon)
     display_as(external_value, "MUSD")
     return business_value, external_value

@@ -71,11 +71,18 @@ bounds["external_cost_SO2"] = [
     external_cost_high["SO2"],
 ]
 
-bounds["external_cost_PM2.5"] = [
-    external_cost_low["PM2.5"],
-    external_cost["PM2.5"],
-    external_cost["PM2.5"],
-    external_cost_high["PM2.5"],
+bounds["external_cost_PM10"] = [
+    external_cost_low["PM10"],
+    external_cost["PM10"],
+    external_cost["PM10"],
+    external_cost_high["PM10"],
+]
+
+bounds["external_cost_PM25"] = [
+    external_cost_low["PM25"],
+    external_cost["PM25"],
+    external_cost["PM25"],
+    external_cost_high["PM25"],
 ]
 
 bounds["external_cost_NOx"] = [
@@ -112,7 +119,7 @@ display_as(bounds["coal_price"], "USD/t")
 display_as(bounds["electricity_price"], "VND/kWh")
 display_as(bounds["external_cost_CO2"], "USD/t")
 display_as(bounds["external_cost_SO2"], "USD/t")
-display_as(bounds["external_cost_PM2.5"], "USD/t")
+display_as(bounds["external_cost_PM25"], "USD/t")
 display_as(bounds["external_cost_NOx"], "USD/t")
 display_as(bounds["biomass_plantgate"], "USD/t")
 display_as(bounds["biomass_fieldside"], "USD/t")

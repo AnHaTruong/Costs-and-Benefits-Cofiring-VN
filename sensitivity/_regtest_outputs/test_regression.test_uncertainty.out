@@ -7,6 +7,7 @@ electricity_price        0.00      0.00        0.00
 external_cost_CO2        0.00      0.01        0.02
 external_cost_SO2        0.91      2.86        4.52
 external_cost_PM10       2.00      3.67        7.06
+external_cost_PM25       0.00      0.00        0.00
 external_cost_NOx        0.23      1.37        2.93
 open_burn_rate           0.40      0.60        0.80
 biomass_plantgate        0.02      0.02        0.04
@@ -22,6 +23,7 @@ electricity_price        0.00      0.00        0.00
 external_cost_CO2        0.00      0.01        0.02
 external_cost_SO2        0.91      2.86        4.52
 external_cost_PM10       2.00      3.67        7.06
+external_cost_PM25       0.00      0.00        0.00
 external_cost_NOx        0.23      1.37        2.93
 open_burn_rate           0.40      0.60        0.80
 biomass_plantgate        0.02      0.03        0.04
