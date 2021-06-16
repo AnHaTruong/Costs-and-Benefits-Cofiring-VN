@@ -1,25 +1,25 @@
 Investment    (MUSD)                         0.0
-Fuel cost     (MUSD)                     1,309.4
-  Main fuel   (MUSD)                     1,309.4
+Fuel cost     (MUSD)                       983.3
+  Main fuel   (MUSD)                       983.3
   Cofuel      (MUSD)                         0.0
-O&M cost      (MUSD)                       560.5
-  O&M Mainfuel(MUSD)                       560.5
+O&M cost      (MUSD)                       421.0
+  O&M Mainfuel(MUSD)                       421.0
   O&M Cofuel  (MUSD)                         0.0
-Tax           (MUSD)                       227.4
-Cash_out      (MUSD)                     2,097.3
-Electricity produced   194,545,954,510,838,944.0
+Tax           (MUSD)                       170.8
+Cash_out      (MUSD)                     1,575.1
+Electricity produced   146,101,573,299,950,912.0
 LCOE                                         0.0
 Name: Mong Duong 1, dtype: float64
 
 Investment    (MUSD)                        0.0
-Fuel cost     (MUSD)                      335.8
-  Main fuel   (MUSD)                      335.8
+Fuel cost     (MUSD)                      252.2
+  Main fuel   (MUSD)                      252.2
   Cofuel      (MUSD)                        0.0
-O&M cost      (MUSD)                       53.5
-  O&M Mainfuel(MUSD)                       53.5
+O&M cost      (MUSD)                       40.2
+  O&M Mainfuel(MUSD)                       40.2
   O&M Cofuel  (MUSD)                        0.0
-Tax           (MUSD)                        2.0
-Cash_out      (MUSD)                      391.3
-Electricity produced   19,214,415,260,329,764.0
+Tax           (MUSD)                        1.5
+Cash_out      (MUSD)                      293.8
+Electricity produced   14,429,785,017,279,102.0
 LCOE                                        0.0
 Name: Ninh Binh, dtype: float64

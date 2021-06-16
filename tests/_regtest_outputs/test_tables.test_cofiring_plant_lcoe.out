@@ -1,25 +1,25 @@
 Investment    (MUSD)                         2.7
-Fuel cost     (MUSD)                     1,293.6
-  Main fuel   (MUSD)                     1,251.4
-  Cofuel      (MUSD)                        42.2
-O&M cost      (MUSD)                       564.8
-  O&M Mainfuel(MUSD)                       535.5
-  O&M Cofuel  (MUSD)                        29.3
-Tax           (MUSD)                       229.4
-Cash_out      (MUSD)                     2,090.5
-Electricity produced   194,545,954,510,838,944.0
+Fuel cost     (MUSD)                       971.9
+  Main fuel   (MUSD)                       941.5
+  Cofuel      (MUSD)                        30.4
+O&M cost      (MUSD)                       424.0
+  O&M Mainfuel(MUSD)                       402.9
+  O&M Cofuel  (MUSD)                        21.2
+Tax           (MUSD)                       172.1
+Cash_out      (MUSD)                     1,570.8
+Electricity produced   146,101,573,299,950,912.0
 LCOE                                         0.0
 Name: Mong Duong 1 Cofire, dtype: float64
 
 Investment    (MUSD)                        0.5
-Fuel cost     (MUSD)                      331.8
-  Main fuel   (MUSD)                      321.0
-  Cofuel      (MUSD)                       10.8
-O&M cost      (MUSD)                       53.9
-  O&M Mainfuel(MUSD)                       51.1
-  O&M Cofuel  (MUSD)                        2.8
-Tax           (MUSD)                        2.6
-Cash_out      (MUSD)                      388.8
-Electricity produced   19,214,415,260,329,764.0
+Fuel cost     (MUSD)                      249.3
+  Main fuel   (MUSD)                      241.5
+  Cofuel      (MUSD)                        7.8
+O&M cost      (MUSD)                       40.5
+  O&M Mainfuel(MUSD)                       38.5
+  O&M Cofuel  (MUSD)                        2.0
+Tax           (MUSD)                        1.9
+Cash_out      (MUSD)                      292.2
+Electricity produced   14,429,785,017,279,102.0
 LCOE                                        0.0
 Name: Ninh Binh Cofire, dtype: float64

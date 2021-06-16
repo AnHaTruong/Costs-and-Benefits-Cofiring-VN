@@ -93,7 +93,7 @@ plt.barh(
 plt.barh(index + 1 * width, dataB, width, edgecolor="none", label=labelB, color="navy")
 plt.barh(index + 0 * width, dataC, width, edgecolor="none", label=labelC, color="green")
 plt.title(title)
-plt.xlabel("Cumulative benefit over 20 years (M$)")
+plt.xlabel("Cumulative benefit over " + str(economic_horizon) + " years (M$)")
 plt.yticks(
     index + 0.2,
     (
