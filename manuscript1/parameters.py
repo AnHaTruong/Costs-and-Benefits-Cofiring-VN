@@ -36,6 +36,7 @@ tax_rate = 0.20  # Corporate tax in Vietnam
 
 coal_import_price = 112 * USD / t
 
+# Values used in 2018 ICERE communication
 # CO2 6 USD/t fromcentral case in UNDP (2018) Opportunities for carbon pricing in VN.
 external_cost_SKC = Series(
     {  # Sakulniyomporn, Kubaha, and Chullabodhi (2011) RSER 15
@@ -67,7 +68,7 @@ external_cost_HAS = Series(
     }
 )
 
-external_cost = (external_cost_SKC + external_cost_ZWY + external_cost_HAS) / 3
+# external_cost = (external_cost_SKC + external_cost_ZWY + external_cost_HAS) / 3
 # # FOR REGRESSION TESTING
 # external_cost = Series(
 #     {  # Parry et al. 2014
@@ -79,56 +80,58 @@ external_cost = (external_cost_SKC + external_cost_ZWY + external_cost_HAS) / 3
 #     }
 # )
 
-external_cost_low = Series(
-    {
-        "CO2": 0.2 * USD / t,
-        "SO2": 0.8 * 1134 * USD / t,
-        "PM10": 0.8 * 2496 * USD / t,
-        "PM2.5": 0.8 * 0 * USD / t,
-        "NOx": 0.8 * 286 * USD / t,
-    }
-)
-
-external_cost_high = Series(
-    {
-        "CO2": 15 * USD / t,
-        "SO2": 1.2 * 3767 * USD / t,
-        "PM10": 1.2 * 5883 * USD / t,
-        "PM2.5": 1.2 * 0 * USD / t,
-        "NOx": 1.2 * 2438 * USD / t,
-    }
-)
-
-# TO BE USED LATER
-# # External costs from PDP8 draft 3 page 198-199
-# external_cost = Series(
-#     {
-#         "CO2": 4 * USD / t,  # Conditional on tax, low case
-#         "SO2": 5.7 * USD / kg,  # Average 2020-2030, figure 4.7
-#         "PM2.5": 7.2 * USD / kg,  # Average 2020-2030, figure 4.7
-#         "NOx": 5.7 * USD / kg,  # Average 2020-2030, figure 4.7
-#     }
-# )
-
-# # The 0.8 factor is based on ranges cited in the PDP8 draft
 # external_cost_low = Series(
 #     {
-#         "CO2": 0.4 * USD / t,  # Market price 2019
-#         "SO2": 0.8 * 5.7 * USD / kg,
-#         "PM2.5": 0.8 * 7.2 * USD / kg,
-#         "NOx": 0.8 * 5.7 * USD / kg,
+#         "CO2": 0.2 * USD / t,
+#         "SO2": 0.8 * 1134 * USD / t,
+#         "PM10": 0.8 * 2496 * USD / t,
+#         "PM2.5": 0.8 * 0 * USD / t,
+#         "NOx": 0.8 * 286 * USD / t,
 #     }
 # )
 
-# # The 1.2 factor is based on ranges cited in the PDP8 draft
 # external_cost_high = Series(
 #     {
-#         "CO2": 22.5 * USD / t,  # (17+28)/2 conditional on tax, high case
-#         "SO2": 5.7 * 1.2 * USD / kg,
-#         "PM2.5": 7.2 * 1.2 * USD / kg,
-#         "NOx": 5.7 * 1.2 * USD / kg,
+#         "CO2": 15 * USD / t,
+#         "SO2": 1.2 * 3767 * USD / t,
+#         "PM10": 1.2 * 5883 * USD / t,
+#         "PM2.5": 1.2 * 0 * USD / t,
+#         "NOx": 1.2 * 2438 * USD / t,
 #     }
 # )
+
+# External costs from PDP8 draft 3 page 198-199
+external_cost = Series(
+    {
+        "CO2": 4 * USD / t,  # Conditional on tax, low case
+        "SO2": 5.7 * USD / kg,  # Average 2020-2030, figure 4.7
+        "PM10": 0 * USD / kg,  # We use PM2.5 for impact of particulates
+        "PM2.5": 7.2 * USD / kg,  # Average 2020-2030, figure 4.7
+        "NOx": 5.7 * USD / kg,  # Average 2020-2030, figure 4.7
+    }
+)
+
+# The 0.8 factor is based on ranges cited in the PDP8 draft
+external_cost_low = Series(
+    {
+        "CO2": 0.4 * USD / t,  # Market price 2019
+        "SO2": 0.8 * 5.7 * USD / kg,
+        "PM10": 0 * USD / kg,  # We use PM2.5 for impact of particulates
+        "PM2.5": 0.8 * 7.2 * USD / kg,
+        "NOx": 0.8 * 5.7 * USD / kg,
+    }
+)
+
+# The 1.2 factor is based on ranges cited in the PDP8 draft
+external_cost_high = Series(
+    {
+        "CO2": 22.5 * USD / t,  # (17+28)/2 conditional on tax, high case
+        "SO2": 5.7 * 1.2 * USD / kg,
+        "PM10": 0 * USD / kg,  # We use PM2.5 for impact of particulates
+        "PM2.5": 7.2 * 1.2 * USD / kg,
+        "NOx": 5.7 * 1.2 * USD / kg,
+    }
+)
 
 mining_parameter = MiningParameter(
     productivity_surface=8.04 * t / hr,  # www.eia.g
@@ -173,8 +176,7 @@ emission_factor["6b_coal"] = {
     "CO2": 0.0966 * kg / MJ * coal_6b.heat_value,  # IPCC 2006
     "SO2": 11.5 * kg / t,  # Eastern Research Group (2011)
     "NOx": 18 * kg / t,  # Nielsen et al. 2019
-    "PM10": 43.8 * kg / t,  # FOR REGRESSION TESTING ONLY. BELOW IS BETTER.
-    #    "PM10": 0.0077 * g / MJ * coal_6b.heat_value * kg / t,  # Nielsen et al. 2019
+    "PM10": 0.0077 * g / MJ * coal_6b.heat_value * kg / t,  # Nielsen et al. 2019
     "PM2.5": 0.0052 * g / MJ * coal_6b.heat_value * kg / t,  # Nielsen et al. 2019
 }  # idem
 
@@ -182,8 +184,7 @@ emission_factor["4b_coal"] = {
     "CO2": 0.0966 * kg / MJ * coal_4b.heat_value,  # IPCC 2006
     "SO2": emission_factor["6b_coal"]["SO2"],
     "NOx": emission_factor["6b_coal"]["NOx"],
-    "PM10": 26.1 * kg / t,  # FOR REGRESSION TESTING ONLY. BELOW IS BETTER.
-    #    "PM10": 0.0077 * g / MJ * coal_6b.heat_value * kg / t,  # Nielsen et al. 2019
+    "PM10": 0.0077 * g / MJ * coal_6b.heat_value * kg / t,  # Nielsen et al. 2019
     "PM2.5": 0.0052 * g / MJ * coal_6b.heat_value * kg / t,  # Nielsen et al. 2019
 }
 
@@ -199,30 +200,29 @@ emission_factor["conveyor_belt"] = {
     "CO2": 0 * kg / t / km,
     "SO2": 0 * kg / t / km,
     "NOx": 0 * kg / t / km,
-    "PM10": 0 * kg / t / km,  # FOR REGRESSION TESTING ONLY. BELOW IS BETTER.
-    #    "PM10": 0.00055 * kg / t / km,  # NDEP 2017
+    "PM10": 0.00055 * kg / t / km,  # NDEP 2017
     "PM2.5": 0.000085 * kg / t / km,  # NDEP 2017
 }
 
-# FOR REGRESSION TESTING ONLY. BELOW IS BETTER.
-emission_factor["road_transport"] = {
-    "CO2": 0.110 * kg / t / km,  # Binh & Tuan (2016)
-    "SO2": 0.003
-    * g
-    / (20 * t)
-    / km,  # http://naei.defra.gov.uk/data/ef-transport, year 2014
-    "NOx": 2.68 * g / (20 * t) / km,  # idem
-    "PM10": 0.04 * g / (20 * t) / km,
-    "PM2.5": 0.04 * g / (20 * t) / km,
-}  # idem
-
+# Values used in early versions.
 # emission_factor["road_transport"] = {
 #     "CO2": 0.110 * kg / t / km,  # Binh & Tuan (2016)
-#     "SO2": 1.86 * g / (20 * t) / km,  # Vu Hoang Ngoc Khue et al. 2019
-#     "NOx": 6.77 * g / (20 * t) / km,  # Vu Hoang Ngoc Khue et al. 2019
-#     "PM10": 0.13 * g / (20 * t) / km,  # Vu Hoang Ngoc Khue et al. 2019
-#     "PM2.5": 0.13 * g / (20 * t) / km,  # Vu Hoang Ngoc Khue et al. 2019
+#     "SO2": 0.003
+#     * g
+#     / (20 * t)
+#     / km,  # http://naei.defra.gov.uk/data/ef-transport, year 2014
+#     "NOx": 2.68 * g / (20 * t) / km,  # idem
+#     "PM10": 0.04 * g / (20 * t) / km,
+#     "PM2.5": 0.04 * g / (20 * t) / km,
 # }  # idem
+
+emission_factor["road_transport"] = {
+    "CO2": 0.110 * kg / t / km,  # Binh & Tuan (2016)
+    "SO2": 1.86 * g / (20 * t) / km,  # Vu Hoang Ngoc Khue et al. 2019
+    "NOx": 6.77 * g / (20 * t) / km,  # Vu Hoang Ngoc Khue et al. 2019
+    "PM10": 0.13 * g / (20 * t) / km,  # Vu Hoang Ngoc Khue et al. 2019
+    "PM2.5": 0.13 * g / (20 * t) / km,  # Vu Hoang Ngoc Khue et al. 2019
+}  # idem
 
 emission_factor["barge_transport"] = {
     "CO2": 0.071 * kg / t / km,  # Binh & Tuan (2016)
