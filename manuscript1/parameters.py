@@ -184,8 +184,8 @@ emission_factor["4b_coal"] = {
     "CO2": 0.0966 * kg / MJ * coal_4b.heat_value,  # IPCC 2006
     "SO2": emission_factor["6b_coal"]["SO2"],
     "NOx": emission_factor["6b_coal"]["NOx"],
-    "PM10": 0.0077 * g / MJ * coal_6b.heat_value * kg / t,  # Nielsen et al. 2019
-    "PM2.5": 0.0052 * g / MJ * coal_6b.heat_value * kg / t,  # Nielsen et al. 2019
+    "PM10": 0.0077 * g / MJ * coal_4b.heat_value * kg / t,  # Nielsen et al. 2019
+    "PM2.5": 0.0052 * g / MJ * coal_4b.heat_value * kg / t,  # Nielsen et al. 2019
 }
 
 emission_factor["diesel"] = {
